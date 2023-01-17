@@ -217,7 +217,13 @@ class Program
             if(s.StartsWith("$") && s.EndsWith("$"))
             {
                 s = s.Substring(1, s.Length - 1 - 1);
-                return PrepareName(s);
+                //s = PrepareName(s);
+                var constant = Constants.Table.GetValueOrDefault(s);
+                if(constant != null)
+                {
+                    s = ObjectToString(constant);
+                }
+                return s;
             }
             else
                 return ("\"" + s + "\"");
@@ -225,7 +231,13 @@ class Program
         else if(value is bool b)
             return b ? "true" : "false";
         else
-            return value.ToString()!;
+        {
+            var type = value.GetType();
+            if(type.IsEnum)
+                return string.Join(" | ", value.ToString()!.Split(", ").Select(x => type.Name + "." + x));
+            else
+                return value.ToString()!;
+        }
     }
 
     static Composite Resolve(ParameterInfo pInfo, Dictionary<string, object> ps)

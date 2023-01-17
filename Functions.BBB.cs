@@ -41,10 +41,12 @@ public static partial class Functions
 
     [BBFunc]
     public static void SetStatus(
+        Action<AttackableUnit, bool> status,
         AttackableUnit target,
-        object src,
-        object status
-    ){}
+        bool src
+    ){
+        status(target, src);
+    }
 
     [BBFunc]
     public static void Else(
