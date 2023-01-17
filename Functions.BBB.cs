@@ -10,7 +10,7 @@ public static partial class Functions
         object src1,
         [BBParam(null, null, "", "ByLevel")]
         object? value1,
-        object compareOp,
+        CompareOp compareOp,
         [BBParam("Var", "VarTable", null, null)]
         object? src2,
         [BBParam(null, null, "", "ByLevel")]
@@ -55,14 +55,14 @@ public static partial class Functions
     ){}
 
     [BBFunc]
-    public static object GetSlotSpellInfo(
+    public static object GetSlotSpellInfo<T>(
+        Func<AttackableUnit, int, SpellbookType, SpellSlotType, T> function,
+        AttackableUnit owner,
         int spellSlot,
         SpellbookType spellbookType,
-        SpellSlotType slotType,
-        AttackableUnit owner,
-        object function
+        SpellSlotType slotType
     ){
-        return default!; // Union<string, float>
+        return function(owner, spellSlot, spellbookType, slotType)!; // Union<string, float>
     }
 
     [BBFunc]
@@ -93,7 +93,7 @@ public static partial class Functions
         object src1,
         [BBParam(null, null, "", "ByLevel")]
         object? value1,
-        object compareOp,
+        CompareOp compareOp,
         [BBParam("Var", "VarTable", null, null)]
         object? src2,
         [BBParam(null, null, "", "ByLevel")]
@@ -134,11 +134,11 @@ public static partial class Functions
 
     [BBFunc]
     public static float GetPAROrHealth(
+        Func<AttackableUnit/*, PrimaryAbilityResourceType*/, float> function,
         AttackableUnit owner,
-        object function,
         PrimaryAbilityResourceType PARType
     ){
-        return default!;
+        return function(owner/*, PARType*/);
     }
 
     [BBFunc]
@@ -160,10 +160,10 @@ public static partial class Functions
 
     [BBFunc]
     public static bool GetStatus(
-        AttackableUnit target,
-        object status
+        Func<AttackableUnit, bool> status,
+        AttackableUnit target
     ){
-        return default!;
+        return status(target);
     }
 
     [BBFunc]
@@ -217,7 +217,7 @@ public static partial class Functions
         object src1,
         [BBParam(null, null, "", "ByLevel")]
         object? value1,
-        object compareOp,
+        CompareOp compareOp,
         [BBParam("Var", "VarTable", null, null)]
         object? src2,
         [BBParam(null, null, "", "ByLevel")]

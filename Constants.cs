@@ -138,5 +138,36 @@ public static class Constants
 
         globals["UNITSCAN_Friends"] = null; //?
         globals["SPAWN_LOCATION"] = null; //?
+
+        globals["CO_EQUAL"] = CompareOp.CO_EQUAL;
+        globals["CO_NOT_EQUAL"] = CompareOp.CO_NOT_EQUAL;
+        globals["CO_LESS_THAN"] = CompareOp.CO_LESS_THAN;
+        globals["CO_GREATER_THAN"] = CompareOp.CO_GREATER_THAN;
+        globals["CO_LESS_THAN_OR_EQUAL"] = CompareOp.CO_LESS_THAN_OR_EQUAL;
+        globals["CO_GREATER_THAN_OR_EQUAL"] = CompareOp.CO_GREATER_THAN_OR_EQUAL;
+        globals["CO_SAME_TEAM"] = CompareOp.CO_SAME_TEAM;
+        globals["CO_DIFFERENT_TEAM"] = CompareOp.CO_DIFFERENT_TEAM;
+        globals["CO_DAMAGE_SOURCETYPE_IS"] = CompareOp.CO_DAMAGE_SOURCETYPE_IS;
+        globals["CO_DAMAGE_SOURCETYPE_IS_NOT"] = CompareOp.CO_DAMAGE_SOURCETYPE_IS_NOT;
+        globals["CO_IS_TYPE_AI"] = CompareOp.CO_IS_TYPE_AI;
+        globals["CO_IS_NOT_AI"] = CompareOp.CO_IS_NOT_AI;
+        globals["CO_IS_TYPE_HERO"] = CompareOp.CO_IS_TYPE_HERO;
+        globals["CO_IS_NOT_HERO"] = CompareOp.CO_IS_NOT_HERO;
+        globals["CO_IS_MELEE"] = CompareOp.CO_IS_MELEE;
+        globals["CO_IS_RANGED"] = CompareOp.CO_IS_RANGED;
+        globals["CO_RANDOM_CHANCE_LESS_THAN"] = CompareOp.CO_RANDOM_CHANCE_LESS_THAN;
+        globals["CO_IS_TYPE_TURRET"] = CompareOp.CO_IS_TYPE_TURRET;
+        globals["CO_IS_NOT_TURRET"] = CompareOp.CO_IS_NOT_TURRET;
+        globals["CO_IS_DEAD"] = CompareOp.CO_IS_DEAD;
+        globals["CO_IS_NOT_DEAD"] = CompareOp.CO_IS_NOT_DEAD;
+        globals["CO_IS_TARGET_IN_FRONT_OF_ME"] = CompareOp.CO_IS_TARGET_IN_FRONT_OF_ME;
+        globals["CO_IS_TARGET_BEHIND_ME"] = CompareOp.CO_IS_TARGET_BEHIND_ME;
+
+        globals["MO_MULTIPLY"] = MathOp.MO_MULTIPLY;
+        globals["MO_ADD"] = MathOp.MO_ADD;
+        globals["MO_SUBTRACT"] = MathOp.MO_SUBTRACT;
+        globals["MO_DIVIDE"] = MathOp.MO_DIVIDE;
+        globals["MO_MIN"] = MathOp.MO_MIN;
+        globals["MO_MAX"] = MathOp.MO_MAX;
     }
 }

@@ -286,6 +286,31 @@ public static partial class Functions
         string spellName
     ){}
 
+    public static string GetSlotSpellName(
+        ObjAIBase owner,
+        int spellSlot,
+        SpellbookType spellbookType,
+        SpellSlotType slotType
+    ){
+        return default!;
+    }
+    public static float GetSlotSpellCooldownTime(
+        ObjAIBase owner,
+        int spellSlot,
+        SpellbookType spellbookType,
+        SpellSlotType slotType
+    ){
+        return default!;
+    }
+    public static int GetSlotSpellLevel(
+        ObjAIBase owner,
+        int spellSlot,
+        SpellbookType spellbookType,
+        SpellSlotType slotType = SpellSlotType.SpellSlots
+    ){
+        return default!;
+    }
+
     [BBFunc]
     public static void SpellCast(
         ObjAIBase caster,
