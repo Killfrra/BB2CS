@@ -106,6 +106,12 @@ public static partial class Functions
     }
 
     [BBFunc]
+    public static TeamId GetTeamID(AttackableUnit? u = null)
+    {
+        return default!;
+    }
+
+    [BBFunc]
     public static void Move(
         AttackableUnit unit,
         Vector3 target,
