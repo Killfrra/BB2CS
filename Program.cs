@@ -79,7 +79,7 @@ class Program
         "using System.Numerics;\n" +
         "using static Functions;\n" +
         "\n" +
-        "public class Code\n" +
+        "public class Code: Script\n" +
         "{\n" +
             (ConvertVars(instanceVars) +
             output).TrimEnd().Indent() + "\n" +
@@ -202,7 +202,7 @@ class Program
         name = UCFirst(name);
         var varName = ps.GetValueOrDefault(name + "Var") as string;
         var tableName = ps.GetValueOrDefault(name + "VarTable") as string;
-        if(varName != null)
+        if(varName != null && varName != "Nothing")
         {
             return new Reference(tableName, varName);
         }
@@ -235,6 +235,8 @@ class Program
             var type = value.GetType();
             if(type.IsEnum)
                 return string.Join(" | ", value.ToString()!.Split(", ").Select(x => type.Name + "." + x));
+            else if(type == typeof(float) || type == typeof(double) || type == typeof(decimal))
+                return value.ToString() + "f";
             else
                 return value.ToString()!;
         }
@@ -253,7 +255,7 @@ class Program
         return new Composite(
             type: pInfo.ParameterType,
             value: value,
-            var: (varName != null) ? new Reference(tableName, varName) : null,
+            var: (varName != null && varName != "Nothing") ? new Reference(tableName, varName) : null,
             varByLevel: (valueByLevel != null) ? new Reference("InstanceVars", "VALUE_BY_LEVEL") : null
         );
     }
