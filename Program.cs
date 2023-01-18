@@ -12,6 +12,7 @@ public static class StringExtensions
     }
 }
 
+/*
 class Program
 {
     static BBParamAttribute defaultPAttr = new();
@@ -400,3 +401,4 @@ class Program
         }
     }
 }
+*/

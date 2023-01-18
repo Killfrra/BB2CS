@@ -41,3 +41,13 @@ public class BBFuncAttribute : Attribute
 {
     public string Dest = "Dest";
 }
+
+[AttributeUsage(AttributeTargets.Method)]
+public class BBCall : Attribute
+{
+    public string Name;
+    public BBCall(string name)
+    {
+        Name = name;
+    }
+}
