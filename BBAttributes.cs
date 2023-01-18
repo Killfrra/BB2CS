@@ -43,10 +43,10 @@ public class BBFuncAttribute : Attribute
 }
 
 [AttributeUsage(AttributeTargets.Method)]
-public class BBCall : Attribute
+public class BBCallAttribute : Attribute
 {
     public string Name;
-    public BBCall(string name)
+    public BBCallAttribute(string name)
     {
         Name = name;
     }

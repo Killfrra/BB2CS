@@ -1,26 +1,27 @@
+using System.Text;
+using System.Reflection;
 using System.Globalization;
-using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 
-class BBScripts
+public class BBScripts
 {
-    Dictionary<string, BBScriptComposite> Scripts = new();
+    public Dictionary<string, BBScriptComposite> Scripts = new();
 }
 
-class BBScriptComposite
+public class BBScriptComposite
 {
     //public string Name;
 
     public Dictionary<string, Union<Var, VarTable>> AvatarVars = new();
     public Dictionary<string, Union<Var, VarTable>> CharVars = new();
 
-    BBScript? CharScript;
-    BBScript? ItemScript;
-    BBScript? BuffScript;
-    BBScript? SpellScript;
+    public BBScript CharScript = new();
+    public BBScript ItemScript = new();
+    public BBScript BuffScript = new();
+    public BBScript SpellScript = new();
 }
 
-class BBScript
+public class BBScript
 {
     public Dictionary<string, object> Metadata = new();
     public Dictionary<string, BBFunction> Functions = new();
@@ -28,19 +29,19 @@ class BBScript
     public List<Var> InstanceEffects = new();
 }
 /*
-class BBSpellScript
+public class BBSpellScript
 {
     public Dictionary<string, Union<Var, VarTable>> SpellVars = new();
 }
 */
-class BBFunction
+public class BBFunction
 {
     //public string Name;
     public List<Block> Blocks = new();
     public Dictionary<string, Union<Var, VarTable>> LocalVars = new();
 }
 
-class Var
+public class Var
 {
     //public string Name;
 
@@ -55,41 +56,41 @@ class Var
     public void Reveal(){}
 }
 
-class VarTable
+public class VarTable
 {
     //string Name;
 
     public bool Initialized = false;
     public bool Used = false;
-    Dictionary<string, Union<Var, VarTable>> Vars = new();
+    public Dictionary<string, Union<Var, VarTable>> Vars = new();
 }
 
-class Block
+public class Block
 {
     public string Function;
     public Dictionary<string, object> Params = new();
     public List<Block> SubBlocks = new();
 }
 
-class SubBlocks
+public class SubBlocks
 {
     public List<Block> Blocks = new();
     public Dictionary<string, Var> Params = new();
 }
 
-class Reference
+public class Reference
 {
     public Type? Type;
     public string? TableName;
     public string VarName;
 }
 
-class EffectReference: Reference
+public class EffectReference: Reference
 {
     public int ID;
 }
 
-class Composite
+public class Composite
 {
     public Type Type;
     public object? Value;
@@ -97,9 +98,9 @@ class Composite
     public EffectReference? VarByLevel;
 }
 
-class Program_v2
+public class Program_v2
 {
-    const string _BB_LUA = ".lua";
+    const string _BB_LUA = ".luaobj.lua";
     string[] globs =
     {
         //"Game/DATA/Characters/*/Scripts/*" + _BB_LUA,
@@ -117,16 +118,35 @@ class Program_v2
     }
     public void Run()
     {
+        var methodsDict = new Dictionary<string, MethodInfo>();
+        var scriptTypes = new Type[]
+        {
+            typeof(BBCharScript), typeof(BBSpellScript),
+            typeof(BBItemScript), typeof(BBBuffScript),
+        };
+        foreach(var scriptType in scriptTypes){
+            var methods = scriptType.GetMethods(BindingFlags.Public|BindingFlags.Instance);
+            foreach(var method in methods)
+            {
+                var mAttr = method.GetCustomAttribute<BBCallAttribute>();
+                if(mAttr != null)
+                {
+                    methodsDict[mAttr.Name] = method;
+                }
+            }
+        }
+
         const string cacheFile = "Cache.json";
         BBScripts? scripts = null;
         if(File.Exists(cacheFile))
         {
-            var json = File.ReadAllText(cacheFile);
+            var json = File.ReadAllText(cacheFile, Encoding.UTF8);
             scripts = JsonConvert.DeserializeObject<BBScripts>(json);
         }
         if(scripts == null)
         {
             scripts = new();
+
             var pwd = Directory.GetCurrentDirectory();
             foreach(var glob in globs)
             {
@@ -135,17 +155,41 @@ class Program_v2
                     if(!filePath.EndsWith(_BB_LUA))
                         continue;
                     
-                    var fileName = Path.GetFileNameWithoutExtension(filePath);
+                    var fileName = Path.GetFileName(filePath);
+                        fileName = fileName.Substring(0, fileName.Length - _BB_LUA.Length);
                     var text = File.ReadAllText(filePath);
 
-                    var (metadataJson, functionsJson) = BB2JSON.Convert(text);
-                    
-                    var metadata = JsonConvert.DeserializeObject<Dictionary<string, object>>(metadataJson);
-                    var functions = JsonConvert.DeserializeObject<Dictionary<string, Block[]>>(functionsJson); 
+                    var (metadata, functions) = BB2JSON.Parse(text);
 
-                                       
+                    var script = scripts.Scripts[fileName] = new();
+
+                    foreach(var func in functions)
+                    {
+                        if(func.Key == "PreLoad")
+                            continue;
+                        
+                        var declType = methodsDict.GetValueOrDefault(func.Key)?.DeclaringType;
+                        if(declType == null)
+                        {
+                            Console.WriteLine($"Unclassified function {func.Key}");
+                            continue;
+                        }
+                        var bbfunc = new BBFunction();
+                            bbfunc.Blocks = func.Value;
+                        
+                        if(declType == typeof(BBCharScript))
+                            script.CharScript.Functions.Add(func.Key, bbfunc);
+                        else if(declType == typeof(BBItemScript))
+                            script.ItemScript.Functions.Add(func.Key, bbfunc);
+                        else if(declType == typeof(BBSpellScript))
+                            script.SpellScript.Functions.Add(func.Key, bbfunc);
+                        else if(declType == typeof(BBBuffScript))
+                            script.BuffScript.Functions.Add(func.Key, bbfunc);
+                    }
                 }
             }
+
+            File.WriteAllText(cacheFile, JsonConvert.SerializeObject(scripts, Formatting.Indented), Encoding.UTF8);
         }
     }
 }

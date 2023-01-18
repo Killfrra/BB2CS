@@ -44,4 +44,5 @@ public class BBBuffScript
     [BBCall("BuffOnDealDamage")] public void OnDealDamage(DamageData data){}
     [BBCall("BuffOnUpdateAmmo")] public void OnUpdateAmmo(){}
     [BBCall("BuffOnZombie")] public void OnZombie(){}
+    [BBCall("BuffOnDodge")] public void OnDodge(){}
 }

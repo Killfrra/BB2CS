@@ -18,4 +18,5 @@ public class BBItemScript
     [BBCall("ItemOnPreDealDamage")] public void OnPreDealDamage(DamageData data){}
     [BBCall("ItemOnDealDamage")] public void OnDealDamage(DamageData data){}
     [BBCall("ItemOnSpellCast")] public void OnSpellCast(Spell spell){}
+    [BBCall("UpdateAura")] public void UpdateAura(){} //TODO: Verify
 }
