@@ -1237,4 +1237,11 @@ public static partial class Functions
     ){
         return default!;
     }
+
+    [BBFunc]
+    public static void SpellBuffRenew(
+        AttackableUnit target,
+        string buffName,
+        float resetDuration = 0
+    ){}
 }

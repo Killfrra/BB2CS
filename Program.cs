@@ -10,6 +10,10 @@ public static class StringExtensions
     {
         return Regex.Replace(str, @"^", "".PadRight(count), RegexOptions.Multiline);
     }
+    public static string UCFirst(this string str)
+    {
+        return Char.ToUpperInvariant(str[0]) + str.Substring(1);
+    }
 }
 
 /*
