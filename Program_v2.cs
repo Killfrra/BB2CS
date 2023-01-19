@@ -5,9 +5,12 @@ using Newtonsoft.Json;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json.Linq;
 using static Program_v2;
+using System.Diagnostics;
 
 public class BBScripts
 {
+    public Var CharVars = new(true);
+    public Var AvatarVars = new(true);
     public Dictionary<string, BBScriptComposite> Scripts = new();
     public void Scan()
     {
@@ -20,6 +23,26 @@ public class BBScripts
         "using System.Numerics;\n" +
         "using static Functions;\n" +
         "\n" +
+        """
+        public class Script
+        {
+            public AttackableUnit Owner;
+            public AllCharVars CharVars;
+            public AllAvatarVars AvatarVars;
+        }
+        """ + "\n" +
+        "public class AllCharVars" + "\n" +
+        "{" + "\n" +
+            string.Join("\n", CharVars.Vars.Select(
+                kv => kv.Value.ToCSharp(kv.Key)
+            )).Indent() + "\n" +
+        "}" + "\n" +
+        "public class AllAvatarVars" + "\n" +
+        "{" + "\n" +
+            string.Join("\n", AvatarVars.Vars.Select(
+                kv => kv.Value.ToCSharp(kv.Key)
+            )).Indent() + "\n" +
+        "}" + "\n" +
         string.Join("\n", Scripts.Select(
             kv => kv.Value.ToCSharp(kv.Key)
         )) + "\n";
@@ -29,14 +52,10 @@ public class BBScripts
 public class BBScriptComposite
 {
     //public string Name;
-
-    public Dictionary<string, Union<Var, VarTable>> AvatarVars = new();
-    public Dictionary<string, Union<Var, VarTable>> CharVars = new();
-
     public BBScript CharScript = new();
     public BBScript ItemScript = new();
     public BBScript BuffScript = new();
-    public BBScript SpellScript = new();
+    public BBSpellScript2 SpellScript = new();
 
     public BBScripts Parent;
 
@@ -54,10 +73,7 @@ public class BBScriptComposite
     }
 
     public string ToCSharp(string name)
-    {
-        if(Regex.IsMatch(name, @"^\d"))
-            name = "_" + name;
-        
+    {        
         var output = "";
         if(CharScript.Functions.Count > 0)
             output += CharScript.ToCSharp("Chars", name) + "\n";
@@ -75,7 +91,7 @@ public class BBScript
 {
     public Dictionary<string, object> Metadata = new();
     public Dictionary<string, BBFunction> Functions = new();
-    public Dictionary<string, Union<Var, VarTable>> InstanceVars = new();
+    public Var InstanceVars = new(true);
     public List<Var> InstanceEffects = new();
 
     public BBScriptComposite Parent;
@@ -91,34 +107,29 @@ public class BBScript
     {
         return
         "namespace " + ns + "\n" +
-        "{" + "\n" +
-            ("public class " + PrepareName(name) + "\n" +
-            "{" + "\n" +
+        "{" + "\n" + (
+            "public class " + PrepareName(name) + " : Script" + "\n" +
+            "{" + "\n" + (
+                string.Join("\n", InstanceVars.Vars.Select(
+                    kv => kv.Value.ToCSharp(kv.Key)
+                )) + "\n" +
                 string.Join("\n", Functions.Select(
                     kv => kv.Value.ToCSharp(kv.Key)
-                )).Indent() +
-            "\n" + "}").Indent() +
-        "\n" + "}";
+                ))).Indent() + "\n" +
+            "}").Indent() + "\n" +
+        "}";
     }
 }
-/*
-public class BBSpellScript
+
+public class BBSpellScript2: BBScript //TODO: Rename
 {
-    public Dictionary<string, Union<Var, VarTable>> SpellVars = new();
+    public Var SpellVars = new(true);
 }
-*/
+
 public class BBFunction: SubBlocks
 {
     //public string Name;
-
-    public Dictionary<string, Union<Var, VarTable>> LocalVars = new();
-
-    public string ToCSharp(string name)
-    {
-        return
-        "public void " + name + "()\n" +
-        BaseToCSharp();
-    }
+    public override bool Locked => false;
 }
 
 public class Block
@@ -158,22 +169,22 @@ public class Block
                 {
                     var paramName = (string)Params[paramNameName + "Var"];
                     var arg = new Var();
-                        arg.Write(typeof(object)); //TODO:
-                    sb.Args[paramName] = arg;
+                        arg.Initialized = true; //arg.Write(typeof(object)); //TODO:
+                    sb.LocalVars[paramName] = arg;
                 }
                 ResolvedParams.Add(sb);
             }
             else
             {
-                var value = new Composite(pInfo, Params);
+                var value = new Composite(pInfo, Params, Parent);
                 ResolvedParams.Add(value);
             }
 
             var returnType = mInfo.ReturnType;
             if(returnType != typeof(void))
             {
-                var fAttr = mInfo.GetCustomAttribute<BBFuncAttribute>() ?? new();
-                ResolvedReturn = Reference.Resolve(fAttr.Dest, Params);
+                var param0 = (ResolvedParams.Count > 0) ? ResolvedParams[0].Item1 : null;
+                ResolvedReturn = Reference.Resolve(mInfo, Params, Parent, param0);
             }
         }
     }
@@ -193,35 +204,91 @@ public class Var
     //public string Name;
 
     public Type? Type = null;
+    public bool IsTable => Type == typeof(VarTable);
+    public Dictionary<string, Var> Vars = new();
+
+    public Var(bool isTable = false)
+    {
+        if(isTable)
+            Type = typeof(VarTable);
+    }
+
     public bool Initialized = false;
     public bool Used = false;
+
+    HashSet<Type> Types = new();
     public void Read(Type type)
     {
         Used = true;
+        Types.Add(type);
     }
     public void Write(Type type)
     {
         Initialized = true;
+        Types.Add(type);
     }
 
-    List<Var> AssignedVars = new();
-    public void Assign(Var var){}
-    public void Reveal(){}
+    HashSet<Composite> AssignedVars = new();
+    public void Assign(Composite var)
+    {
+        Initialized = true;
+        AssignedVars.Add(var);
+    }
+    public void InferType()
+    {
+        if(Type != null)
+            return;
+        foreach(var v in AssignedVars)
+        {
+            v.InferType();
+            if(v.Type != null)
+                Types.Add(v.Type);
+        }
+        Type = Types.FirstOrDefault(); //TODO:
+    }
+
+    public string ToCSharp(string name)
+    {
+        InferType();
+
+        var output = "";
+        
+        if(!Initialized)
+            output += "//";
+
+        if(Type != null)
+            output += TypeToCSharp(Type);
+        else
+            output += "object";
+
+        if(!(Type != null && IsSummableType(Type)))
+            output += "?";
+
+        output += " " + PrepareName(name);
+
+        if(Type != null && IsSummableType(Type))
+            output += " = 0;";
+        else
+            output += " = null;";
+
+        output += " //";
+        foreach(var type in Types)
+            output += " " + TypeToCSharp(type);
+
+        return output;
+    }
 }
 
 public class VarTable
 {
-    //string Name;
-
-    public bool Initialized = false;
-    public bool Used = false;
-    public Dictionary<string, Union<Var, VarTable>> Vars = new();
+    private VarTable(){}
 }
 
 public class SubBlocks
 {
     public List<Block> Blocks = new();
-    public Dictionary<string, Var> Args = new();
+    public Dictionary<string, Var> LocalVars = new();
+    public virtual bool Locked => true;
     
     public BBScript ParentScript;
     public SubBlocks? ParentFunction;
@@ -241,11 +308,21 @@ public class SubBlocks
     public virtual string BaseToCSharp()
     {
         return
-        "{" + "\n" +
-        string.Join("\n", Blocks.Select(
-            block => block.ToCSharp()
-        )).Indent() +
-        "\n" + "}";
+        "{" + "\n" + (
+            string.Join("\n", LocalVars.Select(
+                kv => kv.Value.ToCSharp(kv.Key)
+            )) + "\n" +
+            string.Join("\n", Blocks.Select(
+                block => block.ToCSharp()
+            ))).Indent() + "\n" +
+        "}";
+    }
+
+    public string ToCSharp(string name)
+    {
+        return
+        "public void " + name + "()\n" +
+        BaseToCSharp();
     }
 
     public virtual string ToCSharp()
@@ -254,16 +331,60 @@ public class SubBlocks
         "() => " + "\n" +
         BaseToCSharp();
     }
+
+    private Var GetOrCreate(Dictionary<string, Var> table, string name)
+    {
+        return table.GetValueOrDefault(name) ?? (table[name] = new Var());
+    }
+    private Var? Resolve(string name)
+    {
+        return LocalVars.GetValueOrDefault(name) ?? ParentFunction?.Resolve(name);
+    }
+    private Var? Declare(string name, bool isTable)
+    {
+        if(!Locked)
+            return (LocalVars[name] = new Var(isTable));
+        else if(ParentFunction != null)
+            return ParentFunction.Declare(name, isTable);
+        else
+            return null;
+    }
+    private Var ResolveOrDeclare(string name, bool isTable)
+    {
+        var v = Resolve(name) ?? Declare(name, false)!;
+        //Debug.Assert(v.IsTable == isTable);
+        return v;
+    }
+    public virtual Var Resolve(Reference r)
+    {
+        if(r.TableName != null)
+        {
+            Var? table = null;
+            if(r.TableName == "InstanceVars")
+                table = ParentScript.InstanceVars;
+            else if(r.TableName == "CharVars")
+                table = ParentScript.Parent.Parent.CharVars;
+            else if(r.TableName == "AvatarVars")
+                table = ParentScript.Parent.Parent.AvatarVars;
+            else if(r.TableName == "SpellVars" && ParentScript is BBSpellScript2 ss)
+                table = ss.SpellVars;
+            else
+                table = ResolveOrDeclare(r.TableName, true);
+            
+            return GetOrCreate(table.Vars, r.VarName);
+        }
+        return ResolveOrDeclare(r.VarName, false);
+    }
 }
 
 public class Composite
 {
-    public Type Type;
+    public Type? Type;
     public object? Value;
     public Reference? Var;
     public EffectReference? VarByLevel;
 
-    public Composite(ParameterInfo pInfo, Dictionary<string, object> ps)
+    public Composite(ParameterInfo pInfo, Dictionary<string, object> ps, SubBlocks sb)
     {
         var pAttr = pInfo.GetCustomAttribute<BBParamAttribute>() ?? new();
 
@@ -274,22 +395,23 @@ public class Composite
         var tableName = (pAttr.VarTablePostfix != null) ? ps.GetValueOrDefault(name + pAttr.VarTablePostfix) as string : null;
 
         Type = pInfo.ParameterType;
+        if(Type.Name == "T") //HACK:
+            Type = null;
+
         Value = value;
-        Var = (varName != null && varName != "Nothing") ? new Reference(tableName, varName) : null;
-        
+        if(varName != null && varName != "Nothing")
+        {
+            Var = new Reference(tableName, varName);
+
+            var v = sb.Resolve(Var);
+            if(Type != null)
+                v.Read(Type);
+            else
+                v.Used = true;
+        }
         VarByLevel = (valueByLevel != null) ?
             new EffectReference(((JArray)valueByLevel).ToObject<object[]>()!)
             : null;
-    }
-
-    bool IsSummableType(Type type)
-    {
-        return type == typeof(int) || type == typeof(float); //TODO:
-    }
-
-    bool IsFloating(Type type)
-    {
-        return type == typeof(float) || type == typeof(double) || type == typeof(decimal);
     }
 
     public string ToCSharp()
@@ -313,20 +435,20 @@ public class Composite
             }
             else if(IsSummableType(Type))
             {
-                var output = "0";
-                if(Value != null)
+                var output = new List<string>();
+                if(Value != null && Convert.ToSingle(Value) != 0)
                 {
-                    output = ObjectToCSharp(Value);
+                    output.Add(ObjectToCSharp(Value));
                 }
                 if(Var != null)
                 {
-                    output += $" + ({Var.ToCSharp()} ?? 0)";
+                    output.Add(Var.ToCSharp());
                 }
                 if(VarByLevel != null)
                 {
-                    output += $" + ({VarByLevel.ToCSharp()} ?? 0)";
+                    output.Add(VarByLevel.ToCSharp());
                 }
-                return output;
+                return string.Join(" + ", output);
             }
             else
             {
@@ -380,6 +502,13 @@ public class Composite
                 return value.ToString()!;
         }
     }
+
+    public void InferType()
+    {
+        if(Type != null)
+            return;
+        Type = Value?.GetType();
+    }
 }
 
 public class Reference
@@ -394,20 +523,28 @@ public class Reference
         VarName = varName;
     }
 
-    public static Reference? Resolve(string name, Dictionary<string, object> ps)
+    public static Reference? Resolve(MethodInfo mInfo, Dictionary<string, object> ps, SubBlocks sb, Composite? param0)
     {
-        name = name.UCFirst();
+        var fAttr = mInfo.GetCustomAttribute<BBFuncAttribute>() ?? new();
+
+        var name = fAttr.Dest.UCFirst();
         var varName = ps.GetValueOrDefault(name + "Var") as string;
         var tableName = ps.GetValueOrDefault(name + "VarTable") as string;
         if(varName != null && varName != "Nothing")
         {
-            return new Reference(tableName, varName);
+            var r = new Reference(tableName, varName);
+            var v = sb.Resolve(r);
+            if(mInfo.Name == nameof(Functions.SetVarInTable))
+                v.Assign(param0);
+            else
+                v.Write(mInfo.ReturnType);
+            return r;
         }
         else
             return null;
     }
 
-    public string ToCSharp()
+    public virtual string ToCSharp()
     {
         if(TableName != null)
         {
@@ -428,9 +565,14 @@ public class EffectReference: Reference
     public EffectReference(object[] values)
     {
         Values = values;
-        
-        TableName = "InstanceVars";
-        VarName = $"Effect{ID}";
+
+        Type = values.FirstOrDefault()?.GetType();
+        TableName = null;
+        VarName = "Level";
+    }
+    public override string ToCSharp()
+    {
+        return $"this.Effect{ID}[Level]";
     }
 }
 
@@ -456,6 +598,38 @@ public class Program_v2
             name = "_" + name;
         }
         return name;
+    }
+
+    static Dictionary<Type, string> primitiveTypes = new Dictionary<Type, string>
+    {
+        { typeof(bool), "bool" },
+        { typeof(byte), "byte" },
+        { typeof(char), "char" },
+        { typeof(decimal), "decimal" },
+        { typeof(double), "double" },
+        { typeof(float), "float" },
+        { typeof(int), "int" },
+        { typeof(long), "long" },
+        { typeof(sbyte), "sbyte" },
+        { typeof(short), "short" },
+        { typeof(string), "string" },
+        { typeof(uint), "uint" },
+        { typeof(ulong), "ulong" },
+        { typeof(ushort), "ushort" },
+    };
+    public static string TypeToCSharp(Type type)
+    {
+        return primitiveTypes.GetValueOrDefault(type) ?? type.Name;
+    }
+
+    public static bool IsSummableType(Type type)
+    {
+        return type == typeof(int) || type == typeof(float); //TODO:
+    }
+
+    public static bool IsFloating(Type type)
+    {
+        return type == typeof(float) || type == typeof(double) || type == typeof(decimal);
     }
 
     public static void Main()
