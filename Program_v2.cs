@@ -4,6 +4,7 @@ using System.Globalization;
 using Newtonsoft.Json;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json.Linq;
+using static Program_v2;
 
 public class BBScripts
 {
@@ -42,10 +43,14 @@ public class BBScriptComposite
     public void Scan(BBScripts parent)
     {
         Parent = parent;
-        CharScript.Scan(this);
-        ItemScript.Scan(this);
-        BuffScript.Scan(this);
-        SpellScript.Scan(this);
+        if(CharScript.Functions.Count > 0)
+            CharScript.Scan(this);
+        if(ItemScript.Functions.Count > 0)
+            ItemScript.Scan(this);
+        if(BuffScript.Functions.Count > 0)
+            BuffScript.Scan(this);
+        if(SpellScript.Functions.Count > 0)
+            SpellScript.Scan(this);
     }
 
     public string ToCSharp(string name)
@@ -53,11 +58,16 @@ public class BBScriptComposite
         if(Regex.IsMatch(name, @"^\d"))
             name = "_" + name;
         
-        return
-        CharScript.ToCSharp("Chars", name) + "\n" +
-        ItemScript.ToCSharp("Items", name) + "\n" +
-        BuffScript.ToCSharp("Buffs", name) + "\n" +
-        SpellScript.ToCSharp("Spells", name);
+        var output = "";
+        if(CharScript.Functions.Count > 0)
+            output += CharScript.ToCSharp("Chars", name) + "\n";
+        if(ItemScript.Functions.Count > 0)
+            output += ItemScript.ToCSharp("Items", name) + "\n";
+        if(BuffScript.Functions.Count > 0)
+            output += BuffScript.ToCSharp("Buffs", name) + "\n";
+        if(SpellScript.Functions.Count > 0)
+            output += SpellScript.ToCSharp("Spells", name);
+        return output;
     }
 }
 
@@ -82,7 +92,7 @@ public class BBScript
         return
         "namespace " + ns + "\n" +
         "{" + "\n" +
-            ("public class " + name + "\n" +
+            ("public class " + PrepareName(name) + "\n" +
             "{" + "\n" +
                 string.Join("\n", Functions.Select(
                     kv => kv.Value.ToCSharp(kv.Key)
@@ -170,8 +180,11 @@ public class Block
 
     public string ToCSharp()
     {
-        return ResolvedName + "(" +
-        string.Join(", ", ResolvedParams.Select(p => p.Item1?.ToCSharp() ?? p.Item2?.ToCSharp())) + ");";
+        return
+        ((ResolvedReturn != null) ? (ResolvedReturn.ToCSharp() + " = ") : "") +
+        ResolvedName + "(" +
+            string.Join(", ", ResolvedParams.Select(p => p.Item1?.ToCSharp() ?? p.Item2?.ToCSharp())) +
+        ");";
     }
 }
 
@@ -237,7 +250,9 @@ public class SubBlocks
 
     public virtual string ToCSharp()
     {
-        return "() => " + BaseToCSharp();
+        return
+        "() => " + "\n" +
+        BaseToCSharp();
     }
 }
 
@@ -267,9 +282,103 @@ public class Composite
             : null;
     }
 
+    bool IsSummableType(Type type)
+    {
+        return type == typeof(int) || type == typeof(float); //TODO:
+    }
+
+    bool IsFloating(Type type)
+    {
+        return type == typeof(float) || type == typeof(double) || type == typeof(decimal);
+    }
+
     public string ToCSharp()
     {
-        return ""; //TODO:
+        int count = Convert.ToInt32(Value != null) +
+                    Convert.ToInt32(Var != null) +
+                    Convert.ToInt32(VarByLevel != null);
+        if(count > 0)
+        {
+            if(count == 1)
+            {
+                if(Value != null)
+                {
+                    return ObjectToCSharp(Value);
+                }
+                else
+                {
+                    var r = (Var ?? VarByLevel)!;
+                    return r.ToCSharp();
+                }
+            }
+            else if(IsSummableType(Type))
+            {
+                var output = "0";
+                if(Value != null)
+                {
+                    output = ObjectToCSharp(Value);
+                }
+                if(Var != null)
+                {
+                    output += $" + ({Var.ToCSharp()} ?? 0)";
+                }
+                if(VarByLevel != null)
+                {
+                    output += $" + ({VarByLevel.ToCSharp()} ?? 0)";
+                }
+                return output;
+            }
+            else
+            {
+                var output = new List<string>();
+                if(Var != null)
+                {
+                    output.Add(Var.ToCSharp());
+                }
+                if(VarByLevel != null)
+                {
+                    output.Add(VarByLevel.ToCSharp());
+                }
+                else if(Value != null)
+                {
+                    output.Add(ObjectToCSharp(Value));
+                }
+                return string.Join(" ?? ", output);
+            }
+        }
+        else
+            return "default";
+    }
+
+    string ObjectToCSharp(object value)
+    {
+        if(value is string s)
+        {
+            if(s.StartsWith("$") && s.EndsWith("$"))
+            {
+                s = s.Substring(1, s.Length - 1 - 1);
+                var constant = Constants.Table.GetValueOrDefault(s);
+                if(constant != null)
+                {
+                    s = ObjectToCSharp(constant);
+                }
+                return s;
+            }
+            else
+                return ("\"" + s + "\"");
+        }
+        else if(value is bool b)
+            return b ? "true" : "false";
+        else
+        {
+            var type = value.GetType();
+            if(type.IsEnum)
+                return string.Join(" | ", value.ToString()!.Split(", ").Select(x => type.Name + "." + x));
+            else if(IsFloating(type))
+                return value.ToString() + "f";
+            else
+                return value.ToString()!;
+        }
     }
 }
 
@@ -296,6 +405,19 @@ public class Reference
         }
         else
             return null;
+    }
+
+    public string ToCSharp()
+    {
+        if(TableName != null)
+        {
+            var tableName = TableName;
+            if(tableName == "InstanceVars")
+                tableName = "this";
+            return tableName + "." + PrepareName(VarName);
+        }
+        else
+            return PrepareName(VarName);
     }
 }
 
@@ -325,6 +447,16 @@ public class Program_v2
     };
 
     public static new Dictionary<string, MethodInfo> Methods = new();
+
+    public static string PrepareName(string name)
+    {
+        name = Regex.Replace(name, @"\W","_");
+        if(Regex.IsMatch("" + name[0], @"[^a-zA-Z]"))
+        {
+            name = "_" + name;
+        }
+        return name;
+    }
 
     public static void Main()
     {
