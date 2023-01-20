@@ -79,10 +79,8 @@ public class SubBlocks
     {
         if(!Locked)
             return (LocalVars[name] = new Var(isTable, parent: this));
-        else if(ParentFunction != null)
-            return ParentFunction.Declare(name, isTable);
         else
-            return null;
+            return ParentFunction?.Declare(name, isTable);
     }
     private Var ResolveOrDeclare(string name, bool isTable)
     {

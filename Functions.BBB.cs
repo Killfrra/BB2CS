@@ -153,7 +153,7 @@ public static partial class Functions
 
     [BBFunc]
     public static void IncPermanentStat(
-        object stat,
+        Action<AttackableUnit, float> stat,
         AttackableUnit target,
         float delta
     ){}
@@ -191,8 +191,8 @@ public static partial class Functions
     ){}
 
     [BBFunc]
-    public static object GetCastInfo(
-        object info
+    public static T GetCastInfo<T>(
+        Func<T> info
     ){
         return default!; // Union<string, float>
     }

@@ -60,6 +60,10 @@ public static partial class Functions
     {
         SetStatus(target, StatusFlags.IgnoreCallForHelp, src);
     }
+    public static void SetImmovable(AttackableUnit target, bool src)
+    {
+        SetStatus(target, StatusFlags.Immovable, src);
+    }
     public static void SetInvulnerable(AttackableUnit target, bool src)
     {
         SetStatus(target, StatusFlags.Invulnerable, src);

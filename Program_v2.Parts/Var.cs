@@ -8,8 +8,8 @@ public class Var
 {
     //public string Name;
 
-    public Type? Type = null;
-    public bool IsTable => Type == typeof(VarTable);
+    public Type? Type = null; //TODO: Type != typeof(VarTable) but IsTable == true
+    public bool IsTable => Type == typeof(VarTable) || Vars.Count > 0;
     public bool IsArgument = false;
     public Dictionary<string, Var> Vars = new();
 

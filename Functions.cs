@@ -32,7 +32,7 @@ public static partial class Functions
         bool invulnerable,
         bool magicImmune,
         bool ignoreCollision,
-        int visibilitySize,
+        float visibilitySize,
         bool isWard = false,
         bool placemarker = false,
         Champion? goldRedirectTarget = null,
@@ -356,7 +356,7 @@ public static partial class Functions
 
     [BBFunc]
     public static void SetSpellToolTipVar(
-        int value,
+        float value,
         int index,
         int slotNumber,
         SpellSlotType slotType,
@@ -417,7 +417,7 @@ public static partial class Functions
     public static void ForNClosestUnitsInTargetArea(
         AttackableUnit attacker,
         Vector3 center,
-        int range,
+        float range,
         SpellDataFlags flags,
         int maximumUnitsToPick,
         bool? inclusiveBuffFilter,
@@ -448,7 +448,7 @@ public static partial class Functions
     [BBFunc(Dest = "BubbleID")]
     public static Region AddUnitPerceptionBubble(
         TeamId team,
-        int radius,
+        float radius,
         AttackableUnit target,
         float duration,
         AttackableUnit specificUnitsClientOnly,
@@ -468,6 +468,31 @@ public static partial class Functions
     public static void RemovePerceptionBubble(
         Region bubbleID
     ){}
+
+    public static string GetSpellName(AttackableUnit target)
+    {
+        return default!;
+    }
+    public static float GetPARCost(AttackableUnit target)
+    {
+        return default!;
+    }
+    public static int GetSpellSlot(AttackableUnit target)
+    {
+        return default!;
+    }
+    public static int GetCastSpellLevelPlusOne(AttackableUnit target)
+    {
+        return default!;
+    }
+    public static bool GetIsAttackOverride(AttackableUnit target)
+    {
+        return default!;
+    }
+    public static int GetCastSpellTargetsHitPlusOne(AttackableUnit target)
+    {
+        return default!;
+    }
 
     [BBFunc]
     public static void SetDodgePiercing(
@@ -525,7 +550,7 @@ public static partial class Functions
         ObjAIBase spellSlotOwner,
         int spellSlot,
         SpellSlotType slotType,
-        int cost,
+        float cost,
         PrimaryAbilityResourceType PARType
     ){}
 
@@ -657,7 +682,7 @@ public static partial class Functions
     [BBFunc]
     public static void IncGold(
         AttackableUnit target,
-        int delta
+        float delta
     ){}
 
     [BBFunc]
@@ -673,7 +698,7 @@ public static partial class Functions
     public static void ForNClosestVisibleUnitsInTargetArea(
         AttackableUnit attacker,
         Vector3 center,
-        int range,
+        float range,
         SpellDataFlags flags,
         int maximumUnitsToPick,
         bool? inclusiveBuffFilter,
@@ -687,8 +712,8 @@ public static partial class Functions
     public static void ForEachUnitInTargetRectangle(
         AttackableUnit attacker,
         Vector3 center,
-        int halfWidth,
-        int halfLength,
+        float halfWidth,
+        float halfLength,
         SpellDataFlags flags,
         bool? inclusiveBuffFilter,
         string? buffNameFilter,
@@ -734,7 +759,7 @@ public static partial class Functions
         AttackableUnit spellSlotOwner,
         int spellSlot,
         SpellSlotType slotType,
-        int cost,
+        float cost,
         PrimaryAbilityResourceType PARType
     ){}
 
@@ -757,10 +782,10 @@ public static partial class Functions
     public static Pet CloneUnitPet(
         AttackableUnit unitToClone,
         string buff,
-        int duration,
+        float duration,
         Vector3 pos,
-        int healthBonus,
-        int damageBonus,
+        float healthBonus,
+        float damageBonus,
         bool showMinimapIcon
     ){
         return default!;
@@ -775,7 +800,7 @@ public static partial class Functions
     [BBFunc]
     public static void IncMaxHealth(
         AttackableUnit target,
-        int delta,
+        float delta,
         bool incCurrentHealth
     ){}
 
@@ -882,7 +907,7 @@ public static partial class Functions
         int colorRed,
         int colorGreen,
         int colorBlue,
-        int fadeTime,
+        float fadeTime,
         float maxWeight,
         TeamId specificToTeam
     ){}
@@ -905,7 +930,7 @@ public static partial class Functions
     [BBFunc]
     public static void IncExp(
         AttackableUnit target,
-        int delta
+        float delta
     ){}
 
     [BBFunc]
@@ -919,7 +944,7 @@ public static partial class Functions
     public static void ApplyFear(
         AttackableUnit attacker,
         AttackableUnit target,
-        int duration
+        float duration
     ){}
 
     [BBFunc(Dest = "Result")]
@@ -940,8 +965,8 @@ public static partial class Functions
     public static void ForEachPointOnLine(
         Vector3 center,
         Vector3 faceTowardsPos,
-        int size,
-        int pushForward,
+        float size,
+        float pushForward,
         int iterations,
 
         [BBSubBlocks("Iterator")]
@@ -949,7 +974,7 @@ public static partial class Functions
     ){}
 
     [BBFunc(Dest = "Position")]
-    public static Vector3 ModifyPosition(int x, int y, int z){
+    public static Vector3 ModifyPosition(float x, float y, float z){
         return default!;
     }
 
@@ -962,20 +987,20 @@ public static partial class Functions
     public static void MoveToUnit(
         AttackableUnit unit,
         AttackableUnit target,
-        int speed,
-        int gravity,
+        float speed,
+        float gravity,
         ForceMovementOrdersType movementOrdersType,
-        int moveBackBy,
-        int maxTrackDistance,
-        int idealDistance,
-        int timeOverride
+        float moveBackBy,
+        float maxTrackDistance,
+        float idealDistance,
+        float timeOverride
     ){}
 
     [BBFunc]
     public static void ForEachUnitInTargetAreaAddBuff(
         AttackableUnit attacker,
         Vector3 center,
-        int range,
+        float range,
         SpellDataFlags flags,
         AttackableUnit buffAttacker,
         string buffName,
@@ -985,7 +1010,7 @@ public static partial class Functions
         int buffNumberOfStacks,
         float buffDuration,
         Table buffVarsTable,
-        int tickRate,
+        float tickRate,
         bool isHiddenOnClient,
         bool? inclusiveBuffFilter
     ){}
@@ -997,7 +1022,7 @@ public static partial class Functions
 
     [BBFunc]
     public static void FadeOutColorFadeEffect(
-        int fadeTime,
+        float fadeTime,
         TeamId specificToTeam
     ){}
 
@@ -1040,10 +1065,10 @@ public static partial class Functions
         string skin,
         string buff,
         string? aiScript,
-        int duration,
+        float duration,
         Vector3 pos,
-        int healthBonus,
-        int damageBonus
+        float healthBonus,
+        float damageBonus
     ){
         return default!;
     }
@@ -1073,7 +1098,7 @@ public static partial class Functions
     public static void ForEachVisibleUnitInTargetAreaRandom(
         AttackableUnit attacker,
         Vector3 center,
-        int range,
+        float range,
         SpellDataFlags flags,
         int maximumUnitsToPick,
         string buffNameFilter,
@@ -1121,7 +1146,7 @@ public static partial class Functions
     [BBFunc]
     public static void ForEachPointAroundCircle(
         Vector3 center,
-        int radius,
+        float radius,
         int iterations,
 
         [BBSubBlocks("Iterator")]
@@ -1146,7 +1171,7 @@ public static partial class Functions
 
     [BBFunc]
     public static void SetSpellCastRange(
-        int newRange
+        float newRange
     ){}
 
     [BBFunc]
@@ -1186,7 +1211,7 @@ public static partial class Functions
     [BBFunc]
     public static void ModifyShield(
         AttackableUnit unit,
-        int amount = 0,
+        float amount = 0,
         bool magicShield = false,
         bool physicalShield = false,
         bool noFade = false //TODO: Validate
@@ -1194,21 +1219,21 @@ public static partial class Functions
     [BBFunc]
     public static void IncreaseShield(
         AttackableUnit unit,
-        int amount = 0,
+        float amount = 0,
         bool magicShield = false,
         bool physicalShield = false
     ){}
     [BBFunc]
     public static void ReduceShield(
         AttackableUnit unit,
-        int amount = 0,
+        float amount = 0,
         bool magicShield = false,
         bool physicalShield = false
     ){}
     [BBFunc]
     public static void RemoveShield(
         AttackableUnit unit,
-        int amount = 0,
+        float amount = 0,
         bool magicShield = false,
         bool physicalShield = false
     ){}
@@ -1223,7 +1248,7 @@ public static partial class Functions
     [BBFunc]
     public static void DefUpdateAura(
         Vector3 center,
-        int range,
+        float range,
         AttackableUnit unitScan,
         string buffName
     ){}
@@ -1232,7 +1257,7 @@ public static partial class Functions
     public static void SetCanCastWhileDisabled(bool canCast){}
 
     [BBFunc]
-    public static int GetGold(
+    public static float GetGold(
         //TODO:
     ){
         return default!;

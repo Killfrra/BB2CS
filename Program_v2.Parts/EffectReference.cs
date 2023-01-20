@@ -10,9 +10,16 @@ public class EffectReference: Reference
         ID = id;
         Values = values;
 
-        Type = InferTypeFrom(
-            values.Select(v => v.GetType())
-        );
+        if(values.All(v => IsSummableType(v.GetType())))
+        {
+            if(values.Any(v => IsFloating(v.GetType())))
+                Type = typeof(float);
+            else
+                Type = typeof(int);        
+        }
+        else
+            Type = InferTypeFrom(values.Select(v => v.GetType()));
+        
         TableName = null;
         VarName = "Level";
     }

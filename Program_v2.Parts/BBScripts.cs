@@ -11,15 +11,18 @@ public class BBScripts
     public string ToCSharp()
     {
         return
-        "using System.Numerics;\n" +
-        "using static Functions;\n" +
-        "\n" +
         """
+        using System.Numerics;
+        using static Functions;
+        
         public class Script
         {
-            public AttackableUnit Owner;
             public AllCharVars CharVars;
             public AllAvatarVars AvatarVars;
+
+            public ObjAIBase Owner; //HACK:
+            public ObjAIBase Attacker; //HACK:
+            public ObjAIBase Target; //HACK:
         }
         """ + "\n" +
         "public class AllCharVars" + "\n" +

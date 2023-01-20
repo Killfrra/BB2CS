@@ -71,69 +71,69 @@ public static partial class Functions
         return default!;
     }
     
-    public static void IncAcquisitionRangeMod(float delta, AttackableUnit? target = null){}
-    public static void IncFlatArmorMod(float delta, AttackableUnit? target = null){}
-    public static void IncFlatArmorPenetrationMod(float delta, AttackableUnit? target = null){}
-    public static void IncFlatAttackRangeMod(float delta, AttackableUnit? target = null){}
-    public static void IncFlatBubbleRadiusMod(float delta, AttackableUnit? target = null){}
-    public static void IncFlatCritChanceMod(float delta, AttackableUnit? target = null){}
-    public static void IncFlatCritDamageMod(float delta, AttackableUnit? target = null){}
-    public static void IncFlatDodgeMod(float delta, AttackableUnit? target = null){}
-    public static void IncFlatGoldPer10Mod(float delta, AttackableUnit? target = null){}
-    public static void IncFlatHPPoolMod(float delta, AttackableUnit? target = null){}
-    public static void IncFlatHPRegenMod(float delta, AttackableUnit? target = null){}
-    public static void IncFlatMagicDamageMod(float delta, AttackableUnit? target = null){}
-    public static void IncFlatMagicPenetrationMod(float delta, AttackableUnit? target = null){}
-    public static void IncFlatMagicReduction(float delta, AttackableUnit? target = null){}
-    public static void IncFlatMissChanceMod(float delta, AttackableUnit? target = null){}
-    public static void IncFlatMovementSpeedMod(float delta, AttackableUnit? target = null){}
-    public static void IncFlatPhysicalDamageMod(float delta, AttackableUnit? target = null){}
-    public static void IncFlatPhysicalReduction(float delta, AttackableUnit? target = null){}
-    public static void IncFlatSpellBlockMod(float delta, AttackableUnit? target = null){}
+    public static void IncAcquisitionRangeMod(AttackableUnit? target, float delta){}
+    public static void IncFlatArmorMod(AttackableUnit? target, float delta){}
+    public static void IncFlatArmorPenetrationMod(AttackableUnit? target, float delta){}
+    public static void IncFlatAttackRangeMod(AttackableUnit? target, float delta){}
+    public static void IncFlatBubbleRadiusMod(AttackableUnit? target, float delta){}
+    public static void IncFlatCritChanceMod(AttackableUnit? target, float delta){}
+    public static void IncFlatCritDamageMod(AttackableUnit? target, float delta){}
+    public static void IncFlatDodgeMod(AttackableUnit? target, float delta){}
+    public static void IncFlatGoldPer10Mod(AttackableUnit? target, float delta){}
+    public static void IncFlatHPPoolMod(AttackableUnit? target, float delta){}
+    public static void IncFlatHPRegenMod(AttackableUnit? target, float delta){}
+    public static void IncFlatMagicDamageMod(AttackableUnit? target, float delta){}
+    public static void IncFlatMagicPenetrationMod(AttackableUnit? target, float delta){}
+    public static void IncFlatMagicReduction(AttackableUnit? target, float delta){}
+    public static void IncFlatMissChanceMod(AttackableUnit? target, float delta){}
+    public static void IncFlatMovementSpeedMod(AttackableUnit? target, float delta){}
+    public static void IncFlatPhysicalDamageMod(AttackableUnit? target, float delta){}
+    public static void IncFlatPhysicalReduction(AttackableUnit? target, float delta){}
+    public static void IncFlatSpellBlockMod(AttackableUnit? target, float delta){}
 
-    public static void IncMoveSpeedFloorMod(float delta, AttackableUnit? target = null){}
+    public static void IncMoveSpeedFloorMod(AttackableUnit? target, float delta){}
 
-    public static void IncPercentArmorMod(float delta, AttackableUnit? target = null){}
-    public static void IncPercentArmorPenetrationMod(float delta, AttackableUnit? target = null){}
-    public static void IncPercentAttackSpeedMod(float delta, AttackableUnit? target = null){}
-    public static void IncPercentBubbleRadiusMod(float delta, AttackableUnit? target = null){}
-    public static void IncPercentCooldownMod(float delta, AttackableUnit? target = null){}
-    public static void IncPercentEXPBonus(float delta, AttackableUnit? target = null){}
-    public static void IncPercentHPPoolMod(float delta, AttackableUnit? target = null){}
-    public static void IncPercentHPRegenMod(float delta, AttackableUnit? target = null){}
-    public static void IncPercentLifeStealMod(float delta, AttackableUnit? target = null){}
-    public static void IncPercentMagicDamageMod(float delta, AttackableUnit? target = null){}
-    public static void IncPercentMagicPenetrationMod(float delta, AttackableUnit? target = null){}
-    public static void IncPercentMagicReduction(float delta, AttackableUnit? target = null){}
-    public static void IncPercentMovementSpeedMod(float delta, AttackableUnit? target = null){}
-    public static void IncPercentMultiplicativeAttackSpeedMod(float delta, AttackableUnit? target = null){}
-    public static void IncPercentMultiplicativeMovementSpeedMod(float delta, AttackableUnit? target = null){}
-    public static void IncPercentPhysicalDamageMod(float delta, AttackableUnit? target = null){}
-    public static void IncPercentPhysicalReduction(float delta, AttackableUnit? target = null){}
-    public static void IncPercentRespawnTimeMod(float delta, AttackableUnit? target = null){}
-    public static void IncPercentSpellBlockMod(float delta, AttackableUnit? target = null){}
-    public static void IncPercentSpellVampMod(float delta, AttackableUnit? target = null){}
+    public static void IncPercentArmorMod(AttackableUnit? target, float delta){}
+    public static void IncPercentArmorPenetrationMod(AttackableUnit? target, float delta){}
+    public static void IncPercentAttackSpeedMod(AttackableUnit? target, float delta){}
+    public static void IncPercentBubbleRadiusMod(AttackableUnit? target, float delta){}
+    public static void IncPercentCooldownMod(AttackableUnit? target, float delta){}
+    public static void IncPercentEXPBonus(AttackableUnit? target, float delta){}
+    public static void IncPercentHPPoolMod(AttackableUnit? target, float delta){}
+    public static void IncPercentHPRegenMod(AttackableUnit? target, float delta){}
+    public static void IncPercentLifeStealMod(AttackableUnit? target, float delta){}
+    public static void IncPercentMagicDamageMod(AttackableUnit? target, float delta){}
+    public static void IncPercentMagicPenetrationMod(AttackableUnit? target, float delta){}
+    public static void IncPercentMagicReduction(AttackableUnit? target, float delta){}
+    public static void IncPercentMovementSpeedMod(AttackableUnit? target, float delta){}
+    public static void IncPercentMultiplicativeAttackSpeedMod(AttackableUnit? target, float delta){}
+    public static void IncPercentMultiplicativeMovementSpeedMod(AttackableUnit? target, float delta){}
+    public static void IncPercentPhysicalDamageMod(AttackableUnit? target, float delta){}
+    public static void IncPercentPhysicalReduction(AttackableUnit? target, float delta){}
+    public static void IncPercentRespawnTimeMod(AttackableUnit? target, float delta){}
+    public static void IncPercentSpellBlockMod(AttackableUnit? target, float delta){}
+    public static void IncPercentSpellVampMod(AttackableUnit? target, float delta){}
 
-    public static void IncPermanentFlatArmorMod(float delta, AttackableUnit? target = null){}
-    public static void IncPermanentFlatArmorPenetrationMod(float delta, AttackableUnit? target = null){}
-    public static void IncPermanentFlatAttackRangeMod(float delta, AttackableUnit? target = null){}
-    public static void IncPermanentFlatBubbleRadiusMod(float delta, AttackableUnit? target = null){}
-    public static void IncPermanentFlatCritChanceMod(float delta, AttackableUnit? target = null){}
-    public static void IncPermanentFlatGoldPer10Mod(float delta, AttackableUnit? target = null){}
-    public static void IncPermanentFlatHPPoolMod(float delta, AttackableUnit? target = null){}
-    public static void IncPermanentFlatHPRegenMod(float delta, AttackableUnit? target = null){}
-    public static void IncPermanentFlatMagicDamageMod(float delta, AttackableUnit? target = null){}
-    public static void IncPermanentFlatMovementSpeedMod(float delta, AttackableUnit? target = null){}
-    public static void IncPermanentFlatPhysicalDamageMod(float delta, AttackableUnit? target = null){}
-    public static void IncPermanentFlatSpellBlockMod(float delta, AttackableUnit? target = null){}
+    public static void IncPermanentFlatArmorMod(AttackableUnit? target, float delta){}
+    public static void IncPermanentFlatArmorPenetrationMod(AttackableUnit? target, float delta){}
+    public static void IncPermanentFlatAttackRangeMod(AttackableUnit? target, float delta){}
+    public static void IncPermanentFlatBubbleRadiusMod(AttackableUnit? target, float delta){}
+    public static void IncPermanentFlatCritChanceMod(AttackableUnit? target, float delta){}
+    public static void IncPermanentFlatGoldPer10Mod(AttackableUnit? target, float delta){}
+    public static void IncPermanentFlatHPPoolMod(AttackableUnit? target, float delta){}
+    public static void IncPermanentFlatHPRegenMod(AttackableUnit? target, float delta){}
+    public static void IncPermanentFlatMagicDamageMod(AttackableUnit? target, float delta){}
+    public static void IncPermanentFlatMovementSpeedMod(AttackableUnit? target, float delta){}
+    public static void IncPermanentFlatPhysicalDamageMod(AttackableUnit? target, float delta){}
+    public static void IncPermanentFlatSpellBlockMod(AttackableUnit? target, float delta){}
 
-    public static void IncPermanentPercentAttackSpeedMod(float delta, AttackableUnit? target = null){}
-    public static void IncPermanentPercentBubbleRadiusMod(float delta, AttackableUnit? target = null){}
-    public static void IncPermanentPercentCooldownMod(float delta, AttackableUnit? target = null){}
-    public static void IncPermanentPercentEXPBonus(float delta, AttackableUnit? target = null){}
-    public static void IncPermanentPercentHPRegenMod(float delta, AttackableUnit? target = null){}
-    public static void IncPermanentPercentMovementSpeedMod(float delta, AttackableUnit? target = null){}
-    public static void IncPermanentPercentPhysicalDamageMod(float delta, AttackableUnit? target = null){}
+    public static void IncPermanentPercentAttackSpeedMod(AttackableUnit? target, float delta){}
+    public static void IncPermanentPercentBubbleRadiusMod(AttackableUnit? target, float delta){}
+    public static void IncPermanentPercentCooldownMod(AttackableUnit? target, float delta){}
+    public static void IncPermanentPercentEXPBonus(AttackableUnit? target, float delta){}
+    public static void IncPermanentPercentHPRegenMod(AttackableUnit? target, float delta){}
+    public static void IncPermanentPercentMovementSpeedMod(AttackableUnit? target, float delta){}
+    public static void IncPermanentPercentPhysicalDamageMod(AttackableUnit? target, float delta){}
 
     public static float GetPAR(AttackableUnit owner/*, PrimaryAbilityResourceType PARType*/)
     {
