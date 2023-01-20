@@ -19,7 +19,11 @@ public class Union<T1, T2, T3>: Union<T1, T2>
 {
     private T3? item3;
     public T3? Item3 => item3;
+    public Union(T1 item): base(item){}
+    public Union(T2 item): base(item){}
     public Union(T3 item){ item3 = item; }
+    public static implicit operator Union<T1, T2, T3>(T1 item){ return new(item); }
+    public static implicit operator Union<T1, T2, T3>(T2 item){ return new(item); }
     public static implicit operator Union<T1, T2, T3>(T3 item){ return new(item); }
     public override string? ToString()
     {

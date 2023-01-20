@@ -34,13 +34,13 @@ public class BBScripts
         "public class AllCharVars" + "\n" +
         "{" + "\n" +
             string.Join("\n", CharVars.Vars.Select(
-                kv => kv.Value.ToCSharp(kv.Key)
+                kv => kv.Value.ToCSharp(kv.Key, true)
             )).Indent() + "\n" +
         "}" + "\n" +
         "public class AllAvatarVars" + "\n" +
         "{" + "\n" +
             string.Join("\n", AvatarVars.Vars.Select(
-                kv => kv.Value.ToCSharp(kv.Key)
+                kv => kv.Value.ToCSharp(kv.Key, true)
             )).Indent() + "\n" +
         "}" + "\n" +
         string.Join("\n", Scripts.Select(
@@ -139,7 +139,7 @@ public class Block
     public List<Block> SubBlocks = new();
 
     public string ResolvedName;
-    public List<Union<Composite, SubBlocks>> ResolvedParams = new();
+    public List<Union<Composite, SubBlocks, Reference>> ResolvedParams = new();
     public Reference? ResolvedReturn;
 
     public SubBlocks Parent;
@@ -169,6 +169,7 @@ public class Block
                 {
                     var paramName = (string)Params[paramNameName + "Var"];
                     var arg = new Var();
+                        arg.IsArgument = true;
                         arg.Initialized = true; //arg.Write(typeof(object)); //TODO:
                     sb.LocalVars[paramName] = arg;
                 }
@@ -176,8 +177,18 @@ public class Block
             }
             else
             {
-                var value = new Composite(pInfo, Params, Parent);
-                ResolvedParams.Add(value);
+                if(pInfo.IsOut || pInfo.ParameterType.IsByRef)
+                {
+                    var value = Reference.Resolve(pInfo, Params, Parent) ?? new Reference(null, "_");
+                        value.IsOut = pInfo.IsOut && pInfo.ParameterType.IsByRef;
+                        value.IsRef = !pInfo.IsOut && pInfo.ParameterType.IsByRef;
+                    ResolvedParams.Add(value);
+                }
+                else
+                {
+                    var value = new Composite(pInfo, Params, Parent);
+                    ResolvedParams.Add(value);
+                }
             }
 
             var returnType = mInfo.ReturnType;
@@ -194,7 +205,7 @@ public class Block
         return
         ((ResolvedReturn != null) ? (ResolvedReturn.ToCSharp() + " = ") : "") +
         ResolvedName + "(" +
-            string.Join(", ", ResolvedParams.Select(p => p.Item1?.ToCSharp() ?? p.Item2?.ToCSharp())) +
+            string.Join(", ", ResolvedParams.Select(p => p.Item1?.ToCSharp() ?? p.Item2?.ToCSharp() ?? p.Item3!.ToCSharp())) +
         ");";
     }
 }
@@ -205,6 +216,7 @@ public class Var
 
     public Type? Type = null;
     public bool IsTable => Type == typeof(VarTable);
+    public bool IsArgument = false;
     public Dictionary<string, Var> Vars = new();
 
     public Var(bool isTable = false)
@@ -217,11 +229,6 @@ public class Var
     public bool Used = false;
 
     HashSet<Type> Types = new();
-    public void Read(Type type)
-    {
-        Used = true;
-        Types.Add(type);
-    }
     public void Write(Type type)
     {
         Initialized = true;
@@ -244,17 +251,32 @@ public class Var
             if(v.Type != null)
                 Types.Add(v.Type);
         }
-        Type = Types.FirstOrDefault(); //TODO:
+        Type = InferTypeFrom(Types);
     }
 
-    public string ToCSharp(string name)
+    public string ToCSharpArg(string name, bool includeType = true)
     {
+        var output = "";
+        if(includeType)
+        {
+            InferType();
+            output += TypeToCSharp(Type) + " ";
+        }
+        output += PrepareName(name);
+        return output;
+    }
+
+    public string ToCSharp(string name, bool pub = false)
+    {
+        var output = "";
+
         InferType();
 
-        var output = "";
-        
         if(!Initialized)
             output += "//";
+
+        if(pub)
+            output += "public ";
 
         if(Type != null)
             output += TypeToCSharp(Type);
@@ -305,13 +327,25 @@ public class SubBlocks
             block.Scan(this);
     }
 
-    public virtual string BaseToCSharp()
+    public string ArgsToCSharp(bool includeType = true)
+    {
+        return
+        "(" + string.Join(", ", LocalVars.Where(
+            kv => kv.Value.IsArgument
+        ).Select(
+            kv => kv.Value.ToCSharpArg(kv.Key, includeType)
+        )) + ")";
+    }
+
+    public string BaseToCSharp()
     {
         return
         "{" + "\n" + (
-            string.Join("\n", LocalVars.Select(
-                kv => kv.Value.ToCSharp(kv.Key)
-            )) + "\n" +
+            string.Join("", LocalVars.Where(
+                kv => !kv.Value.IsArgument
+            ).Select(
+                kv => kv.Value.ToCSharp(kv.Key) + "\n"
+            )) +
             string.Join("\n", Blocks.Select(
                 block => block.ToCSharp()
             ))).Indent() + "\n" +
@@ -321,14 +355,14 @@ public class SubBlocks
     public string ToCSharp(string name)
     {
         return
-        "public void " + name + "()\n" +
+        "public void " + name + ArgsToCSharp(true) + "\n" +
         BaseToCSharp();
     }
 
     public virtual string ToCSharp()
     {
         return
-        "() => " + "\n" +
+        ArgsToCSharp(false) + " => " + "\n" +
         BaseToCSharp();
     }
 
@@ -402,12 +436,8 @@ public class Composite
         if(varName != null && varName != "Nothing")
         {
             Var = new Reference(tableName, varName);
-
             var v = sb.Resolve(Var);
-            if(Type != null)
-                v.Read(Type);
-            else
-                v.Used = true;
+            v.Used = true;
         }
         VarByLevel = (valueByLevel != null) ?
             new EffectReference(((JArray)valueByLevel).ToObject<object[]>()!)
@@ -507,20 +537,54 @@ public class Composite
     {
         if(Type != null)
             return;
-        Type = Value?.GetType();
+        List<Type> types = new();
+        if(Value != null)
+            types.Add(Value.GetType());
+        if(VarByLevel != null && VarByLevel.Type != null)
+            types.Add(VarByLevel.Type);
+        Type = InferTypeFrom(types);
     }
 }
 
 public class Reference
 {
-    public Type? Type;
     public string? TableName;
     public string VarName;
+    public bool IsOut = false;
+    public bool IsRef = false;
     protected Reference(){}
     public Reference(string? tableName, string varName)
     {
         TableName = tableName;
         VarName = varName;
+    }
+
+    //TODO: Deduplicate
+    public static Reference? Resolve(ParameterInfo pInfo, Dictionary<string, object> ps, SubBlocks sb)
+    {
+        var pAttr = pInfo.GetCustomAttribute<BBParamAttribute>() ?? new();
+
+        var name = pInfo.Name!.UCFirst();
+        var varName = (pAttr.VarPostfix != null) ? ps.GetValueOrDefault(name + pAttr.VarPostfix) as string : null;
+        var tableName = (pAttr.VarTablePostfix != null) ? ps.GetValueOrDefault(name + pAttr.VarTablePostfix) as string : null;
+    
+        if(varName != null && varName != "Nothing")
+        {
+            var r = new Reference(tableName, varName);
+            var type = pInfo.ParameterType;
+            if(pInfo.IsOut || type.IsByRef)
+            {
+                type = type.GetElementType();
+                if(type != null && type.Name != "T") //HACK:
+                {
+                    var v = sb.Resolve(r);
+                        v.Write(type);
+                }
+            }
+            return r;
+        }
+        else
+            return null;
     }
 
     public static Reference? Resolve(MethodInfo mInfo, Dictionary<string, object> ps, SubBlocks sb, Composite? param0)
@@ -535,7 +599,7 @@ public class Reference
             var r = new Reference(tableName, varName);
             var v = sb.Resolve(r);
             if(mInfo.Name == nameof(Functions.SetVarInTable))
-                v.Assign(param0);
+                v.Assign(param0!);
             else
                 v.Write(mInfo.ReturnType);
             return r;
@@ -546,27 +610,37 @@ public class Reference
 
     public virtual string ToCSharp()
     {
+        var output = "";
+
+        if(IsOut) output += "out ";
+        if(IsRef) output += "ref ";
+
         if(TableName != null)
         {
             var tableName = TableName;
             if(tableName == "InstanceVars")
                 tableName = "this";
-            return tableName + "." + PrepareName(VarName);
+            output += tableName + "." + PrepareName(VarName);
         }
         else
-            return PrepareName(VarName);
+            output += PrepareName(VarName);
+
+        return output;
     }
 }
 
 public class EffectReference: Reference
 {
     public int ID;
+    public Type? Type;
     public object[] Values;
     public EffectReference(object[] values)
     {
         Values = values;
 
-        Type = values.FirstOrDefault()?.GetType();
+        Type = InferTypeFrom(
+            values.Select(v => v.GetType())
+        );
         TableName = null;
         VarName = "Level";
     }
@@ -593,7 +667,7 @@ public class Program_v2
     public static string PrepareName(string name)
     {
         name = Regex.Replace(name, @"\W","_");
-        if(Regex.IsMatch("" + name[0], @"[^a-zA-Z]"))
+        if(Regex.IsMatch("" + name[0], @"[^a-z_]", RegexOptions.IgnoreCase))
         {
             name = "_" + name;
         }
@@ -617,19 +691,28 @@ public class Program_v2
         { typeof(ulong), "ulong" },
         { typeof(ushort), "ushort" },
     };
-    public static string TypeToCSharp(Type type)
+    public static string TypeToCSharp(Type? type)
     {
+        if(type == null)
+            return "object";
         return primitiveTypes.GetValueOrDefault(type) ?? type.Name;
     }
 
     public static bool IsSummableType(Type type)
     {
-        return type == typeof(int) || type == typeof(float); //TODO:
+        return
+        type == typeof(int) || type == typeof(long) ||
+        type == typeof(float) || type == typeof(double); //TODO:
     }
 
     public static bool IsFloating(Type type)
     {
         return type == typeof(float) || type == typeof(double) || type == typeof(decimal);
+    }
+
+    public static Type? InferTypeFrom(IEnumerable<Type> types)
+    {
+        return types.FirstOrDefault();
     }
 
     public static void Main()
