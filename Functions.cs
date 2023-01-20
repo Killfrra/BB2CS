@@ -53,7 +53,7 @@ public static partial class Functions
         float duration = 25000,
 
         [BBParam("", null, null, null)]
-        Table? buffVarsTable = null,
+        object? buffVarsTable = null,
         // Ending of positional parameters
 
         BuffAddType buffAddType = BuffAddType.REPLACE_EXISTING,

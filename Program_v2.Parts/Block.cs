@@ -93,53 +93,111 @@ public class Block
             }
         }
 
-        if(ResolvedName == nameof(Functions.If))
+        else if(ResolvedName is "If" or "ElseIf" or "While")
         {
             var s1 = ResolvedParams[0].Item1!.Var;
-            var v1 = ResolvedParams[1].Item1!.Value;
+            var v1 = ResolvedParams[1].Item1!;
             var cop = (CompareOp)ResolvedParams[2].Item1!.Value!;
             var s2 = ResolvedParams[3].Item1!.Var;
-            var v2 = ResolvedParams[4].Item1!.Value;
+            var v2 = ResolvedParams[4].Item1!;
             var sb = ResolvedParams[5].Item2!;
 
+            string n;
+            if(ResolvedName == "If")
+                n = "if";
+            else if(ResolvedName == "ElseIf")
+                n = "else if";
+            else //if(ResolvedName == "While")
+                n = "while";
+
             // lazy
-            string l() => (s1?.ToCSharp() ?? ((v1 != null) ? ObjectToCSharp(v1) : "default"));
-            string r() => (s2?.ToCSharp() ?? ((v2 != null) ? ObjectToCSharp(v2) : "default"));
+            string l() => s1?.ToCSharp() ?? v1.ToCSharp();
+            string r() => s2?.ToCSharp() ?? v2.ToCSharp();
             string b() => "\n" + sb.BaseToCSharp();
 
             if(cop == CompareOp.CO_EQUAL)
-                return $"if({l()} == {r()}){b()}";
+                return $"{n}({l()} == {r()}){b()}";
             else if(cop == CompareOp.CO_NOT_EQUAL)
-                return $"if({l()} != {r()}){b()}";
+                return $"{n}({l()} != {r()}){b()}";
             else if(cop == CompareOp.CO_GREATER_THAN)
-                return $"if({l()} > {r()}){b()}";
+                return $"{n}({l()} > {r()}){b()}";
             else if(cop == CompareOp.CO_GREATER_THAN_OR_EQUAL)
-                return $"if({l()} >= {r()}){b()}";
+                return $"{n}({l()} >= {r()}){b()}";
             else if(cop == CompareOp.CO_LESS_THAN)
-                return $"if({l()} < {r()}){b()}";
+                return $"{n}({l()} < {r()}){b()}";
             else if(cop == CompareOp.CO_LESS_THAN_OR_EQUAL)
-                return $"if({l()} <= {r()}){b()}";
+                return $"{n}({l()} <= {r()}){b()}";
             
             else if(cop == CompareOp.CO_DAMAGE_SOURCETYPE_IS)
-                return $"if(damage.SourceType == {l()}){b()}";
+                return $"{n}(damage.SourceType == {l()}){b()}";
             else if(cop == CompareOp.CO_DAMAGE_SOURCETYPE_IS_NOT)
-                return $"if(damage.SourceType != {l()}){b()}";
+                return $"{n}(damage.SourceType != {l()}){b()}";
 
             else if(cop == CompareOp.CO_IS_TYPE_AI)
-                return $"if({l()} is ObjAIBase){b()}";
+                return $"{n}({l()} is ObjAIBase){b()}";
             else if(cop == CompareOp.CO_IS_TYPE_HERO)
-                return $"if({l()} is Champion){b()}";
+                return $"{n}({l()} is Champion){b()}";
             else if(cop == CompareOp.CO_IS_TYPE_TURRET)
-                return $"if({l()} is BaseTurret){b()}";
+                return $"{n}({l()} is BaseTurret){b()}";
             else if(cop == CompareOp.CO_IS_NOT_AI)
-                return $"if({l()} is not ObjAIBase){b()}";
+                return $"{n}({l()} is not ObjAIBase){b()}";
             else if(cop == CompareOp.CO_IS_NOT_HERO)
-                return $"if({l()} is not Champion){b()}";
+                return $"{n}({l()} is not Champion){b()}";
             else if(cop == CompareOp.CO_IS_NOT_TURRET)
-                return $"if({l()} is not BaseTurret){b()}";
+                return $"{n}({l()} is not BaseTurret){b()}";
+
+            else if(cop == CompareOp.CO_IS_DEAD)
+                return $"{n}({l()}.IsDead){b()}";
+            else if(cop == CompareOp.CO_IS_NOT_DEAD)
+                return $"{n}(!{l()}.IsDead){b()}";
+            
+            else if(cop == CompareOp.CO_SAME_TEAM)
+                return $"{n}({l()}.Team == {r()}.Team){b()}";
+            else if(cop == CompareOp.CO_DIFFERENT_TEAM)
+                return $"{n}({l()}.Team != {r()}.Team){b()}";
+
+            else if(cop == CompareOp.CO_IS_RANGED)
+                return $"{n}(IsRanged({l()})){b()}";
+            else if(cop == CompareOp.CO_IS_MELEE)
+                return $"{n}(IsMelee({l()})){b()}";
+
+            else if(cop == CompareOp.CO_IS_TARGET_IN_FRONT_OF_ME)
+                return $"{n}(IsInFront({l()}, {r()})){b()}";
+            else if(cop == CompareOp.CO_IS_TARGET_BEHIND_ME)
+                return $"{n}(IsBehind({l()}, {r()})){b()}";
+
+            else if(cop == CompareOp.CO_RANDOM_CHANCE_LESS_THAN)
+                return $"{n}(RandomChance() < {l()}){b()}";
         }
 
-        if(ResolvedName == nameof(Functions.SetVarInTable))
+        else if(ResolvedName == "Else")
+        {
+            var sb = ResolvedParams.Last().Item2!;
+            return "else\n" + sb.BaseToCSharp();
+        }
+
+        else if(ResolvedName is "IfHasBuff" or "IfNotHasBuff" or "IfHasBuffOfType" or "ExecutePeriodically")
+        {
+            var sb = ResolvedParams.Last().Item2!;
+
+            var b = "\n" + sb.BaseToCSharp();
+            var ps = string.Join(", ", ResolvedParams.Where(
+                p => p.Item2 != sb
+            ).Select(
+                p => p.Item1?.ToCSharp() ?? p.Item2?.ToCSharp() ?? p.Item3!.ToCSharp()
+            ));
+
+            if(ResolvedName == "IfHasBuff")
+                return $"if(GetBuffCountFromCaster({ps}) > 0){b}";
+            else if(ResolvedName == "IfNotHasBuff")
+                return $"if(GetBuffCountFromCaster({ps}) == 0){b}";
+            else if(ResolvedName == "IfHasBuffOfType")
+                return $"if(HasBuffOfType({ps})){b}";
+            else if(ResolvedName == "ExecutePeriodically")
+                return $"if(ExecutePeriodically({ps})){b}";
+        }
+
+        else if(ResolvedName == nameof(Functions.SetVarInTable))
         {
             if(ResolvedReturn != null)
             {

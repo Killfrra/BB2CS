@@ -49,8 +49,8 @@ public static class Constants
         //...
         globals["BUFF_Shred"] = BuffType.SHRED;
         //...
-        globals["BUFF_AmmoStack"] = null; //?
-        globals["BUFF_Net"] = null; //?
+        globals["BUFF_AmmoStack"] = BuffType.COUNTER; //?
+        globals["BUFF_Net"] = BuffType.CHARM; //?
 
         globals["BUFF_REPLACE_EXISTING"] = BuffAddType.REPLACE_EXISTING;
         globals["BUFF_RENEW_EXISTING"] = BuffAddType.RENEW_EXISTING;

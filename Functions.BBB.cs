@@ -115,11 +115,11 @@ public static partial class Functions
     public static void ExecutePeriodically(
         float timeBetweenExecutions,
         ref float trackTime,
-        bool executeImmediately = false,
+        bool executeImmediately,
         //TODO: ref float tickTime?
 
         [BBSubBlocks]
-        Action? subBlocks = null
+        Action subBlocks
     ){}
 
     [BBFunc]
@@ -148,7 +148,7 @@ public static partial class Functions
         string buffName,
 
         [BBSubBlocks]
-        Action? subBlocks = null
+        Action subBlocks
     ){}
 
     [BBFunc]
