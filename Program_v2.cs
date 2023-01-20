@@ -92,7 +92,7 @@ public class BBScript
     public Dictionary<string, object> Metadata = new();
     public Dictionary<string, BBFunction> Functions = new();
     public Var InstanceVars = new(true);
-    public List<Var> InstanceEffects = new();
+    public List<EffectReference> InstanceEffects = new();
 
     public BBScriptComposite Parent;
 
@@ -105,14 +105,36 @@ public class BBScript
 
     public string ToCSharp(string ns, string name)
     {
+        var output = "";
+        foreach(var func in Functions) //TODO: MultiSelect?
+        {
+            foreach(var v in func.Value.LocalVars)
+            {
+                if(v.Value.IsTable)
+                {
+                    output +=
+                    "class " + func.Key + "_" + PrepareName(v.Key) + "\n" +
+                    "{" + "\n" +
+                        string.Join("\n", v.Value.Vars.Select(
+                            kv => kv.Value.ToCSharp(kv.Key, true)
+                        )).Indent() + "\n" +
+                    "}" + "\n";
+                }
+            }
+        }
+
         return
         "namespace " + ns + "\n" +
         "{" + "\n" + (
             "public class " + PrepareName(name) + " : Script" + "\n" +
             "{" + "\n" + (
-                string.Join("\n", InstanceVars.Vars.Select(
-                    kv => kv.Value.ToCSharp(kv.Key)
-                )) + "\n" +
+                output +
+                string.Join("", InstanceEffects.Select(
+                    e => e.ToCSharpDecl() + "\n"
+                )) +
+                string.Join("", InstanceVars.Vars.Select(
+                    kv => kv.Value.ToCSharp(kv.Key) + "\n"
+                )) +
                 string.Join("\n", Functions.Select(
                     kv => kv.Value.ToCSharp(kv.Key)
                 ))).Indent() + "\n" +
@@ -168,7 +190,7 @@ public class Block
                 foreach(var paramNameName in sAttr.ParamNames)
                 {
                     var paramName = (string)Params[paramNameName + "Var"];
-                    var arg = new Var();
+                    var arg = new Var(parent: sb);
                         arg.IsArgument = true;
                         arg.Initialized = true; //arg.Write(typeof(object)); //TODO:
                     sb.LocalVars[paramName] = arg;
@@ -219,10 +241,13 @@ public class Var
     public bool IsArgument = false;
     public Dictionary<string, Var> Vars = new();
 
-    public Var(bool isTable = false)
+    SubBlocks? Parent = null;
+
+    public Var(bool isTable = false, SubBlocks? parent = null)
     {
         if(isTable)
             Type = typeof(VarTable);
+        Parent = parent;
     }
 
     public bool Initialized = false;
@@ -268,6 +293,14 @@ public class Var
 
     public string ToCSharp(string name, bool pub = false)
     {
+        if(IsTable)
+        {
+            //HACK:
+            name = PrepareName(name);
+            var funcName = Parent!.ParentScript.Functions.Where(kv => kv.Value == Parent).First().Key;
+            return funcName + "_" + name + " " + name + " = new();";
+        }
+
         var output = "";
 
         InferType();
@@ -293,9 +326,9 @@ public class Var
         else
             output += " = null;";
 
-        output += " //";
-        foreach(var type in Types)
-            output += " " + TypeToCSharp(type);
+        //output += " //";
+        //foreach(var type in Types)
+        //    output += " " + TypeToCSharp(type);
 
         return output;
     }
@@ -368,7 +401,7 @@ public class SubBlocks
 
     private Var GetOrCreate(Dictionary<string, Var> table, string name)
     {
-        return table.GetValueOrDefault(name) ?? (table[name] = new Var());
+        return table.GetValueOrDefault(name) ?? (table[name] = new Var(parent: this));
     }
     private Var? Resolve(string name)
     {
@@ -377,7 +410,7 @@ public class SubBlocks
     private Var? Declare(string name, bool isTable)
     {
         if(!Locked)
-            return (LocalVars[name] = new Var(isTable));
+            return (LocalVars[name] = new Var(isTable, parent: this));
         else if(ParentFunction != null)
             return ParentFunction.Declare(name, isTable);
         else
@@ -385,7 +418,7 @@ public class SubBlocks
     }
     private Var ResolveOrDeclare(string name, bool isTable)
     {
-        var v = Resolve(name) ?? Declare(name, false)!;
+        var v = Resolve(name) ?? Declare(name, isTable)!;
         //Debug.Assert(v.IsTable == isTable);
         return v;
     }
@@ -403,8 +436,11 @@ public class SubBlocks
             else if(r.TableName == "SpellVars" && ParentScript is BBSpellScript2 ss)
                 table = ss.SpellVars;
             else
+            {
                 table = ResolveOrDeclare(r.TableName, true);
-            
+                //table.Initialized = true; //TODO:
+                //table.Used = true;
+            }
             return GetOrCreate(table.Vars, r.VarName);
         }
         return ResolveOrDeclare(r.VarName, false);
@@ -432,16 +468,21 @@ public class Composite
         if(Type.Name == "T") //HACK:
             Type = null;
 
-        Value = value;
+        Value = AskConstants(value);
+
         if(varName != null && varName != "Nothing")
         {
             Var = new Reference(tableName, varName);
             var v = sb.Resolve(Var);
             v.Used = true;
         }
-        VarByLevel = (valueByLevel != null) ?
-            new EffectReference(((JArray)valueByLevel).ToObject<object[]>()!)
-            : null;
+        if(valueByLevel != null)
+        {
+            var arr = ((JArray)valueByLevel).ToObject<object[]>()!;
+            var id = sb.ParentScript.InstanceEffects.Count;
+            VarByLevel = new EffectReference(id, arr);
+            sb.ParentScript.InstanceEffects.Add(VarByLevel);
+        }
     }
 
     public string ToCSharp()
@@ -502,35 +543,17 @@ public class Composite
             return "default";
     }
 
-    string ObjectToCSharp(object value)
+    object? AskConstants(object? value)
     {
-        if(value is string s)
+        if(value is string s && s.StartsWith("$") && s.EndsWith("$"))
         {
-            if(s.StartsWith("$") && s.EndsWith("$"))
-            {
-                s = s.Substring(1, s.Length - 1 - 1);
-                var constant = Constants.Table.GetValueOrDefault(s);
-                if(constant != null)
-                {
-                    s = ObjectToCSharp(constant);
-                }
-                return s;
-            }
-            else
-                return ("\"" + s + "\"");
+            s = s.Substring(1, s.Length - 1 - 1);
+            var constant = Constants.Table.GetValueOrDefault(s);
+            //if(constant == null)
+            //    Console.WriteLine($"Failed to resolve constant {s}");
+            return constant ?? value;
         }
-        else if(value is bool b)
-            return b ? "true" : "false";
-        else
-        {
-            var type = value.GetType();
-            if(type.IsEnum)
-                return string.Join(" | ", value.ToString()!.Split(", ").Select(x => type.Name + "." + x));
-            else if(IsFloating(type))
-                return value.ToString() + "f";
-            else
-                return value.ToString()!;
-        }
+        return value;
     }
 
     public void InferType()
@@ -542,6 +565,9 @@ public class Composite
             types.Add(Value.GetType());
         if(VarByLevel != null && VarByLevel.Type != null)
             types.Add(VarByLevel.Type);
+        
+        //TODO: Var.Var.InferType
+        
         Type = InferTypeFrom(types);
     }
 }
@@ -634,8 +660,9 @@ public class EffectReference: Reference
     public int ID;
     public Type? Type;
     public object[] Values;
-    public EffectReference(object[] values)
+    public EffectReference(int id, object[] values)
     {
+        ID = id;
         Values = values;
 
         Type = InferTypeFrom(
@@ -647,6 +674,14 @@ public class EffectReference: Reference
     public override string ToCSharp()
     {
         return $"this.Effect{ID}[Level]";
+    }
+
+    public string ToCSharpDecl()
+    {
+        return
+        "public " + TypeToCSharp(Type) + "[] Effect" + ID + " = {" +
+        string.Join(", ", Values.Select(v => ObjectToCSharp(v))) +
+        "};";
     }
 }
 
@@ -713,6 +748,29 @@ public class Program_v2
     public static Type? InferTypeFrom(IEnumerable<Type> types)
     {
         return types.FirstOrDefault();
+    }
+
+    public static string ObjectToCSharp(object value)
+    {
+        if(value is string s)
+        {
+            if(s.StartsWith("$") && s.EndsWith("$"))
+                return s.Substring(1, s.Length - 1 - 1);
+            else
+                return ("\"" + s + "\"");
+        }
+        else if(value is bool b)
+            return b ? "true" : "false";
+        else
+        {
+            var type = value.GetType();
+            if(type.IsEnum)
+                return string.Join(" | ", value.ToString()!.Split(", ").Select(x => type.Name + "." + x));
+            else if(IsFloating(type))
+                return value.ToString() + "f";
+            else
+                return value.ToString()!;
+        }
     }
 
     public static void Main()

@@ -379,7 +379,7 @@ public static partial class Functions
     }
 
     [BBFunc]
-    public static float GetLevel(
+    public static int GetLevel(
         AttackableUnit target
     ){
         return default!;

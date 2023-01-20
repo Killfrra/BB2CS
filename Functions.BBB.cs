@@ -72,7 +72,7 @@ public static partial class Functions
 
     [BBFunc]
     public static void IncStat(
-        object stat,
+        Action<AttackableUnit, float> stat,
         AttackableUnit target,
         float delta
     ){}
