@@ -2,13 +2,17 @@ using System.Text.RegularExpressions;
 
 public static class Utils
 {
-    public static string PrepareName(string name)
+    public static string PrepareName(string name, bool ucfirst)
     {
         name = Regex.Replace(name, @"\W","_");
         if(Regex.IsMatch("" + name[0], @"[^a-z_]", RegexOptions.IgnoreCase))
         {
             name = "_" + name;
         }
+        if(ucfirst)
+            name = name.UCFirst();
+        else
+            name = name.LCFirst();
         return name;
     }
 
@@ -50,6 +54,15 @@ public static class Utils
 
     public static Type? InferTypeFrom(IEnumerable<Type> types)
     {
+        if(types.Count() == 0)
+            return null;
+        if(types.All(t => IsSummableType(t)))
+        {
+            if(types.Any(t => IsFloating(t)))
+                return typeof(float);
+            else
+                return typeof(int);
+        }
         return types.FirstOrDefault();
     }
 

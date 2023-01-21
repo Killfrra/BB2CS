@@ -1,3 +1,4 @@
+using System.Numerics;
 using System.Reflection;
 using Newtonsoft.Json.Linq;
 using static Utils;
@@ -27,9 +28,8 @@ public class Composite
 
         if(varName != null && varName != "Nothing")
         {
-            Var = new Reference(tableName, varName);
-            var v = sb.Resolve(Var);
-            v.Used = true;
+            Var = new Reference(tableName, varName, sb);
+            Var.Var.Used = true;
         }
         if(valueByLevel != null)
         {
@@ -42,6 +42,8 @@ public class Composite
 
     public string ToCSharp()
     {
+        InferType();
+
         int count = Convert.ToInt32(Value != null) +
                     Convert.ToInt32(Var != null) +
                     Convert.ToInt32(VarByLevel != null);
@@ -53,13 +55,30 @@ public class Composite
                 {
                     return ObjectToCSharp(Value);
                 }
-                else
+                else if(VarByLevel != null)
                 {
-                    var r = (Var ?? VarByLevel)!;
+                    return VarByLevel.ToCSharp();
+                }
+                else //if(Var != null)
+                {
+                    var r = Var!;
+                    var v = Var!.Var;
+                        v.InferType();
+                    if(Type != null && v.Type != null && v.Type != Type)
+                    {
+                        if(Type.IsAssignableTo(v.Type))
+                            return "(" + TypeToCSharp(Type) + ")" + r.ToCSharp();
+
+                        if(
+                            (Type == typeof(Vector3) || Type == typeof(Vector3?)) //TODO: Nullables
+                            && v.Type.IsAssignableTo(typeof(GameObject))
+                        )
+                            return r.ToCSharp() + ".Position";
+                    }
                     return r.ToCSharp();
                 }
             }
-            else if(IsSummableType(Type))
+            else if(Type != null && IsSummableType(Type))
             {
                 var output = new List<string>();
                 if(Value != null && Convert.ToSingle(Value) != 0)
@@ -121,7 +140,21 @@ public class Composite
         if(VarByLevel != null && VarByLevel.Type != null)
             types.Add(VarByLevel.Type);
         
-        //TODO: Var.Var.InferType
+        /*
+        try
+        {
+            if(Var != null)
+            {
+                Var.Var.InferType();
+                if(Var.Var.Type != null)
+                    types.Add(Var.Var.Type);
+            }
+        }
+        catch(StackOverflowException)
+        {
+            //TODO: Solve the problem differently
+        }
+        */
         
         Type = InferTypeFrom(types);
     }

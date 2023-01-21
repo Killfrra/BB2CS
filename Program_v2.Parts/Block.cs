@@ -44,13 +44,16 @@ public class Block
                 var sb = new SubBlocks();
                     sb.Blocks = SubBlocks;
                     sb.Scan(parent);
+                int i = 0;
+                var genericArguments = pInfo.ParameterType.GetGenericArguments();
                 foreach(var paramNameName in sAttr.ParamNames)
                 {
                     var paramName = (string)Params[paramNameName + "Var"];
                     var arg = new Var(parent: sb);
+                        arg.Write(genericArguments[i]);
                         arg.IsArgument = true;
-                        arg.Initialized = true; //arg.Write(typeof(object)); //TODO:
                     sb.LocalVars[paramName] = arg;
+                    i++;
                 }
                 ResolvedParams.Add(sb);
             }
@@ -58,7 +61,8 @@ public class Block
             {
                 if(pInfo.IsOut || pInfo.ParameterType.IsByRef)
                 {
-                    var value = Reference.Resolve(pInfo, Params, Parent) ?? new Reference(null, "_");
+                    var value = Reference.Resolve(pInfo, Params, Parent) ??
+                            new Reference(null, "_", Parent); //TODO:
                         value.IsOut = pInfo.IsOut && pInfo.ParameterType.IsByRef;
                         value.IsRef = !pInfo.IsOut && pInfo.ParameterType.IsByRef;
                     ResolvedParams.Add(value);
@@ -69,13 +73,13 @@ public class Block
                     ResolvedParams.Add(value);
                 }
             }
+        }
 
-            var returnType = mInfo.ReturnType;
-            if(returnType != typeof(void))
-            {
-                var param0 = (ResolvedParams.Count > 0) ? ResolvedParams[0].Item1 : null;
-                ResolvedReturn = Reference.Resolve(mInfo, Params, Parent, param0);
-            }
+        var returnType = mInfo.ReturnType;
+        if(returnType != typeof(void))
+        {
+            var param0 = (ResolvedParams.Count > 0) ? ResolvedParams[0].Item1 : null;
+            ResolvedReturn = Reference.Resolve(mInfo, Params, Parent, param0);
         }
     }
 
@@ -87,7 +91,7 @@ public class Block
             var c = ResolvedParams[6].Item1!;
             if(c.Var != null)
             {
-                var v = Parent.Resolve(c.Var);
+                var v = c.Var.Var;
                 if(/*!v.Initialized ||*/!v.IsTable)
                     c.Var = null;
             }

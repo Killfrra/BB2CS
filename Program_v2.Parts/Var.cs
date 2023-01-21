@@ -59,7 +59,7 @@ public class Var
             InferType();
             output += TypeToCSharp(Type) + " ";
         }
-        output += PrepareName(name);
+        output += PrepareName(name, false);
         return output;
     }
 
@@ -68,7 +68,7 @@ public class Var
         if(IsTable)
         {
             //HACK:
-            name = PrepareName(name);
+            name = PrepareName(name, false);
             var funcName = Parent!.ParentScript.Functions.Where(kv => kv.Value == Parent).First().Key;
             return funcName + "_" + name + " " + name + " = new();";
         }
@@ -91,7 +91,7 @@ public class Var
         if(!(Type != null && IsSummableType(Type)))
             output += "?";
 
-        output += " " + PrepareName(name);
+        output += " " + PrepareName(name, pub);
 
         if(Type != null && IsSummableType(Type))
             output += " = 0;";

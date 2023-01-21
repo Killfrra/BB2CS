@@ -3,15 +3,20 @@ using static Utils;
 
 public class Reference
 {
+    SubBlocks Block; //TODO: Rename?
     public string? TableName;
     public string VarName;
+    public Var Var;
     public bool IsOut = false;
     public bool IsRef = false;
+
     protected Reference(){}
-    public Reference(string? tableName, string varName)
+    public Reference(string? tableName, string varName, SubBlocks sb)
     {
+        Block = sb;
         TableName = tableName;
         VarName = varName;
+        Var = sb.Resolve(this);
     }
 
     //TODO: Deduplicate
@@ -25,15 +30,14 @@ public class Reference
     
         if(varName != null && varName != "Nothing")
         {
-            var r = new Reference(tableName, varName);
+            var r = new Reference(tableName, varName, sb);
             var type = pInfo.ParameterType;
             if(pInfo.IsOut || type.IsByRef)
             {
                 type = type.GetElementType();
                 if(type != null && type.Name != "T") //HACK:
                 {
-                    var v = sb.Resolve(r);
-                        v.Write(type);
+                    r.Var.Write(type);
                 }
             }
             return r;
@@ -46,17 +50,16 @@ public class Reference
     {
         var fAttr = mInfo.GetCustomAttribute<BBFuncAttribute>() ?? new();
 
-        var name = fAttr.Dest.UCFirst();
+        var name = fAttr.Dest;
         var varName = ps.GetValueOrDefault(name + "Var") as string;
         var tableName = ps.GetValueOrDefault(name + "VarTable") as string;
         if(varName != null && varName != "Nothing")
         {
-            var r = new Reference(tableName, varName);
-            var v = sb.Resolve(r);
+            var r = new Reference(tableName, varName, sb);
             if(mInfo.Name == nameof(Functions.SetVarInTable))
-                v.Assign(param0!);
+                r.Var.Assign(param0!);
             else
-                v.Write(mInfo.ReturnType);
+                r.Var.Write(mInfo.ReturnType);
             return r;
         }
         else
@@ -75,10 +78,10 @@ public class Reference
             var tableName = TableName;
             if(tableName == "InstanceVars")
                 tableName = "this";
-            output += tableName + "." + PrepareName(VarName);
+            output += PrepareName(tableName, false) + "." + PrepareName(VarName, tableName != "this");
         }
         else
-            output += PrepareName(VarName);
+            output += PrepareName(VarName, false);
 
         return output;
     }

@@ -2,6 +2,7 @@ using System.Text;
 using System.Reflection;
 using System.Globalization;
 using Newtonsoft.Json;
+using System.Text.RegularExpressions;
 
 public class Program_v2
 {
@@ -101,6 +102,13 @@ public class Program_v2
         }
 
         scripts.Scan();
-        File.WriteAllText("Code.cs", scripts.ToCSharp(), Encoding.UTF8);
+        var cs = scripts.ToCSharp();
+            //HACK:
+            cs = Regex.Replace(cs, @"\blong\b", "int");
+            cs = Regex.Replace(cs, @"\bdouble\b", "float");
+            cs = Regex.Replace(cs, @"\b(TeamId|Vector3)\? (\w+) = null;", "$1 $2;");
+            cs = Regex.Replace(cs, @" \?\? TeamId\.\w+", "");
+            cs = Regex.Replace(cs, @"\bdamage\.SourceType\b", "damageSource");
+        File.WriteAllText("Code.cs", cs, Encoding.UTF8);
     }
 }

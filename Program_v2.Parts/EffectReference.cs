@@ -10,28 +10,20 @@ public class EffectReference: Reference
         ID = id;
         Values = values;
 
-        if(values.All(v => IsSummableType(v.GetType())))
-        {
-            if(values.Any(v => IsFloating(v.GetType())))
-                Type = typeof(float);
-            else
-                Type = typeof(int);        
-        }
-        else
-            Type = InferTypeFrom(values.Select(v => v.GetType()));
+        Type = InferTypeFrom(values.Select(v => v.GetType()));
         
         TableName = null;
         VarName = "Level";
     }
     public override string ToCSharp()
     {
-        return $"this.Effect{ID}[Level]";
+        return $"this.{PrepareName("Effect", false)}{ID}[{PrepareName("Level", false)}]";
     }
 
     public string ToCSharpDecl()
     {
         return
-        "public " + TypeToCSharp(Type) + "[] Effect" + ID + " = {" +
+        "public " + TypeToCSharp(Type) + "[] " + PrepareName("Effect", false) + ID + " = {" +
         string.Join(", ", Values.Select(v => ObjectToCSharp(v))) +
         "};";
     }

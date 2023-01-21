@@ -1,3 +1,4 @@
+using System.Numerics;
 using static Utils;
 
 //TODO: Rename
@@ -17,8 +18,43 @@ public class BBScript
     public void Scan(BBScriptComposite parent)
     {
         Parent = parent;
-        foreach(var function in Functions.Values)
+        foreach(var kv in Functions)
+        {
+            var function = kv.Value;
+            var funcName = kv.Key;
+
+            //HACK:
+            void declare<T>(string name)
+            {
+                var v = new Var(false);
+                    v.Write(typeof(T));
+                    v.IsArgument = true;
+                function.LocalVars[name] = v;
+            }
+            declare<AttackableUnit>("Owner");
+            declare<AttackableUnit>("Attacker");
+            declare<AttackableUnit>("Target");
+            if(funcName is "OnLevelUpSpell")
+                declare<int>("Slot");
+            if(funcName is "SelfExecute" or "TargetExecute")
+            {
+                declare<int>("Level");
+                declare<Vector3>("TargetPos");
+            }
+            if(funcName is "TargetExecute" or "OnMissileUpdate")
+                declare<SpellMissile>("missileNetworkID"); //TODO: NetID or object?
+            if(funcName is "SetVarsByLevel")
+                declare<int>("Level");
+            if(funcName is "OnHitUnit")
+                declare<HitResult>("HitResult");
+            if(funcName.Contains("Damage") || funcName.Contains("Hit"))
+            {
+                declare<DamageSource>("damageSource");
+                declare<DamageType>("damageType");
+            }
+
             function.Scan(this, null);
+        }
     }
 
     public string ToCSharp(string ns, string name)
@@ -31,7 +67,7 @@ public class BBScript
                 if(v.Value.IsTable)
                 {
                     output +=
-                    "class " + func.Key + "_" + PrepareName(v.Key) + "\n" +
+                    "class " + func.Key + "_" + PrepareName(v.Key, false) + "\n" +
                     "{" + "\n" +
                         string.Join("\n", v.Value.Vars.Select(
                             kv => kv.Value.ToCSharp(kv.Key, true)
@@ -44,7 +80,7 @@ public class BBScript
         return
         "namespace " + ns + "\n" +
         "{" + "\n" + (
-            "public class " + PrepareName(name) + " : Script" + "\n" +
+            "public class " + PrepareName(name, true) + " : Script" + "\n" +
             "{" + "\n" + (
                 output +
                 string.Join("", InstanceEffects.Select(

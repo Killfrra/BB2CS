@@ -163,11 +163,13 @@ public static class Constants
         globals["CO_IS_TARGET_IN_FRONT_OF_ME"] = CompareOp.CO_IS_TARGET_IN_FRONT_OF_ME;
         globals["CO_IS_TARGET_BEHIND_ME"] = CompareOp.CO_IS_TARGET_BEHIND_ME;
 
+        globals["MO_MODULO"] = MathOp.MO_MODULO;
         globals["MO_MULTIPLY"] = MathOp.MO_MULTIPLY;
         globals["MO_ADD"] = MathOp.MO_ADD;
         globals["MO_SUBTRACT"] = MathOp.MO_SUBTRACT;
         globals["MO_DIVIDE"] = MathOp.MO_DIVIDE;
         globals["MO_MIN"] = MathOp.MO_MIN;
         globals["MO_MAX"] = MathOp.MO_MAX;
+        globals["MO_ROUNDUP"] = MathOp.MO_ROUNDUP;
     }
 }

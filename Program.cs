@@ -14,6 +14,10 @@ public static class StringExtensions
     {
         return Char.ToUpperInvariant(str[0]) + str.Substring(1);
     }
+    public static string LCFirst(this string str)
+    {
+        return Char.ToLowerInvariant(str[0]) + str.Substring(1);
+    }
 }
 
 /*

@@ -1,4 +1,11 @@
-public class AttackableUnit
+using System.Numerics;
+
+public class GameObject
+{
+    public Vector3 Position;
+    public TeamId Team;
+}
+public class AttackableUnit: GameObject
 {
     public bool IsDead;
 }

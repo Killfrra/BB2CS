@@ -1,3 +1,5 @@
+using static Utils;
+
 public class BBScripts
 {
     public Var CharVars = new(true);
@@ -15,24 +17,20 @@ public class BBScripts
         using System.Numerics;
         using static Functions;
         using static Functions_CS;
-        
-        public class Script
-        {
-            public AllCharVars CharVars;
-            public AllAvatarVars AvatarVars;
-
-            public ObjAIBase Owner; //HACK:
-            public ObjAIBase Attacker; //HACK:
-            public ObjAIBase Target; //HACK:
-        }
         """ + "\n" +
-        "public class AllCharVars" + "\n" +
+        $"public class {PrepareName("Script", true)}\n" +
+        "{" + "\n" + (
+            $"public AllCharVars {PrepareName("CharVars", false)};\n" +
+            $"public AllAvatarVars {PrepareName("AvatarVars", false)};"
+        ).Indent() + "\n" +
+        "}" + "\n" +
+        $"public class {PrepareName("AllCharVars", true)}\n" +
         "{" + "\n" +
             string.Join("\n", CharVars.Vars.Select(
                 kv => kv.Value.ToCSharp(kv.Key, true)
             )).Indent() + "\n" +
         "}" + "\n" +
-        "public class AllAvatarVars" + "\n" +
+        $"public class {PrepareName("AllAvatarVars", true)}\n" +
         "{" + "\n" +
             string.Join("\n", AvatarVars.Vars.Select(
                 kv => kv.Value.ToCSharp(kv.Key, true)
