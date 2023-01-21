@@ -171,6 +171,7 @@ public static class Constants
         globals["MO_DIVIDE"] = MathOp.MO_DIVIDE;
         globals["MO_MIN"] = MathOp.MO_MIN;
         globals["MO_MAX"] = MathOp.MO_MAX;
+        globals["MO_ROUND"] = MathOp.MO_ROUND;
         globals["MO_ROUNDUP"] = MathOp.MO_ROUNDUP;
     }
 }

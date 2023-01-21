@@ -7,5 +7,6 @@ public enum MathOp
     MO_DIVIDE,
     MO_MIN,
     MO_MAX,
+    MO_ROUND,
     MO_ROUNDUP,
 }

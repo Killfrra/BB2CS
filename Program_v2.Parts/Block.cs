@@ -212,6 +212,43 @@ public class Block
             return "";
         }
 
+        else if(ResolvedName == nameof(Functions.Math))
+        {
+            var s1 = ResolvedParams[0].Item1!;
+            var op = (MathOp)ResolvedParams[1].Item1!.Value!;
+            var s2 = ResolvedParams[2].Item1!;
+            
+            var o = "";
+            if(op == MathOp.MO_ADD) o = "+";
+            if(op == MathOp.MO_MULTIPLY) o = "*";
+            if(op == MathOp.MO_SUBTRACT) o = "-";
+            if(op == MathOp.MO_DIVIDE) o = "/";
+            if(op == MathOp.MO_MODULO) o = "%";
+            if(o != "")
+            {
+                //HACK:
+                if(ResolvedReturn!.Var == s2.Var?.Var && (o == "+" || o == "*"))
+                    (s1, s2) = (s2, s1);
+
+                if(ResolvedReturn!.Var == s1.Var?.Var){
+                    if((o == "+" || o == "-") && s2.Value != null && Convert.ToInt32(s2.Value) == 1)
+                        return $"{ResolvedReturn.ToCSharp()}{o}{o};";
+                    else
+                        return $"{ResolvedReturn.ToCSharp()} {o}= {s2.ToCSharp()};";
+                }
+                else
+                    return $"{ResolvedReturn.ToCSharp()} = {s1.ToCSharp()} {o} {s2.ToCSharp()};";
+            }
+            else if(op == MathOp.MO_MIN)
+                return $"{ResolvedReturn!.ToCSharp()} = MathF.Min({s1.ToCSharp()}, {s2.ToCSharp()});";
+            else if(op == MathOp.MO_MAX)
+                return $"{ResolvedReturn!.ToCSharp()} = MathF.Max({s1.ToCSharp()}, {s2.ToCSharp()});";
+            else if(op == MathOp.MO_ROUND)
+                return $"{ResolvedReturn!.ToCSharp()} = MathF.Floor({s1.ToCSharp()});";
+            else if(op == MathOp.MO_ROUNDUP)
+                return $"{ResolvedReturn!.ToCSharp()} = MathF.Ceiling({s1.ToCSharp()});";
+        }
+
         return
         ((ResolvedReturn != null) ? (ResolvedReturn.ToCSharp() + " = ") : "") +
         ResolvedName + "(" +

@@ -42,18 +42,19 @@ public class BBScript
                 declare<Vector3>("TargetPos");
             }
             if(funcName is "TargetExecute" or "OnMissileUpdate")
-                declare<SpellMissile>("missileNetworkID"); //TODO: NetID or object?
+                declare<SpellMissile>("MissileNetworkID"); //TODO: NetID or object?
             if(funcName is "SetVarsByLevel")
                 declare<int>("Level");
             if(funcName is "OnHitUnit")
                 declare<HitResult>("HitResult");
             if(funcName.Contains("Damage") || funcName.Contains("Hit"))
             {
-                declare<DamageSource>("damageSource");
-                declare<DamageType>("damageType");
+                declare<DamageSource>("DamageSource");
+                declare<DamageType>("DamageType");
+                declare<float>("DamageAmount");
             }
             if(funcName == "OnAllowAdd")
-                declare<BuffType>("type");
+                declare<BuffType>("Type");
 
             function.Scan(this, null);
         }
