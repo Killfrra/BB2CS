@@ -14,6 +14,7 @@ public class Minion: ObjAIBase {}
 public class Champion: ObjAIBase {}
 public class BaseTurret: ObjAIBase {}
 public class Pet: Minion {}
+public class Clone: Pet {}
 
 public class Spell {}
 public class Buff {}

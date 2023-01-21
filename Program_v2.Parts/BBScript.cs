@@ -52,6 +52,8 @@ public class BBScript
                 declare<DamageSource>("damageSource");
                 declare<DamageType>("damageType");
             }
+            if(funcName == "OnAllowAdd")
+                declare<BuffType>("type");
 
             function.Scan(this, null);
         }

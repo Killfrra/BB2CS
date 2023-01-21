@@ -162,6 +162,7 @@ public static class Constants
         globals["CO_IS_NOT_DEAD"] = CompareOp.CO_IS_NOT_DEAD;
         globals["CO_IS_TARGET_IN_FRONT_OF_ME"] = CompareOp.CO_IS_TARGET_IN_FRONT_OF_ME;
         globals["CO_IS_TARGET_BEHIND_ME"] = CompareOp.CO_IS_TARGET_BEHIND_ME;
+        globals["CO_IS_CLONE"] = CompareOp.CO_IS_CLONE;
 
         globals["MO_MODULO"] = MathOp.MO_MODULO;
         globals["MO_MULTIPLY"] = MathOp.MO_MULTIPLY;

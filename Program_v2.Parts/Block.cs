@@ -143,6 +143,8 @@ public class Block
                 return $"{n}({l()} is Champion){b()}";
             else if(cop == CompareOp.CO_IS_TYPE_TURRET)
                 return $"{n}({l()} is BaseTurret){b()}";
+            else if(cop == CompareOp.CO_IS_CLONE)
+                return $"{n}({l()} is Clone){b()}";
             else if(cop == CompareOp.CO_IS_NOT_AI)
                 return $"{n}({l()} is not ObjAIBase){b()}";
             else if(cop == CompareOp.CO_IS_NOT_HERO)

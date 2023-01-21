@@ -23,4 +23,5 @@ public enum CompareOp
     CO_IS_NOT_DEAD,
     CO_IS_TARGET_IN_FRONT_OF_ME,
     CO_IS_TARGET_BEHIND_ME,
+    CO_IS_CLONE,
 }
