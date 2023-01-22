@@ -115,7 +115,7 @@ public static class Constants
         //...
         globals["FIRST_WALL_HIT"] = ForceMovementType.FIRST_WALL_HIT;
 
-        globals["HAS_SUNGLASSES"] = null; //?
+        globals["HAS_SUNGLASSES"] = ExtraAttributeFlag.HAS_SUNGLASSES;
 
         globals["HIT_Normal"] = HitResult.HIT_Normal;
         globals["HIT_Critical"] = HitResult.HIT_Critical;
@@ -126,7 +126,7 @@ public static class Constants
         globals["TEAM_ORDER"] = TeamId.TEAM_BLUE;
         globals["TEAM_CHAOS"] = TeamId.TEAM_PURPLE;
         globals["TEAM_NEUTRAL"] = TeamId.TEAM_NEUTRAL;
-        globals["TEAM_CASTER"] = null; //?
+        globals["TEAM_CASTER"] = TeamId.TEAM_CASTER; //?
 
         globals["TTYPE_Self"] = TargetingType.Self;
         globals["TTYPE_Target"] = TargetingType.Target;

@@ -6,8 +6,19 @@ public class BBScriptComposite
     public BBBuffScript2 BuffScript = new();
     public BBSpellScript2 SpellScript = new();
 
-    public BBScripts Parent;
+    public List<BBScript> Scripts;
+    public BBScriptComposite()
+    {
+        Scripts = new List<BBScript>
+        {
+            CharScript,
+            ItemScript,
+            BuffScript,
+            SpellScript
+        };
+    }
 
+    public BBScripts Parent;
     public void Scan(BBScripts parent)
     {
         Parent = parent;
@@ -32,6 +43,6 @@ public class BBScriptComposite
             output += BuffScript.ToCSharp("Buffs", name) + "\n";
         if(SpellScript.Functions.Count > 0)
             output += SpellScript.ToCSharp("Spells", name);
-        return output;
+        return output.TrimEnd();
     }
 }

@@ -41,16 +41,15 @@ public class SubBlocks
     public string BaseToCSharp()
     {
         return
-        "{" + "\n" + (
-            string.Join("", LocalVars.Where(
+        "{" + "\n" +
+            string.Join("\n", LocalVars.Where(
                 kv => !kv.Value.IsArgument
             ).Select(
-                kv => kv.Value.ToCSharp(kv.Key) + "\n"
-            )) +
-            string.Join("\n", Blocks.Select(
+                kv => kv.Value.ToCSharp(kv.Key)
+            ).Concat(Blocks.Select(
                 block => block.ToCSharp()
-            ))).Indent() + "\n" +
-        "}";
+            ))).Indent() +
+        "\n" + "}";
     }
 
     public string ToCSharp(string name)

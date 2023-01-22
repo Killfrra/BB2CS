@@ -10,8 +10,12 @@ public class Composite
     public Reference? Var;
     public EffectReference? VarByLevel;
 
+    public static List<Composite> All = new();
+
     public Composite(Type type, object value)
     {
+        All.Add(this);
+
         Type = type;
         Value = value;
     }
@@ -19,6 +23,8 @@ public class Composite
     //TODO: Deduplicate
     public Composite(ParameterInfo pInfo, Dictionary<string, object> ps, SubBlocks sb)
     {
+        All.Add(this);
+
         var pAttr = pInfo.GetCustomAttribute<BBParamAttribute>() ?? new();
 
         var name = pInfo.Name!.UCFirst();
@@ -27,7 +33,7 @@ public class Composite
         var varName = (pAttr.VarPostfix != null) ? ps.GetValueOrDefault(name + pAttr.VarPostfix) as string : null;
         var tableName = (pAttr.VarTablePostfix != null) ? ps.GetValueOrDefault(name + pAttr.VarTablePostfix) as string : null;
 
-        Type = pInfo.ParameterType;
+        Type = Nullable.GetUnderlyingType(pInfo.ParameterType) ?? pInfo.ParameterType;
         if(Type.Name == "T") //HACK:
             Type = null;
 
@@ -49,7 +55,7 @@ public class Composite
 
     public string ToCSharp()
     {
-        InferType();
+        //InferType();
 
         int count = Convert.ToInt32(Value != null) +
                     Convert.ToInt32(Var != null) +
@@ -77,7 +83,7 @@ public class Composite
                 {
                     var r = Var!;
                     var v = Var!.Var;
-                        v.InferType();
+                    //  v.InferType();
                     if(Type != null && v.Type != null && v.Type != Type)
                     {
                         if(Type.IsAssignableTo(v.Type))
@@ -144,34 +150,28 @@ public class Composite
         return value;
     }
 
+    bool inferred = false;
     public void InferType()
     {
-        if(Type != null)
+        if(inferred || Type != null)
+        {
+            //inferred = true;
             return;
+        }
         List<Type> types = new();
         if(Value != null)
             types.Add(Value.GetType());
         if(VarByLevel != null && VarByLevel.Type != null)
             types.Add(VarByLevel.Type);
         
-        /*
-        try
+        if(Var != null)
         {
-            if(Var != null)
-            {
-                Var.Var.InferType();
-                if(Var.Var.Type != null)
-                    types.Add(Var.Var.Type);
-            }
+            //Var.Var.InferType();
+            if(Var.Var.Type != null)
+                types.Add(Var.Var.Type);
         }
-        catch(StackOverflowException)
-        {
-            //TODO: Solve the problem differently
-        }
-        //*/
-        if(Var != null && Var.Var.Type != null)
-            types.Add(Var.Var.Type);
         
         Type = InferTypeFrom(types);
+        //inferred = true;
     }
 }

@@ -175,9 +175,27 @@ public class Block
             string b() => "\n" + sb.BaseToCSharp();
 
             if(cop == CompareOp.CO_EQUAL)
-                return $"{n}({l()} == {r()}){b()}";
+            {
+                /*
+                if(v1.Value is bool b1)
+                    return $"{n}({(b1 ? "": "!")}{r()}){b()}";
+                else if(v2.Value is bool b2)
+                    return $"{n}({(b2 ? "": "!")}{l()}){b()}";
+                else
+                */
+                    return $"{n}({l()} == {r()}){b()}";
+            }
             else if(cop == CompareOp.CO_NOT_EQUAL)
-                return $"{n}({l()} != {r()}){b()}";
+            {
+                /*
+                if(v1.Value is bool b1)
+                    return $"{n}({(b1 ? "!": "")}{r()}){b()}";
+                else if(v2.Value is bool b2)
+                    return $"{n}({(b2 ? "!": "")}{l()}){b()}";
+                else
+                */
+                    return $"{n}({l()} != {r()}){b()}";
+            }
             else if(cop == CompareOp.CO_GREATER_THAN)
                 return $"{n}({l()} > {r()}){b()}";
             else if(cop == CompareOp.CO_GREATER_THAN_OR_EQUAL)
@@ -304,7 +322,12 @@ public class Block
                 return $"{ResolvedReturn!.ToCSharp()} = MathF.Ceiling({s1.ToCSharp()});";
         }
 
+        var comment = "";
+        if(ResolvedName == "RequireVar")
+            comment = "//";
+
         return
+        comment +
         ((ResolvedReturn != null) ? (ResolvedReturn.ToCSharp() + " = ") : "") +
         ResolvedName + "(" +
             string.Join(", ", ResolvedParams.Select(

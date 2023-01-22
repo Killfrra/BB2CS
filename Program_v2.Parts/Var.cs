@@ -15,8 +15,12 @@ public class Var
 
     SubBlocks? Parent = null;
 
+    public static List<Var> All = new();
+
     public Var(bool isTable = false, SubBlocks? parent = null)
     {
+        All.Add(this);
+        
         if(isTable)
             Type = typeof(VarTable);
         Parent = parent;
@@ -38,10 +42,15 @@ public class Var
         Initialized = true;
         Assigned.Add(var);
     }
+
+    bool inferred = false;
     public void InferType()
     {
-        if(Type != null)
+        if(inferred || Type != null)
+        {
+            //inferred = true;
             return;
+        }
         foreach(var v in Assigned)
         {
             if(v.Item1 == this) //TODO: Better way to resolve ring
@@ -50,18 +59,19 @@ public class Var
             Type? type; //TODO: Reduce code
             if(v.Item1 != null)
             {
-                v.Item1.InferType();
+                //v.Item1.InferType();
                 type = v.Item1.Type;
             }
             else // if(v.Item2 != null)
             {
-                v.Item2!.InferType();
-                type = v.Item2.Type;
+                //v.Item2!.InferType();
+                type = v.Item2!.Type;
             }
             if(type != null)
                 Types.Add(type);
         }
         Type = InferTypeFrom(Types);
+        //inferred = true;
     }
 
     public string ToCSharpArg(string name, bool includeType = true)
@@ -69,7 +79,7 @@ public class Var
         var output = "";
         if(includeType)
         {
-            InferType();
+            //InferType();
             output += TypeToCSharp(Type) + " ";
         }
         output += PrepareName(name, false);
@@ -88,7 +98,7 @@ public class Var
 
         var output = "";
 
-        InferType();
+        //InferType();
 
         if(!Initialized)
             output += "//";

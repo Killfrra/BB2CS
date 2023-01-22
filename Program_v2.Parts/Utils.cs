@@ -43,8 +43,11 @@ public static class Utils
     public static bool IsSummableType(Type type)
     {
         return
-        type == typeof(int) || type == typeof(long) ||
-        type == typeof(float) || type == typeof(double); //TODO:
+        type == typeof(sbyte) || type == typeof(byte) ||
+        type == typeof(short) || type == typeof(ushort) ||
+        type == typeof(int) || type == typeof(uint) ||
+        type == typeof(long) || type == typeof(ulong) ||
+        type == typeof(char) || IsFloating(type);
     }
 
     public static bool IsFloating(Type type)
@@ -54,8 +57,11 @@ public static class Utils
 
     public static Type? InferTypeFrom(IEnumerable<Type> types)
     {
+        Type? def = null; //typeof(object);
+        //types = types.Where(t => t != def);
+
         if(types.Count() == 0)
-            return null;
+            return def;
         if(types.All(t => IsSummableType(t)))
         {
             if(types.Any(t => IsFloating(t)))
@@ -63,9 +69,7 @@ public static class Utils
             else
                 return typeof(int);
         }
-        return types.FirstOrDefault(
-            //typeof(object)
-        );
+        return types.FirstOrDefault(def);
     }
 
     public static string ObjectToCSharp(object value)

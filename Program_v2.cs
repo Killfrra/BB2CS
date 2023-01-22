@@ -116,6 +116,49 @@ public class Program_v2
         }
 
         scripts.Scan();
+
+        //*
+        var stats = new Dictionary<string, Dictionary<string, int>>();
+        foreach(var scriptComposite in scripts.Scripts.Values)
+        foreach(var script in scriptComposite.Scripts)
+        foreach(var kv1 in script.Functions)
+        foreach(var kv2 in kv1.Value.LocalVars)
+            if(!kv2.Value.Initialized)
+            {
+                var func = script.GetType().Name + "." + kv1.Key;
+                var v = kv2.Key;
+                if(v is "_" or "NextBuffVars")
+                    continue;
+                stats[func] = stats.GetValueOrDefault(func) ?? new();
+                stats[func][v] = stats[func].GetValueOrDefault(v) + 1;
+            }
+        foreach(var kv1 in stats)
+        foreach(var kv2 in kv1.Value)
+            Console.WriteLine($"{kv1.Key} {kv2.Key} {kv2.Value}");
+        //return;
+        //*/
+
+        bool changed;
+        do
+        {
+            //Console.WriteLine("loop"); // 8 times
+
+            changed = false;
+            foreach(var v in Var.All)
+            {
+                var prevT = v.Type;
+                v.InferType();
+                changed = changed || (v.Type != prevT);
+            }
+            foreach(var c in Composite.All)
+            {
+                var prevT = c.Type;
+                c.InferType();
+                changed = changed || (c.Type != prevT);
+            }
+        }
+        while(changed);
+
         var cs = scripts.ToCSharp();
             //HACK:
             cs = Regex.Replace(cs, @"\blong\b", "int");

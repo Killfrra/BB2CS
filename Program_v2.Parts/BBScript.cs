@@ -36,6 +36,7 @@ public class BBScript
             var function = kv.Value;
             var funcName = kv.Key;
 
+            /*
             //HACK:
             void declare<T>(string name)
             {
@@ -68,6 +69,7 @@ public class BBScript
             }
             if(funcName == "OnAllowAdd")
                 declare<BuffType>("Type");
+            */
 
             function.Scan(this, null);
         }
@@ -99,15 +101,13 @@ public class BBScript
             "public class " + PrepareName(name, true) + " : Script" + "\n" +
             "{" + "\n" + (
                 output +
-                string.Join("", InstanceEffects.Select(
-                    e => e.ToCSharpDecl() + "\n"
-                )) +
-                string.Join("", InstanceVars.Vars.Select(
-                    kv => kv.Value.ToCSharp(kv.Key) + "\n"
-                )) +
-                string.Join("\n", Functions.Select(
+                string.Join("\n", InstanceEffects.Select(
+                    e => e.ToCSharpDecl()
+                ).Concat(InstanceVars.Vars.Select(
                     kv => kv.Value.ToCSharp(kv.Key)
-                ))).Indent() + "\n" +
+                )).Concat(Functions.Select(
+                    kv => kv.Value.ToCSharp(kv.Key)
+                )))).Indent() + "\n" +
             "}").Indent() + "\n" +
         "}";
     }
