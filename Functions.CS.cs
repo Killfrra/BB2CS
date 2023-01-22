@@ -40,4 +40,23 @@ public static class Functions_CS
     {
         return default!;
     }
+    /*
+    public static void SpellBuffAdd(
+        ObjAIBase attacker,
+        AttackableUnit target,
+        Script buffScript,
+        int maxStack = 1,
+        int numberOfStacks = 1,
+        float duration = 25000,
+
+        BuffAddType buffAddType = BuffAddType.REPLACE_EXISTING,
+        BuffType buffType = BuffType.INTERNAL,
+        float tickRate = 0,
+        bool stacksExclusive = false,
+        bool canMitigateDuration = false,
+        bool isHiddenOnClient = false,
+        
+        Spell? originSpell = null // for non-BB
+    ){}
+    */
 }

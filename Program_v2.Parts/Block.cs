@@ -75,6 +75,27 @@ public class Block
             }
         }
 
+        if(ResolvedName == "SpellBuffAdd")
+        {
+            var buffName = GetBuffName();
+            var passedTable = ResolvedParams[6].Item1!.Var!.Var;
+            //  passedTable.UseAsInstanceVarsFor(GetBuffName());
+            var buffScriptComposite = GetScript(buffName);
+            if(buffScriptComposite != null)
+            {
+                var buffScript = buffScriptComposite.BuffScript;
+                //  buffScript.PassedTables.Add(passedTable);
+                foreach(var kv in passedTable.Vars)
+                {
+                    var existingVar = buffScript.InstanceVars.Vars.GetValueOrDefault(kv.Key);
+                    if(existingVar != null)
+                        existingVar.Assign(kv.Value);
+                    else
+                        buffScript.InstanceVars.Vars[kv.Key] = kv.Value; //TODO: Copy & Assign?
+                }
+            }
+        }
+
         var returnType = mInfo.ReturnType;
         if(returnType != typeof(void))
         {
@@ -83,18 +104,52 @@ public class Block
         }
     }
 
+    BBScriptComposite? GetScript(string name)
+    {
+        return Parent.ParentScript.Parent.Parent.Scripts.GetValueOrDefault(name);
+    }
+
+    (string Key, BBScriptComposite Value) GetScript()
+    {
+        var compositeScript = Parent.ParentScript.Parent;
+        var kv = compositeScript.Parent.Scripts.First(kv => kv.Value == compositeScript);
+        return (kv.Key, kv.Value);
+    }
+
+    string GetBuffName()
+    {
+        var buffName = ResolvedParams[2].Item1!.Value as string;
+        if(buffName != null)
+            return buffName;
+        return GetScript().Key;
+    }
+
     public string ToCSharp()
     {
         //HACK:
         if(ResolvedName == nameof(Functions.SpellBuffAdd))
         {
+            //*
             var c = ResolvedParams[6].Item1!;
             if(c.Var != null)
             {
                 var v = c.Var.Var;
-                if(/*!v.Initialized ||*/!v.IsTable)
+                if(!v.IsTable) // || !v.Initialized
                     c.Var = null;
             }
+            //*/
+            /*
+            //ResolvedName = "AddBuff";
+            var buffVarsTable = ResolvedParams[6].Item1!.Var!;
+            var buffName = ResolvedParams[2].Item1!;
+            var compositeScript = Parent.ParentScript.Parent;
+            var scriptName = compositeScript.Parent.Scripts.First(kv => kv.Value == compositeScript).Key;
+            buffName.Value =
+            "$" + $"new Buffs.{PrepareName((string)(buffName.Value ?? scriptName), true)}(" + 
+                ((buffVarsTable.Var.IsTable) ? buffVarsTable.ToCSharp() : "") +
+            ")" + "$";
+            ResolvedParams.RemoveAt(6);
+            //*/
         }
 
         else if(ResolvedName is "If" or "ElseIf" or "While")

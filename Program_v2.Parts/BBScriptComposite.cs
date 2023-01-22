@@ -1,9 +1,9 @@
 public class BBScriptComposite
 {
     //public string Name;
-    public BBScript CharScript = new();
-    public BBScript ItemScript = new();
-    public BBScript BuffScript = new();
+    public BBCharScript2 CharScript = new();
+    public BBItemScript2 ItemScript = new();
+    public BBBuffScript2 BuffScript = new();
     public BBSpellScript2 SpellScript = new();
 
     public BBScripts Parent;

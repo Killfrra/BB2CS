@@ -16,7 +16,7 @@ public class Program_v2
         "Game/DATA/Spells/*" + _BB_LUA,
     };
 
-    public static new Dictionary<string, MethodInfo> Methods = new();
+    public static Dictionary<string, Dictionary<Type, MethodInfo>> Methods = new();
 
     public static void Main()
     {
@@ -38,7 +38,8 @@ public class Program_v2
                 var mAttr = method.GetCustomAttribute<BBCallAttribute>();
                 if(mAttr != null)
                 {
-                    Methods[mAttr.Name] = method;
+                    Methods[mAttr.Name] = Methods.GetValueOrDefault(mAttr.Name) ?? new();
+                    Methods[mAttr.Name][scriptType] = method;
                 }
             }
         }
@@ -75,13 +76,26 @@ public class Program_v2
                         if(func.Key == "PreLoad")
                             continue;
                         
-                        var method = Methods.GetValueOrDefault(func.Key);
-                        var declType = method?.DeclaringType;
-                        if(method == null || declType == null)
+                        var methods = Methods.GetValueOrDefault(func.Key);
+                        if(methods == null)
                         {
                             Console.WriteLine($"Unclassified function {func.Key}");
                             continue;
                         }
+
+                        var method = methods.Values.First();
+                        if(methods.Count > 1)
+                        {
+                            if(!(
+                                filePath.Contains("Characters") && methods.TryGetValue(typeof(BBCharScript), out method) ||
+                                filePath.Contains("Talents") && methods.TryGetValue(typeof(BBCharScript), out method) || //TODO: BBTalentScript?
+                                filePath.Contains("Items") && methods.TryGetValue(typeof(BBItemScript), out method)
+                            ))
+                                Console.WriteLine($"Can't determine which script type to choose for {func.Key} method");
+                        }
+
+                        var declType = method?.DeclaringType;
+                        
                         var bbfunc = new BBFunction();
                             bbfunc.Blocks = func.Value;
                         var funcName = method.Name;

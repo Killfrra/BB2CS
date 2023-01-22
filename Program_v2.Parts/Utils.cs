@@ -63,7 +63,9 @@ public static class Utils
             else
                 return typeof(int);
         }
-        return types.FirstOrDefault();
+        return types.FirstOrDefault(
+            //typeof(object)
+        );
     }
 
     public static string ObjectToCSharp(object value)

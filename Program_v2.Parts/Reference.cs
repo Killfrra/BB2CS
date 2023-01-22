@@ -20,6 +20,7 @@ public class Reference
     }
 
     //TODO: Deduplicate
+    // For out/ref parameters
     public static Reference? Resolve(ParameterInfo pInfo, Dictionary<string, object> ps, SubBlocks sb)
     {
         var pAttr = pInfo.GetCustomAttribute<BBParamAttribute>() ?? new();
@@ -46,6 +47,7 @@ public class Reference
             return null;
     }
 
+    // For return
     public static Reference? Resolve(MethodInfo mInfo, Dictionary<string, object> ps, SubBlocks sb, Composite? param0)
     {
         var fAttr = mInfo.GetCustomAttribute<BBFuncAttribute>() ?? new();

@@ -32,21 +32,34 @@ public class Var
         Types.Add(type);
     }
 
-    HashSet<Composite> AssignedVars = new();
-    public void Assign(Composite var)
+    HashSet<Union<Var, Composite>> Assigned = new();
+    public void Assign(Union<Var, Composite> var)
     {
         Initialized = true;
-        AssignedVars.Add(var);
+        Assigned.Add(var);
     }
     public void InferType()
     {
         if(Type != null)
             return;
-        foreach(var v in AssignedVars)
+        foreach(var v in Assigned)
         {
-            v.InferType();
-            if(v.Type != null)
-                Types.Add(v.Type);
+            if(v.Item1 == this) //TODO: Better way to resolve ring
+                continue;
+
+            Type? type; //TODO: Reduce code
+            if(v.Item1 != null)
+            {
+                v.Item1.InferType();
+                type = v.Item1.Type;
+            }
+            else // if(v.Item2 != null)
+            {
+                v.Item2!.InferType();
+                type = v.Item2.Type;
+            }
+            if(type != null)
+                Types.Add(type);
         }
         Type = InferTypeFrom(Types);
     }
@@ -69,8 +82,8 @@ public class Var
         {
             //HACK:
             name = PrepareName(name, false);
-            var funcName = Parent!.ParentScript.Functions.Where(kv => kv.Value == Parent).First().Key;
-            return funcName + "_" + name + " " + name + " = new();";
+            var funcName = Parent!.ParentScript.Functions.First(kv => kv.Value == Parent).Key;
+            return funcName + "_" + name + " " + name + " = new();"; // + " //USEDBY: " + string.Join(" ", Buffs);;
         }
 
         var output = "";
@@ -103,5 +116,11 @@ public class Var
         //    output += " " + TypeToCSharp(type);
 
         return output;
+    }
+
+    HashSet<string> Buffs = new();
+    public void UseAsInstanceVarsFor(string v)
+    {
+        Buffs.Add(v);
     }
 }

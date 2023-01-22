@@ -10,6 +10,13 @@ public class Composite
     public Reference? Var;
     public EffectReference? VarByLevel;
 
+    public Composite(Type type, object value)
+    {
+        Type = type;
+        Value = value;
+    }
+
+    //TODO: Deduplicate
     public Composite(ParameterInfo pInfo, Dictionary<string, object> ps, SubBlocks sb)
     {
         var pAttr = pInfo.GetCustomAttribute<BBParamAttribute>() ?? new();
@@ -53,6 +60,13 @@ public class Composite
             {
                 if(Value != null)
                 {
+                    if(Type == typeof(SpellDataFlags) && Value is string s)
+                    {
+                        var opt = StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries;
+                        return string.Join(" | ", s.Split(" ", opt).Select(
+                            f => "SpellDataFlags" + "." + f
+                        ));
+                    }
                     return ObjectToCSharp(Value);
                 }
                 else if(VarByLevel != null)
@@ -154,7 +168,9 @@ public class Composite
         {
             //TODO: Solve the problem differently
         }
-        */
+        //*/
+        if(Var != null && Var.Var.Type != null)
+            types.Add(Var.Var.Type);
         
         Type = InferTypeFrom(types);
     }

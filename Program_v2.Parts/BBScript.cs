@@ -2,6 +2,19 @@ using System.Numerics;
 using static Utils;
 
 //TODO: Rename
+public class BBCharScript2: BBScript
+{
+}
+//TODO: Rename
+public class BBItemScript2: BBScript
+{
+}
+//TODO: Rename
+public class BBBuffScript2: BBScript
+{
+    public HashSet<Var> PassedTables = new();
+}
+//TODO: Rename
 public class BBSpellScript2: BBScript
 {
     public Var SpellVars = new(true);

@@ -18,7 +18,7 @@ public class BBScripts
         using static Functions;
         using static Functions_CS;
         """ + "\n" +
-        $"public class {PrepareName("Script", true)}\n" +
+        $"public partial class {PrepareName("Script", true)}\n" +
         "{" + "\n" + (
             $"public AllCharVars {PrepareName("CharVars", false)};\n" +
             $"public AllAvatarVars {PrepareName("AvatarVars", false)};"
