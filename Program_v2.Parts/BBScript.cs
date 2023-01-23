@@ -55,7 +55,7 @@ public class BBScript2
                 function.LocalVars[name] = v;
             }
             declare<AttackableUnit>("Owner");
-            declare<AttackableUnit>("Attacker");
+            declare<  ObjAIBase   >("Attacker");
             declare<AttackableUnit>("Target");
             declare<int>("Slot"); // Items
             declare<int>("Level"); // ?

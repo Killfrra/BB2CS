@@ -282,7 +282,6 @@ public static partial class Functions
     [BBFunc]
     public static void SetSpell(
         ObjAIBase target,
-        
         int slotNumber,
         SpellSlotType slotType,
         SpellbookType slotBook,
@@ -291,7 +290,7 @@ public static partial class Functions
 
     public static string GetSlotSpellName(
         ObjAIBase owner,
-
+        [BBParam("Var", "VarTable", "Value", "ValueByLevel")]
         int spellSlot,
         SpellbookType spellbookType,
         SpellSlotType slotType
@@ -300,7 +299,7 @@ public static partial class Functions
     }
     public static float GetSlotSpellCooldownTime(
         ObjAIBase owner,
-
+        [BBParam("Var", "VarTable", "Value", "ValueByLevel")]
         int spellSlot,
         SpellbookType spellbookType,
         SpellSlotType slotType
@@ -309,7 +308,7 @@ public static partial class Functions
     }
     public static int GetSlotSpellLevel(
         ObjAIBase owner,
-
+        [BBParam("Var", "VarTable", "Value", "ValueByLevel")]
         int spellSlot,
         SpellbookType spellbookType,
         SpellSlotType slotType = SpellSlotType.SpellSlots
@@ -409,7 +408,7 @@ public static partial class Functions
     ){}
 
     [BBFunc(Dest = "Caster")]
-    public static AttackableUnit SetBuffCasterUnit(){
+    public static ObjAIBase SetBuffCasterUnit(){
         return default!;
     }
 
@@ -475,30 +474,32 @@ public static partial class Functions
         Region bubbleID
     ){}
 
-    public static string GetSpellName(AttackableUnit? target)
+    #region GetCastInfo
+    public static string GetSpellName()
     {
         return default!;
     }
-    public static float GetPARCost(AttackableUnit? target)
+    public static float GetPARCost()
     {
         return default!;
     }
-    public static int GetSpellSlot(AttackableUnit? target)
+    public static int GetSpellSlot()
     {
         return default!;
     }
-    public static int GetCastSpellLevelPlusOne(AttackableUnit? target)
+    public static int GetCastSpellLevelPlusOne()
     {
         return default!;
     }
-    public static bool GetIsAttackOverride(AttackableUnit? target)
+    public static bool GetIsAttackOverride()
     {
         return default!;
     }
-    public static int GetCastSpellTargetsHitPlusOne(AttackableUnit? target)
+    public static int GetCastSpellTargetsHitPlusOne()
     {
         return default!;
     }
+    #endregion
 
     [BBFunc]
     public static void SetDodgePiercing(

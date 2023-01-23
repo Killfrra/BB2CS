@@ -20,6 +20,7 @@ public class Block
 
         var flags = BindingFlags.Public | BindingFlags.Static;
 
+        /*
         if(
             ResolvedName
             is "SetStatus" or "IncStat" or "IncPermanentStat"
@@ -29,6 +30,7 @@ public class Block
             ResolvedName = (new Composite(pInfo, Params, Parent).Value as string)!;
             ResolvedName = ResolvedName.Substring(1, ResolvedName.Length - 1 - 1);
         }
+        */
 
         var mInfo = typeof(Functions).GetMethod(ResolvedName, flags);
         if(mInfo == null)
@@ -96,6 +98,18 @@ public class Block
                         buffScript.InstanceVars.Vars[kv.Key] = kv.Value; //TODO: Copy & Assign?
                 }
             }
+        }
+
+        if(
+            ResolvedName
+            is "SetStatus" or "IncStat" or "IncPermanentStat"
+            or "GetSlotSpellInfo" or "GetStat" or "GetPAROrHealth" or "GetStatus" or "GetCastInfo"
+        ){
+            var pInfo = mInfo.GetParameters()[0];
+            ResolvedName = (ResolvedParams[0].Item1!.Value as string)!;
+            ResolvedName = ResolvedName.Substring(1, ResolvedName.Length - 1 - 1);
+            mInfo = typeof(Functions).GetMethod(ResolvedName, flags)!;
+            ResolvedParams.RemoveAt(0);
         }
 
         var returnType = mInfo.ReturnType;

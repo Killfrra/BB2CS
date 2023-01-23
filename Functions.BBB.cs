@@ -58,7 +58,7 @@ public static partial class Functions
     [BBFunc]
     public static object GetSlotSpellInfo<T>(
         Func<AttackableUnit, int, SpellbookType, SpellSlotType, T> function,
-        AttackableUnit owner,
+        ObjAIBase owner,
         [BBParam("Var", "VarTable", "Value", "ValueByLevel")]
         int spellSlot,
         SpellbookType spellbookType,

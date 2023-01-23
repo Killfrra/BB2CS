@@ -135,45 +135,45 @@ public static partial class Functions
     public static void IncPermanentPercentMovementSpeedMod(AttackableUnit? target, float delta){}
     public static void IncPermanentPercentPhysicalDamageMod(AttackableUnit? target, float delta){}
 
-    public static float GetPAR(AttackableUnit owner/*, PrimaryAbilityResourceType PARType*/)
+    public static float GetPAR(AttackableUnit owner, PrimaryAbilityResourceType PARType = 0)
     {
         return default!;
     }
-    public static float GetMaxPAR(AttackableUnit owner/*, PrimaryAbilityResourceType PARType*/)
+    public static float GetMaxPAR(AttackableUnit owner, PrimaryAbilityResourceType PARType = 0)
     {
         return default!;
     }
-    public static float GetPARPercent(AttackableUnit owner/*, PrimaryAbilityResourceType PARType*/)
+    public static float GetPARPercent(AttackableUnit owner, PrimaryAbilityResourceType PARType = 0)
     {
         return default!;
     }
-    public static float GetHealth(AttackableUnit owner/*, PrimaryAbilityResourceType PARType*/)
+    public static float GetHealth(AttackableUnit owner, PrimaryAbilityResourceType PARType = 0)
     {
         return default!;
     }
-    public static float GetMaxHealth(AttackableUnit owner/*, PrimaryAbilityResourceType PARType*/)
+    public static float GetMaxHealth(AttackableUnit owner, PrimaryAbilityResourceType PARType = 0)
     {
         return default!;
     }
-    public static float GetHealthPercent(AttackableUnit owner/*, PrimaryAbilityResourceType PARType*/)
+    public static float GetHealthPercent(AttackableUnit owner, PrimaryAbilityResourceType PARType = 0)
     {
         return default!;
     }
 
     [BBFunc]
-    public static void IncPAR(AttackableUnit target, float delta/*, PrimaryAbilityResourceType PARType*/){}
+    public static void IncPAR(AttackableUnit target, float delta, PrimaryAbilityResourceType PARType = 0){}
     [BBFunc]
-    public static void IncFlatPARPoolMod(AttackableUnit target, float delta/*, PrimaryAbilityResourceType PARType*/){}
+    public static void IncFlatPARPoolMod(AttackableUnit target, float delta, PrimaryAbilityResourceType PARType = 0){}
     [BBFunc]
-    public static void IncPercentPARPoolMod(AttackableUnit target, float delta/*, PrimaryAbilityResourceType PARType*/){}
+    public static void IncPercentPARPoolMod(AttackableUnit target, float delta, PrimaryAbilityResourceType PARType = 0){}
     [BBFunc]
-    public static void IncPermanentFlatPARPoolMod(AttackableUnit target, float delta/*, PrimaryAbilityResourceType PARType*/){}
+    public static void IncPermanentFlatPARPoolMod(AttackableUnit target, float delta, PrimaryAbilityResourceType PARType = 0){}
     [BBFunc]
-    public static void IncFlatPARRegenMod(AttackableUnit target, float delta/*, PrimaryAbilityResourceType PARType*/){}
+    public static void IncFlatPARRegenMod(AttackableUnit target, float delta, PrimaryAbilityResourceType PARType = 0){}
     [BBFunc]
-    public static void IncPercentPARRegenMod(AttackableUnit target, float delta/*, PrimaryAbilityResourceType PARType*/){}
+    public static void IncPercentPARRegenMod(AttackableUnit target, float delta, PrimaryAbilityResourceType PARType = 0){}
     [BBFunc]
-    public static void IncPermanentFlatPARRegenMod(AttackableUnit target, float delta/*, PrimaryAbilityResourceType PARType*/){}
+    public static void IncPermanentFlatPARRegenMod(AttackableUnit target, float delta, PrimaryAbilityResourceType PARType = 0){}
 
     [BBFunc]
     public static void IncPermanentGoldReward(AttackableUnit target, float delta){}
