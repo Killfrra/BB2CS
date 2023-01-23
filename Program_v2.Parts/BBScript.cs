@@ -2,25 +2,31 @@ using System.Numerics;
 using static Utils;
 
 //TODO: Rename
-public class BBCharScript2: BBScript
+public class BBCharScript2: BBScript2
 {
+    protected override Type? prototype => typeof(BBCharScript);
 }
 //TODO: Rename
-public class BBItemScript2: BBScript
+public class BBItemScript2: BBScript2
 {
+    protected override Type? prototype => typeof(BBItemScript);
 }
 //TODO: Rename
-public class BBBuffScript2: BBScript
+public class BBBuffScript2: BBScript2
 {
+    protected override Type? prototype => typeof(BBBuffScript);
     public HashSet<Var> PassedTables = new();
 }
 //TODO: Rename
-public class BBSpellScript2: BBScript
+public class BBSpellScript2: BBScript2
 {
+    protected override Type? prototype => typeof(BBSpellScript);
     public Var SpellVars = new(true);
 }
-public class BBScript
+public class BBScript2
 {
+    protected virtual Type? prototype => null;
+
     public Dictionary<string, object> Metadata = new();
     public Dictionary<string, BBFunction> Functions = new();
     public Var InstanceVars = new(true);
@@ -36,18 +42,26 @@ public class BBScript
             var function = kv.Value;
             var funcName = kv.Key;
 
-            /*
             //HACK:
             void declare<T>(string name)
             {
+                decl(typeof(T), name);
+            }
+            void decl(Type type, string name)
+            {
                 var v = new Var(false);
-                    v.Write(typeof(T));
+                    v.Write(type);
                     v.IsArgument = true;
                 function.LocalVars[name] = v;
             }
             declare<AttackableUnit>("Owner");
             declare<AttackableUnit>("Attacker");
             declare<AttackableUnit>("Target");
+            declare<int>("Slot"); // Items
+            declare<int>("Level"); // ?
+            declare<int>("TalentLevel"); // Talents
+            declare<float>("LifeTime"); // Buffs
+            /*
             if(funcName is "OnLevelUpSpell")
                 declare<int>("Slot");
             if(funcName is "SelfExecute" or "TargetExecute")
@@ -70,7 +84,16 @@ public class BBScript
             if(funcName == "OnAllowAdd")
                 declare<BuffType>("Type");
             */
-
+            var mInfo = prototype!.GetMethod(funcName)!;
+            foreach(var pInfo in mInfo.GetParameters())
+            {
+                //TODO: Deduplicate
+                var argName = pInfo.Name!.UCFirst();
+                var arg = new Var(parent: function);
+                    arg.Write(pInfo.ParameterType);
+                    arg.IsArgument = true;
+                function.LocalVars[argName] = arg;
+            }
             function.Scan(this, null);
         }
     }

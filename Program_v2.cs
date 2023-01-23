@@ -132,9 +132,11 @@ public class Program_v2
                 stats[func] = stats.GetValueOrDefault(func) ?? new();
                 stats[func][v] = stats[func].GetValueOrDefault(v) + 1;
             }
+        var output = "";
         foreach(var kv1 in stats)
         foreach(var kv2 in kv1.Value)
-            Console.WriteLine($"{kv1.Key} {kv2.Key} {kv2.Value}");
+            output += ($"{kv2.Value.ToString().PadLeft(4)} {kv1.Key} {kv2.Key}") + "\n";
+        Console.Write(output);
         //return;
         //*/
 

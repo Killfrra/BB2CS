@@ -27,3 +27,10 @@ public class DamageData {}
 public class DeathData {}
 
 public class Table {}
+
+public class SpellScriptMetaData
+{
+    public bool DoesntTriggerSpellCasts;
+    public bool CastingBreaksStealth;
+    public bool DoesntBreakShields;
+}

@@ -42,20 +42,22 @@ public class Block
             if(sAttr != null)
             {
                 var sb = new SubBlocks();
-                    sb.Blocks = SubBlocks;
-                    sb.Scan(parent);
+                
                 int i = 0;
                 var genericArguments = pInfo.ParameterType.GetGenericArguments();
                 foreach(var paramNameName in sAttr.ParamNames)
                 {
-                    var paramName = (string)Params[paramNameName + "Var"];
+                    var argName = (string)Params[paramNameName + "Var"];
                     var arg = new Var(parent: sb);
                         arg.Write(genericArguments[i]);
                         arg.IsArgument = true;
-                    sb.LocalVars[paramName] = arg;
+                    sb.LocalVars[argName] = arg;
                     i++;
                 }
                 ResolvedParams.Add(sb);
+
+                sb.Blocks = SubBlocks;
+                sb.Scan(parent);
             }
             else
             {

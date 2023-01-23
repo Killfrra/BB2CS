@@ -1,22 +1,24 @@
 #nullable enable
 
-public class BBItemScript
+public class BBItemScript: BBScript, IHandleAttackableUnitEvents
 {
-    [BBCall("PreLoad")] public void PreLoad(){}
-    [BBCall("OnActivate")] public void OnActivate(ObjAIBase Owner){}
-    [BBCall("OnDeactivate")] public void OnDeactivate(ObjAIBase owner){}
-    [BBCall("UpdateSelfBuffActions")] public void UpdateSelfBuffActions(){}
-    [BBCall("UpdateSelfBuffStats")] public void UpdateSelfBuffStats(){}
-    [BBCall("ItemOnAssist")] public void OnAssist(){}
-    [BBCall("ItemOnBeingDodged")] public void OnBeingDodged(){}
-    [BBCall("ItemOnBeingHit")] public void OnBeingHit(AttackableUnit attacker){}
-    [BBCall("ItemOnDeath")] public void OnDeath(DeathData data){}
-    [BBCall("ItemOnHitUnit")] public void OnHitUnit(DamageData data){}
-    [BBCall("ItemOnKill")] public void OnKill(DeathData data){}
-    [BBCall("ItemOnMiss")] public void OnMiss(){}
-    [BBCall("ItemOnPreDamage")] public void OnPreDamage(DamageData data){}
-    [BBCall("ItemOnPreDealDamage")] public void OnPreDealDamage(DamageData data){}
-    [BBCall("ItemOnDealDamage")] public void OnDealDamage(DamageData data){}
-    [BBCall("ItemOnSpellCast")] public void OnSpellCast(Spell spell){}
+    // ITEM SPECIFIC
     [BBCall("UpdateAura")] public void UpdateAura(){} //TODO: Verify
+    
+    [BBCall("PreLoad")] public override void PreLoad(){}
+    [BBCall("OnActivate")] public override void OnActivate(){}
+    [BBCall("OnDeactivate")] public override void OnDeactivate(){}
+    [BBCall("UpdateSelfBuffStats")] public override void OnUpdateStats(){}
+    [BBCall("UpdateSelfBuffActions")] public override void OnUpdateActions(){}
+    [BBCall("ItemOnAssist")] public override void OnAssist(){}
+    [BBCall("ItemOnBeingDodged")] public override void OnBeingDodged(){}
+    [BBCall("ItemOnDeath")] public override void OnDeath(){}
+    [BBCall("ItemOnHitUnit")] public override void OnHitUnit(float damageAmount, DamageType damageType, HitResult hitResult){}
+    [BBCall("ItemOnBeingHit")] public override void OnBeingHit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult){}
+    [BBCall("ItemOnKill")] public override void OnKill(){}
+    [BBCall("ItemOnMiss")] public override void OnMiss(){}
+    [BBCall("ItemOnPreDamage")] public override void OnPreDamage(float damageAmount, DamageType damageType, DamageSource damageSource){}
+    [BBCall("ItemOnPreDealDamage")] public override void OnPreDealDamage(float damageAmount, DamageType damageType, DamageSource damageSource){}
+    [BBCall("ItemOnDealDamage")] public override void OnDealDamage(){}
+    [BBCall("ItemOnSpellCast")] public override void OnSpellCast(string spellName, SpellScriptMetaData spellVars){}
 }

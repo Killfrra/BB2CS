@@ -1,28 +1,31 @@
 #nullable enable
 
-public class BBCharScript
+public class BBCharScript: BBScript, IHandleAttackableUnitEvents
 {
-    [BBCall("PreLoad")] public void PreLoad(){}
-    [BBCall("CharOnActivate")] public void OnActivate(){}
-    [BBCall("CharOnDeactivate")] public void OnDeactivate(){}
-    [BBCall("UpdateSelfBuffActions")] public void UpdateSelfBuffActions(){}
-    [BBCall("UpdateSelfBuffStats")] public void UpdateSelfBuffStats(){}
-    [BBCall("CharOnAssistUnit")] public void OnAssistUnit(){}
-    [BBCall("CharOnBeingHit")] public void OnBeingHit(AttackableUnit attacker){}
-    [BBCall("CharOnDisconnect")] public void OnDisconnect(){}
-    [BBCall("CharOnDodge")] public void OnDodge(){}
-    [BBCall("CharOnHitUnit")] public void OnHitUnit(DamageData data){}
-    [BBCall("CharOnKillUnit")] public void OnKillUnit(){}
-    [BBCall("CharOnLaunchAttack")] public void OnLaunchAttack(Spell spell){}
-    [BBCall("CharOnLevelUp")] public void OnLevelUp(){}
-    [BBCall("CharOnLevelUpSpell")] public void OnLevelUpSpell(Spell spell){}
-    [BBCall("CharOnMiss")] public void OnMiss(){}
-    [BBCall("CharOnNearbyDeath")] public void OnNearbyDeath(){}
-    [BBCall("CharOnPreAttack")] public void OnPreAttack(Spell spell){}
-    [BBCall("CharOnPreDealDamage")] public void OnPreDealDamage(DamageData data){}
-    [BBCall("CharOnPreDamage")] public void OnPreDamage(DamageData data){}
-    [BBCall("CharOnReconnect")] public void OnReconnect(){}
-    [BBCall("CharOnResurrect")] public void OnResurrect(){}
-    [BBCall("CharOnSpellCast")] public void OnSpellCast(Spell spell){}
+    // TALENT? SPECIFIC
     [BBCall("SetVarsByLevel")] public void SetVarsByLevel(){}
+
+    [BBCall("PreLoad")] public override void PreLoad(){}
+    [BBCall("CharOnActivate")] public override void OnActivate(){}
+    [BBCall("CharOnDeactivate")] public override void OnDeactivate(){}
+    [BBCall("UpdateSelfBuffStats")] public override void OnUpdateStats(){}
+    [BBCall("UpdateSelfBuffActions")] public override void OnUpdateActions(){}
+    
+    [BBCall("CharOnAssistUnit")] public override void OnAssist(){}
+    [BBCall("CharOnBeingHit")] public override void OnBeingHit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult){}
+    [BBCall("CharOnDisconnect")] public override void OnDisconnect(){}
+    [BBCall("CharOnDodge")] public override void OnDodge(){}
+    [BBCall("CharOnHitUnit")] public override void OnHitUnit(float damageAmount, DamageType damageType, HitResult hitResult){}
+    [BBCall("CharOnKillUnit")] public override void OnKill(){}
+    [BBCall("CharOnLaunchAttack")] public override void OnLaunchAttack(){}
+    [BBCall("CharOnLevelUp")] public override void OnLevelUp(){}
+    [BBCall("CharOnLevelUpSpell")] public override void OnLevelUpSpell(int slot){}
+    [BBCall("CharOnMiss")] public override void OnMiss(){}
+    [BBCall("CharOnNearbyDeath")] public override void OnNearbyDeath(){}
+    [BBCall("CharOnPreAttack")] public override void OnPreAttack(){}
+    [BBCall("CharOnPreDealDamage")] public override void OnPreDealDamage(float damageAmount, DamageType damageType, DamageSource damageSource){}
+    [BBCall("CharOnPreDamage")] public override void OnPreDamage(float damageAmount, DamageType damageType, DamageSource damageSource){}
+    [BBCall("CharOnReconnect")] public override void OnReconnect(){}
+    [BBCall("CharOnResurrect")] public override void OnResurrect(){}
+    [BBCall("CharOnSpellCast")] public override void OnSpellCast(string spellName, SpellScriptMetaData spellVars){}
 }

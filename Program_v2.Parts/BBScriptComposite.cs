@@ -6,10 +6,10 @@ public class BBScriptComposite
     public BBBuffScript2 BuffScript = new();
     public BBSpellScript2 SpellScript = new();
 
-    public List<BBScript> Scripts;
+    public List<BBScript2> Scripts;
     public BBScriptComposite()
     {
-        Scripts = new List<BBScript>
+        Scripts = new List<BBScript2>
         {
             CharScript,
             ItemScript,

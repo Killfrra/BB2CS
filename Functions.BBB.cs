@@ -43,6 +43,7 @@ public static partial class Functions
     public static void SetStatus(
         Action<AttackableUnit, bool> status,
         AttackableUnit target,
+        [BBParam("Var", "VarTable", "Value", "ValueByLevel")]
         bool src
     ){
         status(target, src);
@@ -58,6 +59,7 @@ public static partial class Functions
     public static object GetSlotSpellInfo<T>(
         Func<AttackableUnit, int, SpellbookType, SpellSlotType, T> function,
         AttackableUnit owner,
+        [BBParam("Var", "VarTable", "Value", "ValueByLevel")]
         int spellSlot,
         SpellbookType spellbookType,
         SpellSlotType slotType
@@ -129,6 +131,7 @@ public static partial class Functions
 
     [BBFunc]
     public static void SetReturnValue(
+        [BBParam("Var", "VarTable", "Value", "ValueByLevel")]
         object src
     ){}
 
@@ -200,7 +203,7 @@ public static partial class Functions
     [BBFunc]
     public static int GetBuffCountFromCaster(
         AttackableUnit target,
-        AttackableUnit caster,
+        AttackableUnit? caster,
         string buffName
     ){
         return default!;

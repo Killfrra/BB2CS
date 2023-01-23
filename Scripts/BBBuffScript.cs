@@ -1,48 +1,53 @@
 #nullable enable
 
-public class BBBuffScript
+using System.Numerics;
+
+public class BBBuffScript: BBScript, IHandleAttackableUnitEvents
 {
-    [BBCall("PreLoad")] public void PreLoad(){}
-    [BBCall("OnBuffActivate")] public void OnActivate(){}
-    [BBCall("OnBuffDeactivate")] public void OnDeactivate(){}
-    [BBCall("BuffOnDeath")] public void OnDeath(DeathData data){}
+    // BUFF SPECIFIC
     [BBCall("UpdateBuffs")] public void UpdateBuffs(){}
-    [BBCall("BuffOnUpdateStats")] public void OnUpdateStats(){}
-    [BBCall("BuffOnUpdateActions")] public void OnUpdateActions(){}
-    [BBCall("BuffOnAllowAdd")] public bool OnAllowAdd(Buff buff)
+    [BBCall("BuffOnUpdateAmmo")] public void OnUpdateAmmo(){}
+    [BBCall("BuffOnAllowAdd")] public bool OnAllowAdd(BuffType type, string scriptName, int maxStack, float duration)
     {
         return true;
     }
-    [BBCall("BuffOnAssist")] public void OnAssist(){}
-    [BBCall("BuffBeingDodged")] public void OnBeingDodged(){}
-    [BBCall("BuffOnBeingHit")] public void OnBeingHit(AttackableUnit attacker){}
-    [BBCall("BuffOnBeingSpellHit")] public void OnBeingSpellHit(Spell spell, SpellMissile missile){}
-    [BBCall("BuffOnCollision")] public void OnCollision(){}
-    [BBCall("BuffOnCollisionTerrain")] public void OnCollisionTerrain(){}
-    [BBCall("BuffOnDisconnect")] public void OnDisconnect(){}
-    [BBCall("BuffOnHeal")] public void OnHeal(){}
-    [BBCall("BuffOnHitUnit")] public void OnHitUnit(DamageData data){}
-    [BBCall("BuffOnKill")] public void OnKill(DeathData data){}
-    [BBCall("BuffOnLaunchAttack")] public void OnLaunchAttack(Spell spell){}
-    [BBCall("BuffOnLaunchMissile")] public void OnLaunchMissile(Spell spell, SpellMissile missile){}
-    [BBCall("BuffOnLevelUp")] public void OnLevelUp(){}
-    [BBCall("BuffOnLevelUpSpell")] public void OnLevelUpSpell(Spell spell){}
-    [BBCall("BuffOnMiss")] public void OnMiss(){}
-    [BBCall("BuffOnMissileEnd")] public void OnMissileEnd(){}
-    [BBCall("BuffOnMoveEnd")] public void OnMoveEnd(){}
-    [BBCall("BuffOnMoveFailure")] public void OnMoveFailure(){}
-    [BBCall("BuffOnMoveSuccess")] public void OnMoveSuccess(){}
-    [BBCall("BuffOnPreAttack")] public void OnPreAttack(Spell spell){}
-    [BBCall("BuffOnReconnect")] public void OnReconnect(){}
-    [BBCall("BuffOnResurrect")] public void OnResurrect(){}
-    [BBCall("BuffOnSpellCast")] public void OnSpellCast(Spell spell){}
-    [BBCall("BuffOnSpellHit")] public void OnSpellHit(Spell spell, AttackableUnit target, SpellMissile missile){}
-    [BBCall("BuffOnPreDealDamage")] public void OnPreDealDamage(DamageData data){}
-    [BBCall("BuffOnPreMitigationDamage")] public void OnPreMitigationDamage(DamageData data){}
-    [BBCall("BuffOnPreDamage")] public void OnPreDamage(DamageData data){}
-    [BBCall("BuffOnTakeDamage")] public void OnTakeDamage(DamageData data){}
-    [BBCall("BuffOnDealDamage")] public void OnDealDamage(DamageData data){}
-    [BBCall("BuffOnUpdateAmmo")] public void OnUpdateAmmo(){}
-    [BBCall("BuffOnZombie")] public void OnZombie(){}
-    [BBCall("BuffOnDodge")] public void OnDodge(){}
+
+    [BBCall("PreLoad")] public override void PreLoad(){}
+    [BBCall("OnBuffActivate")] public override void OnActivate(){}
+    [BBCall("OnBuffDeactivate")] public override void OnDeactivate(/*bool expired*/){}
+    [BBCall("BuffOnUpdateStats")] public override void OnUpdateStats(){}
+    [BBCall("BuffOnUpdateActions")] public override void OnUpdateActions(){}
+
+    [BBCall("BuffOnDeath")] public override void OnDeath(){}
+    [BBCall("BuffOnAssist")] public override void OnAssist(){}
+    [BBCall("BuffBeingDodged")] public override void OnBeingDodged(){}
+    [BBCall("BuffOnBeingHit")] public override void OnBeingHit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult){}
+    [BBCall("BuffOnBeingSpellHit")] public override void OnBeingSpellHit(SpellScriptMetaData spellVars){}
+    [BBCall("BuffOnCollision")] public override void OnCollision(){}
+    [BBCall("BuffOnCollisionTerrain")] public override void OnCollisionTerrain(){}
+    [BBCall("BuffOnDisconnect")] public override void OnDisconnect(){}
+    [BBCall("BuffOnHeal")] public override void OnHeal(float health){}
+    [BBCall("BuffOnHitUnit")] public override void OnHitUnit(float damageAmount, DamageType damageType, HitResult hitResult){}
+    [BBCall("BuffOnKill")] public override void OnKill(){}
+    [BBCall("BuffOnLaunchAttack")] public override void OnLaunchAttack(){}
+    [BBCall("BuffOnLaunchMissile")] public override void OnLaunchMissile(SpellMissile missileId){}
+    [BBCall("BuffOnLevelUp")] public override void OnLevelUp(){}
+    [BBCall("BuffOnLevelUpSpell")] public override void OnLevelUpSpell(int slot){}
+    [BBCall("BuffOnMiss")] public override void OnMiss(){}
+    [BBCall("BuffOnMissileEnd")] public override void OnMissileEnd(string spellName, Vector3 missileEndPosition){}
+    [BBCall("BuffOnMoveEnd")] public override void OnMoveEnd(){}
+    [BBCall("BuffOnMoveFailure")] public override void OnMoveFailure(){}
+    [BBCall("BuffOnMoveSuccess")] public override void OnMoveSuccess(){}
+    [BBCall("BuffOnPreAttack")] public override void OnPreAttack(){}
+    [BBCall("BuffOnReconnect")] public override void OnReconnect(){}
+    [BBCall("BuffOnResurrect")] public override void OnResurrect(){}
+    [BBCall("BuffOnSpellCast")] public override void OnSpellCast(string spellName, SpellScriptMetaData spellVars){}
+    [BBCall("BuffOnSpellHit")] public override void OnSpellHit(){}
+    [BBCall("BuffOnPreDealDamage")] public override void OnPreDealDamage(float damageAmount, DamageType damageType, DamageSource damageSource){}
+    [BBCall("BuffOnPreMitigationDamage")] public override void OnPreMitigationDamage(){}
+    [BBCall("BuffOnPreDamage")] public override void OnPreDamage(float damageAmount, DamageType damageType, DamageSource damageSource){}
+    [BBCall("BuffOnTakeDamage")] public override void OnTakeDamage(float damageAmount){}
+    [BBCall("BuffOnDealDamage")] public override void OnDealDamage(){}
+    [BBCall("BuffOnZombie")] public override void OnZombie(){}
+    [BBCall("BuffOnDodge")] public override void OnDodge(){}
 }

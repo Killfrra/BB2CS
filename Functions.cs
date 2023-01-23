@@ -47,7 +47,7 @@ public static partial class Functions
         // Beginning of positional parameters
         ObjAIBase attacker,
         AttackableUnit target,
-        string buffName = "",
+        string? buffName = "",
         int maxStack = 1, //TODO: Maybe there should be "TickRate"?
         int numberOfStacks = 1,
         float duration = 25000,
@@ -72,7 +72,7 @@ public static partial class Functions
     [BBFunc]
     public static void SpellBuffRemove(
         AttackableUnit target,
-        string buffName,
+        string? buffName = "",
         ObjAIBase? attacker = null,
         float resetDuration = 0
     ){}
@@ -89,10 +89,12 @@ public static partial class Functions
     [BBFunc]
     public static void SetSlotSpellCooldownTime(
         ObjAIBase owner,
-        [BBParam(ValuePostfix = "Value")] int spellSlot,
+        [BBParam("Var", "VarTable", "Value", "ValueByLevel")]
+        int spellSlot,
         SpellbookType spellbookType,
         SpellSlotType slotType = SpellSlotType.SpellSlots,
-        [BBParam(ValuePostfix = "Value")] float src = 0
+        [BBParam("Var", "VarTable", "Value", "ValueByLevel")]
+        float src = 0
     ){}
 
     [BBFunc(Dest = "Position")]
@@ -136,8 +138,8 @@ public static partial class Functions
         out Particle effectID,
         out Particle? effectID2,
 
-        string effectName = "",
-        string effectNameForOtherTeam = "",
+        string? effectName = "",
+        string? effectNameForOtherTeam = "",
 
         [BBParam("OverrideVar", "OverrideVarTable", "", null)]
         TeamId FOWTeam = TeamId.TEAM_UNKNOWN,
@@ -150,11 +152,11 @@ public static partial class Functions
         bool useSpecificUnit = false,
 
         AttackableUnit? bindObject = null,
-        string boneName = "",
+        string? boneName = "",
         Vector3 pos = default,
 
         AttackableUnit? targetObject = null,
-        string targetBoneName = "",
+        string? targetBoneName = "",
         Vector3 targetPos = default,
 
         bool sendIfOnScreenOrDiscard = false,
@@ -280,6 +282,7 @@ public static partial class Functions
     [BBFunc]
     public static void SetSpell(
         ObjAIBase target,
+        
         int slotNumber,
         SpellSlotType slotType,
         SpellbookType slotBook,
@@ -288,6 +291,7 @@ public static partial class Functions
 
     public static string GetSlotSpellName(
         ObjAIBase owner,
+
         int spellSlot,
         SpellbookType spellbookType,
         SpellSlotType slotType
@@ -296,6 +300,7 @@ public static partial class Functions
     }
     public static float GetSlotSpellCooldownTime(
         ObjAIBase owner,
+
         int spellSlot,
         SpellbookType spellbookType,
         SpellSlotType slotType
@@ -304,6 +309,7 @@ public static partial class Functions
     }
     public static int GetSlotSpellLevel(
         ObjAIBase owner,
+
         int spellSlot,
         SpellbookType spellbookType,
         SpellSlotType slotType = SpellSlotType.SpellSlots
@@ -451,9 +457,9 @@ public static partial class Functions
         float radius,
         AttackableUnit target,
         float duration,
-        AttackableUnit specificUnitsClientOnly,
-        AttackableUnit revealSpecificUnitOnly,
-        bool revealSteath
+        AttackableUnit? specificUnitsClientOnly = null,
+        AttackableUnit? revealSpecificUnitOnly = null,
+        bool revealSteath = false
     ){
         return default!;
     }
@@ -469,27 +475,27 @@ public static partial class Functions
         Region bubbleID
     ){}
 
-    public static string GetSpellName(AttackableUnit target)
+    public static string GetSpellName(AttackableUnit? target)
     {
         return default!;
     }
-    public static float GetPARCost(AttackableUnit target)
+    public static float GetPARCost(AttackableUnit? target)
     {
         return default!;
     }
-    public static int GetSpellSlot(AttackableUnit target)
+    public static int GetSpellSlot(AttackableUnit? target)
     {
         return default!;
     }
-    public static int GetCastSpellLevelPlusOne(AttackableUnit target)
+    public static int GetCastSpellLevelPlusOne(AttackableUnit? target)
     {
         return default!;
     }
-    public static bool GetIsAttackOverride(AttackableUnit target)
+    public static bool GetIsAttackOverride(AttackableUnit? target)
     {
         return default!;
     }
-    public static int GetCastSpellTargetsHitPlusOne(AttackableUnit target)
+    public static int GetCastSpellTargetsHitPlusOne(AttackableUnit? target)
     {
         return default!;
     }

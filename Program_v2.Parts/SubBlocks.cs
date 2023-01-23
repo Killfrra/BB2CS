@@ -13,14 +13,14 @@ public class SubBlocks
     public Dictionary<string, Var> LocalVars = new();
     public virtual bool Locked => true;
     
-    public BBScript ParentScript;
+    public BBScript2 ParentScript;
     public SubBlocks? ParentFunction;
 
     public virtual void Scan(SubBlocks parentFunc)
     {
         Scan(parentFunc.ParentScript, parentFunc);
     }
-    public void Scan(BBScript parentScript, SubBlocks? parentFunc = null)
+    public void Scan(BBScript2 parentScript, SubBlocks? parentFunc = null)
     {
         ParentScript = parentScript;
         ParentFunction = parentFunc;
