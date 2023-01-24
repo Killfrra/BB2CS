@@ -55,7 +55,10 @@ public class Reference
         {
             var r = new Reference(tableName, varName, sb);
             if(mInfo.Name == nameof(Functions.SetVarInTable))
+            {
                 r.Var.Assign(param0!);
+                param0!.Var?.Var.AssignTo(r.Var);
+            }
             else
                 r.Var.Write(mInfo.ReturnType);
             return r;

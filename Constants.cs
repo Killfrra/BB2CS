@@ -173,5 +173,7 @@ public static class Constants
         globals["MO_MAX"] = MathOp.MO_MAX;
         globals["MO_ROUND"] = MathOp.MO_ROUND;
         globals["MO_ROUNDUP"] = MathOp.MO_ROUNDUP;
+
+        globals["SPAWN_LOCATION"] = SpawnType.SPAWN_LOCATION;
     }
 }

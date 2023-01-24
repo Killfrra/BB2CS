@@ -96,6 +96,7 @@ public class Block
                     if(v == null)
                         buffScript.InstanceVars.Vars[kv.Key] = v = new Var();
                     v.Assign(kv.Value);
+                    kv.Value.AssignTo(v);
                     v.Initialized = false;
                     v.PassedFromOutside = true;
                 }
@@ -134,7 +135,8 @@ public class Block
             }
             //*/
             //*
-            //ResolvedName = "AddBuff";
+            ResolvedName = "AddBuff";
+            
             var compositeScript = Parent.ParentScript.Parent;
             var scripts = compositeScript.Parent;
 
@@ -183,7 +185,7 @@ public class Block
             }
             else
             {
-                Console.WriteLine($"Could not find buff \"{buffName}\"");
+                //Console.WriteLine($"Could not find buff \"{buffName}\"");
                 scripts.EmptyBuffScriptNames.Add(buffName);
             }
 
@@ -197,6 +199,22 @@ public class Block
             
             ResolvedParams.RemoveAt(6);
             //*/
+        }
+
+        if(ResolvedName is "If" or "ElseIf" or "While")
+        {
+            ResolvedParams[1].Item1!.Var = ResolvedParams[0].Item1!.Var;
+            ResolvedParams[4].Item1!.Var = ResolvedParams[3].Item1!.Var;
+            ResolvedParams.RemoveAt(3);
+            ResolvedParams.RemoveAt(0);
+
+            //TODO: AssignTo(Composite)?
+            var c1 = ResolvedParams[0].Item1!;
+            var c2 = ResolvedParams[2].Item1!;
+            if(c1.Var != null) c2.Var?.Var.AssignTo(c1.Var.Var);
+            if(c1.Value != null) c2.Var?.Var.Read(c1.Value.GetType());
+            if(c2.Var != null) c1.Var?.Var.AssignTo(c2.Var.Var);
+            if(c2.Value != null) c1.Var?.Var.Read(c2.Value.GetType());
         }
     }
 
@@ -220,16 +238,27 @@ public class Block
         return GetScript().Key;
     }
 
+    Dictionary<int, string> int2team = new Dictionary<int, string>
+    {
+        {   0, "$TeamId.TEAM_UNKNOWN$" },
+        { 100, "$TeamId.TEAM_BLUE$"    },
+        { 200, "$TeamId.TEAM_PURPLE$"  },
+        { 300, "$TeamId.TEAM_NEUTRAL$" },
+    };
+
     public string ToCSharp()
     {
         if(ResolvedName is "If" or "ElseIf" or "While")
         {
-            var s1 = ResolvedParams[0].Item1!.Var;
-            var v1 = ResolvedParams[1].Item1!;
-            var cop = (CompareOp)ResolvedParams[2].Item1!.Value!;
-            var s2 = ResolvedParams[3].Item1!.Var;
-            var v2 = ResolvedParams[4].Item1!;
-            var sb = ResolvedParams[5].Item2!;
+            var c1 = ResolvedParams[0].Item1!;
+            var cop = (CompareOp)ResolvedParams[1].Item1!.Value!;
+            var c2 = ResolvedParams[2].Item1!;
+            var sb = ResolvedParams[3].Item2!;
+
+            if(c1.Type == typeof(TeamId) && c2.Value != null && IsSummableType(c2.Value.GetType()))
+                c2.Value = int2team[Convert.ToInt32(c2.Value)];
+            if(c2.Type == typeof(TeamId) && c1.Value != null && IsSummableType(c1.Value.GetType()))
+                c1.Value = int2team[Convert.ToInt32(c1.Value)];
 
             string n;
             if(ResolvedName == "If")
@@ -240,8 +269,8 @@ public class Block
                 n = "while";
 
             // lazy
-            string l() => s1?.ToCSharp() ?? v1.ToCSharp();
-            string r() => s2?.ToCSharp() ?? v2.ToCSharp();
+            string l() => c1.ToCSharp();
+            string r() => c2.ToCSharp();
             string b() => "\n" + sb.BaseToCSharp();
 
             if(cop == CompareOp.CO_EQUAL)
@@ -276,9 +305,9 @@ public class Block
                 return $"{n}({l()} <= {r()}){b()}";
             
             else if(cop == CompareOp.CO_DAMAGE_SOURCETYPE_IS)
-                return $"{n}(damage.SourceType == {l()}){b()}";
+                return $"{n}(damageSource == {r()}){b()}";
             else if(cop == CompareOp.CO_DAMAGE_SOURCETYPE_IS_NOT)
-                return $"{n}(damage.SourceType != {l()}){b()}";
+                return $"{n}(damageSource != {r()}){b()}";
 
             else if(cop == CompareOp.CO_IS_TYPE_AI)
                 return $"{n}({l()} is ObjAIBase){b()}";

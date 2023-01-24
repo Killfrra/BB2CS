@@ -5,7 +5,7 @@ using System.Numerics;
 public class BBSpellScript: BBScript
 {
     [BBCall("PreLoad")] public void PreLoad(){}
-    [BBCall("SpellOnMissileUpdate")] public override void OnMissileUpdate(SpellMissile missileNetworkId, Vector3 missilePosition){}
+    [BBCall("SpellOnMissileUpdate")] public override void OnMissileUpdate(SpellMissile missileNetworkID, Vector3 missilePosition){}
     [BBCall("SpellOnMissileEnd")] public override void OnMissileEnd(string spellName, Vector3 missileEndPosition){}
 
     // SPELL SPECIFIC

@@ -14,7 +14,7 @@ public class BBBuffScript: BBScript, IHandleAttackableUnitEvents
 
     [BBCall("PreLoad")] public override void PreLoad(){}
     [BBCall("OnBuffActivate")] public override void OnActivate(){}
-    [BBCall("OnBuffDeactivate")] public override void OnDeactivate(/*bool expired*/){}
+    [BBCall("OnBuffDeactivate")] public /*override*/ void OnDeactivate(bool expired){}
     [BBCall("BuffOnUpdateStats")] public override void OnUpdateStats(){}
     [BBCall("BuffOnUpdateActions")] public override void OnUpdateActions(){}
 
@@ -27,7 +27,7 @@ public class BBBuffScript: BBScript, IHandleAttackableUnitEvents
     [BBCall("BuffOnCollisionTerrain")] public override void OnCollisionTerrain(){}
     [BBCall("BuffOnDisconnect")] public override void OnDisconnect(){}
     [BBCall("BuffOnHeal")] public override void OnHeal(float health){}
-    [BBCall("BuffOnHitUnit")] public override void OnHitUnit(float damageAmount, DamageType damageType, HitResult hitResult){}
+    [BBCall("BuffOnHitUnit")] public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult){}
     [BBCall("BuffOnKill")] public override void OnKill(){}
     [BBCall("BuffOnLaunchAttack")] public override void OnLaunchAttack(){}
     [BBCall("BuffOnLaunchMissile")] public override void OnLaunchMissile(SpellMissile missileId){}
@@ -44,10 +44,10 @@ public class BBBuffScript: BBScript, IHandleAttackableUnitEvents
     [BBCall("BuffOnSpellCast")] public override void OnSpellCast(string spellName, SpellScriptMetaData spellVars){}
     [BBCall("BuffOnSpellHit")] public override void OnSpellHit(){}
     [BBCall("BuffOnPreDealDamage")] public override void OnPreDealDamage(float damageAmount, DamageType damageType, DamageSource damageSource){}
-    [BBCall("BuffOnPreMitigationDamage")] public override void OnPreMitigationDamage(){}
+    [BBCall("BuffOnPreMitigationDamage")] public override void OnPreMitigationDamage(float damageAmount, DamageType damageType, DamageSource damageSource){}
     [BBCall("BuffOnPreDamage")] public override void OnPreDamage(float damageAmount, DamageType damageType, DamageSource damageSource){}
-    [BBCall("BuffOnTakeDamage")] public override void OnTakeDamage(float damageAmount){}
-    [BBCall("BuffOnDealDamage")] public override void OnDealDamage(){}
+    [BBCall("BuffOnTakeDamage")] public override void OnTakeDamage(float damageAmount, DamageType damageType, DamageSource damageSource){}
+    [BBCall("BuffOnDealDamage")] public override void OnDealDamage(float damageAmount, DamageType damageType, DamageSource damageSource){}
     [BBCall("BuffOnZombie")] public override void OnZombie(){}
     [BBCall("BuffOnDodge")] public override void OnDodge(){}
 }

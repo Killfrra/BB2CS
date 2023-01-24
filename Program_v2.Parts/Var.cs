@@ -43,6 +43,18 @@ public class Var
         Assigned.Add(var);
     }
 
+    HashSet<Type> ReadedTypes = new();
+    public void Read(Type type)
+    {
+        ReadedTypes.Add(type);
+    }
+
+    HashSet<Var> AssignedTo = new();
+    public void AssignTo(Var var)
+    {
+        AssignedTo.Add(var);
+    }
+
     bool inferred = false;
     public void InferType()
     {
@@ -71,6 +83,15 @@ public class Var
                 Types.Add(type);
         }
         Type = InferTypeFrom(Types);
+        
+        if(Type == null)
+        {
+            Types = ReadedTypes;
+            foreach(var v in AssignedTo)
+                if(v.Type != null)
+                    Types.Add(v.Type);
+            Type = InferTypeFrom(Types);
+        }
         //inferred = true;
     }
 
@@ -84,17 +105,20 @@ public class Var
         else
             output += "object";
 
-        if(!(Type != null && IsSummableType(Type)))
-            output += "?";
+        //if(!(Type != null && IsSummableType(Type)))
+        //    output += "?";
 
         output += " " + PrepareName(name, ucfirst);
 
         if(includeDefault)
         {
+            /*
             if(Type != null && IsSummableType(Type))
                 output += " = 0";
             else
                 output += " = null";
+            */
+            output += " = default";
         }
 
         return output;
@@ -126,7 +150,7 @@ public class Var
 
         //InferType();
 
-        if(!Initialized && !PassedFromOutside)
+        if(!(Initialized || (PassedFromOutside && Used > 0)))
             output += "//";
 
         if(isPublic)

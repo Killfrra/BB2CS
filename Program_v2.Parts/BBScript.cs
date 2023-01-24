@@ -110,11 +110,11 @@ public class BBScript2
                 {
                     subclasses +=
                     "class " + func.Key + "_" + PrepareName(v.Key, false) + "\n" +
-                    "{" + "\n" +
+                    Braces(
                         string.Join("\n", v.Value.Vars.Select(
                             kv => kv.Value.ToCSharp(kv.Key, true, true)
-                        )).Indent() + "\n" +
-                    "}" + "\n";
+                        ))
+                    ) + "\n";
                 }
             }
         }
@@ -131,9 +131,9 @@ public class BBScript2
 
         return
         "namespace " + ns + "\n" +
-        "{" + "\n" + (
+        Braces(
             "public class " + PrepareName(name, true) + " : Script" + "\n" +
-            "{" + "\n" + (
+            Braces(
                 subclasses +
                 string.Join("", InstanceVars.Vars.Select(
                     kv => {
@@ -146,8 +146,8 @@ public class BBScript2
                 constructor + 
                 string.Join("\n", Functions.Select(
                     kv => kv.Value.ToCSharp(kv.Key)
-                ))).Indent() + "\n" +
-            "}").Indent() + "\n" +
-        "}";
+                ))
+            )
+        );
     }
 }

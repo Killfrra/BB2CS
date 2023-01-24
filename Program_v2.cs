@@ -165,9 +165,15 @@ public class Program_v2
             //HACK:
             cs = Regex.Replace(cs, @"\blong\b", "int");
             cs = Regex.Replace(cs, @"\bdouble\b", "float");
-            cs = Regex.Replace(cs, @"\b(TeamId|Vector3)\? (\w+)( = null)?", "$1 $2");
+            //cs = Regex.Replace(cs, @"\b(TeamId)\? (\w+) = null", "$1 $2 = 0");
+            //cs = Regex.Replace(cs, @"\b(Vector3)\? (\w+) = null", "$1 $2 = Vector3.Zero");
+            //cs = Regex.Replace(cs, @"\b(TeamId|Vector3)\?", "$1");
+            //cs = Regex.Replace(cs, @" \?\? TeamId\.TEAM_UNKNOWN", "");
             cs = Regex.Replace(cs, @" \?\? TeamId\.\w+", "");
-            cs = Regex.Replace(cs, @"\bdamage\.SourceType\b", "damageSource");
+            cs = Regex.Replace(cs, @" = default;", ";");
+            cs = Regex.Replace(cs, @"^ *//object (nextBuffVars|_);\n", "", RegexOptions.Multiline);
+            //cs = Regex.Replace(cs, @"//(?!RequireVar)", "");
+            cs = Regex.Replace(cs, @"if\((.*) == \1\)", "if(true)");
         File.WriteAllText("Code.cs", cs, Encoding.UTF8);
     }
 }

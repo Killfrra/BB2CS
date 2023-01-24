@@ -40,7 +40,6 @@ public static partial class Functions
         return default!;
     }
 
-    /*
     [BBFunc] //TODO: BB-only and Lua-only versions?
     public static void SpellBuffAdd(
         // Beginning of positional parameters
@@ -62,7 +61,6 @@ public static partial class Functions
         bool canMitigateDuration = false,
         bool isHiddenOnClient = false
     ){}
-    */
 
     [BBFunc]
     public static void SpellBuffRemoveCurrent(AttackableUnit target){}
@@ -106,7 +104,7 @@ public static partial class Functions
     }
 
     [BBFunc]
-    public static TeamId GetTeamID(AttackableUnit? u = null)
+    public static TeamId GetTeamID(AttackableUnit? target = null)
     {
         return default!;
     }
@@ -693,7 +691,7 @@ public static partial class Functions
         int slotNumber,
         SpellSlotType slotType,
         SpellbookType? slotBook,
-        AttackableUnit targetType,
+        TargetingType targetType,
         AttackableUnit target
     ){}
 
@@ -884,11 +882,12 @@ public static partial class Functions
         AttackableUnit redirectTarget
     ){}
 
-    [BBFunc]
-    public static void GetGroundHeight(
-        Vector3 queryPos,
-        Vector3 groundPos
-    ){}
+    [BBFunc(Dest = "GroundPos")]
+    public static Vector3 GetGroundHeight(
+        Vector3 queryPos
+    ){
+        return default!;
+    }
 
     [BBFunc]
     public static void ShowHealthBar(

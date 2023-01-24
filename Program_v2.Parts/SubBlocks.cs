@@ -1,4 +1,4 @@
-
+using static Utils;
 
 //TODO: Deprecate
 public class BBFunction: SubBlocks
@@ -41,15 +41,15 @@ public class SubBlocks
     public string BaseToCSharp()
     {
         return
-        "{" + "\n" +
+        Braces(
             string.Join("\n", LocalVars.Where(
                 kv => !kv.Value.IsArgument
             ).Select(
                 kv => kv.Value.ToCSharp(kv.Key, false, true)
             ).Concat(Blocks.Select(
                 block => block.ToCSharp()
-            ))).Indent() +
-        "\n" + "}";
+            )))
+        );
     }
 
     public string ToCSharp(string name)

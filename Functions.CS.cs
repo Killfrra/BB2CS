@@ -41,7 +41,7 @@ public static class Functions_CS
         return default!;
     }
     //*
-    public static void SpellBuffAdd(
+    public static void AddBuff(
         ObjAIBase attacker,
         AttackableUnit target,
         Script buffScript,

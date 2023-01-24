@@ -12,12 +12,16 @@ public class Composite
 
     public static List<Composite> All = new();
 
-    public Composite(Type type, object value)
+    public Composite(Reference? var, object? value)
     {
         All.Add(this);
 
-        Type = type;
-        Value = value;
+        Value = AskConstants(value);
+        if(var != null)
+        {
+            Var = var;
+            Var.Var.Used++;
+        }
     }
 
     //TODO: Deduplicate
@@ -34,7 +38,7 @@ public class Composite
         var tableName = (pAttr.VarTablePostfix != null) ? ps.GetValueOrDefault(name + pAttr.VarTablePostfix) as string : null;
 
         Type = Nullable.GetUnderlyingType(pInfo.ParameterType) ?? pInfo.ParameterType;
-        if(Type.Name == "T") //HACK:
+        if(Type.Name == "T" || Type == typeof(object)) //HACK:
             Type = null;
 
         Value = AskConstants(value);
@@ -43,6 +47,9 @@ public class Composite
         {
             Var = new Reference(tableName, varName, sb);
             Var.Var.Used++;
+
+            if(Type != null)
+                Var.Var.Read(Type);
         }
         if(valueByLevel != null)
         {

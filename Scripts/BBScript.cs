@@ -5,7 +5,7 @@ public class BBScript
     public virtual void PreLoad(){}
     
     public virtual void OnActivate(){}
-    public virtual void OnDeactivate(){}
+    //public virtual void OnDeactivate(){}
     
     // UPDATE
     public virtual void OnUpdateStats(){}
@@ -15,7 +15,7 @@ public class BBScript
     public virtual void OnBeingDodged(){}
 
     // HIT
-    public virtual void OnHitUnit(float damageAmount, DamageType damageType, HitResult hitResult){}
+    public virtual void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult){}
     public virtual void OnBeingHit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult){}
     public virtual void OnSpellHit(){}
     public virtual void OnBeingSpellHit(SpellScriptMetaData spellVars){}
@@ -46,15 +46,15 @@ public class BBScript
     public virtual void OnPreAttack(){}
     public virtual void OnLaunchAttack(){}
     public virtual void OnLaunchMissile(SpellMissile missileId){}
-    public virtual void OnMissileUpdate(SpellMissile missileNetworkId, Vector3 missilePosition){}
+    public virtual void OnMissileUpdate(SpellMissile missileNetworkID, Vector3 missilePosition){}
     public virtual void OnMissileEnd(string spellName, Vector3 missileEndPosition){}
 
     // DAMAGE
     public virtual void OnPreDealDamage(float damageAmount, DamageType damageType, DamageSource damageSource){}
-    public virtual void OnPreMitigationDamage(){}
+    public virtual void OnPreMitigationDamage(float damageAmount, DamageType damageType, DamageSource damageSource){}
     public virtual void OnPreDamage(float damageAmount, DamageType damageType, DamageSource damageSource){}
-    public virtual void OnTakeDamage(float damageAmount){}
-    public virtual void OnDealDamage(){}
+    public virtual void OnTakeDamage(float damageAmount, DamageType damageType, DamageSource damageSource){}
+    public virtual void OnDealDamage(float damageAmount, DamageType damageType, DamageSource damageSource){}
 
     public virtual void OnHeal(float health){}
     

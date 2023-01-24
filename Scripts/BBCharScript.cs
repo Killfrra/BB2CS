@@ -7,7 +7,7 @@ public class BBCharScript: BBScript, IHandleAttackableUnitEvents
 
     [BBCall("PreLoad")] public override void PreLoad(){}
     [BBCall("CharOnActivate")] public override void OnActivate(){}
-    [BBCall("CharOnDeactivate")] public override void OnDeactivate(){}
+    [BBCall("CharOnDeactivate")] public /*override*/ void OnDeactivate(){}
     [BBCall("UpdateSelfBuffStats")] public override void OnUpdateStats(){}
     [BBCall("UpdateSelfBuffActions")] public override void OnUpdateActions(){}
     
@@ -15,7 +15,7 @@ public class BBCharScript: BBScript, IHandleAttackableUnitEvents
     [BBCall("CharOnBeingHit")] public override void OnBeingHit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult){}
     [BBCall("CharOnDisconnect")] public override void OnDisconnect(){}
     [BBCall("CharOnDodge")] public override void OnDodge(){}
-    [BBCall("CharOnHitUnit")] public override void OnHitUnit(float damageAmount, DamageType damageType, HitResult hitResult){}
+    [BBCall("CharOnHitUnit")] public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult){}
     [BBCall("CharOnKillUnit")] public override void OnKill(){}
     [BBCall("CharOnLaunchAttack")] public override void OnLaunchAttack(){}
     [BBCall("CharOnLevelUp")] public override void OnLevelUp(){}

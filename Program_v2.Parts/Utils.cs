@@ -69,7 +69,7 @@ public static class Utils
             else
                 return typeof(int);
         }
-        return types.FirstOrDefault(def);
+        return types.Where(t => t != typeof(object)).FirstOrDefault(def);
     }
 
     public static string ObjectToCSharp(object value)
@@ -93,5 +93,24 @@ public static class Utils
             else
                 return value.ToString()!;
         }
+    }
+
+    public static string Braces(string body)
+    {
+        body = body.Trim();
+        if(body.Length > 0)
+            return "{\n" + body.Indent() + "\n}";
+        return "{\n}";
+    }
+
+    public static string Class(string name, string extends = "", string body = "", bool isPublic = true, bool isPartial = false)
+    {
+        var output = "";
+        if(isPublic) output += "public ";
+        if(isPartial) output += "partial ";
+        output += $"class " + PrepareName(name, true);
+        if(extends != "") output += ": " + extends;
+        output += "\n" + Braces(body);
+        return output;
     }
 }
