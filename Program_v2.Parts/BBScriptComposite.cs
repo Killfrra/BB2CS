@@ -39,7 +39,7 @@ public class BBScriptComposite
             output += CharScript.ToCSharp("Chars", name) + "\n";
         if(ItemScript.Functions.Count > 0)
             output += ItemScript.ToCSharp("Items", name) + "\n";
-        if(BuffScript.Functions.Count > 0)
+        if(BuffScript.Functions.Count > 0 || BuffScript.Used)
             output += BuffScript.ToCSharp("Buffs", name) + "\n";
         if(SpellScript.Functions.Count > 0)
             output += SpellScript.ToCSharp("Spells", name);

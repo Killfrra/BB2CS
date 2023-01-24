@@ -45,7 +45,7 @@ public class SubBlocks
             string.Join("\n", LocalVars.Where(
                 kv => !kv.Value.IsArgument
             ).Select(
-                kv => kv.Value.ToCSharp(kv.Key)
+                kv => kv.Value.ToCSharp(kv.Key, false, true)
             ).Concat(Blocks.Select(
                 block => block.ToCSharp()
             ))).Indent() +
@@ -103,8 +103,8 @@ public class SubBlocks
             else
             {
                 table = ResolveOrDeclare(r.TableName, true);
-                //table.Initialized = true; //TODO:
-                //table.Used = true;
+                table.Initialized = true; //TODO:
+                table.Used++;
             }
             return GetOrCreate(table.Vars, r.VarName);
         }

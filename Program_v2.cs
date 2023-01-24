@@ -117,7 +117,7 @@ public class Program_v2
 
         scripts.Scan();
 
-        //*
+        /*
         var stats = new Dictionary<string, Dictionary<string, int>>();
         foreach(var scriptComposite in scripts.Scripts.Values)
         foreach(var script in scriptComposite.Scripts)
@@ -165,7 +165,7 @@ public class Program_v2
             //HACK:
             cs = Regex.Replace(cs, @"\blong\b", "int");
             cs = Regex.Replace(cs, @"\bdouble\b", "float");
-            cs = Regex.Replace(cs, @"\b(TeamId|Vector3)\? (\w+) = null;", "$1 $2;");
+            cs = Regex.Replace(cs, @"\b(TeamId|Vector3)\? (\w+)( = null)?", "$1 $2");
             cs = Regex.Replace(cs, @" \?\? TeamId\.\w+", "");
             cs = Regex.Replace(cs, @"\bdamage\.SourceType\b", "damageSource");
         File.WriteAllText("Code.cs", cs, Encoding.UTF8);

@@ -42,13 +42,16 @@ public class Composite
         if(varName != null && varName != "Nothing")
         {
             Var = new Reference(tableName, varName, sb);
-            Var.Var.Used = true;
+            Var.Var.Used++;
         }
         if(valueByLevel != null)
         {
             var arr = ((JArray)valueByLevel).ToObject<object[]>()!;
             var id = sb.ParentScript.InstanceEffects.Count;
-            VarByLevel = new EffectReference(id, arr);
+
+            VarByLevel = new EffectReference(id, arr, sb);
+            VarByLevel.Var.Used++;
+            
             sb.ParentScript.InstanceEffects.Add(VarByLevel);
         }
     }

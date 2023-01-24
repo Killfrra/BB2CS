@@ -34,13 +34,9 @@ public class Reference
             var r = new Reference(tableName, varName, sb);
             var type = pInfo.ParameterType;
             if(pInfo.IsOut || type.IsByRef)
-            {
                 type = type.GetElementType();
-                if(type != null && type.Name != "T") //HACK:
-                {
-                    r.Var.Write(type);
-                }
-            }
+            if(type != null && type.Name != "T") //HACK:
+                r.Var.Write(type);
             return r;
         }
         else

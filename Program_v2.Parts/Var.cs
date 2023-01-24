@@ -27,7 +27,7 @@ public class Var
     }
 
     public bool Initialized = false;
-    public bool Used = false;
+    public int Used = 0;
 
     HashSet<Type> Types = new();
     public void Write(Type type)
@@ -74,7 +74,33 @@ public class Var
         //inferred = true;
     }
 
-    public string ToCSharpArg(string name, bool includeType = true)
+    //TODO: Rename and deduplicate
+    public string BaseToCSharp(string name, bool ucfirst, bool includeDefault)
+    {
+        var output = "";
+
+        if(Type != null)
+            output += TypeToCSharp(Type);
+        else
+            output += "object";
+
+        if(!(Type != null && IsSummableType(Type)))
+            output += "?";
+
+        output += " " + PrepareName(name, ucfirst);
+
+        if(includeDefault)
+        {
+            if(Type != null && IsSummableType(Type))
+                output += " = 0";
+            else
+                output += " = null";
+        }
+
+        return output;
+    }
+
+    public string ToCSharpArg(string name, bool includeType)
     {
         var output = "";
         if(includeType)
@@ -86,7 +112,7 @@ public class Var
         return output;
     }
 
-    public string ToCSharp(string name, bool pub = false)
+    public string ToCSharp(string name, bool isPublic, bool includeDefault)
     {
         if(IsTable)
         {
@@ -100,26 +126,13 @@ public class Var
 
         //InferType();
 
-        if(!Initialized)
+        if(!Initialized && !PassedFromOutside)
             output += "//";
 
-        if(pub)
+        if(isPublic)
             output += "public ";
 
-        if(Type != null)
-            output += TypeToCSharp(Type);
-        else
-            output += "object";
-
-        if(!(Type != null && IsSummableType(Type)))
-            output += "?";
-
-        output += " " + PrepareName(name, pub);
-
-        if(Type != null && IsSummableType(Type))
-            output += " = 0;";
-        else
-            output += " = null;";
+        output += BaseToCSharp(name, isPublic, includeDefault) + ";";
 
         //output += " //";
         //foreach(var type in Types)
@@ -129,6 +142,7 @@ public class Var
     }
 
     HashSet<string> Buffs = new();
+    public bool PassedFromOutside = false;
     public void UseAsInstanceVarsFor(string v)
     {
         Buffs.Add(v);

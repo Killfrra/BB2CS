@@ -69,6 +69,7 @@ public class Block
                             new Reference(null, "_", Parent); //TODO:
                         value.IsOut = pInfo.IsOut && pInfo.ParameterType.IsByRef;
                         value.IsRef = !pInfo.IsOut && pInfo.ParameterType.IsByRef;
+                        value.Var.Used += Convert.ToInt32(value.IsRef);
                     ResolvedParams.Add(value);
                 }
                 else
@@ -91,11 +92,12 @@ public class Block
                 //  buffScript.PassedTables.Add(passedTable);
                 foreach(var kv in passedTable.Vars)
                 {
-                    var existingVar = buffScript.InstanceVars.Vars.GetValueOrDefault(kv.Key);
-                    if(existingVar != null)
-                        existingVar.Assign(kv.Value);
-                    else
-                        buffScript.InstanceVars.Vars[kv.Key] = kv.Value; //TODO: Copy & Assign?
+                    var v = buffScript.InstanceVars.Vars.GetValueOrDefault(kv.Key);
+                    if(v == null)
+                        buffScript.InstanceVars.Vars[kv.Key] = v = new Var();
+                    v.Assign(kv.Value);
+                    v.Initialized = false;
+                    v.PassedFromOutside = true;
                 }
             }
         }
@@ -117,6 +119,84 @@ public class Block
         {
             var param0 = (ResolvedParams.Count > 0) ? ResolvedParams[0].Item1 : null;
             ResolvedReturn = Reference.Resolve(mInfo, Params, Parent, param0);
+        }
+
+        //HACK:
+        if(ResolvedName == nameof(Functions.SpellBuffAdd))
+        {
+            /*
+            var c = ResolvedParams[6].Item1!;
+            if(c.Var != null)
+            {
+                var v = c.Var.Var;
+                if(!v.IsTable) // || !v.Initialized
+                    c.Var = null;
+            }
+            //*/
+            //*
+            //ResolvedName = "AddBuff";
+            var compositeScript = Parent.ParentScript.Parent;
+            var scripts = compositeScript.Parent;
+
+            var buffVarsTableParam = ResolvedParams[6].Item1!.Var!;
+            var buffVarsTable = Parent.Resolve(buffVarsTableParam);
+            var buffNameParam = ResolvedParams[2].Item1!;
+            var buffName = buffNameParam.Value as string;
+            var buffScript = (BBBuffScript2?)null;
+
+            if(buffName != null)
+            {
+                var buffScriptKV = scripts.Scripts.FirstOrDefault(kv => kv.Key.ToLower() == buffName.ToLower());
+                if(buffScriptKV.Value != null)
+                {
+                    buffName = buffScriptKV.Key;
+                    buffScript = buffScriptKV.Value.BuffScript;
+                }
+            }
+            else
+            {
+                var currentScriptName = scripts.Scripts.First(kv => kv.Value == compositeScript).Key;
+                buffName = currentScriptName;
+                buffScript = compositeScript.BuffScript;
+            }            
+
+            var args = new List<string>();
+            if(buffScript != null)
+            {
+                buffScript.Used = true;
+
+                var tableRefCS = buffVarsTableParam.ToCSharp();
+                foreach(var kv in buffScript.InstanceVars.Vars)
+                {
+                    if(kv.Value.PassedFromOutside && kv.Value.Used > 0)
+                    {
+                        var passed = buffVarsTable.Vars.GetValueOrDefault(kv.Key);
+                        if(passed != null)
+                        {
+                            args.Add(tableRefCS + "." + PrepareName(kv.Key, true));
+                            passed.Used++;
+                        }
+                        else
+                            args.Add("default");
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine($"Could not find buff \"{buffName}\"");
+                scripts.EmptyBuffScriptNames.Add(buffName);
+            }
+
+            var output =
+            $"new Buffs.{PrepareName(buffName, true)}(" +
+            //  ((buffVarsTable.Var.IsTable) ? buffVarsTable.ToCSharp() : "") +
+                string.Join(", ", args) +
+            ")";
+
+            buffNameParam.Value = "$" + output + "$";
+            
+            ResolvedParams.RemoveAt(6);
+            //*/
         }
     }
 
@@ -142,33 +222,7 @@ public class Block
 
     public string ToCSharp()
     {
-        //HACK:
-        if(ResolvedName == nameof(Functions.SpellBuffAdd))
-        {
-            //*
-            var c = ResolvedParams[6].Item1!;
-            if(c.Var != null)
-            {
-                var v = c.Var.Var;
-                if(!v.IsTable) // || !v.Initialized
-                    c.Var = null;
-            }
-            //*/
-            /*
-            //ResolvedName = "AddBuff";
-            var buffVarsTable = ResolvedParams[6].Item1!.Var!;
-            var buffName = ResolvedParams[2].Item1!;
-            var compositeScript = Parent.ParentScript.Parent;
-            var scriptName = compositeScript.Parent.Scripts.First(kv => kv.Value == compositeScript).Key;
-            buffName.Value =
-            "$" + $"new Buffs.{PrepareName((string)(buffName.Value ?? scriptName), true)}(" + 
-                ((buffVarsTable.Var.IsTable) ? buffVarsTable.ToCSharp() : "") +
-            ")" + "$";
-            ResolvedParams.RemoveAt(6);
-            //*/
-        }
-
-        else if(ResolvedName is "If" or "ElseIf" or "While")
+        if(ResolvedName is "If" or "ElseIf" or "While")
         {
             var s1 = ResolvedParams[0].Item1!.Var;
             var v1 = ResolvedParams[1].Item1!;

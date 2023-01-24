@@ -35,13 +35,12 @@ public static partial class Functions
         float visibilitySize,
         bool isWard = false,
         bool placemarker = false,
-        Champion? goldRedirectTarget = null,
-
-        ObjAIBase? owner = null // for non-BB
+        Champion? goldRedirectTarget = null
     ){
         return default!;
     }
 
+    /*
     [BBFunc] //TODO: BB-only and Lua-only versions?
     public static void SpellBuffAdd(
         // Beginning of positional parameters
@@ -61,10 +60,9 @@ public static partial class Functions
         float tickRate = 0,
         bool stacksExclusive = false,
         bool canMitigateDuration = false,
-        bool isHiddenOnClient = false,
-
-        Spell? originSpell = null // for non-BB
+        bool isHiddenOnClient = false
     ){}
+    */
 
     [BBFunc]
     public static void SpellBuffRemoveCurrent(AttackableUnit target){}
@@ -165,9 +163,7 @@ public static partial class Functions
         bool followsGroundTilt = false,
         bool facesTarget = false,
 
-        object? orientTowards = null, // Vector3 or AttackableUnit
-
-        ObjAIBase? caster = null // for non-BB
+        object? orientTowards = null // Vector3 or AttackableUnit
     ){
         effectID = effectID2 = default!;
     }

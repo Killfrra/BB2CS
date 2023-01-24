@@ -16,6 +16,7 @@ public class BBBuffScript2: BBScript2
 {
     protected override Type? prototype => typeof(BBBuffScript);
     public HashSet<Var> PassedTables = new();
+    public bool Used = false;
 }
 //TODO: Rename
 public class BBSpellScript2: BBScript2
@@ -100,37 +101,52 @@ public class BBScript2
 
     public string ToCSharp(string ns, string name)
     {
-        var output = "";
+        var subclasses = "";
         foreach(var func in Functions) //TODO: MultiSelect?
         {
             foreach(var v in func.Value.LocalVars)
             {
                 if(v.Value.IsTable)
                 {
-                    output +=
+                    subclasses +=
                     "class " + func.Key + "_" + PrepareName(v.Key, false) + "\n" +
                     "{" + "\n" +
                         string.Join("\n", v.Value.Vars.Select(
-                            kv => kv.Value.ToCSharp(kv.Key, true)
+                            kv => kv.Value.ToCSharp(kv.Key, true, true)
                         )).Indent() + "\n" +
                     "}" + "\n";
                 }
             }
         }
 
+        var outsiders = InstanceVars.Vars.Where(kv => kv.Value.PassedFromOutside && kv.Value.Used > 0);
+        var constructor = (outsiders.Count() == 0) ? "" :
+        $"public {PrepareName(name, true)}(" + 
+            string.Join(", ", outsiders.Select(v => v.Value.BaseToCSharp(v.Key, false, true))) +
+        ")\n{\n" +
+            string.Join("\n", outsiders.Select(
+                v => $"this.{PrepareName(v.Key, false)} = {PrepareName(v.Key, false)};"
+            )).Indent() +
+        "\n}\n";
+
         return
         "namespace " + ns + "\n" +
         "{" + "\n" + (
             "public class " + PrepareName(name, true) + " : Script" + "\n" +
             "{" + "\n" + (
-                output +
-                string.Join("\n", InstanceEffects.Select(
-                    e => e.ToCSharpDecl()
-                ).Concat(InstanceVars.Vars.Select(
+                subclasses +
+                string.Join("", InstanceVars.Vars.Select(
+                    kv => {
+                        bool initializedInCtr = kv.Value.PassedFromOutside && kv.Value.Used > 0;
+                        return kv.Value.ToCSharp(kv.Key, false, !initializedInCtr) + "\n";
+                    }
+                ).Concat(InstanceEffects.Select(
+                    e => e.ToCSharpDecl() + "\n"
+                ))) +
+                constructor + 
+                string.Join("\n", Functions.Select(
                     kv => kv.Value.ToCSharp(kv.Key)
-                )).Concat(Functions.Select(
-                    kv => kv.Value.ToCSharp(kv.Key)
-                )))).Indent() + "\n" +
+                ))).Indent() + "\n" +
             "}").Indent() + "\n" +
         "}";
     }

@@ -40,7 +40,7 @@ public static class Functions_CS
     {
         return default!;
     }
-    /*
+    //*
     public static void SpellBuffAdd(
         ObjAIBase attacker,
         AttackableUnit target,
@@ -54,9 +54,7 @@ public static class Functions_CS
         float tickRate = 0,
         bool stacksExclusive = false,
         bool canMitigateDuration = false,
-        bool isHiddenOnClient = false,
-        
-        Spell? originSpell = null // for non-BB
+        bool isHiddenOnClient = false
     ){}
-    */
+    //*/
 }
