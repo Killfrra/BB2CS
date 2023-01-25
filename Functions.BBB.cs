@@ -9,15 +9,15 @@ public static partial class Functions
         [BBParam("Var", "VarTable", null, null)]
         object src1,
         [BBParam(null, null, "", "ByLevel")]
-        object? value1,
+        object/*?*/ value1,
         CompareOp compareOp,
         [BBParam("Var", "VarTable", null, null)]
-        object? src2,
+        object/*?*/ src2,
         [BBParam(null, null, "", "ByLevel")]
-        object? value2,
+        object/*?*/ value2,
 
         [BBSubBlocks]
-        Action subBlocks
+        Action/*?*/ subBlocks/* = null*/
     ){}
 
     [BBFunc]
@@ -52,7 +52,7 @@ public static partial class Functions
     [BBFunc]
     public static void Else(
         [BBSubBlocks]
-        Action subBlocks
+        Action/*?*/ subBlocks/* = null*/
     ){}
 
     [BBFunc]
@@ -69,7 +69,7 @@ public static partial class Functions
 
     [BBFunc]
     public static void RequireVar(
-        object? required
+        object/*?*/ required
     ){}
 
     [BBFunc]
@@ -86,7 +86,7 @@ public static partial class Functions
         string buffName,
 
         [BBSubBlocks]
-        Action subBlocks
+        Action/*?*/ subBlocks/* = null*/
     ){}
 
     [BBFunc]
@@ -94,15 +94,15 @@ public static partial class Functions
         [BBParam("Var", "VarTable", null, null)]
         object src1,
         [BBParam(null, null, "", "ByLevel")]
-        object? value1,
+        object/*?*/ value1,
         CompareOp compareOp,
         [BBParam("Var", "VarTable", null, null)]
-        object? src2,
+        object/*?*/ src2,
         [BBParam(null, null, "", "ByLevel")]
-        object? value2,
+        object/*?*/ value2,
 
         [BBSubBlocks]
-        Action subBlocks
+        Action/*?*/ subBlocks/* = null*/
     ){}
 
     [BBFunc]
@@ -117,11 +117,11 @@ public static partial class Functions
     public static void ExecutePeriodically(
         float timeBetweenExecutions,
         ref float trackTime,
-        bool executeImmediately,
-        //TODO: ref float tickTime?
+        bool executeImmediately/* = false*/,
+        float tickTime/* = 0*/,
 
         [BBSubBlocks]
-        Action subBlocks
+        Action/*?*/ subBlocks/* = null*/
     ){}
 
     [BBFunc]
@@ -151,7 +151,7 @@ public static partial class Functions
         string buffName,
 
         [BBSubBlocks]
-        Action subBlocks
+        Action/*?*/ subBlocks/* = null*/
     ){}
 
     [BBFunc]
@@ -172,7 +172,7 @@ public static partial class Functions
     [BBFunc]
     public static int GetBuffCountFromAll(
         AttackableUnit target,
-        string? buffName
+        string/*?*/ buffName/* = null*/
     ){
         return default!;
     }
@@ -203,7 +203,7 @@ public static partial class Functions
     [BBFunc]
     public static int GetBuffCountFromCaster(
         AttackableUnit target,
-        AttackableUnit? caster,
+        AttackableUnit/*?*/ caster,
         string buffName
     ){
         return default!;
@@ -219,15 +219,15 @@ public static partial class Functions
         [BBParam("Var", "VarTable", null, null)]
         object src1,
         [BBParam(null, null, "", "ByLevel")]
-        object? value1,
+        object/*?*/ value1,
         CompareOp compareOp,
         [BBParam("Var", "VarTable", null, null)]
-        object? src2,
+        object/*?*/ src2,
         [BBParam(null, null, "", "ByLevel")]
-        object? value2,
+        object/*?*/ value2,
 
         [BBSubBlocks]
-        Action subBlocks
+        Action/*?*/ subBlocks/* = null*/
     ){}
 
     [BBFunc]
@@ -236,7 +236,7 @@ public static partial class Functions
         BuffType buffType,
 
         [BBSubBlocks]
-        Action subBlocks
+        Action/*?*/ subBlocks/* = null*/
     ){}
 
     [BBFunc]

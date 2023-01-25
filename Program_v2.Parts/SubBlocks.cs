@@ -5,6 +5,17 @@ public class BBFunction: SubBlocks
 {
     //public string Name;
     public override bool Locked => false;
+
+    public Var? Return;
+    public object? DefaultReturn;
+
+    public string ToCSharp(string name)
+    {
+        var type = (Return != null) ? Return.Type : typeof(void);
+        return
+        "public override " + TypeToCSharp(type) + " " + name + ArgsToCSharp(true) + "\n" +
+        BaseToCSharp();
+    }
 }
 
 public class SubBlocks
@@ -14,16 +25,17 @@ public class SubBlocks
     public virtual bool Locked => true;
     
     public BBScript2 ParentScript;
-    public SubBlocks? ParentFunction;
+    public SubBlocks? ParentBlock;
+    //public BBFunction? ParentFunction;
 
-    public virtual void Scan(SubBlocks parentFunc)
+    public virtual void Scan(SubBlocks parentBlock)
     {
-        Scan(parentFunc.ParentScript, parentFunc);
+        Scan(parentBlock.ParentScript, parentBlock);
     }
-    public void Scan(BBScript2 parentScript, SubBlocks? parentFunc = null)
+    public void Scan(BBScript2 parentScript, SubBlocks? parentBlock = null)
     {
         ParentScript = parentScript;
-        ParentFunction = parentFunc;
+        ParentBlock = parentBlock;
         foreach(var block in Blocks)
             block.Scan(this);
     }
@@ -40,23 +52,34 @@ public class SubBlocks
 
     public string BaseToCSharp()
     {
-        return
-        Braces(
-            string.Join("\n", LocalVars.Where(
-                kv => !kv.Value.IsArgument
-            ).Select(
-                kv => kv.Value.ToCSharp(kv.Key, false, true)
-            ).Concat(Blocks.Select(
-                block => block.ToCSharp()
-            )))
-        );
-    }
+        var func = this as BBFunction;
+        bool shouldReturn = func != null && func.Return != null;
+        
+        var body = string.Join("\n", LocalVars.Where(
+            kv => !(
+                kv.Value.IsArgument
+                || kv.Key == "_" // HACK:
+                || (shouldReturn && kv.Key == "ReturnValue")
+                || (kv.Value.Used == 0 && (
+                    kv.Value.PassedFromOutside
+                    || !kv.Value.Initialized)))
+        ).Select(
+            kv => kv.Value.ToCSharp(kv.Key, false, true)
+        ).Concat(Blocks.Select(
+            block => block.ToCSharp()
+        )));
 
-    public string ToCSharp(string name)
-    {
-        return
-        "public void " + name + ArgsToCSharp(true) + "\n" +
-        BaseToCSharp();
+        if(shouldReturn)
+        {
+            body = body.Trim();
+            body =
+            func!.Return!.BaseToCSharp("ReturnValue", false, false) + " = " +
+            ObjectToCSharp(func.DefaultReturn) + ";\n" +
+            body + ((body != "") ? "\n" : "") +
+            "return " + PrepareName("ReturnValue", false) + ";";
+        }
+
+        return Braces(body);
     }
 
     public virtual string ToCSharp()
@@ -72,14 +95,18 @@ public class SubBlocks
     }
     private Var? Resolve(string name)
     {
-        return LocalVars.GetValueOrDefault(name) ?? ParentFunction?.Resolve(name);
+        return LocalVars.GetValueOrDefault(name) ?? (
+            (ParentBlock != null) ?
+                ParentBlock.Resolve(name)
+                : ParentScript.Resolve(name)
+        );
     }
     private Var? Declare(string name, bool isTable)
     {
         if(!Locked)
             return (LocalVars[name] = new Var(isTable, parent: this));
         else
-            return ParentFunction?.Declare(name, isTable);
+            return ParentBlock?.Declare(name, isTable);
     }
     private Var ResolveOrDeclare(string name, bool isTable)
     {
@@ -103,6 +130,7 @@ public class SubBlocks
             else
             {
                 table = ResolveOrDeclare(r.TableName, true);
+                table.IsCustomTable = true;
                 table.Initialized = true; //TODO:
                 table.Used++;
             }

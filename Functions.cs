@@ -45,7 +45,7 @@ public static partial class Functions
         // Beginning of positional parameters
         ObjAIBase attacker,
         AttackableUnit target,
-        string? buffName = "",
+        string buffName = "",
         int maxStack = 1, //TODO: Maybe there should be "TickRate"?
         int numberOfStacks = 1,
         float duration = 25000,
@@ -68,7 +68,7 @@ public static partial class Functions
     [BBFunc]
     public static void SpellBuffRemove(
         AttackableUnit target,
-        string? buffName = "",
+        string buffName = "",
         ObjAIBase? attacker = null,
         float resetDuration = 0
     ){}
@@ -134,8 +134,8 @@ public static partial class Functions
         out Particle effectID,
         out Particle? effectID2,
 
-        string? effectName = "",
-        string? effectNameForOtherTeam = "",
+        string effectName = "",
+        string effectNameForOtherTeam = "",
 
         [BBParam("OverrideVar", "OverrideVarTable", "", null)]
         TeamId FOWTeam = TeamId.TEAM_UNKNOWN,
@@ -144,15 +144,16 @@ public static partial class Functions
         FXFlags flags = 0,
 
         TeamId specificTeamOnly = TeamId.TEAM_UNKNOWN,
+        TeamId specificTeamOnlyOverride = TeamId.TEAM_UNKNOWN,
         AttackableUnit? specificUnitOnly = null,
         bool useSpecificUnit = false,
 
         AttackableUnit? bindObject = null,
-        string? boneName = "",
+        string boneName = "",
         Vector3 pos = default,
 
         AttackableUnit? targetObject = null,
-        string? targetBoneName = "",
+        string targetBoneName = "",
         Vector3 targetPos = default,
 
         bool sendIfOnScreenOrDiscard = false,
@@ -199,11 +200,11 @@ public static partial class Functions
         Vector3 center,
         float range,
         SpellDataFlags flags,
-        string? buffNameFilter,
-        bool? inclusiveBuffFilter,
+        string buffNameFilter = "",
+        bool inclusiveBuffFilter = false,
 
         [BBSubBlocks("Iterator")]
-        Action<AttackableUnit> subBlocks
+        Action<AttackableUnit>? subBlocks = null
     ){}
 
     [BBFunc]
@@ -212,12 +213,12 @@ public static partial class Functions
         Vector3 center,
         float range,
         SpellDataFlags flags,
-        string? buffNameFilter,
-        bool? inclusiveBuffFilter,
         int maximumUnitsToPick,
+        string buffNameFilter = "",
+        bool inclusiveBuffFilter = false,
 
         [BBSubBlocks("Iterator")]
-        Action<AttackableUnit> subBlocks
+        Action<AttackableUnit>? subBlocks = null
     ){}
 
     [BBFunc]
@@ -243,7 +244,7 @@ public static partial class Functions
         ForceMovementType movementType,
         ForceMovementOrdersType movementOrdersType,
         float idealDistance,
-        ForceMovementOrdersFacing movementOrdersFacing
+        ForceMovementOrdersFacing movementOrdersFacing = 0
     ){}
 
     [BBFunc(Dest = "Result")]
@@ -316,7 +317,6 @@ public static partial class Functions
         AttackableUnit? target,
         Vector3? pos,
         Vector3? endPos,
-        bool? overrideCastPosition,
         int slotNumber,
         SpellSlotType slotType,
         int overrideForceLevel,
@@ -325,7 +325,8 @@ public static partial class Functions
         bool useAutoAttackSpell,
         bool forceCastingOrChannelling = false,
         bool updateAutoAttackTimer = false,
-        Vector3? overrideCastPos = null
+        bool overrideCastPosition = false,
+        Vector3 overrideCastPos = default
     ){}
 
     [BBFunc]
@@ -350,7 +351,7 @@ public static partial class Functions
         SpellSlotType slotType,
         SpellbookType spellbookType,
         ObjAIBase owner,
-        bool? broadcastEvent
+        bool broadcastEvent = false //TODO: Verify
     ){}
 
     [BBFunc]
@@ -419,11 +420,11 @@ public static partial class Functions
         float range,
         SpellDataFlags flags,
         int maximumUnitsToPick,
-        bool? inclusiveBuffFilter,
-        string? buffNameFilter,
+        string buffNameFilter = "",
+        bool inclusiveBuffFilter = false,
 
         [BBSubBlocks("Iterator")]
-        Action<AttackableUnit> subBlocks
+        Action<AttackableUnit>? subBlocks = null
     ){}
 
     [BBFunc(Dest = "Result")]
@@ -505,15 +506,14 @@ public static partial class Functions
     public static void Say(
         AttackableUnit owner,
         string toSay,
-        object? src
+        object? src = null
     ){}
 
     [BBFunc(Dest = "ID")]
     public static Fade? PushCharacterFade(
         AttackableUnit target,
         float fadeAmount,
-        float fadeTime,
-        Fade? ID = null
+        float fadeTime
     ){
         return default!;
     }
@@ -582,8 +582,8 @@ public static partial class Functions
     public static void IssueOrder(
         AttackableUnit whomToOrder,
         OrderType order,
-        Vector3? targetOfOrderPosition,
-        AttackableUnit? targetOfOrder
+        Vector3? targetOfOrderPosition = null,
+        AttackableUnit? targetOfOrder = null
     ){}
 
     [BBFunc]
@@ -609,18 +609,18 @@ public static partial class Functions
     [BBFunc]
     public static void ForEachChampion(
         TeamId team,
-        string? buffNameFilter,
-        bool? inclusiveBuffFilter,
+        string buffNameFilter = "",
+        bool inclusiveBuffFilter = false,
 
         [BBSubBlocks("Iterator")]
-        Action<Champion> subBlocks
+        Action<Champion>? subBlocks = null
     ){}
 
     [BBFunc]
     public static void DebugSay(
         AttackableUnit owner,
         string toSay,
-        object? src
+        object? src = null
     ){}
 
     [BBFunc]
@@ -702,11 +702,11 @@ public static partial class Functions
         float range,
         SpellDataFlags flags,
         int maximumUnitsToPick,
-        bool? inclusiveBuffFilter,
-        string? buffNameFilter,
+        string buffNameFilter = "",
+        bool inclusiveBuffFilter = false,
 
         [BBSubBlocks("Iterator")]
-        Action<AttackableUnit> subBlocks
+        Action<AttackableUnit>? subBlocks = null
     ){}
 
     [BBFunc]
@@ -716,11 +716,11 @@ public static partial class Functions
         float halfWidth,
         float halfLength,
         SpellDataFlags flags,
-        bool? inclusiveBuffFilter,
-        string? buffNameFilter,
+        string buffNameFilter = "",
+        bool inclusiveBuffFilter = false,
 
         [BBSubBlocks("Iterator")]
-        Action<AttackableUnit> subBlocks
+        Action<AttackableUnit>? subBlocks = null
     ){}
 
     [BBFunc]
@@ -812,6 +812,7 @@ public static partial class Functions
 
     [BBFunc]
     public static void SetCameraPosition(
+        [BBParam("", "Table", null, null)]
         Champion owner,
         Vector3 position
     ){}
@@ -972,7 +973,7 @@ public static partial class Functions
         int iterations,
 
         [BBSubBlocks("Iterator")]
-        Action<Vector3> subBlocks
+        Action<Vector3>? subBlocks = null
     ){}
 
     [BBFunc(Dest = "Position")]
@@ -1014,7 +1015,7 @@ public static partial class Functions
         Table buffVarsTable,
         float tickRate,
         bool isHiddenOnClient,
-        bool? inclusiveBuffFilter
+        bool inclusiveBuffFilter = false
     ){}
 
     [BBFunc]
@@ -1078,7 +1079,7 @@ public static partial class Functions
     [BBFunc]
     public static void Alert(
         string toAlert,
-        object? src
+        object? src = null
     ){}
 
     [BBFunc]
@@ -1107,7 +1108,7 @@ public static partial class Functions
         bool inclusiveBuffFilter,
 
         [BBSubBlocks("Iterator")]
-        Action<AttackableUnit> subBlocks
+        Action<AttackableUnit>? subBlocks = null
     ){}
 
     [BBFunc]
@@ -1152,7 +1153,7 @@ public static partial class Functions
         int iterations,
 
         [BBSubBlocks("Iterator")]
-        Action<Vector3> subBlocks
+        Action<Vector3>? subBlocks = null
     ){}
 
     [BBFunc]

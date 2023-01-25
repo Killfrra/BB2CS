@@ -25,17 +25,17 @@ public class Composite
     }
 
     //TODO: Deduplicate
-    public Composite(ParameterInfo pInfo, Dictionary<string, object> ps, SubBlocks sb)
+    public Composite(ParameterInfo pInfo, Dictionary<string, object> ps, HashSet<string> used, SubBlocks sb)
     {
         All.Add(this);
 
         var pAttr = pInfo.GetCustomAttribute<BBParamAttribute>() ?? new();
 
         var name = pInfo.Name!.UCFirst();
-        var value = (pAttr.ValuePostfix != null) ? ps.GetValueOrDefault(name + pAttr.ValuePostfix) : null;
-        var valueByLevel = (pAttr.ValueByLevelPostfix != null) ? ps.GetValueOrDefault(name + pAttr.ValueByLevelPostfix) : null;
-        var varName = (pAttr.VarPostfix != null) ? ps.GetValueOrDefault(name + pAttr.VarPostfix) as string : null;
-        var tableName = (pAttr.VarTablePostfix != null) ? ps.GetValueOrDefault(name + pAttr.VarTablePostfix) as string : null;
+        var value = (pAttr.ValuePostfix != null) ? ps.UseValueOrDefault(used, name + pAttr.ValuePostfix) : null;
+        var valueByLevel = (pAttr.ValueByLevelPostfix != null) ? ps.UseValueOrDefault(used, name + pAttr.ValueByLevelPostfix) : null;
+        var varName = (pAttr.VarPostfix != null) ? ps.UseValueOrDefault(used, name + pAttr.VarPostfix) as string : null;
+        var tableName = (pAttr.VarTablePostfix != null) ? ps.UseValueOrDefault(used, name + pAttr.VarTablePostfix) as string : null;
 
         Type = Nullable.GetUnderlyingType(pInfo.ParameterType) ?? pInfo.ParameterType;
         if(Type.Name == "T" || Type == typeof(object)) //HACK:

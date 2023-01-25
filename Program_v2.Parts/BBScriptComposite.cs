@@ -1,3 +1,5 @@
+using Newtonsoft.Json;
+
 public class BBScriptComposite
 {
     //public string Name;
@@ -6,6 +8,7 @@ public class BBScriptComposite
     public BBBuffScript2 BuffScript = new();
     public BBSpellScript2 SpellScript = new();
 
+    [JsonIgnore]
     public List<BBScript2> Scripts;
     public BBScriptComposite()
     {

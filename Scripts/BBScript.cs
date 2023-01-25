@@ -1,7 +1,11 @@
 using System.Numerics;
 
-public class BBScript
+public partial class BBScript
 {
+    public AttackableUnit owner;
+    public ObjAIBase attacker;
+    public AttackableUnit target;
+
     public virtual void PreLoad(){}
     
     public virtual void OnActivate(){}
@@ -56,7 +60,10 @@ public class BBScript
     public virtual void OnTakeDamage(float damageAmount, DamageType damageType, DamageSource damageSource){}
     public virtual void OnDealDamage(float damageAmount, DamageType damageType, DamageSource damageSource){}
 
-    public virtual void OnHeal(float health){}
+    public virtual float OnHeal(float health)
+    {
+        return 0;
+    }
     
     public virtual void OnSpellCast(string spellName, SpellScriptMetaData spellVars){}
 }

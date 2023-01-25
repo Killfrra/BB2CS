@@ -10,6 +10,8 @@ public class Var
 
     public Type? Type = null; //TODO: Type != typeof(VarTable) but IsTable == true
     public bool IsTable => Type == typeof(VarTable) || Vars.Count > 0;
+    public bool IsCustomTable = false;
+
     public bool IsArgument = false;
     public Dictionary<string, Var> Vars = new();
 
@@ -150,13 +152,20 @@ public class Var
 
         //InferType();
 
-        if(!(Initialized || (PassedFromOutside && Used > 0)))
-            output += "//";
+        //if(!(Initialized || (PassedFromOutside && Used > 0)))
+        //    output += "//";
 
         if(isPublic)
             output += "public ";
 
         output += BaseToCSharp(name, isPublic, includeDefault) + ";";
+
+        if(!Initialized || Used == 0)
+        {
+            output += " //";
+            if(!Initialized) output += " UNITIALIZED";
+            if(Used == 0) output += " UNUSED";
+        }
 
         //output += " //";
         //foreach(var type in Types)

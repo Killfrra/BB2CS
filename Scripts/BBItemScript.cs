@@ -1,13 +1,15 @@
 #nullable enable
 
-public class BBItemScript: BBScript, IHandleAttackableUnitEvents
+public class BBItemScript: BBScript
 {
+    public int slot;
+
     // ITEM SPECIFIC
-    [BBCall("UpdateAura")] public void UpdateAura(){} //TODO: Verify
+    [BBCall("UpdateAura")] public virtual void UpdateAura(){} //TODO: Verify
     
     [BBCall("PreLoad")] public override void PreLoad(){}
     [BBCall("OnActivate")] public override void OnActivate(){}
-    [BBCall("OnDeactivate")] public /*override*/ void OnDeactivate(){}
+    [BBCall("OnDeactivate")] public /*override*/virtual void OnDeactivate(){}
     [BBCall("UpdateSelfBuffStats")] public override void OnUpdateStats(){}
     [BBCall("UpdateSelfBuffActions")] public override void OnUpdateActions(){}
     [BBCall("ItemOnAssist")] public override void OnAssist(){}

@@ -13,13 +13,17 @@ public class Block
 
     public SubBlocks Parent;
 
+    public static Dictionary<string, HashSet<string>> Unused = new();
+    public static List<Block> AllSpellBuffAdds = new();
+
     public void Scan(SubBlocks parent)
     {
         Parent = parent;
         ResolvedName = Function.Substring(3, Function.Length - 3 - 1);
 
-        var flags = BindingFlags.Public | BindingFlags.Static;
+        var used = new HashSet<string>();
 
+        var flags = BindingFlags.Public | BindingFlags.Static;
         /*
         if(
             ResolvedName
@@ -31,6 +35,18 @@ public class Block
             ResolvedName = ResolvedName.Substring(1, ResolvedName.Length - 1 - 1);
         }
         */
+
+        // Subscribing to the next scanning step
+        if(ResolvedName == "SpellBuffAdd")
+            AllSpellBuffAdds.Add(this);
+
+        //HACK: Usually, they start with a capital letter, but sometimes they don't
+        foreach(var kv in Params.ToArray())
+            if(Char.IsLower(kv.Key[0]))
+            {
+                Params.Remove(kv.Key);
+                Params.Add(kv.Key.UCFirst(), kv.Value);
+            }
 
         var mInfo = typeof(Functions).GetMethod(ResolvedName, flags);
         if(mInfo == null)
@@ -49,7 +65,7 @@ public class Block
                 var genericArguments = pInfo.ParameterType.GetGenericArguments();
                 foreach(var paramNameName in sAttr.ParamNames)
                 {
-                    var argName = (string)Params[paramNameName + "Var"];
+                    var argName = (string)Params.UseValueOrDefault(used, paramNameName + "Var")!;
                     var arg = new Var(parent: sb);
                         arg.Write(genericArguments[i]);
                         arg.IsArgument = true;
@@ -65,7 +81,7 @@ public class Block
             {
                 if(pInfo.IsOut || pInfo.ParameterType.IsByRef)
                 {
-                    var value = Reference.Resolve(pInfo, Params, Parent) ??
+                    var value = Reference.ResolveRefOut(pInfo, Params, used, Parent) ??
                             new Reference(null, "_", Parent); //TODO:
                         value.IsOut = pInfo.IsOut && pInfo.ParameterType.IsByRef;
                         value.IsRef = !pInfo.IsOut && pInfo.ParameterType.IsByRef;
@@ -74,7 +90,7 @@ public class Block
                 }
                 else
                 {
-                    var value = new Composite(pInfo, Params, Parent);
+                    var value = new Composite(pInfo, Params, used, Parent);
                     ResolvedParams.Add(value);
                 }
             }
@@ -95,10 +111,13 @@ public class Block
                     var v = buffScript.InstanceVars.Vars.GetValueOrDefault(kv.Key);
                     if(v == null)
                         buffScript.InstanceVars.Vars[kv.Key] = v = new Var();
+                    
+                    bool prevInitialized = v.Initialized;
                     v.Assign(kv.Value);
-                    kv.Value.AssignTo(v);
-                    v.Initialized = false;
+                    v.Initialized = prevInitialized;
                     v.PassedFromOutside = true;
+
+                    kv.Value.AssignTo(v);
                 }
             }
         }
@@ -119,9 +138,37 @@ public class Block
         if(returnType != typeof(void))
         {
             var param0 = (ResolvedParams.Count > 0) ? ResolvedParams[0].Item1 : null;
-            ResolvedReturn = Reference.Resolve(mInfo, Params, Parent, param0);
+            ResolvedReturn = Reference.ResolveReturn(mInfo, Params, used, Parent, param0);
         }
 
+        Unused[ResolvedName] = Unused.GetValueOrDefault(ResolvedName) ?? new();
+        Unused[ResolvedName].UnionWith(Params.Keys.Where(k => !used.Contains(k)));
+
+        if(ResolvedName is "If" or "ElseIf" or "While")
+        {
+            ResolvedParams[1].Item1!.Var = ResolvedParams[0].Item1!.Var;
+            ResolvedParams[4].Item1!.Var = ResolvedParams[3].Item1!.Var;
+            ResolvedParams.RemoveAt(3);
+            ResolvedParams.RemoveAt(0);
+
+            //TODO: AssignTo(Composite)?
+            var c1 = ResolvedParams[0].Item1!;
+            var c2 = ResolvedParams[2].Item1!;
+            if(c1.Var != null) c2.Var?.Var.AssignTo(c1.Var.Var);
+            if(c1.Value != null) c2.Var?.Var.Read(c1.Value.GetType());
+            if(c2.Var != null) c1.Var?.Var.AssignTo(c2.Var.Var);
+            if(c2.Value != null) c1.Var?.Var.Read(c2.Value.GetType());
+        }
+
+        if(ResolvedName == "SetReturnValue")
+        {
+            //TODO: Increment ReturnValue var usage
+            //TODO: Set ResolvedReturn to new Reference(null, "ReturnValue")
+        }
+    }
+
+    public void ScanSpellBuffAdd()
+    {
         //HACK:
         if(ResolvedName == nameof(Functions.SpellBuffAdd))
         {
@@ -197,24 +244,9 @@ public class Block
 
             buffNameParam.Value = "$" + output + "$";
             
+            buffVarsTable.Used--;
             ResolvedParams.RemoveAt(6);
             //*/
-        }
-
-        if(ResolvedName is "If" or "ElseIf" or "While")
-        {
-            ResolvedParams[1].Item1!.Var = ResolvedParams[0].Item1!.Var;
-            ResolvedParams[4].Item1!.Var = ResolvedParams[3].Item1!.Var;
-            ResolvedParams.RemoveAt(3);
-            ResolvedParams.RemoveAt(0);
-
-            //TODO: AssignTo(Composite)?
-            var c1 = ResolvedParams[0].Item1!;
-            var c2 = ResolvedParams[2].Item1!;
-            if(c1.Var != null) c2.Var?.Var.AssignTo(c1.Var.Var);
-            if(c1.Value != null) c2.Var?.Var.Read(c1.Value.GetType());
-            if(c2.Var != null) c1.Var?.Var.AssignTo(c2.Var.Var);
-            if(c2.Value != null) c1.Var?.Var.Read(c2.Value.GetType());
         }
     }
 
@@ -377,11 +409,19 @@ public class Block
 
         else if(ResolvedName == nameof(Functions.SetVarInTable))
         {
+            var output = "";
             if(ResolvedReturn != null)
-            {
-                return ResolvedReturn.ToCSharp() + " = " + ResolvedParams[0].Item1!.ToCSharp() + ";";
-            }
-            return "";
+                output += ResolvedReturn.ToCSharp() + " = ";
+            output += ResolvedParams[0].Item1!.ToCSharp() + ";";
+            return output;
+        }
+
+        else if(ResolvedName == nameof(Functions.SetReturnValue))
+        {
+            var output = "";
+            output += PrepareName("ReturnValue", false) + " = ";
+            output += ResolvedParams[0].Item1!.ToCSharp() + ";";
+            return output;
         }
 
         else if(ResolvedName == nameof(Functions.Math))

@@ -10,8 +10,8 @@ public static class Functions_CS
     public static bool ExecutePeriodically(
         float timeBetweenExecutions,
         ref float trackTime,
-        bool executeImmediately = false
-        //TODO: ref float tickTime?
+        bool executeImmediately = false,
+        float tickTime = 0
     ){
         return default!;
     }
@@ -44,7 +44,7 @@ public static class Functions_CS
     public static void AddBuff(
         ObjAIBase attacker,
         AttackableUnit target,
-        Script buffScript,
+        BBScript buffScript,
         int maxStack = 1,
         int numberOfStacks = 1,
         float duration = 25000,

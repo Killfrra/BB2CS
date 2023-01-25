@@ -2,19 +2,21 @@
 
 using System.Numerics;
 
-public class BBBuffScript: BBScript, IHandleAttackableUnitEvents
+public class BBBuffScript: BBScript
 {
+    public float lifeTime;
+
     // BUFF SPECIFIC
-    [BBCall("UpdateBuffs")] public void UpdateBuffs(){}
-    [BBCall("BuffOnUpdateAmmo")] public void OnUpdateAmmo(){}
-    [BBCall("BuffOnAllowAdd")] public bool OnAllowAdd(BuffType type, string scriptName, int maxStack, float duration)
+    [BBCall("UpdateBuffs")] public virtual void UpdateBuffs(){}
+    [BBCall("BuffOnUpdateAmmo")] public virtual void OnUpdateAmmo(){}
+    [BBCall("BuffOnAllowAdd", true)] public virtual bool OnAllowAdd(BuffType type, string scriptName, int maxStack, float duration)
     {
         return true;
     }
 
     [BBCall("PreLoad")] public override void PreLoad(){}
     [BBCall("OnBuffActivate")] public override void OnActivate(){}
-    [BBCall("OnBuffDeactivate")] public /*override*/ void OnDeactivate(bool expired){}
+    [BBCall("OnBuffDeactivate")] public /*override*/virtual void OnDeactivate(bool expired){}
     [BBCall("BuffOnUpdateStats")] public override void OnUpdateStats(){}
     [BBCall("BuffOnUpdateActions")] public override void OnUpdateActions(){}
 
@@ -26,7 +28,10 @@ public class BBBuffScript: BBScript, IHandleAttackableUnitEvents
     [BBCall("BuffOnCollision")] public override void OnCollision(){}
     [BBCall("BuffOnCollisionTerrain")] public override void OnCollisionTerrain(){}
     [BBCall("BuffOnDisconnect")] public override void OnDisconnect(){}
-    [BBCall("BuffOnHeal")] public override void OnHeal(float health){}
+    [BBCall("BuffOnHeal", 0)] public override float OnHeal(float health)
+    {
+        return 0;
+    }
     [BBCall("BuffOnHitUnit")] public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult){}
     [BBCall("BuffOnKill")] public override void OnKill(){}
     [BBCall("BuffOnLaunchAttack")] public override void OnLaunchAttack(){}

@@ -4,25 +4,30 @@ using System.Numerics;
 
 public class BBSpellScript: BBScript
 {
-    [BBCall("PreLoad")] public void PreLoad(){}
+    public int level;
+    public int slot;
+
+    [BBCall("PreLoad")] public virtual void PreLoad(){}
     [BBCall("SpellOnMissileUpdate")] public override void OnMissileUpdate(SpellMissile missileNetworkID, Vector3 missilePosition){}
     [BBCall("SpellOnMissileEnd")] public override void OnMissileEnd(string spellName, Vector3 missileEndPosition){}
 
     // SPELL SPECIFIC
-    [BBCall("SelfExecute")] public void SelfExecute(int level){}
-    [BBCall("TargetExecute")] public void TargetExecute(int level, SpellMissile missileNetworkID, HitResult hitResult){}
-    [BBCall("AdjustCastInfo")] public void AdjustCastInfo(){}
-    [BBCall("AdjustCooldown")] public void AdjustCooldown(){}
-    [BBCall("CanCast")] public bool CanCast()
+    [BBCall("CanCast", true)] public virtual bool CanCast()
     {
         return true;
     }
-    [BBCall("ChannelingStart")] public void ChannelingStart(){}
-    [BBCall("ChannelingCancelStop")] public void ChannelingCancelStop(){}
-    [BBCall("ChannelingSuccessStop")] public void ChannelingSuccessStop(){}
-    [BBCall("ChannelingStop")] public void ChannelingStop(){}
-    [BBCall("ChannelingUpdateStats")] public void ChannelingUpdateStats(){}
-    [BBCall("ChannelingUpdateActions")] public void ChannelingUpdateActions(){}
-
-    [BBCall("SpellUpdateTooltip")] public void UpdateTooltip(int spellSlot){}
+    [BBCall("SelfExecute")] public virtual void SelfExecute(int level){}
+    [BBCall("TargetExecute")] public virtual void TargetExecute(int level, SpellMissile missileNetworkID, HitResult hitResult){}
+    [BBCall("AdjustCastInfo")] public virtual void AdjustCastInfo(){}
+    [BBCall("AdjustCooldown", 0)] public virtual float AdjustCooldown()
+    {
+        return 0;
+    }
+    [BBCall("ChannelingStart")] public virtual void ChannelingStart(){}
+    [BBCall("ChannelingCancelStop")] public virtual void ChannelingCancelStop(){}
+    [BBCall("ChannelingSuccessStop")] public virtual void ChannelingSuccessStop(){}
+    [BBCall("ChannelingStop")] public virtual void ChannelingStop(){}
+    [BBCall("ChannelingUpdateStats")] public virtual void ChannelingUpdateStats(){}
+    [BBCall("ChannelingUpdateActions")] public virtual void ChannelingUpdateActions(){}
+    [BBCall("SpellUpdateTooltip")] public virtual void UpdateTooltip(int spellSlot){}
 }

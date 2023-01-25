@@ -140,6 +140,13 @@ public class Program_v2
         //return;
         //*/
 
+        /*
+        foreach(var kv in Block.Unused)
+            foreach(var key in kv.Value)
+                Console.WriteLine($"{kv.Key}.{key}");
+        //return;
+        //*/
+
         bool changed;
         do
         {
@@ -174,6 +181,7 @@ public class Program_v2
             cs = Regex.Replace(cs, @"^ *//object (nextBuffVars|_);\n", "", RegexOptions.Multiline);
             //cs = Regex.Replace(cs, @"//(?!RequireVar)", "");
             cs = Regex.Replace(cs, @"if\((.*) == \1\)", "if(true)");
+            cs = Regex.Replace(cs, @"(?:, default)+(?=\))", "");
         File.WriteAllText("Code.cs", cs, Encoding.UTF8);
     }
 }

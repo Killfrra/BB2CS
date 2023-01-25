@@ -15,6 +15,10 @@ public class BBScripts
             foreach(var v in script.BuffScript.InstanceVars.Vars.Values)
                 if(!v.Initialized)
                     v.PassedFromOutside = true;
+        //HACK:
+        //TODO: Make a few scan steps
+        foreach(var sba in Block.AllSpellBuffAdds)
+            sba.ScanSpellBuffAdd();
     }
 
     public string ToCSharp()
@@ -27,7 +31,7 @@ public class BBScripts
         using static Functions;
         using static Functions_CS;
         """ + "\n" +
-        $"public partial class {PrepareName("Script", true)}\n" +
+        $"public partial class {PrepareName("BBScript", true)}\n" +
         Braces(
             $"public AllCharVars {PrepareName("CharVars", false)};\n" +
             $"public AllAvatarVars {PrepareName("AvatarVars", false)};"
@@ -47,7 +51,7 @@ public class BBScripts
         "namespace Buffs" + "\n" +
         Braces(
             string.Join("\n", EmptyBuffScriptNames.Select(
-                name => Class(name, "Script", "")
+                name => Class(name, "BBScript", "")
             ))
         ) + "\n" +
         string.Join("\n", Scripts.Select(

@@ -1,4 +1,5 @@
 using System.Numerics;
+using System.Reflection;
 using static Utils;
 
 //TODO: Rename
@@ -35,6 +36,19 @@ public class BBScript2
 
     public BBScriptComposite Parent;
 
+    public BBScript2()
+    {
+        var flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+        foreach(var fInfo in prototype!.GetFields(flags))
+        {
+            var v = new Var();
+                v.IsArgument = true;
+                v.Initialized = true;
+                v.Type = fInfo.FieldType;
+            InheritedVariables.Add(fInfo.Name.UCFirst(), v);
+        }
+    }
+
     public void Scan(BBScriptComposite parent)
     {
         Parent = parent;
@@ -43,6 +57,7 @@ public class BBScript2
             var function = kv.Value;
             var funcName = kv.Key;
 
+            /*
             //HACK:
             void declare<T>(string name)
             {
@@ -62,6 +77,7 @@ public class BBScript2
             declare<int>("Level"); // ?
             declare<int>("TalentLevel"); // Talents
             declare<float>("LifeTime"); // Buffs
+            */
             /*
             if(funcName is "OnLevelUpSpell")
                 declare<int>("Slot");
@@ -85,6 +101,7 @@ public class BBScript2
             if(funcName == "OnAllowAdd")
                 declare<BuffType>("Type");
             */
+            //TODO: Move to Function
             var mInfo = prototype!.GetMethod(funcName)!;
             foreach(var pInfo in mInfo.GetParameters())
             {
@@ -94,6 +111,16 @@ public class BBScript2
                     arg.Write(pInfo.ParameterType);
                     arg.IsArgument = true;
                 function.LocalVars[argName] = arg;
+            }
+            if(mInfo.ReturnType != typeof(void))
+            {
+                var cAttr = mInfo.GetCustomAttribute<BBCallAttribute>();
+                var v = new Var(parent: function);
+                    v.Type = mInfo.ReturnType;
+                    v.Initialized = true;
+                function.Return = v;
+                function.DefaultReturn = cAttr?.DefaultReturnValue;
+                function.LocalVars["ReturnValue"] = v;
             }
             function.Scan(this, null);
         }
@@ -132,7 +159,7 @@ public class BBScript2
         return
         "namespace " + ns + "\n" +
         Braces(
-            "public class " + PrepareName(name, true) + " : Script" + "\n" +
+            "public class " + PrepareName(name, true) + " : " + prototype!.Name + "\n" +
             Braces(
                 subclasses +
                 string.Join("", InstanceVars.Vars.Select(
@@ -149,5 +176,11 @@ public class BBScript2
                 ))
             )
         );
+    }
+
+    public Dictionary<string, Var> InheritedVariables = new();
+    public Var? Resolve(string name)
+    {
+        return InheritedVariables.GetValueOrDefault(name);
     }
 }

@@ -20,14 +20,13 @@ public class Reference
     }
 
     //TODO: Deduplicate
-    // For out/ref parameters
-    public static Reference? Resolve(ParameterInfo pInfo, Dictionary<string, object> ps, SubBlocks sb)
+    public static Reference? ResolveRefOut(ParameterInfo pInfo, Dictionary<string, object> ps, HashSet<string> used, SubBlocks sb)
     {
         var pAttr = pInfo.GetCustomAttribute<BBParamAttribute>() ?? new();
 
         var name = pInfo.Name!.UCFirst();
-        var varName = (pAttr.VarPostfix != null) ? ps.GetValueOrDefault(name + pAttr.VarPostfix) as string : null;
-        var tableName = (pAttr.VarTablePostfix != null) ? ps.GetValueOrDefault(name + pAttr.VarTablePostfix) as string : null;
+        var varName = (pAttr.VarPostfix != null) ? ps.UseValueOrDefault(used, name + pAttr.VarPostfix) as string : null;
+        var tableName = (pAttr.VarTablePostfix != null) ? ps.UseValueOrDefault(used, name + pAttr.VarTablePostfix) as string : null;
     
         if(varName != null && varName != "Nothing")
         {
@@ -43,14 +42,13 @@ public class Reference
             return null;
     }
 
-    // For return
-    public static Reference? Resolve(MethodInfo mInfo, Dictionary<string, object> ps, SubBlocks sb, Composite? param0)
+    public static Reference? ResolveReturn(MethodInfo mInfo, Dictionary<string, object> ps, HashSet<string> used, SubBlocks sb, Composite? param0)
     {
         var fAttr = mInfo.GetCustomAttribute<BBFuncAttribute>() ?? new();
 
         var name = fAttr.Dest;
-        var varName = ps.GetValueOrDefault(name + "Var") as string;
-        var tableName = ps.GetValueOrDefault(name + "VarTable") as string;
+        var varName = ps.UseValueOrDefault(used, name + "Var") as string;
+        var tableName = ps.UseValueOrDefault(used, name + "VarTable") as string;
         if(varName != null && varName != "Nothing")
         {
             var r = new Reference(tableName, varName, sb);

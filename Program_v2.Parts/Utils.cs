@@ -32,6 +32,7 @@ public static class Utils
         { typeof(uint), "uint" },
         { typeof(ulong), "ulong" },
         { typeof(ushort), "ushort" },
+        { typeof(void), "void" },
     };
     public static string TypeToCSharp(Type? type)
     {
@@ -72,8 +73,10 @@ public static class Utils
         return types.Where(t => t != typeof(object)).FirstOrDefault(def);
     }
 
-    public static string ObjectToCSharp(object value)
+    public static string ObjectToCSharp(object? value)
     {
+        if(value == null)
+            return "null";
         if(value is string s)
         {
             if(s.StartsWith("$") && s.EndsWith("$"))
@@ -112,5 +115,11 @@ public static class Utils
         if(extends != "") output += ": " + extends;
         output += "\n" + Braces(body);
         return output;
+    }
+
+    public static object? UseValueOrDefault(this Dictionary<string, object> dict, HashSet<string> used, string key)
+    {
+        used.Add(key);
+        return dict.GetValueOrDefault(key);
     }
 }

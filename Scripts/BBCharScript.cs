@@ -1,13 +1,16 @@
 #nullable enable
 
-public class BBCharScript: BBScript, IHandleAttackableUnitEvents
+public class BBCharScript: BBScript
 {
+    public int level;
+    public int talentLevel;
+    
     // TALENT? SPECIFIC
-    [BBCall("SetVarsByLevel")] public void SetVarsByLevel(){}
+    [BBCall("SetVarsByLevel")] public virtual void SetVarsByLevel(){}
 
     [BBCall("PreLoad")] public override void PreLoad(){}
     [BBCall("CharOnActivate")] public override void OnActivate(){}
-    [BBCall("CharOnDeactivate")] public /*override*/ void OnDeactivate(){}
+    [BBCall("CharOnDeactivate")] public /*override*/virtual void OnDeactivate(){}
     [BBCall("UpdateSelfBuffStats")] public override void OnUpdateStats(){}
     [BBCall("UpdateSelfBuffActions")] public override void OnUpdateActions(){}
     

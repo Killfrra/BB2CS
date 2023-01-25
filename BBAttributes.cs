@@ -46,8 +46,10 @@ public class BBFuncAttribute : Attribute
 public class BBCallAttribute : Attribute
 {
     public string Name;
-    public BBCallAttribute(string name)
+    public object? DefaultReturnValue = null;
+    public BBCallAttribute(string name, object? defaultReturn = null)
     {
         Name = name;
+        DefaultReturnValue = defaultReturn;
     }
 }
