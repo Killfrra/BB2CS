@@ -307,24 +307,24 @@ public class Block
 
             if(cop == CompareOp.CO_EQUAL)
             {
-                /*
-                if(v1.Value is bool b1)
+                //*
+                if(c1.Value is bool b1)
                     return $"{n}({(b1 ? "": "!")}{r()}){b()}";
-                else if(v2.Value is bool b2)
+                else if(c2.Value is bool b2)
                     return $"{n}({(b2 ? "": "!")}{l()}){b()}";
                 else
-                */
+                //*/
                     return $"{n}({l()} == {r()}){b()}";
             }
             else if(cop == CompareOp.CO_NOT_EQUAL)
             {
-                /*
-                if(v1.Value is bool b1)
+                //*
+                if(c1.Value is bool b1)
                     return $"{n}({(b1 ? "!": "")}{r()}){b()}";
-                else if(v2.Value is bool b2)
+                else if(c2.Value is bool b2)
                     return $"{n}({(b2 ? "!": "")}{l()}){b()}";
                 else
-                */
+                //*/
                     return $"{n}({l()} != {r()}){b()}";
             }
             else if(cop == CompareOp.CO_GREATER_THAN)

@@ -162,11 +162,10 @@ public class BBScript2
             "public class " + PrepareName(name, true) + " : " + prototype!.Name + "\n" +
             Braces(
                 subclasses +
-                string.Join("", InstanceVars.Vars.Select(
-                    kv => {
-                        bool initializedInCtr = kv.Value.PassedFromOutside && kv.Value.Used > 0;
-                        return kv.Value.ToCSharp(kv.Key, false, !initializedInCtr) + "\n";
-                    }
+                string.Join("", InstanceVars.Vars.Where(
+                    kv => kv.Value.Used > 0 || kv.Value.Initialized
+                ).Select(
+                    kv => kv.Value.ToCSharp(kv.Key, false, !outsiders.Contains(kv)) + "\n"
                 ).Concat(InstanceEffects.Select(
                     e => e.ToCSharpDecl() + "\n"
                 ))) +
