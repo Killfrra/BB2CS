@@ -17,6 +17,7 @@ public class Program_v2
     };
 
     public static Dictionary<string, Dictionary<Type, MethodInfo>> Methods = new();
+    public static BBScripts? scripts = null;
 
     public static void Main()
     {
@@ -45,7 +46,6 @@ public class Program_v2
         }
 
         const string cacheFile = "Cache.json";
-        BBScripts? scripts = null;
         if(File.Exists(cacheFile))
         {
             var json = File.ReadAllText(cacheFile, Encoding.UTF8);

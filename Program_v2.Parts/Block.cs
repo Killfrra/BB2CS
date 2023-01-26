@@ -37,7 +37,7 @@ public class Block
         */
 
         // Subscribing to the next scanning step
-        if(ResolvedName == "SpellBuffAdd")
+        if(ResolvedName is "SpellBuffAdd" or "ForEachUnitInTargetAreaAddBuff")
             AllSpellBuffAdds.Add(this);
 
         //HACK: Usually, they start with a capital letter, but sometimes they don't
@@ -96,12 +96,15 @@ public class Block
             }
         }
 
-        if(ResolvedName == "SpellBuffAdd")
+        bool isSBA = ResolvedName is nameof(Functions.SpellBuffAdd);
+        if(isSBA ||  ResolvedName is nameof(Functions.ForEachUnitInTargetAreaAddBuff))
         {
-            var buffName = GetBuffName();
-            var passedTable = ResolvedParams[6].Item1!.Var!.Var;
+            var buffName = ResolvedParams[isSBA ? 2 : 5].Item1!.Value as string;
+            var passedTable = ResolvedParams[isSBA ? 6 : 11].Item1!.Var!.Var;
+
+                buffName ??= GetScript().Key;
             //  passedTable.UseAsInstanceVarsFor(GetBuffName());
-            var buffScriptComposite = GetScript(buffName);
+            var buffScriptComposite = GetScript(buffName)?.Value;
             if(buffScriptComposite != null)
             {
                 var buffScript = buffScriptComposite.BuffScript;
@@ -170,7 +173,8 @@ public class Block
     public void ScanSpellBuffAdd()
     {
         //HACK:
-        if(ResolvedName == nameof(Functions.SpellBuffAdd))
+        bool isSBA = ResolvedName is nameof(Functions.SpellBuffAdd);
+        if(isSBA ||  ResolvedName is nameof(Functions.ForEachUnitInTargetAreaAddBuff))
         {
             /*
             var c = ResolvedParams[6].Item1!;
@@ -182,31 +186,32 @@ public class Block
             }
             //*/
             //*
-            ResolvedName = "AddBuff";
-            
+            ResolvedName = isSBA ? "AddBuff" : "AddBuffToEachUnitInArea";
+            var buffNameParam = ResolvedParams[isSBA ? 2 : 5].Item1!;
+            var buffVarsTableParam = ResolvedParams[isSBA ? 6 : 11].Item1!.Var!;
+
             var compositeScript = Parent.ParentScript.Parent;
             var scripts = compositeScript.Parent;
 
-            var buffVarsTableParam = ResolvedParams[6].Item1!.Var!;
-            var buffVarsTable = Parent.Resolve(buffVarsTableParam);
-            var buffNameParam = ResolvedParams[2].Item1!;
             var buffName = buffNameParam.Value as string;
+            var buffVarsTable = Parent.Resolve(buffVarsTableParam);
+            
             var buffScript = (BBBuffScript2?)null;
 
             if(buffName != null)
             {
-                var buffScriptKV = scripts.Scripts.FirstOrDefault(kv => kv.Key.ToLower() == buffName.ToLower());
-                if(buffScriptKV.Value != null)
+                var buffScriptKV = GetScript(buffName);
+                if(buffScriptKV != null)
                 {
-                    buffName = buffScriptKV.Key;
-                    buffScript = buffScriptKV.Value.BuffScript;
+                    buffName = buffScriptKV?.Key;
+                    buffScript = buffScriptKV?.Value.BuffScript;
                 }
             }
             else
             {
-                var currentScriptName = scripts.Scripts.First(kv => kv.Value == compositeScript).Key;
-                buffName = currentScriptName;
-                buffScript = compositeScript.BuffScript;
+                var currentScriptKV = GetScript();
+                buffName = currentScriptKV.Key;
+                buffScript = currentScriptKV.Value.BuffScript;
             }            
 
             var args = new List<string>();
@@ -245,14 +250,18 @@ public class Block
             buffNameParam.Value = "$" + output + "$";
             
             buffVarsTable.Used--;
-            ResolvedParams.RemoveAt(6);
+            ResolvedParams.RemoveAt(isSBA ? 6 : 11);
             //*/
         }
     }
 
-    BBScriptComposite? GetScript(string name)
+    (string Key, BBScriptComposite Value)? GetScript(string name)
     {
-        return Parent.ParentScript.Parent.Parent.Scripts.GetValueOrDefault(name);
+        var compositeScript = Parent.ParentScript.Parent;
+        var kv = compositeScript.Parent.Scripts.FirstOrDefault(kv => kv.Key.ToLower() == name.ToLower());
+        if(kv.Key == null)
+            return null;
+        return (kv.Key, kv.Value);
     }
 
     (string Key, BBScriptComposite Value) GetScript()
@@ -260,14 +269,6 @@ public class Block
         var compositeScript = Parent.ParentScript.Parent;
         var kv = compositeScript.Parent.Scripts.First(kv => kv.Value == compositeScript);
         return (kv.Key, kv.Value);
-    }
-
-    string GetBuffName()
-    {
-        var buffName = ResolvedParams[2].Item1!.Value as string;
-        if(buffName != null)
-            return buffName;
-        return GetScript().Key;
     }
 
     Dictionary<int, string> int2team = new Dictionary<int, string>
@@ -442,19 +443,22 @@ public class Block
                 if(ResolvedReturn!.Var == s2.Var?.Var && (o == "+" || o == "*"))
                     (s1, s2) = (s2, s1);
 
-                if(ResolvedReturn!.Var == s1.Var?.Var){
+                string s2cs() => ((o == "/" && IsInteger(s2.Type)) ? "(float)" : "") + s2.ToCSharp();
+
+                if(ResolvedReturn!.Var == s1.Var?.Var)
+                {
                     if((o == "+" || o == "-") && s2.Value != null && Convert.ToInt32(s2.Value) == 1)
                         return $"{ResolvedReturn.ToCSharp()}{o}{o};";
                     else
-                        return $"{ResolvedReturn.ToCSharp()} {o}= {s2.ToCSharp()};";
+                        return $"{ResolvedReturn.ToCSharp()} {o}= {s2cs()};";
                 }
                 else
-                    return $"{ResolvedReturn.ToCSharp()} = {s1.ToCSharp()} {o} {s2.ToCSharp()};";
+                    return $"{ResolvedReturn.ToCSharp()} = {s1.ToCSharp()} {o} {s2cs()};";
             }
             else if(op == MathOp.MO_MIN)
-                return $"{ResolvedReturn!.ToCSharp()} = MathF.Min({s1.ToCSharp()}, {s2.ToCSharp()});";
+                return $"{ResolvedReturn!.ToCSharp()} = Math.Min({s1.ToCSharp()}, {s2.ToCSharp()});";
             else if(op == MathOp.MO_MAX)
-                return $"{ResolvedReturn!.ToCSharp()} = MathF.Max({s1.ToCSharp()}, {s2.ToCSharp()});";
+                return $"{ResolvedReturn!.ToCSharp()} = Math.Max({s1.ToCSharp()}, {s2.ToCSharp()});";
             else if(op == MathOp.MO_ROUND)
                 return $"{ResolvedReturn!.ToCSharp()} = MathF.Floor({s1.ToCSharp()});";
             else if(op == MathOp.MO_ROUNDUP)

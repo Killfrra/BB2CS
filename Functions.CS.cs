@@ -1,3 +1,5 @@
+using System.Numerics;
+
 public static class Functions_CS
 {
     public static bool HasBuffOfType(
@@ -40,7 +42,7 @@ public static class Functions_CS
     {
         return default!;
     }
-    //*
+
     public static void AddBuff(
         ObjAIBase attacker,
         AttackableUnit target,
@@ -56,5 +58,21 @@ public static class Functions_CS
         bool canMitigateDuration = false,
         bool isHiddenOnClient = false
     ){}
-    //*/
+
+    public static void AddBuffToEachUnitInArea(
+        AttackableUnit attacker,
+        Vector3 center,
+        float range,
+        SpellDataFlags flags,
+        AttackableUnit buffAttacker,
+        BBScript buffScript,
+        BuffAddType buffAddType,
+        BuffType buffType,
+        int buffMaxStack,
+        int buffNumberOfStacks,
+        float buffDuration,
+        float tickRate,
+        bool isHiddenOnClient,
+        bool inclusiveBuffFilter = false
+    ){}
 }

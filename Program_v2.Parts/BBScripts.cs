@@ -30,6 +30,8 @@ public class BBScripts
         using System.Numerics;
         using static Functions;
         using static Functions_CS;
+        using Math = System.Math;
+        
         """ + "\n" +
         $"public partial class {PrepareName("BBScript", true)}\n" +
         Braces(

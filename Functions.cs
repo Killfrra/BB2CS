@@ -1012,7 +1012,10 @@ public static partial class Functions
         int buffMaxStack,
         int buffNumberOfStacks,
         float buffDuration,
-        Table buffVarsTable,
+
+        [BBParam("", null, null, null)]
+        object? buffVarsTable,
+        
         float tickRate,
         bool isHiddenOnClient,
         bool inclusiveBuffFilter = false

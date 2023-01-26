@@ -56,6 +56,11 @@ public static class Utils
         return type == typeof(float) || type == typeof(double) || type == typeof(decimal);
     }
 
+    public static bool IsInteger(Type type)
+    {
+        return IsSummableType(type) && !IsFloating(type);
+    }
+
     public static Type? InferTypeFrom(IEnumerable<Type> types)
     {
         Type? def = null; //typeof(object);
