@@ -138,24 +138,6 @@ public class BBScript2
 
     public string ToCSharp(string ns, string name)
     {
-        var subclasses = "";
-        foreach(var func in Functions) //TODO: MultiSelect?
-        {
-            foreach(var v in func.Value.LocalVars)
-            {
-                if(v.Value.IsTable)
-                {
-                    subclasses +=
-                    "class " + func.Key + "_" + PrepareName(v.Key, false) + "\n" +
-                    Braces(
-                        string.Join("\n", v.Value.Vars.Select(
-                            kv => kv.Value.ToCSharp(kv.Key, true, true)
-                        ))
-                    ) + "\n";
-                }
-            }
-        }
-
         var outsiders = InstanceVars.Vars.Where(kv => kv.Value.PassedFromOutside && kv.Value.Used > 0);
         var constructor = (outsiders.Count() == 0) ? "" :
         $"public {PrepareName(name, true)}(" + 
@@ -171,7 +153,6 @@ public class BBScript2
         Braces(
             "public class " + PrepareName(name, true) + " : " + prototype!.Name + "\n" +
             Braces(
-                subclasses +
                 MetaDataToCSharp() +
                 string.Join("", InstanceVars.Vars.Where(
                     kv => kv.Value.Used > 0 || kv.Value.Initialized
@@ -181,8 +162,22 @@ public class BBScript2
                     e => e.ToCSharpDecl() + "\n"
                 ))) +
                 constructor + 
-                string.Join("\n", Functions.Select(
-                    kv => kv.Value.ToCSharp(kv.Key)
+                string.Join("\n", Functions.Where(
+                    func => func.Value.Blocks.Count > 0
+                ).Select(
+                    func =>
+                    string.Join("", func.Value.LocalVars.Where(
+                        v => v.Value.IsTable && !v.Value.IsArgument
+                    ).Select(
+                        v =>
+                        "class " + func.Key + "_" + PrepareName(v.Key, false) + "\n" +
+                        Braces(
+                            string.Join("\n", v.Value.Vars.Select(
+                                kv => kv.Value.ToCSharp(kv.Key, true, true)
+                            ))
+                        ) + "\n"
+                    )) +
+                    func.Value.ToCSharp(func.Key)
                 ))
             )
         );
