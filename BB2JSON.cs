@@ -12,14 +12,14 @@ public static class BB2JSON
         Dictionary<string, List<Block>> functions = new();
         try
         {
-            //metadata = JsonConvert.DeserializeObject<Dictionary<string, object>>(metadataJson)!;
+            metadata = JsonConvert.DeserializeObject<Dictionary<string, object>>(metadataJson)!;
             functions = JsonConvert.DeserializeObject<Dictionary<string, List<Block>>>(functionsJson)!; 
         }
-        catch(Exception e)
+        catch(JsonReaderException e)
         {
-            Console.WriteLine(e);
-            Console.WriteLine(metadataJson);
-            Console.WriteLine(functionsJson);
+            //Console.WriteLine(e);
+            //Console.WriteLine(metadataJson);
+            //Console.WriteLine(functionsJson);
         }
         return (metadata, functions);
     }

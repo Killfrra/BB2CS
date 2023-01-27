@@ -42,7 +42,7 @@ public class Reference
             return null;
     }
 
-    public static Reference? ResolveReturn(MethodInfo mInfo, Dictionary<string, object> ps, HashSet<string> used, SubBlocks sb, Composite? param0)
+    public static Reference? ResolveReturn(MethodInfo mInfo, Dictionary<string, object> ps, HashSet<string> used, SubBlocks sb, Composite? param0, Type? returnTypeOverride)
     {
         var fAttr = mInfo.GetCustomAttribute<BBFuncAttribute>() ?? new();
 
@@ -58,7 +58,7 @@ public class Reference
                 param0!.Var?.Var.AssignTo(r.Var);
             }
             else
-                r.Var.Write(mInfo.ReturnType);
+                r.Var.Write(returnTypeOverride ?? mInfo.ReturnType);
             return r;
         }
         else

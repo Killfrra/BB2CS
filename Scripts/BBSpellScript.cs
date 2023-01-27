@@ -9,7 +9,7 @@ public class BBSpellScript: BBScript
 
     [BBCall("PreLoad")] public virtual void PreLoad(){}
     [BBCall("SpellOnMissileUpdate")] public override void OnMissileUpdate(SpellMissile missileNetworkID, Vector3 missilePosition){}
-    [BBCall("SpellOnMissileEnd")] public override void OnMissileEnd(string spellName, Vector3 missileEndPosition){}
+    [BBCall("SpellOnMissileEnd")] public override void OnMissileEnd([BBSpellName] string spellName, Vector3 missileEndPosition){}
 
     // SPELL SPECIFIC
     [BBCall("CanCast", true)] public virtual bool CanCast()

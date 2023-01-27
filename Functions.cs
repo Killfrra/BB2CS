@@ -45,7 +45,7 @@ public static partial class Functions
         // Beginning of positional parameters
         ObjAIBase attacker,
         AttackableUnit target,
-        string buffName = "",
+        [BBBuffName] string buffName = "",
         int maxStack = 1, //TODO: Maybe there should be "TickRate"?
         int numberOfStacks = 1,
         float duration = 25000,
@@ -68,7 +68,7 @@ public static partial class Functions
     [BBFunc]
     public static void SpellBuffRemove(
         AttackableUnit target,
-        string buffName = "",
+        [BBBuffName] string buffName = "",
         ObjAIBase? attacker = null,
         float resetDuration = 0
     ){}
@@ -77,7 +77,7 @@ public static partial class Functions
     public static void PreloadParticle(string name){}
 
     [BBFunc]
-    public static void PreloadSpell(string name){}
+    public static void PreloadSpell([BBSpellName] string name){}
 
     [BBFunc]
     public static void PreloadCharacter(string name){}
@@ -200,10 +200,10 @@ public static partial class Functions
         Vector3 center,
         float range,
         SpellDataFlags flags,
-        string buffNameFilter = "",
+        [BBBuffName] string buffNameFilter = "",
         bool inclusiveBuffFilter = false,
 
-        [BBSubBlocks("Iterator")]
+        [BBSubBlocksAttribute("Iterator")]
         Action<AttackableUnit>? subBlocks = null
     ){}
 
@@ -214,10 +214,10 @@ public static partial class Functions
         float range,
         SpellDataFlags flags,
         int maximumUnitsToPick,
-        string buffNameFilter = "",
+        [BBBuffName] string buffNameFilter = "",
         bool inclusiveBuffFilter = false,
 
-        [BBSubBlocks("Iterator")]
+        [BBSubBlocksAttribute("Iterator")]
         Action<AttackableUnit>? subBlocks = null
     ){}
 
@@ -231,7 +231,7 @@ public static partial class Functions
     }
 
     [BBFunc]
-    public static void SpellBuffClear(AttackableUnit target, string buffName){}
+    public static void SpellBuffClear(AttackableUnit target, [BBBuffName] string buffName){}
 
     [BBFunc]
     public static void MoveAway(
@@ -280,10 +280,10 @@ public static partial class Functions
         int slotNumber,
         SpellSlotType slotType,
         SpellbookType slotBook,
-        string spellName
+        [BBSpellName] string spellName
     ){}
 
-    public static string GetSlotSpellName(
+    [BBSpellName] public static string GetSlotSpellName(
         ObjAIBase owner,
         [BBParam("Var", "VarTable", "Value", "ValueByLevel")]
         int spellSlot,
@@ -420,10 +420,10 @@ public static partial class Functions
         float range,
         SpellDataFlags flags,
         int maximumUnitsToPick,
-        string buffNameFilter = "",
+        [BBBuffName] string buffNameFilter = "",
         bool inclusiveBuffFilter = false,
 
-        [BBSubBlocks("Iterator")]
+        [BBSubBlocksAttribute("Iterator")]
         Action<AttackableUnit>? subBlocks = null
     ){}
 
@@ -470,7 +470,7 @@ public static partial class Functions
     ){}
 
     #region GetCastInfo
-    public static string GetSpellName()
+    [BBSpellName] public static string GetSpellName()
     {
         return default!;
     }
@@ -565,7 +565,7 @@ public static partial class Functions
     [BBFunc]
     public static float GetBuffRemainingDuration(
         AttackableUnit target,
-        string buffName
+        [BBBuffName] string buffName
     ){
         return default!;
     }
@@ -609,10 +609,10 @@ public static partial class Functions
     [BBFunc]
     public static void ForEachChampion(
         TeamId team,
-        string buffNameFilter = "",
+        [BBBuffName] string buffNameFilter = "",
         bool inclusiveBuffFilter = false,
 
-        [BBSubBlocks("Iterator")]
+        [BBSubBlocksAttribute("Iterator")]
         Action<Champion>? subBlocks = null
     ){}
 
@@ -702,10 +702,10 @@ public static partial class Functions
         float range,
         SpellDataFlags flags,
         int maximumUnitsToPick,
-        string buffNameFilter = "",
+        [BBBuffName] string buffNameFilter = "",
         bool inclusiveBuffFilter = false,
 
-        [BBSubBlocks("Iterator")]
+        [BBSubBlocksAttribute("Iterator")]
         Action<AttackableUnit>? subBlocks = null
     ){}
 
@@ -716,10 +716,10 @@ public static partial class Functions
         float halfWidth,
         float halfLength,
         SpellDataFlags flags,
-        string buffNameFilter = "",
+        [BBBuffName] string buffNameFilter = "",
         bool inclusiveBuffFilter = false,
 
-        [BBSubBlocks("Iterator")]
+        [BBSubBlocksAttribute("Iterator")]
         Action<AttackableUnit>? subBlocks = null
     ){}
 
@@ -773,7 +773,7 @@ public static partial class Functions
     public static void SetSpellOffsetTarget(
         int slotNumber,
         SpellSlotType slotType,
-        string spellName,
+        [BBSpellName] string spellName,
         SpellbookType spellbookType,
         AttackableUnit owner,
         AttackableUnit offsetTarget
@@ -782,7 +782,7 @@ public static partial class Functions
     [BBFunc]
     public static Pet CloneUnitPet(
         AttackableUnit unitToClone,
-        string buff,
+        [BBBuffName] string buff,
         float duration,
         Vector3 pos,
         float healthBonus,
@@ -925,7 +925,7 @@ public static partial class Functions
     [BBFunc]
     public static float GetBuffStartTime(
         AttackableUnit target,
-        string buffName
+        [BBBuffName] string buffName
     ){
         return default!;
     }
@@ -972,7 +972,7 @@ public static partial class Functions
         float pushForward,
         int iterations,
 
-        [BBSubBlocks("Iterator")]
+        [BBSubBlocksAttribute("Iterator")]
         Action<Vector3>? subBlocks = null
     ){}
 
@@ -1006,7 +1006,7 @@ public static partial class Functions
         float range,
         SpellDataFlags flags,
         AttackableUnit buffAttacker,
-        string buffName,
+        [BBBuffName] string buffName,
         BuffAddType buffAddType,
         BuffType buffType,
         int buffMaxStack,
@@ -1069,7 +1069,7 @@ public static partial class Functions
     public static Pet SpawnPet(
         string name,
         string skin,
-        string buff,
+        [BBBuffName] string buff,
         string? aiScript,
         float duration,
         Vector3 pos,
@@ -1086,7 +1086,7 @@ public static partial class Functions
     ){}
 
     [BBFunc]
-    public static string GetDamagingBuffName(){
+    [BBBuffName] public static string GetDamagingBuffName(){
         return default!;
     }
 
@@ -1107,10 +1107,10 @@ public static partial class Functions
         float range,
         SpellDataFlags flags,
         int maximumUnitsToPick,
-        string buffNameFilter,
+        [BBBuffName] string buffNameFilter,
         bool inclusiveBuffFilter,
 
-        [BBSubBlocks("Iterator")]
+        [BBSubBlocksAttribute("Iterator")]
         Action<AttackableUnit>? subBlocks = null
     ){}
 
@@ -1155,7 +1155,7 @@ public static partial class Functions
         float radius,
         int iterations,
 
-        [BBSubBlocks("Iterator")]
+        [BBSubBlocksAttribute("Iterator")]
         Action<Vector3>? subBlocks = null
     ){}
 
@@ -1256,7 +1256,7 @@ public static partial class Functions
         Vector3 center,
         float range,
         AttackableUnit unitScan,
-        string buffName
+        [BBBuffName] string buffName
     ){}
 
     [BBFunc]
@@ -1272,7 +1272,7 @@ public static partial class Functions
     [BBFunc]
     public static void SpellBuffRenew(
         AttackableUnit target,
-        string buffName,
+        [BBBuffName] string buffName,
         float resetDuration = 0
     ){}
 }

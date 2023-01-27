@@ -1,7 +1,50 @@
+using System.Diagnostics;
+using System.Reflection;
 using System.Text.RegularExpressions;
+
+public static class StringExtensions
+{
+    public static string Indent(this string str, int count = 4)
+    {
+        return Regex.Replace(str, @"^", "".PadRight(count), RegexOptions.Multiline);
+    }
+    public static string UCFirst(this string str)
+    {
+        return Char.ToUpperInvariant(str[0]) + str.Substring(1);
+    }
+    public static string LCFirst(this string str)
+    {
+        return Char.ToLowerInvariant(str[0]) + str.Substring(1);
+    }
+}
 
 public static class Utils
 {
+    public static bool? Invert(bool? src) => (src == null) ? null : !src;
+
+    public static T[]? ReadArray<T>(this Dictionary<string, object> globals, HashSet<string> used, string name, T defaultValue)
+    {
+        var list = new List<T>();
+        foreach(var (key, value) in globals)
+        {
+            int i = 1;
+            if(key.StartsWith(name) &&
+                (key.Length == name.Length || int.TryParse(key.Substring(name.Length), out i))
+            ){
+                Debug.Assert(i > 0);
+                i--;
+                while(list.Count <= i)
+                    list.Add(defaultValue);
+                list[i] = (T)value;
+                used.Add(key);
+            }
+        }
+        if(list.Count > 0)
+            return list.ToArray();
+        else
+            return null;
+    }
+
     public static string PrepareName(string name, bool ucfirst)
     {
         name = Regex.Replace(name, @"\W","_");
@@ -29,6 +72,8 @@ public static class Utils
         { typeof(sbyte), "sbyte" },
         { typeof(short), "short" },
         { typeof(string), "string" },
+        { typeof(BBBuffName), "string" },
+        { typeof(BBSpellName), "string" },
         { typeof(uint), "uint" },
         { typeof(ulong), "ulong" },
         { typeof(ushort), "ushort" },
@@ -43,22 +88,22 @@ public static class Utils
 
     public static bool IsSummableType(Type type)
     {
+        return IsInteger(type) || IsFloating(type);
+    }
+
+    public static bool IsInteger(Type type)
+    {
         return
         type == typeof(sbyte) || type == typeof(byte) ||
         type == typeof(short) || type == typeof(ushort) ||
         type == typeof(int) || type == typeof(uint) ||
         type == typeof(long) || type == typeof(ulong) ||
-        type == typeof(char) || IsFloating(type);
+        type == typeof(char);
     }
 
     public static bool IsFloating(Type type)
     {
         return type == typeof(float) || type == typeof(double) || type == typeof(decimal);
-    }
-
-    public static bool IsInteger(Type type)
-    {
-        return IsSummableType(type) && !IsFloating(type);
     }
 
     public static Type? InferTypeFrom(IEnumerable<Type> types)
@@ -78,11 +123,25 @@ public static class Utils
         return types.Where(t => t != typeof(object)).FirstOrDefault(def);
     }
 
+    public static Type GetParamType(ParameterInfo pInfo)
+    {
+        if(pInfo.GetCustomAttribute<BBBuffNameAttribute>() != null)
+            return typeof(BBBuffName);
+        if(pInfo.GetCustomAttribute<BBSpellNameAttribute>() != null)
+            return typeof(BBSpellName);
+        else
+            return pInfo.ParameterType;
+    }
+
     public static string ObjectToCSharp(object? value)
     {
         if(value == null)
             return "null";
-        if(value is string s)
+        else if(value is BBSpellName sn)
+            return $"nameof(Spells.{PrepareName(sn.Value, true)})";
+        else if(value is BBBuffName bn)
+            return $"nameof(Buffs.{PrepareName(bn.Value, true)})";
+        else if(value is string s)
         {
             if(s.StartsWith("$") && s.EndsWith("$"))
                 return s.Substring(1, s.Length - 1 - 1);

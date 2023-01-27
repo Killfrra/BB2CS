@@ -22,5 +22,5 @@ public class BBItemScript: BBScript
     [BBCall("ItemOnPreDamage")] public override void OnPreDamage(float damageAmount, DamageType damageType, DamageSource damageSource){}
     [BBCall("ItemOnPreDealDamage")] public override void OnPreDealDamage(float damageAmount, DamageType damageType, DamageSource damageSource){}
     [BBCall("ItemOnDealDamage")] public override void OnDealDamage(float damageAmount, DamageType damageType, DamageSource damageSource){}
-    [BBCall("ItemOnSpellCast")] public override void OnSpellCast(string spellName, SpellScriptMetaData spellVars){}
+    [BBCall("ItemOnSpellCast")] public override void OnSpellCast([BBSpellName] string spellName, SpellScriptMetaData spellVars){}
 }

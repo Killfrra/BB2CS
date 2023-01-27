@@ -9,7 +9,7 @@ public class BBBuffScript: BBScript
     // BUFF SPECIFIC
     [BBCall("UpdateBuffs")] public virtual void UpdateBuffs(){}
     [BBCall("BuffOnUpdateAmmo")] public virtual void OnUpdateAmmo(){}
-    [BBCall("BuffOnAllowAdd", true)] public virtual bool OnAllowAdd(BuffType type, string scriptName, int maxStack, float duration)
+    [BBCall("BuffOnAllowAdd", true)] public virtual bool OnAllowAdd(BuffType type, [BBBuffName] string scriptName, int maxStack, float duration)
     {
         return true;
     }
@@ -39,14 +39,14 @@ public class BBBuffScript: BBScript
     [BBCall("BuffOnLevelUp")] public override void OnLevelUp(){}
     [BBCall("BuffOnLevelUpSpell")] public override void OnLevelUpSpell(int slot){}
     [BBCall("BuffOnMiss")] public override void OnMiss(){}
-    [BBCall("BuffOnMissileEnd")] public override void OnMissileEnd(string spellName, Vector3 missileEndPosition){}
+    [BBCall("BuffOnMissileEnd")] public override void OnMissileEnd([BBSpellName] string spellName, Vector3 missileEndPosition){}
     [BBCall("BuffOnMoveEnd")] public override void OnMoveEnd(){}
     [BBCall("BuffOnMoveFailure")] public override void OnMoveFailure(){}
     [BBCall("BuffOnMoveSuccess")] public override void OnMoveSuccess(){}
     [BBCall("BuffOnPreAttack")] public override void OnPreAttack(){}
     [BBCall("BuffOnReconnect")] public override void OnReconnect(){}
     [BBCall("BuffOnResurrect")] public override void OnResurrect(){}
-    [BBCall("BuffOnSpellCast")] public override void OnSpellCast(string spellName, SpellScriptMetaData spellVars){}
+    [BBCall("BuffOnSpellCast")] public override void OnSpellCast([BBSpellName] string spellName, SpellScriptMetaData spellVars){}
     [BBCall("BuffOnSpellHit")] public override void OnSpellHit(){}
     [BBCall("BuffOnPreDealDamage")] public override void OnPreDealDamage(float damageAmount, DamageType damageType, DamageSource damageSource){}
     [BBCall("BuffOnPreMitigationDamage")] public override void OnPreMitigationDamage(float damageAmount, DamageType damageType, DamageSource damageSource){}

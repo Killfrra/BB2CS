@@ -17,24 +17,27 @@ public class BBBuffScript2: BBScript2
 {
     protected override Type? prototype => typeof(BBBuffScript);
     public HashSet<Var> PassedTables = new();
-    public bool Used = false;
+    public BuffScriptMetadataUnmutable MetaData = new();
 }
 //TODO: Rename
 public class BBSpellScript2: BBScript2
 {
     protected override Type? prototype => typeof(BBSpellScript);
+    public SpellScriptMetaDataNullable MetaData = new();
     public Var SpellVars = new(true);
 }
 public class BBScript2
 {
     protected virtual Type? prototype => null;
 
-    public Dictionary<string, object> Metadata = new();
+    //public Dictionary<string, object> Metadata = new();
     public Dictionary<string, BBFunction> Functions = new();
     public Var InstanceVars = new(true);
     public List<EffectReference> InstanceEffects = new();
 
     public BBScriptComposite Parent;
+
+    public bool Used = false;
 
     public BBScript2()
     {
@@ -108,7 +111,7 @@ public class BBScript2
                 //TODO: Deduplicate
                 var argName = pInfo.Name!.UCFirst();
                 var arg = new Var(parent: function);
-                    arg.Write(pInfo.ParameterType);
+                    arg.Write(GetParamType(pInfo));
                     arg.IsArgument = true;
                 function.LocalVars[argName] = arg;
             }

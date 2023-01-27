@@ -30,5 +30,5 @@ public class BBCharScript: BBScript
     [BBCall("CharOnPreDamage")] public override void OnPreDamage(float damageAmount, DamageType damageType, DamageSource damageSource){}
     [BBCall("CharOnReconnect")] public override void OnReconnect(){}
     [BBCall("CharOnResurrect")] public override void OnResurrect(){}
-    [BBCall("CharOnSpellCast")] public override void OnSpellCast(string spellName, SpellScriptMetaData spellVars){}
+    [BBCall("CharOnSpellCast")] public override void OnSpellCast([BBSpellName] string spellName, SpellScriptMetaData spellVars){}
 }

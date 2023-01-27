@@ -4,22 +4,6 @@ using System.Globalization;
 using Newtonsoft.Json;
 using System.Text.RegularExpressions;
 
-public static class StringExtensions
-{
-    public static string Indent(this string str, int count = 4)
-    {
-        return Regex.Replace(str, @"^", "".PadRight(count), RegexOptions.Multiline);
-    }
-    public static string UCFirst(this string str)
-    {
-        return Char.ToUpperInvariant(str[0]) + str.Substring(1);
-    }
-    public static string LCFirst(this string str)
-    {
-        return Char.ToLowerInvariant(str[0]) + str.Substring(1);
-    }
-}
-
 /*
 class Program
 {

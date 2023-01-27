@@ -12,18 +12,6 @@ public class Composite
 
     public static List<Composite> All = new();
 
-    public Composite(Reference? var, object? value)
-    {
-        All.Add(this);
-
-        Value = AskConstants(value);
-        if(var != null)
-        {
-            Var = var;
-            Var.Var.Used++;
-        }
-    }
-
     //TODO: Deduplicate
     public Composite(ParameterInfo pInfo, Dictionary<string, object> ps, HashSet<string> used, SubBlocks sb)
     {
@@ -42,6 +30,35 @@ public class Composite
             Type = null;
 
         Value = AskConstants(value);
+
+        var b = sb.Blocks[0]; //HACK:
+        var scripts = sb.ParentScript.Parent.Parent;
+        if(pInfo.GetCustomAttribute<BBBuffNameAttribute>() != null)
+        {
+            Type = typeof(BBBuffName);
+            if(Value is string s)
+            {
+                var script = b.GetScript(s);
+                var buffScript = script?.Value.BuffScript;
+                if(buffScript != null)
+                    buffScript.Used = true;
+                else
+                    scripts.EmptyBuffScriptNames.Add(s);
+                Value = new BBBuffName(script?.Key ?? s);
+            }
+        }
+        else if(pInfo.GetCustomAttribute<BBSpellNameAttribute>() != null)
+        {
+            Type = typeof(BBSpellName);
+            if(Value is string s)
+            {
+                var script = b.GetScript(s);
+                var spellScript = script?.Value.SpellScript;
+                if(spellScript != null)
+                    spellScript.Used = true;
+                Value = new BBSpellName(script?.Key ?? s);
+            }
+        }
 
         if(varName != null && varName != "Nothing")
         {

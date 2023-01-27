@@ -24,17 +24,6 @@ public class Block
         var used = new HashSet<string>();
 
         var flags = BindingFlags.Public | BindingFlags.Static;
-        /*
-        if(
-            ResolvedName
-            is "SetStatus" or "IncStat" or "IncPermanentStat"
-            or "GetSlotSpellInfo" or "GetStat" or "GetPAROrHealth" or "GetStatus" or "GetCastInfo"
-        ){
-            var pInfo = typeof(Functions).GetMethod(ResolvedName, flags)!.GetParameters()[0];
-            ResolvedName = (new Composite(pInfo, Params, Parent).Value as string)!;
-            ResolvedName = ResolvedName.Substring(1, ResolvedName.Length - 1 - 1);
-        }
-        */
 
         // Subscribing to the next scanning step
         if(ResolvedName is "SpellBuffAdd" or "ForEachUnitInTargetAreaAddBuff")
@@ -56,7 +45,7 @@ public class Block
 
         foreach(var pInfo in mInfo.GetParameters())
         {
-            var sAttr = pInfo.GetCustomAttribute<BBSubBlocks>();
+            var sAttr = pInfo.GetCustomAttribute<BBSubBlocksAttribute>();
             if(sAttr != null)
             {
                 var sb = new SubBlocks();
@@ -99,7 +88,7 @@ public class Block
         bool isSBA = ResolvedName is nameof(Functions.SpellBuffAdd);
         if(isSBA ||  ResolvedName is nameof(Functions.ForEachUnitInTargetAreaAddBuff))
         {
-            var buffName = ResolvedParams[isSBA ? 2 : 5].Item1!.Value as string;
+            var buffName = BBName.Resolve(ResolvedParams[isSBA ? 2 : 5].Item1!.Value);
             var passedTable = ResolvedParams[isSBA ? 6 : 11].Item1!.Var!.Var;
 
                 buffName ??= GetScript().Key;
@@ -137,11 +126,27 @@ public class Block
             ResolvedParams.RemoveAt(0);
         }
 
-        var returnType = mInfo.ReturnType;
-        if(returnType != typeof(void))
+        Type? returnTypeOverride = null;
+        if(mInfo.GetCustomAttribute<BBBuffNameAttribute>() != null)
+            returnTypeOverride = typeof(BBBuffName);
+        else if(mInfo.GetCustomAttribute<BBSpellNameAttribute>() != null)
+            returnTypeOverride = typeof(BBSpellName);
+        /*
+        if(ResolvedName is nameof(Functions.Math))
+        {
+            var s1 = ResolvedParams[0].Item1!;
+            var op = (MathOp)ResolvedParams[1].Item1!.Value!;
+            var s2 = ResolvedParams[2].Item1!;
+
+            if(IsInteger(s1.Type!) && IsInteger(s2.Type!) && op != MathOp.MO_DIVIDE)
+                returnTypeOverride = typeof(int);
+        }
+        */
+        
+        if(mInfo.ReturnType != typeof(void))
         {
             var param0 = (ResolvedParams.Count > 0) ? ResolvedParams[0].Item1 : null;
-            ResolvedReturn = Reference.ResolveReturn(mInfo, Params, used, Parent, param0);
+            ResolvedReturn = Reference.ResolveReturn(mInfo, Params, used, Parent, param0, returnTypeOverride);
         }
 
         Unused[ResolvedName] = Unused.GetValueOrDefault(ResolvedName) ?? new();
@@ -193,7 +198,7 @@ public class Block
             var compositeScript = Parent.ParentScript.Parent;
             var scripts = compositeScript.Parent;
 
-            var buffName = buffNameParam.Value as string;
+            var buffName = BBName.Resolve(buffNameParam.Value);
             var buffVarsTable = Parent.Resolve(buffVarsTableParam);
             
             var buffScript = (BBBuffScript2?)null;
@@ -255,7 +260,7 @@ public class Block
         }
     }
 
-    (string Key, BBScriptComposite Value)? GetScript(string name)
+    public (string Key, BBScriptComposite Value)? GetScript(string name)
     {
         var compositeScript = Parent.ParentScript.Parent;
         var kv = compositeScript.Parent.Scripts.FirstOrDefault(kv => kv.Key.ToLower() == name.ToLower());
@@ -264,7 +269,7 @@ public class Block
         return (kv.Key, kv.Value);
     }
 
-    (string Key, BBScriptComposite Value) GetScript()
+    public (string Key, BBScriptComposite Value) GetScript()
     {
         var compositeScript = Parent.ParentScript.Parent;
         var kv = compositeScript.Parent.Scripts.First(kv => kv.Value == compositeScript);
@@ -288,6 +293,14 @@ public class Block
             var c2 = ResolvedParams[2].Item1!;
             var sb = ResolvedParams[3].Item2!;
 
+            if(c1.Type == typeof(BBSpellName) && c2.Value is string s1)
+                c2.Value = new BBSpellName(GetScript(s1)?.Key ?? s1);
+            if(c2.Type == typeof(BBSpellName) && c1.Value is string s2)
+                c1.Value = new BBSpellName(GetScript(s2)?.Key ?? s2);
+            if(c1.Type == typeof(BBBuffName) && c2.Value is string s3)
+                c2.Value = new BBBuffName(GetScript(s3)?.Key ?? s3);
+            if(c2.Type == typeof(BBBuffName) && c1.Value is string s4)
+                c1.Value = new BBBuffName(GetScript(s4)?.Key ?? s4);
             if(c1.Type == typeof(TeamId) && c2.Value != null && IsSummableType(c2.Value.GetType()))
                 c2.Value = int2team[Convert.ToInt32(c2.Value)];
             if(c2.Type == typeof(TeamId) && c1.Value != null && IsSummableType(c1.Value.GetType()))

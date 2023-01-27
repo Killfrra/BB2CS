@@ -1,7 +1,5 @@
 #nullable enable
 
-using System;
-
 [AttributeUsage(AttributeTargets.Parameter)]
 public class BBParamAttribute : Attribute
 {
@@ -27,14 +25,20 @@ public class BBParamAttribute : Attribute
 }
 
 [AttributeUsage(AttributeTargets.Parameter)]
-public class BBSubBlocks : Attribute
+public class BBSubBlocksAttribute : Attribute
 {
     public string[] ParamNames;
-    public BBSubBlocks(params string[] paramNames)
+    public BBSubBlocksAttribute(params string[] paramNames)
     {
         ParamNames = paramNames;
     }
 }
+
+[AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method)]
+public class BBSpellNameAttribute : Attribute {}
+
+[AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method)]
+public class BBBuffNameAttribute : Attribute {}
 
 [AttributeUsage(AttributeTargets.Method)]
 public class BBFuncAttribute : Attribute

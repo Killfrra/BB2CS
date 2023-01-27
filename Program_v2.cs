@@ -55,6 +55,8 @@ public class Program_v2
         {
             scripts = new();
 
+            var unused = new Dictionary<string, int>();
+
             var pwd = Directory.GetCurrentDirectory();
             foreach(var glob in globs)
             {
@@ -69,7 +71,13 @@ public class Program_v2
 
                     var (metadata, functions) = BB2JSON.Parse(text);
 
+                    var used = new HashSet<string>();
                     var script = scripts.Scripts[fileName] = new();
+                        script.BuffScript.MetaData.Parse(metadata, used);
+                        script.SpellScript.MetaData.Parse(metadata, used);
+                    foreach(var key in metadata.Keys)
+                        if(!used.Contains(key))
+                            unused[key] = unused.GetValueOrDefault(key, 0) + 1;
 
                     foreach(var func in functions)
                     {
@@ -112,8 +120,13 @@ public class Program_v2
                 }
             }
 
+            foreach(var (key, count) in unused)
+                Console.WriteLine($"{count.ToString().PadLeft(3, '0')} {key}");
+
             File.WriteAllText(cacheFile, JsonConvert.SerializeObject(scripts, Formatting.Indented), Encoding.UTF8);
         }
+
+        //return;
 
         scripts.Scan();
 

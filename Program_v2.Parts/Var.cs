@@ -160,10 +160,11 @@ public class Var
 
         output += BaseToCSharp(name, isPublic, includeDefault) + ";";
 
-        if(!Initialized || Used == 0)
+        bool initialized = Initialized || PassedFromOutside;
+        if(!initialized || Used == 0)
         {
             output += " //";
-            if(!Initialized) output += " UNITIALIZED";
+            if(!initialized) output += " UNITIALIZED";
             if(Used == 0) output += " UNUSED";
         }
 

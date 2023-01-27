@@ -16,7 +16,7 @@ public static partial class Functions
         [BBParam(null, null, "", "ByLevel")]
         object/*?*/ value2,
 
-        [BBSubBlocks]
+        [BBSubBlocksAttribute]
         Action/*?*/ subBlocks/* = null*/
     ){}
 
@@ -51,7 +51,7 @@ public static partial class Functions
 
     [BBFunc]
     public static void Else(
-        [BBSubBlocks]
+        [BBSubBlocksAttribute]
         Action/*?*/ subBlocks/* = null*/
     ){}
 
@@ -83,9 +83,9 @@ public static partial class Functions
     public static void IfHasBuff(
         AttackableUnit owner,
         AttackableUnit attacker,
-        string buffName,
+        [BBBuffName] string buffName,
 
-        [BBSubBlocks]
+        [BBSubBlocksAttribute]
         Action/*?*/ subBlocks/* = null*/
     ){}
 
@@ -101,7 +101,7 @@ public static partial class Functions
         [BBParam(null, null, "", "ByLevel")]
         object/*?*/ value2,
 
-        [BBSubBlocks]
+        [BBSubBlocksAttribute]
         Action/*?*/ subBlocks/* = null*/
     ){}
 
@@ -120,7 +120,7 @@ public static partial class Functions
         bool executeImmediately/* = false*/,
         float tickTime/* = 0*/,
 
-        [BBSubBlocks]
+        [BBSubBlocksAttribute]
         Action/*?*/ subBlocks/* = null*/
     ){}
 
@@ -148,9 +148,9 @@ public static partial class Functions
     public static void IfNotHasBuff(
         AttackableUnit owner,
         AttackableUnit caster,
-        string buffName,
+        [BBBuffName] string buffName,
 
-        [BBSubBlocks]
+        [BBSubBlocksAttribute]
         Action/*?*/ subBlocks/* = null*/
     ){}
 
@@ -172,7 +172,7 @@ public static partial class Functions
     [BBFunc]
     public static int GetBuffCountFromAll(
         AttackableUnit target,
-        string/*?*/ buffName/* = null*/
+        [BBBuffName] string/*?*/ buffName/* = null*/
     ){
         return default!;
     }
@@ -189,7 +189,7 @@ public static partial class Functions
     public static void SpellBuffRemoveStacks(
         AttackableUnit target,
         AttackableUnit attacker,
-        string buffName,
+        [BBBuffName] string buffName,
         int numStacks
     ){}
 
@@ -204,7 +204,7 @@ public static partial class Functions
     public static int GetBuffCountFromCaster(
         AttackableUnit target,
         AttackableUnit/*?*/ caster,
-        string buffName
+        [BBBuffName] string buffName
     ){
         return default!;
     }
@@ -226,7 +226,7 @@ public static partial class Functions
         [BBParam(null, null, "", "ByLevel")]
         object/*?*/ value2,
 
-        [BBSubBlocks]
+        [BBSubBlocksAttribute]
         Action/*?*/ subBlocks/* = null*/
     ){}
 
@@ -235,7 +235,7 @@ public static partial class Functions
         AttackableUnit target,
         BuffType buffType,
 
-        [BBSubBlocks]
+        [BBSubBlocksAttribute]
         Action/*?*/ subBlocks/* = null*/
     ){}
 
