@@ -4,6 +4,8 @@ using System.Numerics;
 
 public class BBSpellScript: BBScript
 {
+    public virtual SpellScriptMetaDataNullable MetaData { get; } = new();
+
     public int level;
     public int slot;
 

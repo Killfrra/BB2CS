@@ -20,6 +20,44 @@ public static class StringExtensions
 
 public static class Utils
 {
+    public static object? AskConstants(object? value)
+    {
+        if(value is string s && s.StartsWith("$") && s.EndsWith("$"))
+        {
+            s = s.Substring(1, s.Length - 1 - 1);
+            var constant = Constants.Table.GetValueOrDefault(s);
+            //if(constant == null)
+            //    Console.WriteLine($"Failed to resolve constant {s}");
+            return constant ?? value;
+        }
+        return value;
+    }
+    
+    public static T? As<T>(this object? obj)
+    {
+        if(obj == null) return default;
+        obj = AskConstants(obj);
+        if(obj == null) return default;
+        var typeTo = Nullable.GetUnderlyingType(typeof(T)) ?? typeof(T);
+        
+        if(obj is double d && typeTo == typeof(float))
+            return (T)((object)((float)d));
+        if(obj is long l)
+        {
+            if(typeTo == typeof(int))
+                return (T)((object)((int)l));
+            if(typeTo == typeof(float))
+                return (T)((object)((float)l));
+        }
+
+        var typeFrom = obj.GetType();
+        if(obj.GetType().IsAssignableTo(typeTo))
+            return (T)obj;
+        Console.WriteLine($"{typeFrom} {obj} -> {typeTo}");
+        //return (T)Convert.ChangeType(obj, typeTo);
+        throw new ArgumentException();
+    }
+
     public static bool? Invert(bool? src) => (src == null) ? null : !src;
 
     public static T[]? ReadArray<T>(this Dictionary<string, object> globals, HashSet<string> used, string name, T defaultValue)

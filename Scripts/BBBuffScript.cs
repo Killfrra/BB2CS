@@ -4,6 +4,8 @@ using System.Numerics;
 
 public class BBBuffScript: BBScript
 {
+    public virtual BuffScriptMetadataUnmutable MetaData { get; } = new();
+    
     public float lifeTime;
 
     // BUFF SPECIFIC

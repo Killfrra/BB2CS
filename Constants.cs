@@ -175,5 +175,7 @@ public static class Constants
         globals["MO_ROUNDUP"] = MathOp.MO_ROUNDUP;
 
         globals["SPAWN_LOCATION"] = SpawnType.SPAWN_LOCATION;
+
+        globals["EFFCREATE_UPDATE_ORIENTATION"] = EffCreate.UPDATE_ORIENTATION;
     }
 }

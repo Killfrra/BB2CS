@@ -10,7 +10,7 @@ public class BuffScriptMetadataUnmutable: IBBMetadata
     public string?[]? AutoBuffActivateAttachBoneName;
     public string?[]? AutoBuffActivateEffect;
     public string? AutoBuffActivateEvent;
-    public int? AutoBuffActivateEffectFlags; //TODO: Enum { None, EFFCREATE_UPDATE_ORIENTATION }
+    public EffCreate? AutoBuffActivateEffectFlags;
     public string? BuffName;
     public string? BuffTextureName;
     public bool? IsDeathRecapSource;
@@ -28,32 +28,32 @@ public class BuffScriptMetadataUnmutable: IBBMetadata
 
     public override void Parse(Dictionary<string, object> globals, HashSet<string> used)
     {
-        BuffName = globals.UseValueOrDefault(used, "BuffName") as string;
-        BuffTextureName = globals.UseValueOrDefault(used, "BuffTextureName") as string;
+        BuffName = globals.UseValueOrDefault(used, "BuffName").As<string>();
+        BuffTextureName = globals.UseValueOrDefault(used, "BuffTextureName").As<string>();
         
-        MinimapIconTextureName = globals.UseValueOrDefault(used, "MinimapIconTextureName") as string;
-        MinimapIconEnemyTextureName = globals.UseValueOrDefault(used, "MinimapIconEnemyTextureName") as string;
+        MinimapIconTextureName = globals.UseValueOrDefault(used, "MinimapIconTextureName").As<string>();
+        MinimapIconEnemyTextureName = globals.UseValueOrDefault(used, "MinimapIconEnemyTextureName").As<string>();
 
-        AutoBuffActivateEvent = globals.UseValueOrDefault(used, "AutoBuffActivateEvent") as string;
+        AutoBuffActivateEvent = globals.UseValueOrDefault(used, "AutoBuffActivateEvent").As<string>();
         AutoBuffActivateEffect = globals.ReadArray<string?>(used, "AutoBuffActivateEffect", null);
-        AutoBuffActivateEffectFlags = globals.UseValueOrDefault(used, "AutoBuffActivateEffectFlags") as int?;
+        AutoBuffActivateEffectFlags = globals.UseValueOrDefault(used, "AutoBuffActivateEffectFlags").As<EffCreate?>();
         AutoBuffActivateAttachBoneName = globals.ReadArray<string?>(used, "AutoBuffActivateAttachBoneName", null);
-        SpellToggleSlot = globals.UseValueOrDefault(used, "SpellToggleSlot") as int?;
+        SpellToggleSlot = globals.UseValueOrDefault(used, "SpellToggleSlot").As<int?>();
 
-        NonDispellable = (globals.UseValueOrDefault(used, "NonDispellable") as bool?) ?? 
-                        Invert(globals.UseValueOrDefault(used, "Nondispellable") as bool?);
+        NonDispellable = (globals.UseValueOrDefault(used, "NonDispellable").As<bool?>()) ?? 
+                        Invert(globals.UseValueOrDefault(used, "Nondispellable").As<bool?>());
                                globals.UseValueOrDefault(used, "Nondispellable"); //HACK:
         
-        PersistsThroughDeath = (globals.UseValueOrDefault(used, "PersistsThroughDeath") as bool?) ??
-                               (globals.UseValueOrDefault(used, "PermeatesThroughDeath") as bool?);
+        PersistsThroughDeath = (globals.UseValueOrDefault(used, "PersistsThroughDeath").As<bool?>()) ??
+                               (globals.UseValueOrDefault(used, "PermeatesThroughDeath").As<bool?>());
                                 globals.UseValueOrDefault(used, "PermeatesThroughDeath"); //HACK:
         
-        IsPetDurationBuff = globals.UseValueOrDefault(used, "IsPetDurationBuff") as bool?;
+        IsPetDurationBuff = globals.UseValueOrDefault(used, "IsPetDurationBuff").As<bool?>();
 
         PopupMessage = globals.ReadArray<string?>(used, "PopupMessage", null);
-        IsDeathRecapSource = globals.UseValueOrDefault(used, "IsDeathRecapSource") as bool?;
-        OnPreDamagePriority = globals.UseValueOrDefault(used, "OnPreDamagePriority") as int?;
-        DoOnPreDamageInExpirationOrder = globals.UseValueOrDefault(used, "DoOnPreDamageInExpirationOrder") as bool?;
+        IsDeathRecapSource = globals.UseValueOrDefault(used, "IsDeathRecapSource").As<bool?>();
+        OnPreDamagePriority = globals.UseValueOrDefault(used, "OnPreDamagePriority").As<int?>();
+        DoOnPreDamageInExpirationOrder = globals.UseValueOrDefault(used, "DoOnPreDamageInExpirationOrder").As<bool?>();
 
         string[]? ReadStringArray(string name) =>
             (globals.UseValueOrDefault(used, name) as JArray)?.ToObject<string[]>();

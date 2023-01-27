@@ -18,13 +18,15 @@ public class BBBuffScript2: BBScript2
     protected override Type? prototype => typeof(BBBuffScript);
     public HashSet<Var> PassedTables = new();
     public BuffScriptMetadataUnmutable MetaData = new();
+    public override string MetaDataToCSharp() => MetaData.ToCSharp();
 }
 //TODO: Rename
 public class BBSpellScript2: BBScript2
 {
     protected override Type? prototype => typeof(BBSpellScript);
-    public SpellScriptMetaDataNullable MetaData = new();
     public Var SpellVars = new(true);
+    public SpellScriptMetaDataNullable MetaData = new();
+    public override string MetaDataToCSharp() => MetaData.ToCSharp();
 }
 public class BBScript2
 {
@@ -50,6 +52,11 @@ public class BBScript2
                 v.Type = fInfo.FieldType;
             InheritedVariables.Add(fInfo.Name.UCFirst(), v);
         }
+    }
+
+    public virtual string MetaDataToCSharp()
+    {
+        return "";
     }
 
     public void Scan(BBScriptComposite parent)
@@ -165,6 +172,7 @@ public class BBScript2
             "public class " + PrepareName(name, true) + " : " + prototype!.Name + "\n" +
             Braces(
                 subclasses +
+                MetaDataToCSharp() +
                 string.Join("", InstanceVars.Vars.Where(
                     kv => kv.Value.Used > 0 || kv.Value.Initialized
                 ).Select(

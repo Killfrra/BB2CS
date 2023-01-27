@@ -164,19 +164,6 @@ public class Composite
             return "default";
     }
 
-    object? AskConstants(object? value)
-    {
-        if(value is string s && s.StartsWith("$") && s.EndsWith("$"))
-        {
-            s = s.Substring(1, s.Length - 1 - 1);
-            var constant = Constants.Table.GetValueOrDefault(s);
-            //if(constant == null)
-            //    Console.WriteLine($"Failed to resolve constant {s}");
-            return constant ?? value;
-        }
-        return value;
-    }
-
     bool inferred = false;
     public void InferType()
     {

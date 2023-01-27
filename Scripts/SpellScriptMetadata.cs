@@ -38,35 +38,35 @@ public class SpellScriptMetaDataNullable: IBBMetadata
 
     public override void Parse(Dictionary<string, object> globals, HashSet<string> used)
     {
-        PhysicalDamageRatio = globals.UseValueOrDefault(used, "SpellDamageRatio") as float?;
+        PhysicalDamageRatio = globals.UseValueOrDefault(used, "SpellDamageRatio").As<float?>();
         SpellDamageRatio =
-            (globals.UseValueOrDefault(used, "SpellDamageRatio") as float?) ??
-            (globals.UseValueOrDefault(used, "SetSpellDamageRatio") as float?);
+            (globals.UseValueOrDefault(used, "SpellDamageRatio").As<float?>()) ??
+            (globals.UseValueOrDefault(used, "SetSpellDamageRatio").As<float?>());
              globals.UseValueOrDefault(used, "SetSpellDamageRatio"); //HACK:
         
-        //AutoItemActivateEffect = globals.UseValueOrDefault(used, "AutoItemActivateEffect") as string;
-        //AutoAuraBuffName = globals.UseValueOrDefault(used, "AutoAuraBuffName") as string;
-        //IsDebugMode = globals.UseValueOrDefault(used, "IsDebugMode") as bool?;
+        //AutoItemActivateEffect = globals.UseValueOrDefault(used, "AutoItemActivateEffect").As<string>();
+        //AutoAuraBuffName = globals.UseValueOrDefault(used, "AutoAuraBuffName").As<string>();
+        //IsDebugMode = globals.UseValueOrDefault(used, "IsDebugMode").As<bool?>();
 
-        ChainMissileParameters = (globals.UseValueOrDefault(used, "ChainMissileParameters") as JObject)?.ToObject<ChainMissileParameters>();
+        ChainMissileParameters = (globals.UseValueOrDefault(used, "ChainMissileParameters").As<JObject>())?.ToObject<ChainMissileParameters>();
 
-        ChannelDuration = globals.UseValueOrDefault(used, "ChannelDuration") as float?;
-        DoesntBreakShields = globals.UseValueOrDefault(used, "DoesntBreakShields") as bool?;
+        ChannelDuration = globals.UseValueOrDefault(used, "ChannelDuration").As<float?>();
+        DoesntBreakShields = globals.UseValueOrDefault(used, "DoesntBreakShields").As<bool?>();
 
         TriggersSpellCasts =
-            (globals.UseValueOrDefault(used, "TriggersSpellCasts") as bool?) ??
-            Invert(globals.UseValueOrDefault(used, "DoesntTriggerSpellCasts") as bool?);
+            (globals.UseValueOrDefault(used, "TriggersSpellCasts").As<bool?>()) ??
+            Invert(globals.UseValueOrDefault(used, "DoesntTriggerSpellCasts").As<bool?>());
                    globals.UseValueOrDefault(used, "DoesntTriggerSpellCasts"); //HACK:
         
-        IsDamagingSpell = globals.UseValueOrDefault(used, "IsDamagingSpell") as bool?;
-        NotSingleTargetSpell = globals.UseValueOrDefault(used, "NotSingleTargetSpell") as bool?;
+        IsDamagingSpell = globals.UseValueOrDefault(used, "IsDamagingSpell").As<bool?>();
+        NotSingleTargetSpell = globals.UseValueOrDefault(used, "NotSingleTargetSpell").As<bool?>();
 
         float[]? ReadFloatArray(string name) =>
             (globals.UseValueOrDefault(used, name) as JArray)?.ToObject<float[]>();
         AutoCooldownByLevel = ReadFloatArray("AutoCooldownByLevel");
         AutoTargetDamageByLevel = ReadFloatArray("AutoTargetDamageByLevel");
 
-        CastingBreaksStealth = globals.UseValueOrDefault(used, "CastingBreaksStealth") as bool?;
-        CastTime = globals.UseValueOrDefault(used, "CastTime") as float?;
+        CastingBreaksStealth = globals.UseValueOrDefault(used, "CastingBreaksStealth").As<bool?>();
+        CastTime = globals.UseValueOrDefault(used, "CastTime").As<float?>();
     }
 }
