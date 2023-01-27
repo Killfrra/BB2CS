@@ -66,7 +66,7 @@ public class Composite
             Var.Var.Used++;
 
             if(Type != null)
-                Var.Var.Read(Type);
+                Var.Var.Read(Type, sb);
         }
         if(valueByLevel != null)
         {

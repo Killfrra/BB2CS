@@ -31,29 +31,103 @@ public class Var
     public bool Initialized = false;
     public int Used = 0;
 
-    HashSet<Type> Types = new();
-    public void Write(Type type)
+    public HashSet<SubBlocks> UsedInSubBlocks = new();
+    void UseInSubBlocks(SubBlocks sb)
     {
+        SubBlocks? toReplace = null;
+        SubBlocks? replaceWith = null;
+        foreach(var sb1 in UsedInSubBlocks)
+        {
+            var ca = GetCommonAncestor(sb, sb1);
+            if(ca != null)
+            {
+                toReplace = sb1;
+                replaceWith = ca;
+                break;
+            }
+        }
+        if(toReplace == null)
+            UsedInSubBlocks.Add(sb);
+        else if(toReplace != replaceWith)
+        {
+            UsedInSubBlocks.Remove(toReplace);
+            UsedInSubBlocks.Add(replaceWith!);
+        }
+        /*
+        bool replaced = false;
+        UsedInSubBlocks = new(UsedInSubBlocks.Select(
+            sb1 => {
+                var ca = GetCommonAncestor(sb, sb1);
+                replaced = ca != null;
+                return ca ?? sb1;
+            }
+        ));
+        if(!replaced)
+            UsedInSubBlocks.Add(sb);
+        */
+        /*
+        if(UsedInSubBlocks.FirstOrDefault(parent => IsChild(sb, parent)) == null)
+        {
+            UsedInSubBlocks.RemoveWhere(child => IsChild(child, sb));
+            UsedInSubBlocks.Add(sb);
+        }
+        */
+    }
+    SubBlocks? GetCommonAncestor(SubBlocks a, SubBlocks b)
+    {
+        if(a == b) return a;
+
+        var apath = new List<SubBlocks>();
+        for(var c = a; c != null; c = c.ParentBlock)
+            apath.Insert(0, c);            
+        var bpath = new List<SubBlocks>();
+        for(var c = b; c != null; c = c.ParentBlock)
+            bpath.Insert(0, c);
+        if(apath[0] == bpath[0])
+        {
+            int i = 1;
+            while(i < Math.Min(apath.Count, bpath.Count) && apath[i] == bpath[i])
+                i++;
+            return apath[i - 1];
+        }
+        else
+            return null;
+    }
+    bool IsChild(SubBlocks child, SubBlocks parent)
+    {
+        for(var t = child.ParentBlock; t != null; t = t.ParentBlock)
+            if(t == parent)
+                return true;
+        return false;
+    }
+
+    HashSet<Type> Types = new();
+    public void Write(Type type, SubBlocks sb)
+    {
+        UseInSubBlocks(sb);
         Initialized = true;
         Types.Add(type);
     }
 
     HashSet<Union<Var, Composite>> Assigned = new();
-    public void Assign(Union<Var, Composite> var)
+    public void Assign(Union<Var, Composite> var, SubBlocks sb)
     {
+        UseInSubBlocks(sb);
         Initialized = true;
         Assigned.Add(var);
     }
 
     HashSet<Type> ReadedTypes = new();
-    public void Read(Type type)
+    public void Read(Type type, SubBlocks sb)
     {
+        UseInSubBlocks(sb);
         ReadedTypes.Add(type);
     }
 
     HashSet<Var> AssignedTo = new();
-    public void AssignTo(Var var)
+    public void AssignTo(Var var, SubBlocks sb)
     {
+        UseInSubBlocks(sb);
         AssignedTo.Add(var);
     }
 
@@ -167,6 +241,8 @@ public class Var
             if(!initialized) output += " UNITIALIZED";
             if(Used == 0) output += " UNUSED";
         }
+
+        //output += " //USEDIN: " + UsedInSubBlocks.Count;
 
         //output += " //";
         //foreach(var type in Types)

@@ -86,7 +86,7 @@ public static class Utils
     public static string PrepareName(string name, bool ucfirst)
     {
         name = Regex.Replace(name, @"\W","_");
-        if(Regex.IsMatch("" + name[0], @"[^a-z_]", RegexOptions.IgnoreCase))
+        if(Regex.IsMatch(name, @"^[^a-z_]|^true$|^false$", RegexOptions.IgnoreCase)) //TODO: Other keywords, just to be
         {
             name = "_" + name;
         }

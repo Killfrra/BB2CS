@@ -35,7 +35,7 @@ public class Reference
             if(pInfo.IsOut || type.IsByRef)
                 type = type.GetElementType();
             if(type != null && type.Name != "T") //HACK:
-                r.Var.Write(type);
+                r.Var.Write(type, sb);
             return r;
         }
         else
@@ -54,11 +54,11 @@ public class Reference
             var r = new Reference(tableName, varName, sb);
             if(mInfo.Name == nameof(Functions.SetVarInTable))
             {
-                r.Var.Assign(param0!);
-                param0!.Var?.Var.AssignTo(r.Var);
+                r.Var.Assign(param0!, sb);
+                param0!.Var?.Var.AssignTo(r.Var, sb);
             }
             else
-                r.Var.Write(returnTypeOverride ?? mInfo.ReturnType);
+                r.Var.Write(returnTypeOverride ?? mInfo.ReturnType, sb);
             return r;
         }
         else

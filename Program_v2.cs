@@ -181,6 +181,19 @@ public class Program_v2
         }
         while(changed);
 
+        foreach(var scriptComposite in scripts.Scripts.Values)
+        foreach(var script in scriptComposite.Scripts)
+        foreach(var (funcName, func) in script.Functions)
+        foreach(var (vName, v) in func.LocalVars)
+        if(!v.IsArgument && !(v.UsedInSubBlocks.Count == 1 && v.UsedInSubBlocks.First() == func) && !v.IsTable && v.UsedInSubBlocks.Count > 0)
+        {
+            func.LocalVars.Remove(vName);
+            foreach(var sb in v.UsedInSubBlocks)
+            {
+                sb.LocalVars.Add(vName, v);
+            }
+        }
+
         var cs = scripts.ToCSharp();
             //HACK:
             cs = Regex.Replace(cs, @"\blong\b", "int");

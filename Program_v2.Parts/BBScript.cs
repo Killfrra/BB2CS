@@ -62,11 +62,8 @@ public class BBScript2
     public void Scan(BBScriptComposite parent)
     {
         Parent = parent;
-        foreach(var kv in Functions)
+        foreach(var (funcName, function) in Functions)
         {
-            var function = kv.Value;
-            var funcName = kv.Key;
-
             /*
             //HACK:
             void declare<T>(string name)
@@ -118,7 +115,7 @@ public class BBScript2
                 //TODO: Deduplicate
                 var argName = pInfo.Name!.UCFirst();
                 var arg = new Var(parent: function);
-                    arg.Write(GetParamType(pInfo));
+                    arg.Write(GetParamType(pInfo), function);
                     arg.IsArgument = true;
                 function.LocalVars[argName] = arg;
             }

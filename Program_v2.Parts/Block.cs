@@ -56,7 +56,7 @@ public class Block
                 {
                     var argName = (string)Params.UseValueOrDefault(used, paramNameName + "Var")!;
                     var arg = new Var(parent: sb);
-                        arg.Write(genericArguments[i]);
+                        arg.Write(genericArguments[i], Parent);
                         arg.IsArgument = true;
                     sb.LocalVars[argName] = arg;
                     i++;
@@ -105,11 +105,11 @@ public class Block
                         buffScript.InstanceVars.Vars[kv.Key] = v = new Var();
                     
                     bool prevInitialized = v.Initialized;
-                    v.Assign(kv.Value);
+                    v.Assign(kv.Value, Parent);
                     v.Initialized = prevInitialized;
                     v.PassedFromOutside = true;
 
-                    kv.Value.AssignTo(v);
+                    kv.Value.AssignTo(v, Parent);
                 }
             }
         }
@@ -162,10 +162,10 @@ public class Block
             //TODO: AssignTo(Composite)?
             var c1 = ResolvedParams[0].Item1!;
             var c2 = ResolvedParams[2].Item1!;
-            if(c1.Var != null) c2.Var?.Var.AssignTo(c1.Var.Var);
-            if(c1.Value != null) c2.Var?.Var.Read(c1.Value.GetType());
-            if(c2.Var != null) c1.Var?.Var.AssignTo(c2.Var.Var);
-            if(c2.Value != null) c1.Var?.Var.Read(c2.Value.GetType());
+            if(c1.Var != null) c2.Var?.Var.AssignTo(c1.Var.Var, Parent);
+            if(c1.Value != null) c2.Var?.Var.Read(c1.Value.GetType(), Parent);
+            if(c2.Var != null) c1.Var?.Var.AssignTo(c2.Var.Var, Parent);
+            if(c2.Value != null) c1.Var?.Var.Read(c2.Value.GetType(), Parent);
         }
 
         if(ResolvedName == "SetReturnValue")
