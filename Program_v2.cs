@@ -182,8 +182,6 @@ public class Program_v2
         }
         while(changed);
 
-        
-
         foreach(var scriptComposite in scripts.Scripts.Values)
             foreach(var script in scriptComposite.Scripts)
                 foreach(var (funcName, func) in script.Functions)
@@ -222,6 +220,10 @@ public class Program_v2
             cs = Regex.Replace(cs, @"(?:, default)+(?=\))", "");
             cs = Regex.Replace(cs, @"(?<=\()default(?=\))", "");
             //cs = Regex.Replace(cs, @"\b([a-z][A-Z]+)([A-Z]|\b)", m => m.Groups[1].Value.ToLower() + m.Groups[2].Value);
+            // Too heavy
+            //cs = Regex.Replace(cs, @"(\w+)\((.*?), \((.*?)\) => (\n(\s*)\{(?:.|\n)*?^\5\})\);",
+            //    m => $"foreach(var {m.Groups[3].Value} in {ForEachReplacements[m.Groups[1].Value]}({m.Groups[2].Value})){m.Groups[4].Value}");
+
         File.WriteAllText("Code.cs", cs, Encoding.UTF8);
     }
 }

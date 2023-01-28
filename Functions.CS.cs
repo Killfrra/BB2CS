@@ -59,6 +59,7 @@ public static class Functions_CS
         bool isHiddenOnClient = false
     ){}
 
+    //TODO: Replace all occurrences with foreach(GetUnitsInArea)+AddBuff
     public static void AddBuffToEachUnitInArea(
         AttackableUnit attacker,
         Vector3 center,
@@ -75,4 +76,93 @@ public static class Functions_CS
         bool isHiddenOnClient,
         bool inclusiveBuffFilter = false
     ){}
+
+    public static IEnumerable<AttackableUnit> GetUnitsInArea(
+        ObjAIBase attacker,
+        Vector3 center,
+        float range,
+        SpellDataFlags flags,
+        string buffNameFilter = "",
+        bool inclusiveBuffFilter = false
+    ){
+        return default!;
+    }
+    public static IEnumerable<AttackableUnit> GetRandomUnitsInArea(
+        ObjAIBase attacker,
+        Vector3 center,
+        float range,
+        SpellDataFlags flags,
+        int maximumUnitsToPick,
+        string buffNameFilter = "",
+        bool inclusiveBuffFilter = false
+    ){
+        return default!;
+    }
+    public static IEnumerable<AttackableUnit> GetClosestUnitsInArea(
+        AttackableUnit attacker,
+        Vector3 center,
+        float range,
+        SpellDataFlags flags,
+        int maximumUnitsToPick,
+        string buffNameFilter = "",
+        bool inclusiveBuffFilter = false
+    ){
+        return default!;
+    }
+    public static IEnumerable<AttackableUnit> GetClosestVisibleUnitsInArea(
+        AttackableUnit attacker,
+        Vector3 center,
+        float range,
+        SpellDataFlags flags,
+        int maximumUnitsToPick,
+        string buffNameFilter = "",
+        bool inclusiveBuffFilter = false
+    ){
+        return default!;
+    }
+    public static IEnumerable<Champion> GetChampions(
+        TeamId team,
+        string buffNameFilter = "",
+        bool inclusiveBuffFilter = false
+    ){
+        return default!;
+    }
+    public static IEnumerable<AttackableUnit> GetUnitsInRectangle(
+        AttackableUnit attacker,
+        Vector3 center,
+        float halfWidth,
+        float halfLength,
+        SpellDataFlags flags,
+        string buffNameFilter = "",
+        bool inclusiveBuffFilter = false
+    ){
+        return default!;
+    }
+    public static IEnumerable<AttackableUnit> GetRandomVisibleUnitsInArea(
+        AttackableUnit attacker,
+        Vector3 center,
+        float range,
+        SpellDataFlags flags,
+        int maximumUnitsToPick,
+        [BBBuffName] string buffNameFilter,
+        bool inclusiveBuffFilter
+    ){
+        return default!;
+    }
+    public static IEnumerable<Vector3> GetPointsOnLine(
+        Vector3 center,
+        Vector3 faceTowardsPos,
+        float size,
+        float pushForward,
+        int iterations
+    ){
+        return default!;
+    }
+    public static IEnumerable<Vector3> GetPointsAroundCircle(
+        Vector3 center,
+        float radius,
+        int iterations
+    ){
+        return default!;
+    }
 }

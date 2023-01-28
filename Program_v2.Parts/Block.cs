@@ -291,6 +291,29 @@ public class Block
         { 300, "$TeamId.TEAM_NEUTRAL$" },
     };
 
+    string ParamsToString()
+    {
+        return string.Join(", ", ResolvedParams.Select(
+            p => {
+                var (composite, subBlocks, reference) = (p.Item1, p.Item2, p.Item3);
+                return composite?.ToCSharp() ?? subBlocks?.ToCSharp() ?? reference!.ToCSharp();
+            }
+        ));
+    }
+
+    static Dictionary<string, string> ForEachReplacements = new()
+    {
+        { "ForEachUnitInTargetArea"              , "GetUnitsInArea"               },
+        { "ForNClosestUnitsInTargetArea"         , "GetClosestUnitsInArea"        },
+        { "ForNClosestVisibleUnitsInTargetArea"  , "GetClosestVisibleUnitsInArea" },
+        { "ForEachUnitInTargetAreaRandom"        , "GetRandomUnitsInArea"         },
+        { "ForEachVisibleUnitInTargetAreaRandom" , "GetRandomVisibleUnitsInArea"  },
+        { "ForEachUnitInTargetRectangle"         , "GetUnitsInRectangle"          },
+        { "ForEachChampion"                      , "GetChampions"                 },
+        { "ForEachPointOnLine"                   , "GetPointsOnLine"              },
+        { "ForEachPointAroundCircle"             , "GetPointsAroundCircle"        },
+    };
+
     public string ToCSharp()
     {
         if(ResolvedName is "If" or "ElseIf" or "While")
@@ -485,6 +508,20 @@ public class Block
                 return $"{ResolvedReturn!.ToCSharp()} = MathF.Ceiling({s1.ToCSharp()});";
         }
 
+        else
+        {
+            var replacement = ForEachReplacements.GetValueOrDefault(ResolvedName);
+            if(replacement != null)
+            {
+                int i = ResolvedParams.Count - 1;
+                SubBlocks? sb = ResolvedParams[i].Item2!;
+                ResolvedParams.RemoveAt(i);
+                var iterKV = sb.LocalVars.First(v => v.Value.IsArgument);
+                var iter = iterKV.Value.ToCSharpArg(iterKV.Key, true);
+                return $"foreach({iter} in {replacement}({ParamsToString()}))\n" + sb.BaseToCSharp();
+            }
+        }
+
         var comment = "";
         if(ResolvedName == "RequireVar")
             comment = "//";
@@ -492,13 +529,6 @@ public class Block
         return
         comment +
         ((ResolvedReturn != null) ? (ResolvedReturn.ToCSharp() + " = ") : "") +
-        ResolvedName + "(" +
-            string.Join(", ", ResolvedParams.Select(
-                p => {
-                    var (composite, subBlocks, reference) = (p.Item1, p.Item2, p.Item3);
-                    return composite?.ToCSharp() ?? subBlocks?.ToCSharp() ?? reference!.ToCSharp();
-                }
-            )) +
-        ");";
+        ResolvedName + "(" + ParamsToString() + ");";
     }
 }
