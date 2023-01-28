@@ -77,7 +77,11 @@ public class Reference
             var tableName = TableName;
             if(tableName == "InstanceVars")
                 tableName = "this";
-            output += PrepareName(tableName, false) + "." + PrepareName(VarName, tableName != "this");
+            //HACK: Custom tables inlining
+            if(!(TableName is "InstanceVars" or "CharVars" or "AvatarVars" or "SpellVars"))
+                output += PrepareName(tableName + "_" + VarName, false);
+            else
+                output += PrepareName(tableName, false) + "." + PrepareName(VarName, tableName != "this");
         }
         else
             output += PrepareName(VarName, false);

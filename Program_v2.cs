@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Globalization;
 using Newtonsoft.Json;
 using System.Text.RegularExpressions;
+using static Utils;
 
 public class Program_v2
 {
@@ -181,18 +182,29 @@ public class Program_v2
         }
         while(changed);
 
+        
+
         foreach(var scriptComposite in scripts.Scripts.Values)
-        foreach(var script in scriptComposite.Scripts)
-        foreach(var (funcName, func) in script.Functions)
-        foreach(var (vName, v) in func.LocalVars)
-        if(!v.IsArgument && !(v.UsedInSubBlocks.Count == 1 && v.UsedInSubBlocks.First() == func) && !v.IsTable && v.UsedInSubBlocks.Count > 0)
-        {
-            func.LocalVars.Remove(vName);
-            foreach(var sb in v.UsedInSubBlocks)
-            {
-                sb.LocalVars.Add(vName, v);
-            }
-        }
+            foreach(var script in scriptComposite.Scripts)
+                foreach(var (funcName, func) in script.Functions)
+                {
+                    //HACK: Custom tables inlining
+                    foreach(var (vName, v) in func.LocalVars.ToArray())
+                        if(!v.IsArgument && v.IsTable && v.IsCustomTable)
+                        {
+                            func.LocalVars.Remove(vName);
+                            foreach(var (svName, sv) in v.Vars)
+                                func.LocalVars.Add(vName + "_" + svName, sv);
+                        }
+
+                    foreach(var (vName, v) in func.LocalVars.ToArray())
+                        if(!v.IsArgument && !(v.UsedInSubBlocks.Count == 1 && v.UsedInSubBlocks.First() == func) && !v.IsTable && v.UsedInSubBlocks.Count > 0)
+                        {
+                            func.LocalVars.Remove(vName);
+                            foreach(var sb in v.UsedInSubBlocks)
+                                sb.LocalVars.Add(vName, v);
+                        }
+                }
 
         var cs = scripts.ToCSharp();
             //HACK:
@@ -208,6 +220,8 @@ public class Program_v2
             //cs = Regex.Replace(cs, @"//(?!RequireVar)", "");
             cs = Regex.Replace(cs, @"if\((.*) == \1\)", "if(true)");
             cs = Regex.Replace(cs, @"(?:, default)+(?=\))", "");
+            cs = Regex.Replace(cs, @"(?<=\()default(?=\))", "");
+            //cs = Regex.Replace(cs, @"\b([a-z][A-Z]+)([A-Z]|\b)", m => m.Groups[1].Value.ToLower() + m.Groups[2].Value);
         File.WriteAllText("Code.cs", cs, Encoding.UTF8);
     }
 }

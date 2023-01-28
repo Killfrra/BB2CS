@@ -32,7 +32,7 @@ public class Var
     public int Used = 0;
 
     public HashSet<SubBlocks> UsedInSubBlocks = new();
-    void UseInSubBlocks(SubBlocks sb)
+    public void UseInSubBlocks(SubBlocks sb)
     {
         SubBlocks? toReplace = null;
         SubBlocks? replaceWith = null;
@@ -216,6 +216,11 @@ public class Var
     {
         if(IsTable)
         {
+            //HACK: Custom tables inlining
+            return string.Join("\n", Vars.Select(
+                kv => $"{TypeToCSharp(kv.Value.Type)} {PrepareName(name + "_" + kv.Key, false)};"
+            ));
+
             //HACK:
             name = PrepareName(name, false);
             var funcName = Parent!.ParentScript.Functions.First(kv => kv.Value == Parent).Key;

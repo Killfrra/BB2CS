@@ -173,6 +173,10 @@ public class Block
             //TODO: Increment ReturnValue var usage
             //TODO: Set ResolvedReturn to new Reference(null, "ReturnValue")
         }
+    
+        //HACK: Don't actually use it, because using this function is often false
+        if(ResolvedName == nameof(Functions.RequireVar))
+            ResolvedParams[0].Item1!.Var!.Var.Used--;
     }
 
     public void ScanSpellBuffAdd()
@@ -232,7 +236,10 @@ public class Block
                         var passed = buffVarsTable.Vars.GetValueOrDefault(kv.Key);
                         if(passed != null)
                         {
-                            args.Add(tableRefCS + "." + PrepareName(kv.Key, true));
+                            //HACK: Custom tables inlining
+                            args.Add(PrepareName(tableRefCS + "_" + kv.Key, false));
+                            //args.Add(tableRefCS + "." + PrepareName(kv.Key, true));
+                            passed.UseInSubBlocks(Parent);
                             passed.Used++;
                         }
                         else

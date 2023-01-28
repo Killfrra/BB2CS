@@ -163,6 +163,8 @@ public class BBScript2
                     func => func.Value.Blocks.Count > 0
                 ).Select(
                     func =>
+                    //HACK: Custom tables inlining
+                    /*
                     string.Join("", func.Value.LocalVars.Where(
                         v => v.Value.IsTable && !v.Value.IsArgument
                     ).Select(
@@ -174,6 +176,7 @@ public class BBScript2
                             ))
                         ) + "\n"
                     )) +
+                    */
                     func.Value.ToCSharp(func.Key)
                 ))
             )
