@@ -18,8 +18,8 @@ public class BBSpellScript: BBScript
     {
         return true;
     }
-    [BBCall("SelfExecute")] public virtual void SelfExecute(int level){}
-    [BBCall("TargetExecute")] public virtual void TargetExecute(int level, SpellMissile missileNetworkID, HitResult hitResult){}
+    [BBCall("SelfExecute")] public virtual void SelfExecute(){}
+    [BBCall("TargetExecute")] public virtual void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult){}
     [BBCall("AdjustCastInfo")] public virtual void AdjustCastInfo(){}
     [BBCall("AdjustCooldown", 0)] public virtual float AdjustCooldown()
     {
