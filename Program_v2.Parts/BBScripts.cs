@@ -21,7 +21,7 @@ public class BBScripts
             sba.ScanSpellBuffAdd();
     }
 
-    public string ToCSharp()
+    public string HeaderToCSharp()
     {
         return
         """
@@ -31,25 +31,46 @@ public class BBScripts
         using static Functions;
         using static Functions_CS;
         using Math = System.Math;
-        
-        """ + "\n" +
+
+        """ + "\n";
+    }
+    public string BBScriptToCSharp()
+    {
+        return
         $"public partial class {PrepareName("BBScript", true)}\n" +
         Braces(
             $"public AllCharVars {PrepareName("CharVars", false)};\n" +
             $"public AllAvatarVars {PrepareName("AvatarVars", false)};"
-        ) + "\n" +
+        ) + "\n";
+    }
+    public string AllCharVarsToCSharp()
+    {
+        return
         $"public class {PrepareName("AllCharVars", true)}\n" +
         Braces(
             string.Join("\n", CharVars.Vars.Select(
                 kv => kv.Value.ToCSharp(kv.Key, true, true)
             ))
-        ) + "\n" +
+        ) + "\n";
+    }
+    public string AllAvatarVarsToCSharp()
+    {
+        return
         $"public class {PrepareName("AllAvatarVars", true)}\n" +
         Braces(
             string.Join("\n", AvatarVars.Vars.Select(
                 kv => kv.Value.ToCSharp(kv.Key, true, true)
             ))
-        ) + "\n" +
+        ) + "\n";
+    }
+
+    public string ToCSharp()
+    {
+        return
+        HeaderToCSharp() +
+        BBScriptToCSharp() +
+        AllCharVarsToCSharp() +
+        AllAvatarVarsToCSharp() +
         "namespace Buffs" + "\n" +
         Braces(
             string.Join("\n", EmptyBuffScriptNames.Select(

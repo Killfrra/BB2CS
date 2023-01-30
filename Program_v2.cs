@@ -4,10 +4,12 @@ using System.Globalization;
 using Newtonsoft.Json;
 using System.Text.RegularExpressions;
 using static Utils;
+using System.Diagnostics;
 
 public class Program_v2
 {
     const string _BB_LUA = ".luaobj.lua";
+    const string _INI = ".inibin.ini";
     string[] globs =
     {
         //"Game/DATA/Characters/*/Scripts/*" + _BB_LUA,
@@ -28,6 +30,83 @@ public class Program_v2
     }
     public void Run()
     {
+        var paths = new List<string>();
+        var pwd_ = Directory.GetCurrentDirectory();
+        var charDir = Path.Join(pwd_, "Game", "DATA", "Characters");
+        foreach(var charPath in Directory.EnumerateDirectories(charDir))
+        {
+            var charName = Path.GetFileName(charPath);
+            var inis = Directory.EnumerateFiles(charPath).Where(p => Path.GetFileName(p).EndsWith(_INI));
+            var iniPath = inis.FirstOrDefault(
+                p => Path.GetFileName(p).ToLower() == (charName + _INI).ToLower(),
+                inis.First()
+            );
+            if(iniPath == null)
+            {
+                Console.WriteLine($"Skipping {charName}");
+                continue;
+            }
+            var iniText = File.ReadAllText(iniPath, Encoding.UTF8);
+
+            var spells = new List<string?>(new string[16]);
+            var attacks = new List<string?>(new string[16]);
+
+            /*
+            try
+            {
+                var scripts = Directory.EnumerateFiles(Path.Join(charPath, "Scripts"));
+                var charScriptName = Path.GetFileName(scripts.First());
+                Debug.Assert(scripts.Count() == 1 && charScriptName.EndsWith(_BB_LUA));
+                spells[0] = charScriptName.Substring(0, charScriptName.Length - _BB_LUA.Length);
+            }
+            catch(DirectoryNotFoundException){}
+            */
+            spells[0] = "CharScript" + charName;
+            
+            //TODO: Deduplicate
+            foreach(Match m in Regex.Matches(iniText, @"^Spell(\d)=""(.*?)""", RegexOptions.Multiline))
+            {
+                int i = int.Parse(m.Groups[1].Value);
+                var name = m.Groups[2].Value;
+                spells[i] = name;
+            }
+
+            //TODO: Deduplicate
+            foreach(Match m in Regex.Matches(iniText, @"^ExtraSpell(\d)=""(.*?)""", RegexOptions.Multiline))
+            {
+                int i = int.Parse(m.Groups[1].Value) + 4;
+                var name = m.Groups[2].Value;
+                spells[i] = name;
+            }
+
+            attacks[0] = Regex.Match(iniText, @"^WeaponMaterial=""(.*?)""", RegexOptions.Multiline).Groups[1].Value;
+
+            //TODO: Deduplicate
+            foreach(Match m in Regex.Matches(iniText, @"^ExtraAttack(\d)=""(.*?)""", RegexOptions.Multiline))
+            {
+                int i = int.Parse(m.Groups[1].Value);
+                var name = m.Groups[2].Value;
+                attacks[i] = name;
+            }
+
+            if(!string.IsNullOrEmpty(spells[0]))
+                paths.Add(Path.Join(charName, "Passive", spells[0] + ".cs"));
+            for(int i = 1; i <= 4; i++)
+                if(!string.IsNullOrEmpty(spells[i]))
+                    paths.Add(Path.Join(charName, "" + "_QWER"[i], spells[i] + ".cs"));
+            for(int i = 5; i < spells.Count; i++)
+                if(!string.IsNullOrEmpty(spells[i]))
+                    paths.Add(Path.Join(charName, "Extra" + (i - 4), spells[i] + ".cs"));
+            for(int i = 0; i < attacks.Count; i++)
+                if(!string.IsNullOrEmpty(attacks[i]))
+                    paths.Add(Path.Join(charName, "Auto" + i, attacks[i] + ".cs"));
+        }
+
+        foreach(var path in paths)
+            Console.WriteLine(path);
+
+        return;
+
         var scriptTypes = new Type[]
         {
             typeof(BBCharScript), typeof(BBSpellScript),
