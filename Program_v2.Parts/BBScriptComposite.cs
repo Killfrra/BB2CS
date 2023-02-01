@@ -8,10 +8,13 @@ public class BBScriptComposite
     public BBBuffScript2 BuffScript = new();
     public BBSpellScript2 SpellScript = new();
 
+    public string Path;
+
     [JsonIgnore]
     public List<BBScript2> Scripts;
-    public BBScriptComposite()
+    public BBScriptComposite(string path)
     {
+        Path = path;
         Scripts = new List<BBScript2>
         {
             CharScript,

@@ -30,6 +30,7 @@ public class Program_v2
     }
     public void Run()
     {
+        /*
         var paths = new List<string>();
         var pwd_ = Directory.GetCurrentDirectory();
         var charDir = Path.Join(pwd_, "Game", "DATA", "Characters");
@@ -51,16 +52,15 @@ public class Program_v2
             var spells = new List<string?>(new string[16]);
             var attacks = new List<string?>(new string[16]);
 
-            /*
-            try
-            {
-                var scripts = Directory.EnumerateFiles(Path.Join(charPath, "Scripts"));
-                var charScriptName = Path.GetFileName(scripts.First());
-                Debug.Assert(scripts.Count() == 1 && charScriptName.EndsWith(_BB_LUA));
-                spells[0] = charScriptName.Substring(0, charScriptName.Length - _BB_LUA.Length);
-            }
-            catch(DirectoryNotFoundException){}
-            */
+            // try
+            // {
+            //     var scripts = Directory.EnumerateFiles(Path.Join(charPath, "Scripts"));
+            //     var charScriptName = Path.GetFileName(scripts.First());
+            //     Debug.Assert(scripts.Count() == 1 && charScriptName.EndsWith(_BB_LUA));
+            //     spells[0] = charScriptName.Substring(0, charScriptName.Length - _BB_LUA.Length);
+            // }
+            // catch(DirectoryNotFoundException){}
+            
             spells[0] = "CharScript" + charName;
             
             //TODO: Deduplicate
@@ -105,7 +105,8 @@ public class Program_v2
         foreach(var path in paths)
             Console.WriteLine(path);
 
-        return;
+        //return;
+        //*/
 
         var scriptTypes = new Type[]
         {
@@ -131,13 +132,14 @@ public class Program_v2
             var json = File.ReadAllText(cacheFile, Encoding.UTF8);
             scripts = JsonConvert.DeserializeObject<BBScripts>(json);
         }
+        var pwd = Directory.GetCurrentDirectory();
+        var outPath = Path.Join(pwd, "Output");
         if(scripts == null)
         {
             scripts = new();
 
             var unused = new Dictionary<string, int>();
 
-            var pwd = Directory.GetCurrentDirectory();
             foreach(var glob in globs)
             {
                 foreach(var filePath in Directory.EnumerateFiles(pwd, glob, SearchOption.AllDirectories))
@@ -152,7 +154,7 @@ public class Program_v2
                     var (metadata, functions) = BB2JSON.Parse(text);
 
                     var used = new HashSet<string>();
-                    var script = scripts.Scripts[fileName] = new();
+                    var script = scripts.Scripts[fileName] = new(filePath);
                         script.BuffScript.MetaData.Parse(metadata, used);
                         script.SpellScript.MetaData.Parse(metadata, used);
                     foreach(var key in metadata.Keys)
@@ -283,8 +285,9 @@ public class Program_v2
                         }
                 }
 
-        var cs = scripts.ToCSharp();
-            //HACK:
+        //HACK:
+        void ApplyRegexes(ref string cs)
+        {
             cs = Regex.Replace(cs, @"\blong\b", "int");
             cs = Regex.Replace(cs, @"\bdouble\b", "float");
             //cs = Regex.Replace(cs, @"\b(TeamId)\? (\w+) = null", "$1 $2 = 0");
@@ -302,7 +305,30 @@ public class Program_v2
             // Too heavy
             //cs = Regex.Replace(cs, @"(\w+)\((.*?), \((.*?)\) => (\n(\s*)\{(?:.|\n)*?^\5\})\);",
             //    m => $"foreach(var {m.Groups[3].Value} in {ForEachReplacements[m.Groups[1].Value]}({m.Groups[2].Value})){m.Groups[4].Value}");
+        }
 
-        File.WriteAllText("Code.cs", cs, Encoding.UTF8);
+        //var cs = scripts.ToCSharp();
+        //ApplyRegexes(ref cs);
+        //File.WriteAllText("Code.cs", cs, Encoding.UTF8);
+
+        void WriteScript(string outFilePath, string content)
+        {
+            var outDirPath = Path.GetDirectoryName(outFilePath);
+            if(outDirPath != null)
+                Directory.CreateDirectory(outDirPath);
+            var cs = scripts!.HeaderToCSharp() + content;
+            ApplyRegexes(ref cs);
+            File.WriteAllText(outFilePath, cs, Encoding.UTF8);
+        }
+
+        WriteScript(Path.Join(outPath, "Script.cs"), scripts.BBScriptToCSharp());
+        WriteScript(Path.Join(outPath, "AllCharVars.cs"), scripts.AllCharVarsToCSharp());
+        WriteScript(Path.Join(outPath, "AllAvatarVars.cs"), scripts.AllAvatarVarsToCSharp());
+
+        foreach(var (scriptName, script) in scripts.Scripts)
+        {
+            var savePath = script.Path.Replace(Path.Join(pwd, "Game"), outPath).Replace(_BB_LUA, ".cs");
+            WriteScript(savePath, script.ToCSharp(scriptName));
+        }
     }
 }
