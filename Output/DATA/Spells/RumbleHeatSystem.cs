@@ -19,18 +19,18 @@ namespace Buffs
         int[] effect0 = {25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110};
         public override void OnUpdateActions()
         {
-            int level;
-            float punchdmg;
-            float aP;
-            float baseCDR;
-            float cDRMod;
-            float heatDecay;
-            float bonusHeatDecay;
-            float currentHeat;
             if(ExecutePeriodically(0.5f, ref this.lastTimeExecuted, false))
             {
+                float heatDecay;
+                float bonusHeatDecay;
+                float currentHeat;
                 if(true)
                 {
+                    int level;
+                    float punchdmg;
+                    float aP;
+                    float baseCDR;
+                    float cDRMod;
                     level = GetLevel(owner);
                     punchdmg = this.effect0[level];
                     SetBuffToolTipVar(1, punchdmg);

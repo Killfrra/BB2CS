@@ -25,9 +25,9 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            int level;
             if(ExecutePeriodically(5, ref this.lastTimeExecuted, true))
             {
+                int level;
                 level = GetLevel(owner);
                 this.punchdmg = this.effect0[level];
                 SetBuffToolTipVar(1, this.punchdmg);

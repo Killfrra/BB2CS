@@ -5,6 +5,21 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class PotionOfGiantStrength : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = false,
+            NotSingleTargetSpell = true,
+        };
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            AddBuff((ObjAIBase)owner, owner, new Buffs.PotionOfGiantStrength(), 1, 1, 240, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class PotionOfGiantStrength : BBBuffScript
@@ -34,21 +49,6 @@ namespace Buffs
             bonusHealth = -1 * this.bonusHealth;
             IncPermanentFlatHPPoolMod(owner, bonusHealth);
             IncPermanentFlatPhysicalDamageMod(owner, -10);
-        }
-    }
-}
-namespace Spells
-{
-    public class PotionOfGiantStrength : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = false,
-            NotSingleTargetSpell = true,
-        };
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            AddBuff((ObjAIBase)owner, owner, new Buffs.PotionOfGiantStrength(), 1, 1, 240, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false);
         }
     }
 }

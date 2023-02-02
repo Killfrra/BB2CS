@@ -29,8 +29,6 @@ namespace Buffs
         public override void OnActivate()
         {
             TeamId teamID;
-            float health;
-            float damage;
             SetGhostProof(owner, true);
             teamID = GetTeamID(owner);
             this.myTeam = GetTeamID(owner);
@@ -40,6 +38,8 @@ namespace Buffs
             this.bubbleID2 = AddUnitPerceptionBubble(this.chaosTeam, 800, owner, 25000, default, default, true);
             if(teamID == TeamId.TEAM_NEUTRAL)
             {
+                float health;
+                float damage;
                 health = GetMaxPAR(owner, PrimaryAbilityResourceType.MANA);
                 damage = health * -0.5f;
                 IncPAR(owner, damage, PrimaryAbilityResourceType.MANA);
@@ -80,14 +80,12 @@ namespace Buffs
         }
         public override void OnUpdateStats()
         {
-            int nextBuffVars_MagicResistBuff;
-            int nextBuffVars_ArmorBuff;
             TeamId currentTeam;
-            Particle asdf; // UNUSED
-            TeamId teamID;
             SetInvulnerable(owner, true);
             foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 900, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectMinions | SpellDataFlags.AffectNotPet | SpellDataFlags.NotAffectSelf, default, true))
             {
+                int nextBuffVars_MagicResistBuff;
+                int nextBuffVars_ArmorBuff;
                 if(GetBuffCountFromCaster(unit, unit, nameof(Buffs.OdinSuperMinion)) > 0)
                 {
                     nextBuffVars_MagicResistBuff = 0;
@@ -104,7 +102,9 @@ namespace Buffs
             currentTeam = GetTeamID(owner);
             if(currentTeam != this.myTeam)
             {
-                SpellEffectCreate(out asdf, out _, "GoldAquisition_glb.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "root", default, owner, default, default, false, false, false, false, false);
+                Particle asdf; // UNUSED
+                TeamId teamID;
+                SpellEffectCreate(out asdf, out _, "GoldAquisition_glb.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "root", default, owner, default, default, false, false, false, false, false);
                 RemovePerceptionBubble(this.bubbleID);
                 if(this.myTeam == TeamId.TEAM_NEUTRAL)
                 {
@@ -150,25 +150,25 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            int count1;
-            int count2;
-            float count;
-            TeamId teamID;
-            float healAmount;
-            float maxHealth;
-            float halfHealth;
-            float curHealth;
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, true))
             {
+                int count1;
+                int count2;
+                float count;
                 count1 = GetBuffCountFromAll(owner, nameof(Buffs.OdinGuardianSuppression));
                 count2 = GetBuffCountFromAll(owner, nameof(Buffs.OdinMinionSpellAttack));
                 count = count1 + count2;
                 if(count == 0)
                 {
+                    TeamId teamID;
+                    float healAmount;
                     teamID = GetTeamID(owner);
                     healAmount = 300;
                     if(teamID == TeamId.TEAM_NEUTRAL)
                     {
+                        float maxHealth;
+                        float halfHealth;
+                        float curHealth;
                         maxHealth = GetMaxPAR(owner, PrimaryAbilityResourceType.MANA);
                         halfHealth = maxHealth * 0.5f;
                         curHealth = GetPAR(owner, PrimaryAbilityResourceType.MANA);

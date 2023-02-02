@@ -17,9 +17,9 @@ namespace Buffs
         float lastTimeExecuted;
         public override void OnUpdateActions()
         {
-            int level;
             if(ExecutePeriodically(15, ref this.lastTimeExecuted, false))
             {
+                int level;
                 level = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 if(level > 0)
                 {

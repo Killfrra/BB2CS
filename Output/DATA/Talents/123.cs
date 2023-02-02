@@ -12,9 +12,9 @@ namespace Chars
         float[] effect0 = {1.04f, 1.08f};
         public override void OnPreDealDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
         {
-            float havocDamage;
             if(damageType != DamageType.DAMAGE_TYPE_TRUE)
             {
+                float havocDamage;
                 level = talentLevel;
                 havocDamage = this.effect0[level];
                 damageAmount *= havocDamage;

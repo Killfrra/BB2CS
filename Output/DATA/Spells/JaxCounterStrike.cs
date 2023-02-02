@@ -5,6 +5,28 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class JaxCounterStrike : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            CastingBreaksStealth = true,
+            DoesntBreakShields = true,
+            TriggersSpellCasts = true,
+            IsDamagingSpell = false,
+            NotSingleTargetSpell = false,
+        };
+        int[] effect0 = {0, 0, 0, 0, 0};
+        float[] effect1 = {1.5f, 1.5f, 1.5f, 1.5f, 1.5f};
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            PlayAnimation("Spell3", 0, owner, false, false, false);
+            charVars.NumCounter = this.effect0[level];
+            AddBuff(attacker, target, new Buffs.JaxCounterStrike(), 1, 1, this.effect1[level], BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class JaxCounterStrike : BBBuffScript
@@ -23,7 +45,7 @@ namespace Buffs
         public override void OnActivate()
         {
             TeamId teamID; // UNITIALIZED
-            SpellEffectCreate(out this.particle, out _, "JaxDodger.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "head", default, owner, "head", default, false, false, false, false, false);
+            SpellEffectCreate(out this.particle, out _, "JaxDodger.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "head", default, owner, "head", default, false, false, false, false, false);
             //RequireVar(this.movementSpeedBonusPercent);
             charVars.NumCounter = 0;
         }
@@ -65,28 +87,6 @@ namespace Buffs
             {
                 charVars.NumCounter += minionBonus;
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class JaxCounterStrike : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            CastingBreaksStealth = true,
-            DoesntBreakShields = true,
-            TriggersSpellCasts = true,
-            IsDamagingSpell = false,
-            NotSingleTargetSpell = false,
-        };
-        int[] effect0 = {0, 0, 0, 0, 0};
-        float[] effect1 = {1.5f, 1.5f, 1.5f, 1.5f, 1.5f};
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            PlayAnimation("Spell3", 0, owner, false, false, false);
-            charVars.NumCounter = this.effect0[level];
-            AddBuff(attacker, target, new Buffs.JaxCounterStrike(), 1, 1, this.effect1[level], BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
         }
     }
 }

@@ -16,11 +16,10 @@ namespace Buffs
         }
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            ObjAIBase caster;
-            Particle part; // UNUSED
             this.attackCounter++;
             if(this.attackCounter == 4)
             {
+                ObjAIBase caster;
                 caster = SetBuffCasterUnit();
                 if(attacker is not Champion)
                 {
@@ -30,6 +29,7 @@ namespace Buffs
                 this.attackCounter = 0;
                 if(target is ObjAIBase)
                 {
+                    Particle part; // UNUSED
                     SpellEffectCreate(out part, out _, "sword_of_the_divine_tar.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, false);
                 }
             }

@@ -26,9 +26,6 @@ namespace Spells
             float baseDamage;
             bool doOnce;
             int count;
-            bool isStealthed;
-            Vector3 attackerPos;
-            bool canSee;
             int brandSkinID;
             TeamId teamID; // UNUSED
             Particle ablazeHitEffect; // UNUSED
@@ -45,6 +42,8 @@ namespace Spells
                     {
                         if(unit != target)
                         {
+                            bool isStealthed;
+                            Vector3 attackerPos;
                             isStealthed = GetStealthed(unit);
                             if(!isStealthed)
                             {
@@ -62,6 +61,7 @@ namespace Spells
                             }
                             else
                             {
+                                bool canSee;
                                 canSee = CanSeeTarget(attacker, unit);
                                 if(canSee)
                                 {

@@ -23,11 +23,10 @@ namespace Buffs
             float totalDamage;
             bool isStealthed;
             float damageToDeal;
-            bool canSee;
             teamID = GetTeamID(attacker);
-            SpellEffectCreate(out a, out _, "olaf_axeThrow_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, true, false, false, false, false);
-            SpellEffectCreate(out a, out _, "olaf_axeThrow_tar_02.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, true, false, false, false, false);
-            SpellEffectCreate(out a, out _, "olaf_axeThrow_tar_03.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, true, false, false, false, false);
+            SpellEffectCreate(out a, out _, "olaf_axeThrow_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, true, false, false, false, false);
+            SpellEffectCreate(out a, out _, "olaf_axeThrow_tar_02.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, true, false, false, false, false);
+            SpellEffectCreate(out a, out _, "olaf_axeThrow_tar_03.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, true, false, false, false, false);
             level = GetSlotSpellLevel(attacker, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             bonusDamage = this.effect0[level];
             totalDamage = GetTotalAttackDamage(attacker);
@@ -44,6 +43,7 @@ namespace Buffs
             }
             else
             {
+                bool canSee;
                 canSee = CanSeeTarget(attacker, owner);
                 if(canSee)
                 {

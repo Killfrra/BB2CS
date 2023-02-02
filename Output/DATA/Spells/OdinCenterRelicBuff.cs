@@ -39,14 +39,14 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            int level;
-            float bonusShieldHP;
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, false))
             {
                 if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.OdinCenterRelicShieldCheck)) == 0)
                 {
                     if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.OdinCenterRelicShieldCheck2)) == 0)
                     {
+                        int level;
+                        float bonusShieldHP;
                         RemoveShield(owner, this.totalArmorAmount, true, true);
                         level = GetLevel(owner);
                         bonusShieldHP = level * 25;

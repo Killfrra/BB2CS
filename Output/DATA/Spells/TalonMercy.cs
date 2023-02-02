@@ -19,9 +19,9 @@ namespace Buffs
         };
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            bool isCCD;
             if(target is ObjAIBase)
             {
+                bool isCCD;
                 if(HasBuffOfType(target, BuffType.SLOW))
                 {
                     isCCD = true;

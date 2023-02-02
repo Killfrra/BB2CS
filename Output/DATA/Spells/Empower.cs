@@ -5,6 +5,24 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class Empower : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = false,
+            NotSingleTargetSpell = true,
+        };
+        int[] effect0 = {25, 35, 45, 55, 65};
+        public override void SelfExecute()
+        {
+            float nextBuffVars_DamagePerStack;
+            nextBuffVars_DamagePerStack = this.effect0[level];
+            AddBuff((ObjAIBase)owner, owner, new Buffs.Empower(nextBuffVars_DamagePerStack), 1, 1, 8, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class Empower : BBBuffScript
@@ -76,24 +94,6 @@ namespace Buffs
             ApplyDamage(attacker, target, damageBonus, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_PROC, 1, 0, 0, false, false, attacker);
             SpellBuffRemove(owner, nameof(Buffs.Empower), (ObjAIBase)owner, 0);
             SpellBuffRemoveStacks(owner, owner, nameof(Buffs.EmpowerCleave), 0);
-        }
-    }
-}
-namespace Spells
-{
-    public class Empower : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = false,
-            NotSingleTargetSpell = true,
-        };
-        int[] effect0 = {25, 35, 45, 55, 65};
-        public override void SelfExecute()
-        {
-            float nextBuffVars_DamagePerStack;
-            nextBuffVars_DamagePerStack = this.effect0[level];
-            AddBuff((ObjAIBase)owner, owner, new Buffs.Empower(nextBuffVars_DamagePerStack), 1, 1, 8, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0, true, false, false);
         }
     }
 }

@@ -5,6 +5,57 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class SummonerDot : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = false,
+        };
+        int[] effect0 = {70, 90, 110, 130, 150, 170, 190, 210, 230, 250, 270, 290, 310, 330, 350, 370, 390, 410};
+        public override void UpdateTooltip(int spellSlot)
+        {
+            float igniteDamage;
+            float baseCooldown;
+            level = GetLevel(owner);
+            igniteDamage = this.effect0[level];
+            SetSpellToolTipVar(igniteDamage, 1, spellSlot, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_SUMMONER, (Champion)attacker);
+            baseCooldown = 180;
+            if(avatarVars.SummonerCooldownBonus != 0)
+            {
+                float cooldownMultiplier;
+                cooldownMultiplier = 1 - avatarVars.SummonerCooldownBonus;
+                baseCooldown *= cooldownMultiplier;
+            }
+            SetSpellToolTipVar(baseCooldown, 2, spellSlot, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_SUMMONER, (Champion)attacker);
+        }
+        public override float AdjustCooldown()
+        {
+            float returnValue = 0;
+            if(avatarVars.SummonerCooldownBonus != 0)
+            {
+                float cooldownMultiplier;
+                float baseCooldown;
+                cooldownMultiplier = 1 - avatarVars.SummonerCooldownBonus;
+                baseCooldown = 180 * cooldownMultiplier;
+            }
+            returnValue = baseCooldown;
+            return returnValue;
+        }
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            Particle castParticle; // UNUSED
+            int nextBuffVars_Level;
+            SpellEffectCreate(out castParticle, out _, "Summoner_Cast.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false, false, false, false, false);
+            level = GetLevel(owner);
+            nextBuffVars_Level = level;
+            AddBuff(attacker, target, new Buffs.SummonerDot(nextBuffVars_Level), 1, 1, 5, BuffAddType.REPLACE_EXISTING, BuffType.DAMAGE, 0, true, false, false);
+            AddBuff((ObjAIBase)target, target, new Buffs.Internal_50MS(), 1, 1, 5, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+            AddBuff(attacker, target, new Buffs.GrievousWound(), 1, 1, 5, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_DEHANCER, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class SummonerDot : BBBuffScript
@@ -43,57 +94,6 @@ namespace Buffs
                     SpellEffectRemove(this.dotPart);
                 }
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class SummonerDot : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = false,
-        };
-        int[] effect0 = {70, 90, 110, 130, 150, 170, 190, 210, 230, 250, 270, 290, 310, 330, 350, 370, 390, 410};
-        public override void UpdateTooltip(int spellSlot)
-        {
-            float igniteDamage;
-            float baseCooldown;
-            float cooldownMultiplier;
-            level = GetLevel(owner);
-            igniteDamage = this.effect0[level];
-            SetSpellToolTipVar(igniteDamage, 1, spellSlot, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_SUMMONER, (Champion)attacker);
-            baseCooldown = 180;
-            if(avatarVars.SummonerCooldownBonus != 0)
-            {
-                cooldownMultiplier = 1 - avatarVars.SummonerCooldownBonus;
-                baseCooldown *= cooldownMultiplier;
-            }
-            SetSpellToolTipVar(baseCooldown, 2, spellSlot, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_SUMMONER, (Champion)attacker);
-        }
-        public override float AdjustCooldown()
-        {
-            float returnValue = 0;
-            float cooldownMultiplier;
-            float baseCooldown;
-            if(avatarVars.SummonerCooldownBonus != 0)
-            {
-                cooldownMultiplier = 1 - avatarVars.SummonerCooldownBonus;
-                baseCooldown = 180 * cooldownMultiplier;
-            }
-            returnValue = baseCooldown;
-            return returnValue;
-        }
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            Particle castParticle; // UNUSED
-            int nextBuffVars_Level;
-            SpellEffectCreate(out castParticle, out _, "Summoner_Cast.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false, false, false, false, false);
-            level = GetLevel(owner);
-            nextBuffVars_Level = level;
-            AddBuff(attacker, target, new Buffs.SummonerDot(nextBuffVars_Level), 1, 1, 5, BuffAddType.REPLACE_EXISTING, BuffType.DAMAGE, 0, true, false, false);
-            AddBuff((ObjAIBase)target, target, new Buffs.Internal_50MS(), 1, 1, 5, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0, true, false, false);
-            AddBuff(attacker, target, new Buffs.GrievousWound(), 1, 1, 5, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_DEHANCER, 0, true, false, false);
         }
     }
 }

@@ -5,6 +5,20 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class NetherBlade : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            NotSingleTargetSpell = true,
+        };
+        public override void SelfExecute()
+        {
+            AddBuff(attacker, owner, new Buffs.NetherBladeBuff(), 1, 1, 5, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, false, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class NetherBlade : BBBuffScript
@@ -22,12 +36,11 @@ namespace Buffs
         {
             int level;
             float manaGainAmount;
-            float modifiedManaGainAmount;
-            Particle num; // UNUSED
             level = GetSlotSpellLevel((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             manaGainAmount = this.effect0[level];
             if(target is Champion)
             {
+                float modifiedManaGainAmount;
                 modifiedManaGainAmount = manaGainAmount * 3;
                 IncPAR(owner, modifiedManaGainAmount, PrimaryAbilityResourceType.MANA);
             }
@@ -37,22 +50,9 @@ namespace Buffs
             }
             if(target is ObjAIBase)
             {
+                Particle num; // UNUSED
                 SpellEffectCreate(out num, out _, "Netherblade_cas.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, attacker, default, default, target, default, default, false, default, default, false, false);
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class NetherBlade : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            NotSingleTargetSpell = true,
-        };
-        public override void SelfExecute()
-        {
-            AddBuff(attacker, owner, new Buffs.NetherBladeBuff(), 1, 1, 5, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, false, false, false);
         }
     }
 }

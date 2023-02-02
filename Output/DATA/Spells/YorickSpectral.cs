@@ -5,6 +5,32 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class YorickSpectral : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            DoesntBreakShields = true,
+        };
+        int[] effect0 = {9, 8, 7, 6, 5};
+        int[] effect1 = {30, 60, 90, 120, 150};
+        public override void SelfExecute()
+        {
+            int nextBuffVars_SpellCooldown;
+            float nextBuffVars_BonusDamage;
+            nextBuffVars_SpellCooldown = this.effect0[level];
+            nextBuffVars_BonusDamage = this.effect1[level];
+            if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.YorickSpectralUnlock)) > 0)
+            {
+                SpellBuffRemove(owner, nameof(Buffs.YorickSpectralUnlock), (ObjAIBase)owner, 0);
+            }
+            AddBuff((ObjAIBase)owner, owner, new Buffs.YorickSpectral(nextBuffVars_BonusDamage, nextBuffVars_SpellCooldown), 1, 1, 10, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+            AddBuff((ObjAIBase)owner, owner, new Buffs.YorickSpectralUnlock(), 1, 1, 11, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+            SetSlotSpellCooldownTime((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, 0);
+        }
+    }
+}
 namespace Buffs
 {
     public class YorickSpectral : BBBuffScript
@@ -53,11 +79,6 @@ namespace Buffs
         }
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            TeamId teamID;
-            Particle a; // UNUSED
-            float totalDamage;
-            Vector3 targetPos;
-            int level;
             if(target is ObjAIBase)
             {
                 if(target is BaseTurret)
@@ -65,6 +86,11 @@ namespace Buffs
                 }
                 else
                 {
+                    TeamId teamID;
+                    Particle a; // UNUSED
+                    float totalDamage;
+                    Vector3 targetPos;
+                    int level;
                     if(GetBuffCountFromCaster(owner, default, nameof(Buffs.YorickSummonSpectral)) > 0)
                     {
                         SpellBuffClear(owner, nameof(Buffs.YorickSummonSpectral));
@@ -74,7 +100,7 @@ namespace Buffs
                         hitResult = HitResult.HIT_Normal;
                     }
                     teamID = GetTeamID(owner);
-                    SpellEffectCreate(out a, out _, "yorick_spectralGhoul_attack_buf_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false, false);
+                    SpellEffectCreate(out a, out _, "yorick_spectralGhoul_attack_buf_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false, false);
                     damageAmount *= 1.2f;
                     totalDamage = damageAmount + this.bonusDamage;
                     AddBuff(attacker, target, new Buffs.YorickSpectralPrimaryTarget(), 1, 1, 5, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
@@ -87,32 +113,6 @@ namespace Buffs
                     damageAmount -= damageAmount;
                 }
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class YorickSpectral : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            DoesntBreakShields = true,
-        };
-        int[] effect0 = {9, 8, 7, 6, 5};
-        int[] effect1 = {30, 60, 90, 120, 150};
-        public override void SelfExecute()
-        {
-            int nextBuffVars_SpellCooldown;
-            float nextBuffVars_BonusDamage;
-            nextBuffVars_SpellCooldown = this.effect0[level];
-            nextBuffVars_BonusDamage = this.effect1[level];
-            if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.YorickSpectralUnlock)) > 0)
-            {
-                SpellBuffRemove(owner, nameof(Buffs.YorickSpectralUnlock), (ObjAIBase)owner, 0);
-            }
-            AddBuff((ObjAIBase)owner, owner, new Buffs.YorickSpectral(nextBuffVars_BonusDamage, nextBuffVars_SpellCooldown), 1, 1, 10, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
-            AddBuff((ObjAIBase)owner, owner, new Buffs.YorickSpectralUnlock(), 1, 1, 11, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0, true, false, false);
-            SetSlotSpellCooldownTime((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, 0);
         }
     }
 }

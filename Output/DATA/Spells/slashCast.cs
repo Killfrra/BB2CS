@@ -17,10 +17,10 @@ namespace Spells
         public override bool CanCast()
         {
             bool returnValue = true;
-            bool canMove;
             level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             if(level > 0)
             {
+                bool canMove;
                 canMove = GetCanMove(owner);
                 if(!canMove)
                 {

@@ -14,8 +14,6 @@ namespace Chars
         {
             float bonusAD;
             float bonusAD2;
-            float curTime;
-            float timeSinceLastHit;
             bonusAD = GetFlatPhysicalDamageMod(owner);
             bonusAD2 = bonusAD * 1.2f;
             bonusAD *= 0.75f;
@@ -25,6 +23,8 @@ namespace Chars
             {
                 if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.NocturneUmbraBlades)) == 0)
                 {
+                    float curTime;
+                    float timeSinceLastHit;
                     curTime = GetGameTime();
                     timeSinceLastHit = curTime - charVars.LastHit;
                     if(timeSinceLastHit >= 10)
@@ -39,9 +39,6 @@ namespace Chars
         }
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            Particle hi; // UNUSED
-            float curTime;
-            float timeSinceLastHit;
             if(hitResult != HitResult.HIT_Miss)
             {
                 if(hitResult != HitResult.HIT_Dodge)
@@ -51,11 +48,14 @@ namespace Chars
                         charVars.LastHit = GetGameTime();
                         if(target is ObjAIBase)
                         {
+                            Particle hi; // UNUSED
                             SpellEffectCreate(out hi, out _, "Globalhit_red.troy", default, TeamId.TEAM_NEUTRAL, 900, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, owner.Position, owner, default, default, true, default, default, false);
                         }
                     }
                     else
                     {
+                        float curTime;
+                        float timeSinceLastHit;
                         charVars.LastHit--;
                         curTime = GetGameTime();
                         timeSinceLastHit = curTime - charVars.LastHit;

@@ -27,13 +27,6 @@ namespace Buffs
         }
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            float aPMod;
-            float moddedDmg;
-            float preCount;
-            TeamId teamID;
-            int count;
-            float damageDealt;
-            Particle asdf; // UNUSED
             if(hitResult != HitResult.HIT_Dodge)
             {
                 if(hitResult != HitResult.HIT_Miss)
@@ -42,6 +35,13 @@ namespace Buffs
                     {
                         if(target is not BaseTurret)
                         {
+                            float aPMod;
+                            float moddedDmg;
+                            float preCount;
+                            TeamId teamID;
+                            int count;
+                            float damageDealt;
+                            Particle asdf; // UNUSED
                             aPMod = GetFlatMagicDamageMod(owner);
                             moddedDmg = aPMod * 0.05f;
                             preCount = moddedDmg + this.damageCounter;
@@ -50,7 +50,7 @@ namespace Buffs
                             count = GetBuffCountFromAll(target, nameof(Buffs.MissFortunePassiveStack));
                             damageDealt = preCount * count;
                             ApplyDamage((ObjAIBase)owner, target, damageDealt, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_PROC, 1, 0, 1, false, false, (ObjAIBase)owner);
-                            SpellEffectCreate(out asdf, out _, "missFortune_passive_tar_indicator.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, false, false, false, false);
+                            SpellEffectCreate(out asdf, out _, "missFortune_passive_tar_indicator.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, false, false, false, false);
                         }
                     }
                 }

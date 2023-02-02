@@ -5,6 +5,16 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class FizzSeastoneTrident : BBSpellScript
+    {
+        public override void SelfExecute()
+        {
+            AddBuff((ObjAIBase)owner, owner, new Buffs.FizzSeastoneTridentActive(), 1, 1, 1, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class FizzSeastoneTrident : BBBuffScript
@@ -24,18 +34,18 @@ namespace Buffs
         float[] effect1 = {0.04f, 0.05f, 0.06f, 0.07f, 0.08f};
         public override void OnUpdateActions()
         {
-            int level;
-            float baseMagic;
-            float currentHealth;
-            float maxHealth;
-            float missingHealth;
-            float basePercent;
-            float baseAP;
-            float flatAPBonus;
-            float bonusDamage;
-            float totalDamage;
             if(ExecutePeriodically(0.5f, ref this.lastTimeExecuted, true))
             {
+                int level;
+                float baseMagic;
+                float currentHealth;
+                float maxHealth;
+                float missingHealth;
+                float basePercent;
+                float baseAP;
+                float flatAPBonus;
+                float bonusDamage;
+                float totalDamage;
                 level = GetSlotSpellLevel(attacker, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 baseMagic = this.effect0[level];
                 currentHealth = GetHealth(owner, PrimaryAbilityResourceType.MANA);
@@ -54,16 +64,6 @@ namespace Buffs
                 }
                 ApplyDamage(attacker, owner, totalDamage, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_PROC, 1, 0, 0, false, false, attacker);
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class FizzSeastoneTrident : BBSpellScript
-    {
-        public override void SelfExecute()
-        {
-            AddBuff((ObjAIBase)owner, owner, new Buffs.FizzSeastoneTridentActive(), 1, 1, 1, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
         }
     }
 }

@@ -21,11 +21,11 @@ namespace Buffs
         public override void OnActivate()
         {
             TeamId teamOfOwner;
-            int count;
             teamOfOwner = GetTeamID(owner);
             this.delay = false;
             if(teamOfOwner == TeamId.TEAM_PURPLE)
             {
+                int count;
                 count = GetBuffCountFromAll(owner, nameof(Buffs.NocturneParanoiaTargetOrder));
                 if(count > 0)
                 {
@@ -51,9 +51,9 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            int count;
             if(this.delay)
             {
+                int count;
                 count = GetBuffCountFromAll(owner, nameof(Buffs.NocturneParanoiaTargetOrder));
                 if(count == 0)
                 {

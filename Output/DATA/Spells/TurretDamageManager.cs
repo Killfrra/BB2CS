@@ -15,12 +15,12 @@ namespace Buffs
         };
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            int turretBuffCount;
-            int targetBuffCount;
-            float buffCount;
-            float damageBonus;
             if(target is Champion)
             {
+                int turretBuffCount;
+                int targetBuffCount;
+                float buffCount;
+                float damageBonus;
                 turretBuffCount = GetBuffCountFromCaster(owner, owner, nameof(Buffs.TurretDamageMarker));
                 targetBuffCount = GetBuffCountFromCaster(target, owner, nameof(Buffs.TurretDamageMarker));
                 buffCount = turretBuffCount + targetBuffCount;

@@ -32,9 +32,9 @@ namespace Buffs
         }
         public override void OnPreDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
         {
-            float attackSpeedIncrement;
             if(damageType == DamageType.DAMAGE_TYPE_MAGICAL)
             {
+                float attackSpeedIncrement;
                 attackSpeedIncrement = damageAmount * 0.0015f;
                 this.attackSpeedBoost += attackSpeedIncrement;
             }

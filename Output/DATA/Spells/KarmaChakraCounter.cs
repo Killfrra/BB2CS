@@ -21,11 +21,6 @@ namespace Buffs
         public override void OnSpellCast(string spellName, SpellScriptMetaData spellVars)
         {
             int spellSlot;
-            float cooldownStat;
-            float baseCooldown;
-            float multiplier;
-            float newCooldown;
-            int level;
             spellSlot = GetSpellSlot();
             spellName = GetSpellName();
             DebugSay(owner, "YOshield", spellName);
@@ -43,6 +38,10 @@ namespace Buffs
             }
             if(!spellVars.DoesntTriggerSpellCasts)
             {
+                float cooldownStat;
+                float baseCooldown;
+                float multiplier;
+                float newCooldown;
                 if(spellSlot == 2)
                 {
                     cooldownStat = GetPercentCooldownMod(owner);
@@ -54,6 +53,7 @@ namespace Buffs
                 }
                 else if(spellSlot == 1)
                 {
+                    int level;
                     cooldownStat = GetPercentCooldownMod(owner);
                     level = GetSlotSpellLevel((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                     baseCooldown = this.effect0[level];

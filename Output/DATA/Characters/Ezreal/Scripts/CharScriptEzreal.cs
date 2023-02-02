@@ -12,17 +12,17 @@ namespace Chars
         float lastTime2Executed;
         public override void OnUpdateActions()
         {
-            float totalDamage;
-            float baseDamage;
-            float bonusDamage;
-            float spell3Display;
-            float aP;
-            float finalAP;
-            float baseDamage;
-            float attackDamage;
             float cURMoveSpeed;
             if(ExecutePeriodically(1, ref this.lastTime2Executed, true))
             {
+                float totalDamage;
+                float baseDamage;
+                float bonusDamage;
+                float spell3Display;
+                float aP;
+                float finalAP;
+                float baseDamage;
+                float attackDamage;
                 level = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 totalDamage = GetTotalAttackDamage(owner);
                 baseDamage = GetBaseAttackDamage(owner);
@@ -72,38 +72,38 @@ namespace Chars
         {
             TeamId teamID;
             int ezrealSkinID;
-            Particle a; // UNUSED
             teamID = GetTeamID(owner);
             ezrealSkinID = GetSkinID(owner);
             if(ezrealSkinID == 5)
             {
-                SpellEffectCreate(out a, out _, "Ezreal_cyberezreal_revive.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, true, owner, default, default, owner, default, default, true, false, false, false, false);
+                Particle a; // UNUSED
+                SpellEffectCreate(out a, out _, "Ezreal_cyberezreal_revive.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, true, owner, default, default, owner, default, default, true, false, false, false, false);
             }
         }
         public override void OnLevelUpSpell(int slot)
         {
             TeamId teamID;
             int ezrealSkinID;
-            Particle a; // UNUSED
             teamID = GetTeamID(attacker);
             ezrealSkinID = GetSkinID(attacker);
             if(ezrealSkinID == 5)
             {
+                Particle a; // UNUSED
                 if(slot == 0)
                 {
-                    SpellEffectCreate(out a, out _, "Ezreal_cyberezreal_mysticshot.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, true, owner, default, default, owner, default, default, true, false, false, false, false);
+                    SpellEffectCreate(out a, out _, "Ezreal_cyberezreal_mysticshot.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, true, owner, default, default, owner, default, default, true, false, false, false, false);
                 }
                 else if(slot == 1)
                 {
-                    SpellEffectCreate(out a, out _, "Ezreal_cyberezreal_essenceflux.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, true, owner, default, default, owner, default, default, true, false, false, false, false);
+                    SpellEffectCreate(out a, out _, "Ezreal_cyberezreal_essenceflux.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, true, owner, default, default, owner, default, default, true, false, false, false, false);
                 }
                 else if(slot == 2)
                 {
-                    SpellEffectCreate(out a, out _, "Ezreal_cyberezreal_arcaneshift.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, true, owner, default, default, owner, default, default, true, false, false, false, false);
+                    SpellEffectCreate(out a, out _, "Ezreal_cyberezreal_arcaneshift.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, true, owner, default, default, owner, default, default, true, false, false, false, false);
                 }
                 else if(slot == 3)
                 {
-                    SpellEffectCreate(out a, out _, "Ezreal_cyberezreal_trueshotbarrage.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, true, owner, default, default, owner, default, default, true, false, false, false, false);
+                    SpellEffectCreate(out a, out _, "Ezreal_cyberezreal_trueshotbarrage.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, true, owner, default, default, owner, default, default, true, false, false, false, false);
                 }
             }
         }

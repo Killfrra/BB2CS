@@ -19,23 +19,23 @@ namespace Buffs
             IncPercentMovementSpeedMod(owner, 0.5f);
             SetCanMove(owner, true);
             teamID = GetTeamID(owner);
-            SpellEffectCreate(out temp, out _, "fizz_playfultrickster_flip_sound.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "root", owner.Position, owner, default, default, true, true, false, false, false);
+            SpellEffectCreate(out temp, out _, "fizz_playfultrickster_flip_sound.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "root", owner.Position, owner, default, default, true, true, false, false, false);
         }
         public override void OnDeactivate(bool expired)
         {
             int level;
             TeamId teamID;
             Particle asdf; // UNUSED
-            Particle b; // UNUSED
             float nextBuffVars_MoveSpeedMod;
             level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             teamID = GetTeamID(owner);
-            SpellEffectCreate(out asdf, out _, "Fizz_TrickSlam.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, false, false, false, false);
+            SpellEffectCreate(out asdf, out _, "Fizz_TrickSlam.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, false, false, false, false);
             foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 375, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
             {
+                Particle b; // UNUSED
                 BreakSpellShields(unit);
                 ApplyDamage((ObjAIBase)owner, unit, this.effect0[level], DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0.75f, 1, false, false, attacker);
-                SpellEffectCreate(out b, out _, "Fizz_TrickSlam_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
+                SpellEffectCreate(out b, out _, "Fizz_TrickSlam_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
                 nextBuffVars_MoveSpeedMod = this.effect1[level];
                 AddBuff((ObjAIBase)owner, unit, new Buffs.FizzWSlow(nextBuffVars_MoveSpeedMod), 1, 1, 2, BuffAddType.STACKS_AND_OVERLAPS, BuffType.SLOW, 0, true, false, false);
             }

@@ -16,37 +16,37 @@ namespace Chars
         Particle staffIdleRED; // UNUSED
         public override void OnUpdateActions()
         {
-            TeamId ownerTeam;
-            Particle staffIdleYELLOW2; // UNUSED
-            Particle staffIdleBLUE2; // UNUSED
-            Particle staffIdleRED2; // UNUSED
             if(!charVars.HasRemoved)
             {
+                TeamId ownerTeam;
                 ownerTeam = GetTeamID(owner);
                 if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.ViktorAugmentQ)) > 0)
                 {
+                    Particle staffIdleYELLOW2; // UNUSED
                     SpellEffectRemove(this.staffIdle);
                     SpellEffectRemove(this.staffIdle2);
                     charVars.HasRemoved = true;
-                    SpellEffectCreate(out this.staffIdleYELLOW, out staffIdleYELLOW2, "Viktorb_yellow.troy", "Viktorb_yellow.troy", ownerTeam, 0, 0, TeamId.TEAM_UNKNOWN, ownerTeam, default, false, owner, "BUFFBONE_CSTM_WEAPON_1", default, owner, "BUFFBONE_CSTM_WEAPON_1", default, false, false, false, false, false);
+                    SpellEffectCreate(out this.staffIdleYELLOW, out staffIdleYELLOW2, "Viktorb_yellow.troy", "Viktorb_yellow.troy", ownerTeam ?? TeamId.TEAM_NEUTRAL, 0, 0, TeamId.TEAM_UNKNOWN, ownerTeam, default, false, owner, "BUFFBONE_CSTM_WEAPON_1", default, owner, "BUFFBONE_CSTM_WEAPON_1", default, false, false, false, false, false);
                 }
                 else
                 {
                     if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.ViktorAugmentW)) > 0)
                     {
+                        Particle staffIdleBLUE2; // UNUSED
                         SpellEffectRemove(this.staffIdle);
                         SpellEffectRemove(this.staffIdle2);
                         charVars.HasRemoved = true;
-                        SpellEffectCreate(out this.staffIdleBLUE, out staffIdleBLUE2, "Viktorb_blue.troy", "Viktorb_blue.troy", ownerTeam, 0, 0, TeamId.TEAM_UNKNOWN, ownerTeam, default, false, owner, "BUFFBONE_CSTM_WEAPON_1", default, owner, "BUFFBONE_CSTM_WEAPON_1", default, false, false, false, false, false);
+                        SpellEffectCreate(out this.staffIdleBLUE, out staffIdleBLUE2, "Viktorb_blue.troy", "Viktorb_blue.troy", ownerTeam ?? TeamId.TEAM_NEUTRAL, 0, 0, TeamId.TEAM_UNKNOWN, ownerTeam, default, false, owner, "BUFFBONE_CSTM_WEAPON_1", default, owner, "BUFFBONE_CSTM_WEAPON_1", default, false, false, false, false, false);
                     }
                     else
                     {
                         if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.ViktorAugmentE)) > 0)
                         {
+                            Particle staffIdleRED2; // UNUSED
                             SpellEffectRemove(this.staffIdle);
                             SpellEffectRemove(this.staffIdle2);
                             charVars.HasRemoved = true;
-                            SpellEffectCreate(out this.staffIdleRED, out staffIdleRED2, "Viktorb_red.troy", "Viktorb_red.troy", ownerTeam, 0, 0, TeamId.TEAM_UNKNOWN, ownerTeam, default, false, owner, "BUFFBONE_CSTM_WEAPON_1", default, owner, "BUFFBONE_CSTM_WEAPON_1", default, false, false, false, false, false);
+                            SpellEffectCreate(out this.staffIdleRED, out staffIdleRED2, "Viktorb_red.troy", "Viktorb_red.troy", ownerTeam ?? TeamId.TEAM_NEUTRAL, 0, 0, TeamId.TEAM_UNKNOWN, ownerTeam, default, false, owner, "BUFFBONE_CSTM_WEAPON_1", default, owner, "BUFFBONE_CSTM_WEAPON_1", default, false, false, false, false, false);
                         }
                     }
                 }
@@ -60,7 +60,7 @@ namespace Chars
             AddBuff((ObjAIBase)owner, owner, new Buffs.ChampionChampionDelta(), 1, 1, 25000, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0, true, false, false);
             CreateItem((ObjAIBase)owner, 3200);
             ownerTeam = GetTeamID(owner);
-            SpellEffectCreate(out this.staffIdle, out this.staffIdle2, "Viktor_idle.troy", "Viktor_idle.troy", ownerTeam, 0, 0, TeamId.TEAM_NEUTRAL, ownerTeam, owner, false, owner, "BUFFBONE_CSTM_WEAPON_1", default, owner, "BUFFBONE_CSTM_WEAPON_1", default, false, false, false, false, false);
+            SpellEffectCreate(out this.staffIdle, out this.staffIdle2, "Viktor_idle.troy", "Viktor_idle.troy", ownerTeam ?? TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_NEUTRAL, ownerTeam, owner, false, owner, "BUFFBONE_CSTM_WEAPON_1", default, owner, "BUFFBONE_CSTM_WEAPON_1", default, false, false, false, false, false);
         }
         public override void OnResurrect()
         {

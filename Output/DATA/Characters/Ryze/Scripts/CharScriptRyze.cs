@@ -12,11 +12,11 @@ namespace Chars
         float lastTimeExecuted;
         public override void OnUpdateActions()
         {
-            float mana;
-            float bonusDamage;
-            float bonusDamage2;
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, true))
             {
+                float mana;
+                float bonusDamage;
+                float bonusDamage2;
                 mana = GetMaxPAR(owner, PrimaryAbilityResourceType.MANA);
                 bonusDamage = mana * 0.08f;
                 bonusDamage2 = mana * 0.05f;

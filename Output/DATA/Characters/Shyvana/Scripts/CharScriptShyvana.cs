@@ -54,9 +54,6 @@ namespace Chars
         }
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            float spellCD1;
-            float spellCD1a;
-            float spellCD1b;
             if(target is ObjAIBase)
             {
                 if(target is not BaseTurret)
@@ -65,6 +62,9 @@ namespace Chars
                     {
                         if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.ShyvanaDoubleAttackDragon)) == 0)
                         {
+                            float spellCD1;
+                            float spellCD1a;
+                            float spellCD1b;
                             spellCD1 = GetSlotSpellCooldownTime((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                             spellCD1a = spellCD1 + -0.5f;
                             spellCD1b = Math.Max(spellCD1a, 0);
@@ -98,9 +98,6 @@ namespace Chars
         }
         public override void OnLevelUpSpell(int slot)
         {
-            float totalAttackDamage;
-            float damagePercent;
-            float damageToDisplay;
             if(slot == 3)
             {
                 AddBuff((ObjAIBase)owner, owner, new Buffs.ShyvanaDragonScales(), 1, 1, 25000, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
@@ -112,6 +109,9 @@ namespace Chars
             }
             if(slot == 0)
             {
+                float totalAttackDamage;
+                float damagePercent;
+                float damageToDisplay;
                 totalAttackDamage = GetTotalAttackDamage(owner);
                 level = GetSlotSpellLevel((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 if(level > 0)

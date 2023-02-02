@@ -5,6 +5,55 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class Masochism : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = true,
+            IsDamagingSpell = true,
+            NotSingleTargetSpell = false,
+        };
+        int[] effect0 = {25, 35, 45, 55, 65};
+        int[] effect1 = {-25, -35, -45, -55, -65};
+        float[] effect2 = {0.4f, 0.55f, 0.7f, 0.85f, 1};
+        int[] effect3 = {40, 55, 70, 85, 100};
+        public override bool CanCast()
+        {
+            bool returnValue = true;
+            level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
+            if(level > 0)
+            {
+                int healthCost;
+                float temp1;
+                healthCost = this.effect0[level];
+                temp1 = GetHealth(owner, PrimaryAbilityResourceType.MANA);
+                if(temp1 >= healthCost)
+                {
+                    returnValue = true;
+                }
+                else
+                {
+                    returnValue = false;
+                }
+            }
+            return returnValue;
+        }
+        public override void SelfExecute()
+        {
+            float healthCost;
+            float nextBuffVars_DamageMod;
+            int nextBuffVars_BaseIncrease;
+            level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
+            healthCost = this.effect1[level];
+            nextBuffVars_DamageMod = this.effect2[level];
+            nextBuffVars_BaseIncrease = this.effect3[level];
+            IncHealth(owner, healthCost, owner);
+            AddBuff(attacker, target, new Buffs.Masochism(nextBuffVars_DamageMod, nextBuffVars_BaseIncrease), 1, 1, 5, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class Masochism : BBBuffScript
@@ -50,55 +99,6 @@ namespace Buffs
             damageBonus = damageMod * rawDamage;
             IncFlatPhysicalDamageMod(owner, damageBonus);
             IncFlatPhysicalDamageMod(owner, baseIncrease);
-        }
-    }
-}
-namespace Spells
-{
-    public class Masochism : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = true,
-            IsDamagingSpell = true,
-            NotSingleTargetSpell = false,
-        };
-        int[] effect0 = {25, 35, 45, 55, 65};
-        int[] effect1 = {-25, -35, -45, -55, -65};
-        float[] effect2 = {0.4f, 0.55f, 0.7f, 0.85f, 1};
-        int[] effect3 = {40, 55, 70, 85, 100};
-        public override bool CanCast()
-        {
-            bool returnValue = true;
-            int healthCost;
-            float temp1;
-            level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
-            if(level > 0)
-            {
-                healthCost = this.effect0[level];
-                temp1 = GetHealth(owner, PrimaryAbilityResourceType.MANA);
-                if(temp1 >= healthCost)
-                {
-                    returnValue = true;
-                }
-                else
-                {
-                    returnValue = false;
-                }
-            }
-            return returnValue;
-        }
-        public override void SelfExecute()
-        {
-            float healthCost;
-            float nextBuffVars_DamageMod;
-            int nextBuffVars_BaseIncrease;
-            level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
-            healthCost = this.effect1[level];
-            nextBuffVars_DamageMod = this.effect2[level];
-            nextBuffVars_BaseIncrease = this.effect3[level];
-            IncHealth(owner, healthCost, owner);
-            AddBuff(attacker, target, new Buffs.Masochism(nextBuffVars_DamageMod, nextBuffVars_BaseIncrease), 1, 1, 5, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
         }
     }
 }

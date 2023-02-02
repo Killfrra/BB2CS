@@ -20,16 +20,16 @@ namespace Buffs
         public override void OnActivate()
         {
             float cD;
-            int count;
-            float healthPercent; // UNUSED
             this.ready = false;
             this.critical = false;
             cD = GetSlotSpellCooldownTime(attacker, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             if(cD <= 0)
             {
+                int count;
                 count = GetBuffCountFromAll(attacker, nameof(Buffs.VolibearWStats));
                 if(count == 4)
                 {
+                    float healthPercent; // UNUSED
                     this.ready = true;
                     SpellEffectCreate(out this.particle1, out _, "Volibear_tar_indicator.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, attacker, true, owner, default, default, target, default, default, false, false, false, false, false);
                     healthPercent = GetHealthPercent(owner, PrimaryAbilityResourceType.MANA);
@@ -48,16 +48,16 @@ namespace Buffs
             bool readyNew;
             bool criticalNew; // UNUSED
             float cD;
-            int count;
-            float distance;
             readyNew = false;
             criticalNew = false;
             cD = GetSlotSpellCooldownTime(attacker, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             if(cD <= 0)
             {
+                int count;
                 count = GetBuffCountFromAll(attacker, nameof(Buffs.VolibearWStats));
                 if(count == 4)
                 {
+                    float distance;
                     distance = DistanceBetweenObjects("Attacker", "Owner");
                     if(distance <= 350)
                     {

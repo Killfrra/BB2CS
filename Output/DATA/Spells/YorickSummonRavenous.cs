@@ -5,6 +5,28 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class YorickSummonRavenous : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            DoesntBreakShields = true,
+            TriggersSpellCasts = false,
+        };
+        public override void SelfExecute()
+        {
+            TeamId teamID;
+            Vector3 targetPos;
+            Minion other1;
+            teamID = GetTeamID(owner);
+            targetPos = GetCastSpellTargetPos();
+            other1 = SpawnMinion("Blinky", "YorickRavenousGhoul", "YorickPHPet.lua", targetPos, teamID ?? TeamId.TEAM_UNKNOWN, false, false, true, false, false, false, 0, false, false, (Champion)owner);
+            AddBuff(other1, attacker, new Buffs.YorickSummonRavenous(), 1, 1, 5, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+            AddBuff(attacker, other1, new Buffs.YorickRavenousLogic(), 1, 1, 25000, BuffAddType.REPLACE_EXISTING, BuffType.AURA, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class YorickSummonRavenous : BBBuffScript
@@ -27,7 +49,7 @@ namespace Buffs
             }
             teamID = GetTeamID(owner);
             ghoulPosition = GetUnitPosition(attacker);
-            SpellEffectCreate(out b, out _, "yorick_ravenousGhoul_death.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, ghoulPosition, owner, default, default, true, default, default, false, false);
+            SpellEffectCreate(out b, out _, "yorick_ravenousGhoul_death.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, ghoulPosition, owner, default, default, true, default, default, false, false);
             ApplyDamage(attacker, attacker, 9999, DamageType.DAMAGE_TYPE_TRUE, DamageSource.DAMAGE_SOURCE_INTERNALRAW, 1, 1, 0, false, false, attacker);
         }
         public override void OnUpdateStats()
@@ -42,11 +64,9 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            bool isTaunted;
-            bool nearbyChampion;
-            bool checkBuilding;
             if(ExecutePeriodically(0.5f, ref this.lastTimeExecuted, true))
             {
+                bool isTaunted;
                 foreach(AttackableUnit unit in GetClosestUnitsInArea(owner, attacker.Position, 500, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, 1, nameof(Buffs.YorickRavenousPrimaryTarget), true))
                 {
                     ApplyTaunt(unit, attacker, 1.5f);
@@ -54,6 +74,8 @@ namespace Buffs
                 isTaunted = GetTaunted(attacker);
                 if(!isTaunted)
                 {
+                    bool nearbyChampion;
+                    bool checkBuilding;
                     nearbyChampion = false;
                     checkBuilding = true;
                     foreach(AttackableUnit unit in GetClosestUnitsInArea(owner, attacker.Position, 1050, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectHeroes, 1, default, true))
@@ -79,28 +101,6 @@ namespace Buffs
                     }
                 }
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class YorickSummonRavenous : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            DoesntBreakShields = true,
-            TriggersSpellCasts = false,
-        };
-        public override void SelfExecute()
-        {
-            TeamId teamID;
-            Vector3 targetPos;
-            Minion other1;
-            teamID = GetTeamID(owner);
-            targetPos = GetCastSpellTargetPos();
-            other1 = SpawnMinion("Blinky", "YorickRavenousGhoul", "YorickPHPet.lua", targetPos, teamID, false, false, true, false, false, false, 0, false, false, (Champion)owner);
-            AddBuff(other1, attacker, new Buffs.YorickSummonRavenous(), 1, 1, 5, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
-            AddBuff(attacker, other1, new Buffs.YorickRavenousLogic(), 1, 1, 25000, BuffAddType.REPLACE_EXISTING, BuffType.AURA, 0, true, false, false);
         }
     }
 }

@@ -40,12 +40,11 @@ namespace Spells
             float distance;
             float multiplicant;
             float finalDamage;
-            bool canSee;
             isStealthed = GetStealthed(target);
             if(!isStealthed)
             {
                 teamID = GetTeamID(owner);
-                SpellEffectCreate(out asffa, out _, "nidalee_javelinToss_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true);
+                SpellEffectCreate(out asffa, out _, "nidalee_javelinToss_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true);
                 BreakSpellShields(target);
                 distance = DistanceBetweenObjects("Target", "Owner");
                 multiplicant = distance / 1000;
@@ -60,7 +59,7 @@ namespace Spells
                 if(target is Champion)
                 {
                     teamID = GetTeamID(owner);
-                    SpellEffectCreate(out asffa, out _, "nidalee_javelinToss_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true);
+                    SpellEffectCreate(out asffa, out _, "nidalee_javelinToss_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true);
                     BreakSpellShields(target);
                     distance = DistanceBetweenObjects("Target", "Owner");
                     multiplicant = distance / 1000;
@@ -72,11 +71,12 @@ namespace Spells
                 }
                 else
                 {
+                    bool canSee;
                     canSee = CanSeeTarget(owner, target);
                     if(canSee)
                     {
                         teamID = GetTeamID(owner);
-                        SpellEffectCreate(out asffa, out _, "nidalee_javelinToss_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true);
+                        SpellEffectCreate(out asffa, out _, "nidalee_javelinToss_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true);
                         BreakSpellShields(target);
                         distance = DistanceBetweenObjects("Target", "Owner");
                         multiplicant = distance / 1000;

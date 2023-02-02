@@ -11,13 +11,13 @@ namespace Chars
     {
         public override void OnUpdateActions()
         {
-            float nextBuffVars_HPPerLevel;
             if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.BlessingoftheLizardElder)) == 0)
             {
                 AddBuff((ObjAIBase)owner, owner, new Buffs.BlessingoftheLizardElder(), 1, 1, 25000, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 100000, true, false);
             }
             if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.HPByPlayerLevel)) == 0)
             {
+                float nextBuffVars_HPPerLevel;
                 nextBuffVars_HPPerLevel = 175;
                 AddBuff((ObjAIBase)owner, owner, new Buffs.HPByPlayerLevel(nextBuffVars_HPPerLevel), 1, 1, 25000, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false);
             }

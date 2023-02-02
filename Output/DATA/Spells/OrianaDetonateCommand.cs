@@ -21,12 +21,7 @@ namespace Spells
         int[] effect2 = {415, 415, 415, 415, 415};
         public override void SelfExecute()
         {
-            float nextBuffVars_MoveSpeedMod;
-            float nextBuffVars_Distance;
-            int nextBuffVars_IdealDistance;
-            float nextBuffVars_Gravity;
-            float nextBuffVars_Speed;
-            Vector3 nextBuffVars_Center;
+            float nextBuffVars_MoveSpeedMod; // UNUSED
             float damage;
             bool deployed;
             float rangeVar;
@@ -36,13 +31,6 @@ namespace Spells
             Vector3 targetPos;
             int currentType;
             AttackableUnit other1;
-            bool isStealthed;
-            AttackableUnit unit; // UNITIALIZED
-            bool canSee;
-            bool validTarget;
-            Vector3 oldPos;
-            Particle temp; // UNUSED
-            Vector3 newPos;
             AddBuff((ObjAIBase)owner, owner, new Buffs.OrianaGlobalCooldown(), 1, 1, 0.25f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
             damage = this.effect0[level];
             deployed = false;
@@ -87,34 +75,38 @@ namespace Spells
             }
             if(currentType == 0)
             {
+                bool isStealthed;
                 isStealthed = GetStealthed(other1);
                 if(!isStealthed)
                 {
-                    SpellEffectCreate(out this.particle, out _, "Oriana_Shockwave_nova_ally.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, other1, "SpinnigTopRidge", targetPos, default, default, targetPos, true, false, false, false, false);
+                    SpellEffectCreate(out this.particle, out _, "Oriana_Shockwave_nova_ally.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, other1, "SpinnigTopRidge", targetPos, default, default, targetPos, true, false, false, false, false);
                 }
                 else
                 {
-                    SpellEffectCreate(out this.particle, out _, "Oriana_Shockwave_nova.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, targetPos, default, default, targetPos, true, false, false, false, false);
+                    SpellEffectCreate(out this.particle, out _, "Oriana_Shockwave_nova.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, targetPos, default, default, targetPos, true, false, false, false, false);
                 }
             }
             else if(currentType == 1)
             {
-                SpellEffectCreate(out this.particle, out _, "Oriana_Shockwave_nova.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, other1, "SpinnigTopRidge", targetPos, default, default, targetPos, true, false, false, false, false);
+                SpellEffectCreate(out this.particle, out _, "Oriana_Shockwave_nova.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, other1, "SpinnigTopRidge", targetPos, default, default, targetPos, true, false, false, false, false);
             }
             else if(currentType == 2)
             {
-                SpellEffectCreate(out this.particle, out _, "Oriana_Shockwave_nova.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, "SpinnigTopRidge", targetPos, default, default, targetPos, true, false, false, false, false);
+                AttackableUnit unit; // UNITIALIZED
+                SpellEffectCreate(out this.particle, out _, "Oriana_Shockwave_nova.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, "SpinnigTopRidge", targetPos, default, default, targetPos, true, false, false, false, false);
             }
             else if(currentType == 3)
             {
-                SpellEffectCreate(out this.particle, out _, "Oriana_Shockwave_nova.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "SpinnigTopRidge", targetPos, default, default, targetPos, true, false, false, false, false);
+                SpellEffectCreate(out this.particle, out _, "Oriana_Shockwave_nova.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "SpinnigTopRidge", targetPos, default, default, targetPos, true, false, false, false, false);
             }
             else if(currentType == 5)
             {
-                SpellEffectCreate(out this.particle, out _, "Oriana_Shockwave_nova.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, targetPos, default, default, targetPos, true, false, false, false, false);
+                SpellEffectCreate(out this.particle, out _, "Oriana_Shockwave_nova.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, targetPos, default, default, targetPos, true, false, false, false, false);
             }
             foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, targetPos, rangeVar, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
             {
+                bool canSee;
+                bool validTarget;
                 canSee = CanSeeTarget(owner, unit);
                 validTarget = true;
                 if(unit is not Champion)
@@ -126,10 +118,18 @@ namespace Spells
                 }
                 if(validTarget)
                 {
+                    Vector3 oldPos;
+                    Particle temp; // UNUSED
+                    Vector3 newPos;
+                    float nextBuffVars_Distance;
+                    int nextBuffVars_IdealDistance; // UNUSED
+                    float nextBuffVars_Gravity;
+                    float nextBuffVars_Speed;
+                    Vector3 nextBuffVars_Center;
                     BreakSpellShields(unit);
                     oldPos = GetPointByUnitFacingOffset(unit, 425, 0);
                     FaceDirection(unit, targetPos);
-                    SpellEffectCreate(out temp, out _, "OrianaDetonate_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
+                    SpellEffectCreate(out temp, out _, "OrianaDetonate_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
                     ApplyDamage((ObjAIBase)owner, unit, damage, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0, 0, false, false, (ObjAIBase)owner);
                     newPos = GetPointByUnitFacingOffset(unit, 425, -180);
                     FaceDirection(unit, oldPos);

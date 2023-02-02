@@ -28,7 +28,7 @@ namespace Buffs
             float bonusDamage;
             float totalDamage;
             teamOfOwner = GetTeamID(owner);
-            SpellEffectCreate(out this.particle, out _, "ManaLeach_tar2.troy", default, teamOfOwner, 240, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, false, default, default, false, false);
+            SpellEffectCreate(out this.particle, out _, "ManaLeach_tar2.troy", default, teamOfOwner ?? TeamId.TEAM_UNKNOWN, 240, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, false, default, default, false, false);
             SetTargetable(owner, false);
             caster = SetBuffCasterUnit();
             level = GetSlotSpellLevel(caster, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
@@ -51,11 +51,11 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            float nextBuffVars_TickDamage;
             if(ExecutePeriodically(0.25f, ref this.lastTimeExecuted, true))
             {
                 foreach(AttackableUnit unit in GetUnitsInArea(attacker, owner.Position, 120, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
                 {
+                    float nextBuffVars_TickDamage;
                     nextBuffVars_TickDamage = this.tickDamage;
                     AddBuff(attacker, unit, new Buffs.OrianaDoT(nextBuffVars_TickDamage), 1, 1, 1, BuffAddType.RENEW_EXISTING, BuffType.DAMAGE, 0, true, false, false);
                 }

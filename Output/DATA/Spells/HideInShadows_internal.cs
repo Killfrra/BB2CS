@@ -47,7 +47,6 @@ namespace Buffs
         {
             float curTime;
             float timeSinceLastHit;
-            Fade iD; // UNUSED
             curTime = GetTime();
             timeSinceLastHit = curTime - this.timeLastHit;
             if(timeSinceLastHit >= 1.5f)
@@ -56,6 +55,7 @@ namespace Buffs
             }
             else if(this.willFade)
             {
+                Fade iD; // UNUSED
                 iD = PushCharacterFade(owner, 0.2f, 1.5f);
             }
         }

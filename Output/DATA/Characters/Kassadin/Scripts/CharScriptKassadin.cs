@@ -13,13 +13,12 @@ namespace Chars
         float[] effect0 = {0.85f, 0.85f, 0.85f, 0.85f, 0.85f, 0.85f, 0.85f, 0.85f, 0.85f, 0.85f, 0.85f, 0.85f, 0.85f, 0.85f, 0.85f, 0.85f, 0.85f, 0.85f};
         public override void OnUpdateActions()
         {
-            int level2;
-            TeamId teamID;
             if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.NetherBlade)) > 0)
             {
             }
             else
             {
+                int level2;
                 level2 = GetSlotSpellLevel((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 if(level2 > 0)
                 {
@@ -33,6 +32,7 @@ namespace Chars
                 {
                     if(!owner.IsDead)
                     {
+                        TeamId teamID;
                         teamID = GetTeamID(owner);
                         foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 1800, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectFriends | SpellDataFlags.AffectHeroes | SpellDataFlags.AlwaysSelf, default, true))
                         {

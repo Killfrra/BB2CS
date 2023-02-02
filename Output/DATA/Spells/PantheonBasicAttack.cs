@@ -12,8 +12,6 @@ namespace Spells
         float[] effect0 = {0.15f, 0.15f, 0.15f, 0.15f, 0.15f};
         public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
         {
-            float tarHP;
-            float hpThreshold;
             float baseDamage;
             if(hitResult != HitResult.HIT_Dodge)
             {
@@ -25,6 +23,8 @@ namespace Spells
                         {
                             if(target is not BaseTurret)
                             {
+                                float tarHP;
+                                float hpThreshold;
                                 tarHP = GetHealthPercent(target, PrimaryAbilityResourceType.MANA);
                                 level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                                 hpThreshold = this.effect0[level];

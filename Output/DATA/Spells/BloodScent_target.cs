@@ -20,7 +20,7 @@ namespace Buffs
         {
             TeamId casterID;
             casterID = GetTeamID(attacker);
-            SpellEffectCreate(out this.particle, out _, "wolfman_bloodscent_marker.troy", default, casterID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "head", default, owner, default, default, false);
+            SpellEffectCreate(out this.particle, out _, "wolfman_bloodscent_marker.troy", default, casterID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "head", default, owner, default, default, false);
             this.bubbleStuff = AddUnitPerceptionBubble(casterID, 1000, owner, 120, default, default, false);
         }
         public override void OnDeactivate(bool expired)

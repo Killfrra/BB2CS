@@ -19,8 +19,6 @@ namespace Buffs
         int[] effect1 = {25, 25, 30, 30, 35, 35, 40, 40, 45, 45, 50, 50, 55, 55, 60, 60, 65, 65};
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            int level;
-            Particle num; // UNUSED
             if(hitResult != HitResult.HIT_Dodge)
             {
                 if(hitResult != HitResult.HIT_Miss)
@@ -28,6 +26,8 @@ namespace Buffs
                     charVars.ComboCounter++;
                     if(charVars.ComboCounter >= 3)
                     {
+                        int level;
+                        Particle num; // UNUSED
                         charVars.ComboCounter = 0;
                         level = GetLevel(owner);
                         this.healAmount = this.effect0[level];

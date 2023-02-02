@@ -5,12 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class GravesPassiveShotAttack : BBBuffScript
-    {
-    }
-}
 namespace Spells
 {
     public class GravesPassiveShotAttack : BBSpellScript
@@ -25,11 +19,11 @@ namespace Spells
         {
             TeamId teamID; // UNUSED
             float damageToDeal;
-            float bonusDamage;
             level = GetLevel(attacker);
             teamID = GetTeamID(owner);
             if(target is not BaseTurret)
             {
+                float bonusDamage;
                 damageToDeal = GetTotalAttackDamage(attacker);
                 bonusDamage = this.effect0[level];
                 damageToDeal += bonusDamage;
@@ -49,5 +43,11 @@ namespace Spells
                 ApplyDamage(attacker, target, damageToDeal, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_ATTACK, 1, 0, 1, false, false, attacker);
             }
         }
+    }
+}
+namespace Buffs
+{
+    public class GravesPassiveShotAttack : BBBuffScript
+    {
     }
 }

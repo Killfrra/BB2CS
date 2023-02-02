@@ -24,13 +24,13 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            int count;
-            float stackDamage;
-            float damageAmount;
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, false))
             {
                 if(GetBuffCountFromCaster(owner, attacker, nameof(Buffs.ToxicShotAttack)) > 0)
                 {
+                    int count;
+                    float stackDamage;
+                    float damageAmount;
                     count = GetBuffCountFromAll(owner, nameof(Buffs.ToxicShotAttack));
                     stackDamage = this.stackingDamagePerTick * count;
                     damageAmount = this.damagePerTick + stackDamage;

@@ -29,7 +29,7 @@ namespace Buffs
             //RequireVar(this.level);
             level = this.level;
             casterTeam = GetTeamID(attacker);
-            SpellEffectCreate(out temp, out _, "Oriana_ts_tar.troy", default, casterTeam, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, false, false, false, false);
+            SpellEffectCreate(out temp, out _, "Oriana_ts_tar.troy", default, casterTeam ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, false, false, false, false);
             nextBuffVars_Level = this.level;
             AddBuff(attacker, target, new Buffs.OrianaShred(nextBuffVars_Level), 5, 1, 3, BuffAddType.STACKS_AND_RENEWS, BuffType.SHRED, 0, true, false, false);
         }

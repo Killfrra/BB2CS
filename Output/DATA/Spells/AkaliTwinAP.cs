@@ -40,13 +40,13 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            float dmgMultTooltip;
             this.akaliAP = GetFlatMagicDamageMod(owner);
             this.akaliAP -= 20;
             this.addBonusDmgPerc = this.akaliAP / 600;
             this.dmgMult = this.bonusDmgPerc + this.addBonusDmgPerc;
             if(ExecutePeriodically(2, ref this.lastTimeExecuted, false))
             {
+                float dmgMultTooltip;
                 dmgMultTooltip = 100 * this.dmgMult;
                 SetBuffToolTipVar(1, dmgMultTooltip);
             }

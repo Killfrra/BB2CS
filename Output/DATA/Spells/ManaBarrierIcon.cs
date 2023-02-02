@@ -23,13 +23,6 @@ namespace Buffs
             float maxHealth;
             float remainingHealth;
             float percentHealthRemaining;
-            float twentyPercentHealth;
-            float damageToLetThrough;
-            float damageToBlock;
-            float curMana;
-            float manaShield;
-            float nextBuffVars_ManaShield;
-            float nextBuffVars_amountToSubtract;
             currentHealth = GetHealth(owner, PrimaryAbilityResourceType.MANA);
             maxHealth = GetMaxHealth(target, PrimaryAbilityResourceType.MANA);
             remainingHealth = currentHealth - damageAmount;
@@ -40,6 +33,13 @@ namespace Buffs
                 {
                     if(percentHealthRemaining <= 0.2f)
                     {
+                        float twentyPercentHealth;
+                        float damageToLetThrough;
+                        float damageToBlock;
+                        float curMana;
+                        float manaShield;
+                        float nextBuffVars_ManaShield;
+                        float nextBuffVars_amountToSubtract;
                         twentyPercentHealth = 0.2f * maxHealth;
                         damageToLetThrough = currentHealth - twentyPercentHealth;
                         damageToBlock = damageAmount - damageToLetThrough;

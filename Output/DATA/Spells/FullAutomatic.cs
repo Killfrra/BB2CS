@@ -5,6 +5,30 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class FullAutomatic : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            AutoCooldownByLevel = new[]{ 90f, 75f, 60f, },
+            TriggersSpellCasts = true,
+            NotSingleTargetSpell = false,
+        };
+        int[] effect0 = {5, 6, 7};
+        int[] effect1 = {15, 25, 35};
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            float nextBuffVars_numAttacks;
+            float nextBuffVars_bonusDamage;
+            nextBuffVars_numAttacks = this.effect0[level];
+            nextBuffVars_bonusDamage = this.effect1[level];
+            OverrideAutoAttack(0, SpellSlotType.ExtraSlots, owner, level, false);
+            AddBuff(attacker, attacker, new Buffs.FullAutomatic(nextBuffVars_numAttacks, nextBuffVars_bonusDamage), 1, 1, 12, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+            AddBuff(attacker, attacker, new Buffs.TwitchSprayAndPray(), 10, nextBuffVars_numAttacks, 12, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, false, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class FullAutomatic : BBBuffScript
@@ -47,30 +71,6 @@ namespace Buffs
             {
                 SpellBuffRemoveCurrent(owner);
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class FullAutomatic : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            AutoCooldownByLevel = new[]{ 90f, 75f, 60f, },
-            TriggersSpellCasts = true,
-            NotSingleTargetSpell = false,
-        };
-        int[] effect0 = {5, 6, 7};
-        int[] effect1 = {15, 25, 35};
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            float nextBuffVars_numAttacks;
-            float nextBuffVars_bonusDamage;
-            nextBuffVars_numAttacks = this.effect0[level];
-            nextBuffVars_bonusDamage = this.effect1[level];
-            OverrideAutoAttack(0, SpellSlotType.ExtraSlots, owner, level, false);
-            AddBuff(attacker, attacker, new Buffs.FullAutomatic(nextBuffVars_numAttacks, nextBuffVars_bonusDamage), 1, 1, 12, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
-            AddBuff(attacker, attacker, new Buffs.TwitchSprayAndPray(), 10, nextBuffVars_numAttacks, 12, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, false, false, false);
         }
     }
 }

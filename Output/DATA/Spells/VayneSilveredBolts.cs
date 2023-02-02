@@ -24,17 +24,6 @@ namespace Buffs
         {
             bool canMove; // UNUSED
             bool isBlinded; // UNITIALIZED
-            int count;
-            TeamId teamID;
-            TeamId teamIDTarget;
-            Particle gragas; // UNUSED
-            int level;
-            float abilityPower;
-            float bonusMaxHealthDamage;
-            float tarMaxHealth;
-            float rankScaling;
-            float flatScaling;
-            float damageToDeal;
             canMove = GetCanMove(owner);
             if(!isBlinded)
             {
@@ -50,12 +39,23 @@ namespace Buffs
                         {
                             if(hitResult != HitResult.HIT_Miss)
                             {
+                                int count;
                                 count = GetBuffCountFromCaster(target, attacker, nameof(Buffs.VayneSilveredDebuff));
                                 if(count == 2)
                                 {
+                                    TeamId teamID;
+                                    TeamId teamIDTarget;
+                                    Particle gragas; // UNUSED
+                                    int level;
+                                    float abilityPower;
+                                    float bonusMaxHealthDamage;
+                                    float tarMaxHealth;
+                                    float rankScaling;
+                                    float flatScaling;
+                                    float damageToDeal;
                                     teamID = GetTeamID(attacker);
                                     teamIDTarget = GetTeamID(target);
-                                    SpellEffectCreate(out gragas, out _, "vayne_W_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, target, false, default, default, target.Position, target, default, default, true, false, false, false, false);
+                                    SpellEffectCreate(out gragas, out _, "vayne_W_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, target, false, default, default, target.Position, target, default, default, true, false, false, false, false);
                                     level = GetSlotSpellLevel(attacker, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                                     abilityPower = GetFlatMagicDamageMod(attacker);
                                     bonusMaxHealthDamage = 0 * abilityPower;

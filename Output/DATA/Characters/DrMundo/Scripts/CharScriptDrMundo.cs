@@ -13,10 +13,10 @@ namespace Chars
         public override void OnSpellCast(string spellName, SpellScriptMetaData spellVars)
         {
             string name;
-            float healthCost;
             name = GetSpellName();
             if(name == nameof(Spells.InfectedCleaverMissile))
             {
+                float healthCost;
                 level = GetSlotSpellLevel((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 healthCost = this.effect0[level];
                 IncHealth(owner, healthCost, owner);

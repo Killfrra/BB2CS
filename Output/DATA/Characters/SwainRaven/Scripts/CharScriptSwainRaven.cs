@@ -23,12 +23,12 @@ namespace Chars
         }
         public override void OnPreDealDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
         {
-            float damagePercent;
             if(GetBuffCountFromCaster(target, owner, nameof(Buffs.SwainTorment)) > 0)
             {
                 level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 if(level > 0)
                 {
+                    float damagePercent;
                     damagePercent = this.effect0[level];
                     damageAmount *= damagePercent;
                 }

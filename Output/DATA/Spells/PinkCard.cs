@@ -44,10 +44,10 @@ namespace Buffs
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
             int level;
-            Particle ar; // UNUSED
             level = GetSlotSpellLevel((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             if(target is ObjAIBase)
             {
+                Particle ar; // UNUSED
                 SpellEffectCreate(out ar, out _, "DeathsCaress_nova.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, false);
             }
             foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, target.Position, 275, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes))

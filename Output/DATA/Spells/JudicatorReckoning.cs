@@ -5,34 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class JudicatorReckoning : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateAttachBoneName = new[]{ "head", },
-            AutoBuffActivateEffect = new[]{ "Global_Slow.troy", },
-            BuffName = "JudicatorReckoning",
-            BuffTextureName = "Judicator_Reckoning.dds",
-            PopupMessage = new[]{ "game_floatingtext_Slowed", },
-        };
-        float moveSpeedMod;
-        public JudicatorReckoning(float moveSpeedMod = default)
-        {
-            this.moveSpeedMod = moveSpeedMod;
-        }
-        public override void OnActivate()
-        {
-            //RequireVar(this.moveSpeedMod);
-            ApplyAssistMarker(attacker, owner, 10);
-        }
-        public override void OnUpdateStats()
-        {
-            IncPercentMultiplicativeMovementSpeedMod(owner, this.moveSpeedMod);
-        }
-    }
-}
 namespace Spells
 {
     public class JudicatorReckoning : BBSpellScript
@@ -64,6 +36,34 @@ namespace Spells
             finalDamage = aP + bonusAD;
             ApplyDamage(attacker, target, finalDamage + this.effect1[level], DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELL, 1, 0, 0, false, false, attacker);
             AddBuff(attacker, target, new Buffs.JudicatorReckoning(nextBuffVars_MoveSpeedMod), 100, 1, 4, BuffAddType.STACKS_AND_OVERLAPS, BuffType.SLOW, 0, true, false, false);
+        }
+    }
+}
+namespace Buffs
+{
+    public class JudicatorReckoning : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateAttachBoneName = new[]{ "head", },
+            AutoBuffActivateEffect = new[]{ "Global_Slow.troy", },
+            BuffName = "JudicatorReckoning",
+            BuffTextureName = "Judicator_Reckoning.dds",
+            PopupMessage = new[]{ "game_floatingtext_Slowed", },
+        };
+        float moveSpeedMod;
+        public JudicatorReckoning(float moveSpeedMod = default)
+        {
+            this.moveSpeedMod = moveSpeedMod;
+        }
+        public override void OnActivate()
+        {
+            //RequireVar(this.moveSpeedMod);
+            ApplyAssistMarker(attacker, owner, 10);
+        }
+        public override void OnUpdateStats()
+        {
+            IncPercentMultiplicativeMovementSpeedMod(owner, this.moveSpeedMod);
         }
     }
 }

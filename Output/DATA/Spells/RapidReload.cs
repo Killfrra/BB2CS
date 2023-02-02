@@ -20,8 +20,6 @@ namespace Buffs
         };
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            float trueDamageAmount;
-            float temp1;
             if(target is ObjAIBase)
             {
                 if(target is BaseTurret)
@@ -29,6 +27,8 @@ namespace Buffs
                 }
                 else
                 {
+                    float trueDamageAmount;
+                    float temp1;
                     trueDamageAmount = 0.1f * damageAmount;
                     temp1 = GetHealth(target, PrimaryAbilityResourceType.MANA);
                     if(trueDamageAmount > temp1)

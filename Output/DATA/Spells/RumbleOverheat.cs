@@ -51,9 +51,9 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            int level;
             if(ExecutePeriodically(0.5f, ref this.lastTimeExecuted, false))
             {
+                int level;
                 IncPAR(owner, -10, PrimaryAbilityResourceType.Other);
                 if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.RumbleGrenadeCounter)) == 0)
                 {

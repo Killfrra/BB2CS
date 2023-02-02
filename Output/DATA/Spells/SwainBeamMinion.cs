@@ -44,10 +44,10 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            float distance;
             FaceDirection(owner, attacker.Position);
             if(ExecutePeriodically(0.25f, ref this.lastTimeExecuted, false))
             {
+                float distance;
                 distance = DistanceBetweenObjects("Attacker", "Owner");
                 if(distance >= 605)
                 {

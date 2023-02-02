@@ -5,6 +5,32 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class BrandFissure : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            DoesntBreakShields = true,
+        };
+        int[] effect0 = {75, 120, 165, 210, 255};
+        float[] effect1 = {93.75f, 150, 206.25f, 262.5f, 318.75f};
+        public override void SelfExecute()
+        {
+            Vector3 targetPos;
+            TeamId teamOfOwner;
+            Minion other3;
+            float nextBuffVars_FissureDamage;
+            float nextBuffVars_AblazeBonusDamage;
+            targetPos = GetCastSpellTargetPos();
+            teamOfOwner = GetTeamID(owner);
+            other3 = SpawnMinion("HiddenMinion", "TestCube", "idle.lua", targetPos, teamOfOwner ?? TeamId.TEAM_CASTER, false, true, false, true, true, true, 0, false, false, (Champion)owner);
+            nextBuffVars_FissureDamage = this.effect0[level];
+            nextBuffVars_AblazeBonusDamage = this.effect1[level];
+            AddBuff(attacker, other3, new Buffs.BrandFissure(nextBuffVars_FissureDamage, nextBuffVars_AblazeBonusDamage), 1, 1, 0.5f, BuffAddType.REPLACE_EXISTING, BuffType.DAMAGE, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class BrandFissure : BBBuffScript
@@ -33,15 +59,15 @@ namespace Buffs
             SetIgnoreCallForHelp(owner, true);
             SetCallForHelpSuppresser(owner, true);
             teamOfOwner = GetTeamID(attacker);
-            SpellEffectCreate(out this.groundParticleEffect, out this.groundParticleEffect2, "BrandPOF_tar_green.troy", "BrandPOF_tar_red.troy", teamOfOwner, 10, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, false, false, false, false, false);
+            SpellEffectCreate(out this.groundParticleEffect, out this.groundParticleEffect2, "BrandPOF_tar_green.troy", "BrandPOF_tar_red.troy", teamOfOwner ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, false, false, false, false, false);
             brandSkinID = GetSkinID(attacker);
             if(brandSkinID == 3)
             {
-                SpellEffectCreate(out this.a, out _, "BrandPOF_Frost_charge.troy", default, teamOfOwner, 10, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, owner, default, default, false, false, false, false, false);
+                SpellEffectCreate(out this.a, out _, "BrandPOF_Frost_charge.troy", default, teamOfOwner ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, owner, default, default, false, false, false, false, false);
             }
             else
             {
-                SpellEffectCreate(out this.a, out _, "BrandPOF_charge.troy", default, teamOfOwner, 10, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, owner, default, default, false, false, false, false, false);
+                SpellEffectCreate(out this.a, out _, "BrandPOF_charge.troy", default, teamOfOwner ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, owner, default, default, false, false, false, false, false);
             }
         }
         public override void OnDeactivate(bool expired)
@@ -50,7 +76,6 @@ namespace Buffs
             Vector3 ownerPos;
             int brandSkinID;
             Particle b; // UNUSED
-            Particle d; // UNUSED
             SpellEffectRemove(this.a);
             SpellEffectRemove(this.groundParticleEffect);
             SpellEffectRemove(this.groundParticleEffect2);
@@ -59,14 +84,15 @@ namespace Buffs
             brandSkinID = GetSkinID(attacker);
             if(brandSkinID == 3)
             {
-                SpellEffectCreate(out b, out _, "BrandPOF_Frost_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, ownerPos, target, default, default, true, false, false, false, false);
+                SpellEffectCreate(out b, out _, "BrandPOF_Frost_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, ownerPos, target, default, default, true, false, false, false, false);
             }
             else
             {
-                SpellEffectCreate(out b, out _, "BrandPOF_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, ownerPos, target, default, default, true, false, false, false, false);
+                SpellEffectCreate(out b, out _, "BrandPOF_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, ownerPos, target, default, default, true, false, false, false, false);
             }
             foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 260, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
             {
+                Particle d; // UNUSED
                 BreakSpellShields(unit);
                 if(GetBuffCountFromCaster(unit, attacker, nameof(Buffs.BrandAblaze)) > 0)
                 {
@@ -88,32 +114,6 @@ namespace Buffs
             }
             SetTargetable(owner, true);
             ApplyDamage((ObjAIBase)owner, owner, 1000, DamageType.DAMAGE_TYPE_TRUE, DamageSource.DAMAGE_SOURCE_INTERNALRAW, 1, 1, 1, false, false, attacker);
-        }
-    }
-}
-namespace Spells
-{
-    public class BrandFissure : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            DoesntBreakShields = true,
-        };
-        int[] effect0 = {75, 120, 165, 210, 255};
-        float[] effect1 = {93.75f, 150, 206.25f, 262.5f, 318.75f};
-        public override void SelfExecute()
-        {
-            Vector3 targetPos;
-            TeamId teamOfOwner;
-            Minion other3;
-            float nextBuffVars_FissureDamage;
-            float nextBuffVars_AblazeBonusDamage;
-            targetPos = GetCastSpellTargetPos();
-            teamOfOwner = GetTeamID(owner);
-            other3 = SpawnMinion("HiddenMinion", "TestCube", "idle.lua", targetPos, teamOfOwner, false, true, false, true, true, true, 0, false, false, (Champion)owner);
-            nextBuffVars_FissureDamage = this.effect0[level];
-            nextBuffVars_AblazeBonusDamage = this.effect1[level];
-            AddBuff(attacker, other3, new Buffs.BrandFissure(nextBuffVars_FissureDamage, nextBuffVars_AblazeBonusDamage), 1, 1, 0.5f, BuffAddType.REPLACE_EXISTING, BuffType.DAMAGE, 0, true, false, false);
         }
     }
 }

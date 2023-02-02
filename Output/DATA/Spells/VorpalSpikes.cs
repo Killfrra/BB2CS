@@ -5,21 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class VorpalSpikes : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateAttachBoneName = new[]{ "", },
-            AutoBuffActivateEffect = new[]{ "", },
-            BuffName = "Vorpal Spikes",
-            BuffTextureName = "GreenTerror_ChitinousExoplates.dds",
-            PersistsThroughDeath = true,
-            SpellToggleSlot = 3,
-        };
-    }
-}
 namespace Spells
 {
     public class VorpalSpikes : BBSpellScript
@@ -43,5 +28,20 @@ namespace Spells
                 AddBuff((ObjAIBase)owner, owner, new Buffs.VorpalSpikes(), 1, 1, 25000, BuffAddType.RENEW_EXISTING, BuffType.AURA, 0, true, false);
             }
         }
+    }
+}
+namespace Buffs
+{
+    public class VorpalSpikes : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateAttachBoneName = new[]{ "", },
+            AutoBuffActivateEffect = new[]{ "", },
+            BuffName = "Vorpal Spikes",
+            BuffTextureName = "GreenTerror_ChitinousExoplates.dds",
+            PersistsThroughDeath = true,
+            SpellToggleSlot = 3,
+        };
     }
 }

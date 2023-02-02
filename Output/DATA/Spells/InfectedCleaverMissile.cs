@@ -5,41 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class InfectedCleaverMissile : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            BuffName = "InfectedCleaverDebuff",
-            BuffTextureName = "DrMundo_InfectedCleaver.dds",
-            PopupMessage = new[]{ "game_floatingtext_Slowed", },
-            SpellFXOverrideSkins = new[]{ "MundoMundo", },
-        };
-        float moveMod;
-        Particle slow;
-        public InfectedCleaverMissile(float moveMod = default)
-        {
-            this.moveMod = moveMod;
-        }
-        public override void OnActivate()
-        {
-            //RequireVar(this.moveMod);
-            SpellEffectCreate(out this.slow, out _, "Global_Slow.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, false, default, default, false, false);
-            ApplyAssistMarker(attacker, owner, 10);
-        }
-        public override void OnDeactivate(bool expired)
-        {
-            SpellEffectRemove(this.slow);
-        }
-        public override void OnUpdateStats()
-        {
-            float moveMod;
-            moveMod = this.moveMod;
-            IncPercentMultiplicativeMovementSpeedMod(owner, moveMod);
-        }
-    }
-}
 namespace Spells
 {
     public class InfectedCleaverMissile : BBSpellScript
@@ -83,7 +48,6 @@ namespace Spells
             float damageDealt;
             float healthReturn;
             Particle hit; // UNUSED
-            bool canSee;
             teamID = GetTeamID(owner);
             mundoID = GetSkinID(owner);
             isStealthed = GetStealthed(target);
@@ -105,11 +69,11 @@ namespace Spells
                 IncHealth(owner, healthReturn, owner);
                 if(mundoID == 4)
                 {
-                    SpellEffectCreate(out hit, out _, "dr_mundo_as_mundo_infected_cleaver_tar", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false, false);
+                    SpellEffectCreate(out hit, out _, "dr_mundo_as_mundo_infected_cleaver_tar", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false, false);
                 }
                 else
                 {
-                    SpellEffectCreate(out hit, out _, "dr_mundo_infected_cleaver_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false, false);
+                    SpellEffectCreate(out hit, out _, "dr_mundo_infected_cleaver_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false, false);
                 }
             }
             else
@@ -129,11 +93,11 @@ namespace Spells
                     DestroyMissile(missileNetworkID);
                     if(mundoID == 4)
                     {
-                        SpellEffectCreate(out hit, out _, "dr_mundo_as_mundo_infected_cleaver_tar", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false, false);
+                        SpellEffectCreate(out hit, out _, "dr_mundo_as_mundo_infected_cleaver_tar", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false, false);
                     }
                     else
                     {
-                        SpellEffectCreate(out hit, out _, "dr_mundo_infected_cleaver_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false, false);
+                        SpellEffectCreate(out hit, out _, "dr_mundo_infected_cleaver_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false, false);
                     }
                     level = GetSlotSpellLevel((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                     healthReturn = this.effect9[level];
@@ -141,6 +105,7 @@ namespace Spells
                 }
                 else
                 {
+                    bool canSee;
                     canSee = CanSeeTarget(owner, target);
                     if(canSee)
                     {
@@ -157,11 +122,11 @@ namespace Spells
                         DestroyMissile(missileNetworkID);
                         if(mundoID == 4)
                         {
-                            SpellEffectCreate(out hit, out _, "dr_mundo_as_mundo_infected_cleaver_tar", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false, false);
+                            SpellEffectCreate(out hit, out _, "dr_mundo_as_mundo_infected_cleaver_tar", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false, false);
                         }
                         else
                         {
-                            SpellEffectCreate(out hit, out _, "dr_mundo_infected_cleaver_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false, false);
+                            SpellEffectCreate(out hit, out _, "dr_mundo_infected_cleaver_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false, false);
                         }
                         level = GetSlotSpellLevel((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                         healthReturn = this.effect14[level];
@@ -169,6 +134,41 @@ namespace Spells
                     }
                 }
             }
+        }
+    }
+}
+namespace Buffs
+{
+    public class InfectedCleaverMissile : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            BuffName = "InfectedCleaverDebuff",
+            BuffTextureName = "DrMundo_InfectedCleaver.dds",
+            PopupMessage = new[]{ "game_floatingtext_Slowed", },
+            SpellFXOverrideSkins = new[]{ "MundoMundo", },
+        };
+        float moveMod;
+        Particle slow;
+        public InfectedCleaverMissile(float moveMod = default)
+        {
+            this.moveMod = moveMod;
+        }
+        public override void OnActivate()
+        {
+            //RequireVar(this.moveMod);
+            SpellEffectCreate(out this.slow, out _, "Global_Slow.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, false, default, default, false, false);
+            ApplyAssistMarker(attacker, owner, 10);
+        }
+        public override void OnDeactivate(bool expired)
+        {
+            SpellEffectRemove(this.slow);
+        }
+        public override void OnUpdateStats()
+        {
+            float moveMod;
+            moveMod = this.moveMod;
+            IncPercentMultiplicativeMovementSpeedMod(owner, moveMod);
         }
     }
 }

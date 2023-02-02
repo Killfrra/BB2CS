@@ -19,23 +19,23 @@ namespace Spells
             TeamId twitchTeamId;
             float baseDamage;
             int twitchSkinID;
-            Particle a; // UNUSED
             twitchTeamId = GetTeamID(owner);
             baseDamage = GetBaseAttackDamage(owner);
             twitchSkinID = GetSkinID(attacker);
             if(target is ObjAIBase)
             {
+                Particle a; // UNUSED
                 if(twitchSkinID == 4)
                 {
-                    SpellEffectCreate(out a, out _, "twitch_gangster_sprayandPray_tar.troy", default, twitchTeamId, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true);
+                    SpellEffectCreate(out a, out _, "twitch_gangster_sprayandPray_tar.troy", default, twitchTeamId ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true);
                 }
                 else if(twitchSkinID == 5)
                 {
-                    SpellEffectCreate(out a, out _, "twitch_punk_sprayandPray_tar.troy", default, twitchTeamId, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true);
+                    SpellEffectCreate(out a, out _, "twitch_punk_sprayandPray_tar.troy", default, twitchTeamId ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true);
                 }
                 else
                 {
-                    SpellEffectCreate(out a, out _, "twitch_sprayandPray_tar.troy", default, twitchTeamId, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true);
+                    SpellEffectCreate(out a, out _, "twitch_sprayandPray_tar.troy", default, twitchTeamId ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true);
                 }
             }
             level = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);

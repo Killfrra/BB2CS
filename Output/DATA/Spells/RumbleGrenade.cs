@@ -5,28 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class RumbleGrenade : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateEffect = new[]{ "", "", },
-            BuffName = "RumbleGrenade",
-            BuffTextureName = "Rumble_Electro Harpoon.dds",
-        };
-        public override void OnActivate()
-        {
-            SetSlotSpellCooldownTimeVer2(0.5f, 2, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner, false);
-        }
-        public override void OnDeactivate(bool expired)
-        {
-            float duration;
-            duration = GetBuffRemainingDuration(owner, nameof(Buffs.RumbleGrenadeCD));
-            SetSlotSpellCooldownTime((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, duration);
-        }
-    }
-}
 namespace Spells
 {
     public class RumbleGrenade : BBSpellScript
@@ -48,10 +26,8 @@ namespace Spells
             float distance;
             float firstCost;
             float secondCost;
-            float cDRMod;
             float nextBuffVars_BaseCDR;
             float nextBuffVars_CDRMod;
-            float par;
             targetPos = GetCastSpellTargetPos();
             level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             ownerPos = GetUnitPosition(owner);
@@ -61,6 +37,7 @@ namespace Spells
             secondCost = this.effect1[level];
             if(true)
             {
+                float cDRMod;
                 level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 cDRMod = GetPercentCooldownMod(attacker);
                 nextBuffVars_BaseCDR = this.effect2[level];
@@ -76,6 +53,7 @@ namespace Spells
             SpellCast((ObjAIBase)owner, default, targetPos, targetPos, 3, SpellSlotType.ExtraSlots, level, true, false, false, false, false, false);
             if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.RumbleGrenadeCounter)) == 0)
             {
+                float par;
                 par = GetPAR(target, PrimaryAbilityResourceType.Other);
                 if(par >= 80)
                 {
@@ -99,6 +77,28 @@ namespace Spells
                 IncPAR(owner, secondCost, PrimaryAbilityResourceType.Other);
                 SpellBuffClear(owner, nameof(Buffs.RumbleGrenadeCounter));
             }
+        }
+    }
+}
+namespace Buffs
+{
+    public class RumbleGrenade : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateEffect = new[]{ "", "", },
+            BuffName = "RumbleGrenade",
+            BuffTextureName = "Rumble_Electro Harpoon.dds",
+        };
+        public override void OnActivate()
+        {
+            SetSlotSpellCooldownTimeVer2(0.5f, 2, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner, false);
+        }
+        public override void OnDeactivate(bool expired)
+        {
+            float duration;
+            duration = GetBuffRemainingDuration(owner, nameof(Buffs.RumbleGrenadeCD));
+            SetSlotSpellCooldownTime((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, duration);
         }
     }
 }

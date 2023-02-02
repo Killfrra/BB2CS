@@ -5,6 +5,24 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class SejuaniNorthernWinds : BBSpellScript
+    {
+        int[] effect0 = {12, 20, 28, 36, 44};
+        float[] effect1 = {0.01f, 0.0125f, 0.015f, 0.0175f, 0.02f};
+        public override void SelfExecute()
+        {
+            float nextBuffVars_DamagePerTick;
+            float nextBuffVars_MaxHPPercent;
+            float nextBuffVars_FrostBonus;
+            nextBuffVars_DamagePerTick = this.effect0[level];
+            nextBuffVars_MaxHPPercent = this.effect1[level];
+            nextBuffVars_FrostBonus = 1.5f;
+            AddBuff((ObjAIBase)owner, target, new Buffs.SejuaniNorthernWinds(nextBuffVars_DamagePerTick, nextBuffVars_MaxHPPercent, nextBuffVars_FrostBonus), 1, 1, 5, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class SejuaniNorthernWinds : BBBuffScript
@@ -33,7 +51,7 @@ namespace Buffs
             //RequireVar(this.damagePerTick);
             //RequireVar(this.maxHPPercent);
             //RequireVar(this.frostBonus);
-            SpellEffectCreate(out this.b, out _, "Sejuani_NorthernWinds_aura.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, true, false, false, false, false);
+            SpellEffectCreate(out this.b, out _, "Sejuani_NorthernWinds_aura.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, true, false, false, false, false);
         }
         public override void OnDeactivate(bool expired)
         {
@@ -41,17 +59,17 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            float temp1;
-            float percentDamage;
-            float damagePerTick;
-            float abilityPowerMod;
-            float abilityPowerBonus;
-            float damagePerTickFrost;
-            TeamId teamID;
-            bool bonus;
-            Particle a; // UNUSED
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, true))
             {
+                float temp1;
+                float percentDamage;
+                float damagePerTick;
+                float abilityPowerMod;
+                float abilityPowerBonus;
+                float damagePerTickFrost;
+                TeamId teamID;
+                bool bonus;
+                Particle a; // UNUSED
                 temp1 = GetMaxHealth(owner, PrimaryAbilityResourceType.MANA);
                 percentDamage = temp1 * this.maxHPPercent;
                 damagePerTick = percentDamage + this.damagePerTick;
@@ -80,12 +98,12 @@ namespace Buffs
                         if(bonus)
                         {
                             ApplyDamage(attacker, unit, damagePerTickFrost, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0, 1, false, false, attacker);
-                            SpellEffectCreate(out a, out _, "SejuaniNorthernWinds_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
+                            SpellEffectCreate(out a, out _, "SejuaniNorthernWinds_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
                         }
                         else
                         {
                             ApplyDamage(attacker, unit, damagePerTick, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0, 1, false, false, attacker);
-                            SpellEffectCreate(out a, out _, "SejuaniNorthernWinds_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
+                            SpellEffectCreate(out a, out _, "SejuaniNorthernWinds_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
                         }
                     }
                 }
@@ -109,34 +127,16 @@ namespace Buffs
                         if(bonus)
                         {
                             ApplyDamage(attacker, unit, damagePerTickFrost, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0, 1, false, false, attacker);
-                            SpellEffectCreate(out a, out _, "SejuaniNorthernWinds_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
+                            SpellEffectCreate(out a, out _, "SejuaniNorthernWinds_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
                         }
                         else
                         {
                             ApplyDamage(attacker, unit, damagePerTick, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0, 1, false, false, attacker);
-                            SpellEffectCreate(out a, out _, "SejuaniNorthernWinds_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
+                            SpellEffectCreate(out a, out _, "SejuaniNorthernWinds_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
                         }
                     }
                 }
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class SejuaniNorthernWinds : BBSpellScript
-    {
-        int[] effect0 = {12, 20, 28, 36, 44};
-        float[] effect1 = {0.01f, 0.0125f, 0.015f, 0.0175f, 0.02f};
-        public override void SelfExecute()
-        {
-            float nextBuffVars_DamagePerTick;
-            float nextBuffVars_MaxHPPercent;
-            float nextBuffVars_FrostBonus;
-            nextBuffVars_DamagePerTick = this.effect0[level];
-            nextBuffVars_MaxHPPercent = this.effect1[level];
-            nextBuffVars_FrostBonus = 1.5f;
-            AddBuff((ObjAIBase)owner, target, new Buffs.SejuaniNorthernWinds(nextBuffVars_DamagePerTick, nextBuffVars_MaxHPPercent, nextBuffVars_FrostBonus), 1, 1, 5, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
         }
     }
 }

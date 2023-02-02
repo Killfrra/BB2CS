@@ -32,7 +32,6 @@ namespace Spells
             float baseAD;
             float bonusDamage;
             bool isStealthed;
-            bool canSee;
             level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             nextBuffVars_ArmorMod = this.effect0[level];
             baseDamage = this.effect1[level];
@@ -55,6 +54,7 @@ namespace Spells
                 }
                 else
                 {
+                    bool canSee;
                     canSee = CanSeeTarget(owner, target);
                     if(canSee)
                     {

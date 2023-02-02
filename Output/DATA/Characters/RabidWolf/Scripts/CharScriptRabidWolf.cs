@@ -11,7 +11,6 @@ namespace Chars
     {
         public override void OnUpdateActions()
         {
-            float nextBuffVars_HPPerLevel;
             if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.CrestOfNaturesFury)) > 0)
             {
             }
@@ -24,6 +23,7 @@ namespace Chars
             }
             else
             {
+                float nextBuffVars_HPPerLevel;
                 nextBuffVars_HPPerLevel = 130;
                 AddBuff((ObjAIBase)owner, owner, new Buffs.HPByPlayerLevel(nextBuffVars_HPPerLevel), 1, 1, 25000, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0);
             }

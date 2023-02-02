@@ -36,12 +36,12 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            Particle hi1; // UNUSED
-            Particle hi2; // UNUSED
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, true))
             {
                 foreach(AttackableUnit unit in GetUnitsInArea(attacker, owner.Position, 225, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes))
                 {
+                    Particle hi1; // UNUSED
+                    Particle hi2; // UNUSED
                     ApplyDamage(attacker, unit, this.damagePerTick, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_PERIODIC, 1, 0.1f);
                     SpellEffectCreate(out hi1, out _, default, default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, "L_foot", default, unit, default, default, false);
                     SpellEffectCreate(out hi2, out _, default, default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, "R_foot", default, unit, default, default, false);

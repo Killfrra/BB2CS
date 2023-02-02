@@ -51,9 +51,9 @@ namespace Chars
         }
         public override void OnSpellCast(string spellName, SpellScriptMetaData spellVars)
         {
-            int slotNumber;
             if(!spellVars.DoesntTriggerSpellCasts)
             {
+                int slotNumber;
                 if(GetBuffCountFromCaster(attacker, attacker, nameof(Buffs.IfHasBuffCheck)) == 0)
                 {
                     if(GetBuffCountFromCaster(attacker, attacker, nameof(Buffs.SonaPowerChord)) == 0)
@@ -95,7 +95,6 @@ namespace Chars
         {
             int nextBuffVars_APADBoost;
             int nextBuffVars_ARMRBoost;
-            int nextBuffVars_MSBoost;
             if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.SonaHymnofValor)) > 0)
             {
                 level = GetSlotSpellLevel(attacker, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
@@ -116,6 +115,7 @@ namespace Chars
             }
             if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.SonaSongofDiscord)) > 0)
             {
+                int nextBuffVars_MSBoost;
                 level = GetSlotSpellLevel(attacker, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 nextBuffVars_MSBoost = this.effect2[level];
                 foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 1000, SpellDataFlags.AffectFriends | SpellDataFlags.AffectHeroes, default, true))

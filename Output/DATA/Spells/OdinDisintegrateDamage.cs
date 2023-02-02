@@ -12,11 +12,11 @@ namespace Buffs
         public override void OnPreDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
         {
             ObjAIBase caster;
-            float hPTotal;
-            float hPPercent;
             caster = SetBuffCasterUnit();
             if(attacker == caster)
             {
+                float hPTotal;
+                float hPPercent;
                 hPTotal = GetMaxHealth(owner, PrimaryAbilityResourceType.MANA);
                 hPPercent = hPTotal * 0.045f;
                 damageAmount = Math.Max(hPPercent, damageAmount);

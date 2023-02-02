@@ -16,9 +16,6 @@ namespace Chars
         }
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            int count;
-            float lifeStealToHeal;
-            Particle num; // UNUSED
             if(hitResult != HitResult.HIT_Dodge)
             {
                 if(hitResult != HitResult.HIT_Miss)
@@ -30,6 +27,9 @@ namespace Chars
                         }
                         else
                         {
+                            int count;
+                            float lifeStealToHeal;
+                            Particle num; // UNUSED
                             AddBuff(attacker, target, new Buffs.EternalThirst(), 3, 1, 4.1f, BuffAddType.STACKS_AND_RENEWS, BuffType.INTERNAL, 0, true, false, false);
                             count = GetBuffCountFromAll(target, nameof(Buffs.EternalThirst));
                             lifeStealToHeal = charVars.LifeStealAmount * count;

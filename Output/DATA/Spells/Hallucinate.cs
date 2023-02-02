@@ -5,18 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class Hallucinate : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            BuffName = "Hallucinate",
-            BuffTextureName = "Jester_HallucinogenBomb.dds",
-            IsPetDurationBuff = true,
-        };
-    }
-}
 namespace Spells
 {
     public class Hallucinate : BBSpellScript
@@ -34,11 +22,6 @@ namespace Spells
         public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
         {
             bool isStealthed;
-            Vector3 pos;
-            Pet other1;
-            int nextBuffVars_DamageAmount;
-            float nextBuffVars_DamageDealt;
-            float nextBuffVars_DamageTaken;
             SpellBuffRemoveType(owner, BuffType.COMBAT_ENCHANCER);
             SpellBuffRemoveType(owner, BuffType.COMBAT_DEHANCER);
             SpellBuffRemoveType(owner, BuffType.STUN);
@@ -67,6 +50,11 @@ namespace Spells
             }
             else
             {
+                Vector3 pos;
+                Pet other1;
+                int nextBuffVars_DamageAmount;
+                float nextBuffVars_DamageDealt;
+                float nextBuffVars_DamageTaken;
                 pos = GetRandomPointInAreaUnit(owner, 100, 0);
                 other1 = CloneUnitPet(owner, nameof(Buffs.Hallucinate), 18, pos, 0, 0, true);
                 nextBuffVars_DamageAmount = this.effect0[level];
@@ -79,5 +67,17 @@ namespace Spells
                 SetStealthed(other1, false);
             }
         }
+    }
+}
+namespace Buffs
+{
+    public class Hallucinate : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            BuffName = "Hallucinate",
+            BuffTextureName = "Jester_HallucinogenBomb.dds",
+            IsPetDurationBuff = true,
+        };
     }
 }

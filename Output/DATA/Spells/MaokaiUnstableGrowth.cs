@@ -5,6 +5,47 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class MaokaiUnstableGrowth : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            CastingBreaksStealth = true,
+            DoesntBreakShields = true,
+            TriggersSpellCasts = true,
+            IsDamagingSpell = true,
+            NotSingleTargetSpell = true,
+        };
+        int[] effect0 = {80, 115, 150, 185, 220};
+        float[] effect1 = {1, 1.25f, 1.5f, 1.75f, 2};
+        public override bool CanCast()
+        {
+            bool returnValue = true;
+            bool canMove;
+            bool canCast;
+            canMove = GetCanMove(owner);
+            canCast = GetCanCast(owner);
+            if(!canMove)
+            {
+                returnValue = false;
+            }
+            if(!canCast)
+            {
+                returnValue = false;
+            }
+            return returnValue;
+        }
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            int nextBuffVars_BaseDamage;
+            float nextBuffVars_RootDuration;
+            nextBuffVars_BaseDamage = this.effect0[level];
+            nextBuffVars_RootDuration = this.effect1[level];
+            AddBuff((ObjAIBase)target, owner, new Buffs.MaokaiUnstableGrowth(nextBuffVars_BaseDamage, nextBuffVars_RootDuration), 1, 1, 3, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class MaokaiUnstableGrowth : BBBuffScript
@@ -41,7 +82,7 @@ namespace Buffs
             SealSpellSlot(3, SpellSlotType.SpellSlots, (ObjAIBase)owner, true, SpellbookType.SPELLBOOK_CHAMPION);
             PlayAnimation("Spell2c", 0, owner, true, true, true);
             teamOfOwner = GetTeamID(owner);
-            SpellEffectCreate(out this.particle, out _, "maokai_elementalAdvance_mis.troy", default, teamOfOwner, 200, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, false, false, false, false, false);
+            SpellEffectCreate(out this.particle, out _, "maokai_elementalAdvance_mis.troy", default, teamOfOwner ?? TeamId.TEAM_UNKNOWN, 200, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, false, false, false, false, false);
             this.unitPerceptionBubble = AddUnitPerceptionBubble(teamOfOwner, 10, caster, 5, default, caster, false);
             MoveToUnit(owner, caster, 1300, 0, ForceMovementOrdersType.POSTPONE_CURRENT_ORDER, 0, 2000, 0, 0);
         }
@@ -49,7 +90,7 @@ namespace Buffs
         {
             ObjAIBase caster; // UNUSED
             int level;
-            int nextBuffVars_DefensiveBonus;
+            int nextBuffVars_DefensiveBonus; // UNUSED
             RemovePerceptionBubble(this.unitPerceptionBubble);
             SetTargetable(owner, true);
             SetGhosted(owner, false);
@@ -91,47 +132,6 @@ namespace Buffs
                     IssueOrder(owner, OrderType.AttackTo, default, caster);
                 }
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class MaokaiUnstableGrowth : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            CastingBreaksStealth = true,
-            DoesntBreakShields = true,
-            TriggersSpellCasts = true,
-            IsDamagingSpell = true,
-            NotSingleTargetSpell = true,
-        };
-        int[] effect0 = {80, 115, 150, 185, 220};
-        float[] effect1 = {1, 1.25f, 1.5f, 1.75f, 2};
-        public override bool CanCast()
-        {
-            bool returnValue = true;
-            bool canMove;
-            bool canCast;
-            canMove = GetCanMove(owner);
-            canCast = GetCanCast(owner);
-            if(!canMove)
-            {
-                returnValue = false;
-            }
-            if(!canCast)
-            {
-                returnValue = false;
-            }
-            return returnValue;
-        }
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            int nextBuffVars_BaseDamage;
-            float nextBuffVars_RootDuration;
-            nextBuffVars_BaseDamage = this.effect0[level];
-            nextBuffVars_RootDuration = this.effect1[level];
-            AddBuff((ObjAIBase)target, owner, new Buffs.MaokaiUnstableGrowth(nextBuffVars_BaseDamage, nextBuffVars_RootDuration), 1, 1, 3, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
         }
     }
 }

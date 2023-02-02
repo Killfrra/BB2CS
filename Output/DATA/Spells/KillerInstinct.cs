@@ -5,6 +5,24 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class KillerInstinct : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            CastingBreaksStealth = true,
+            DoesntBreakShields = false,
+            TriggersSpellCasts = true,
+            IsDamagingSpell = false,
+            NotSingleTargetSpell = true,
+        };
+        public override void SelfExecute()
+        {
+            AddBuff((ObjAIBase)owner, owner, new Buffs.KillerInstinct(), 1, 1, 15, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class KillerInstinct : BBBuffScript
@@ -25,24 +43,6 @@ namespace Buffs
         {
             SpellEffectRemove(this.kILHand);
             SpellEffectRemove(this.kIRHand);
-        }
-    }
-}
-namespace Spells
-{
-    public class KillerInstinct : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            CastingBreaksStealth = true,
-            DoesntBreakShields = false,
-            TriggersSpellCasts = true,
-            IsDamagingSpell = false,
-            NotSingleTargetSpell = true,
-        };
-        public override void SelfExecute()
-        {
-            AddBuff((ObjAIBase)owner, owner, new Buffs.KillerInstinct(), 1, 1, 15, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
         }
     }
 }

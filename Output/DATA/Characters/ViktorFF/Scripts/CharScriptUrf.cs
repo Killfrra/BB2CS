@@ -12,7 +12,6 @@ namespace Chars
         float lastTimeExecuted;
         public override void OnUpdateActions()
         {
-            int warwickID;
             if(ExecutePeriodically(2, ref this.lastTimeExecuted, false))
             {
                 if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.HalloweenUrfCD)) == 0)
@@ -21,6 +20,7 @@ namespace Chars
                     {
                         if(GetBuffCountFromCaster(unit, unit, nameof(Buffs.EternalThirstIcon)) > 0)
                         {
+                            int warwickID;
                             warwickID = GetSkinID(unit);
                             if(warwickID == 2)
                             {

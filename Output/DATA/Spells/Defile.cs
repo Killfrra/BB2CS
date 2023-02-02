@@ -5,6 +5,29 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class Defile : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = false,
+            IsDamagingSpell = true,
+            NotSingleTargetSpell = true,
+        };
+        public override void SelfExecute()
+        {
+            if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.Defile)) > 0)
+            {
+                SpellBuffRemove(owner, nameof(Buffs.Defile), (ObjAIBase)owner, 0);
+            }
+            else
+            {
+                AddBuff(attacker, target, new Buffs.Defile(), 1, 1, 30000, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+            }
+        }
+    }
+}
 namespace Buffs
 {
     public class Defile : BBBuffScript
@@ -36,7 +59,7 @@ namespace Buffs
                 ApplyDamage(attacker, unit, damageToDeal, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0.25f, 1, false, false, attacker);
             }
             teamOfOwner = GetTeamID(owner);
-            SpellEffectCreate(out this.particle, out this.particle2, "Defile_green_cas.troy", "Defile_red_cas.troy", teamOfOwner, 0, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, false, default, default, false, false);
+            SpellEffectCreate(out this.particle, out this.particle2, "Defile_green_cas.troy", "Defile_red_cas.troy", teamOfOwner ?? TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, false, default, default, false, false);
         }
         public override void OnDeactivate(bool expired)
         {
@@ -45,16 +68,15 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            int level;
-            float manaCost;
-            float ownerMana;
-            float negManaCost;
-            float damageToDeal;
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, false))
             {
+                int level;
+                float damageToDeal;
                 level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.DeathDefiedBuff)) == 0)
                 {
+                    float manaCost;
+                    float ownerMana;
                     manaCost = this.effect1[level];
                     ownerMana = GetPAR(owner, PrimaryAbilityResourceType.MANA);
                     if(ownerMana < manaCost)
@@ -63,6 +85,7 @@ namespace Buffs
                     }
                     else
                     {
+                        float negManaCost;
                         negManaCost = -1 * manaCost;
                         IncPAR(owner, negManaCost, PrimaryAbilityResourceType.MANA);
                     }
@@ -72,29 +95,6 @@ namespace Buffs
                 {
                     ApplyDamage(attacker, unit, damageToDeal, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0.25f, 1, false, false, attacker);
                 }
-            }
-        }
-    }
-}
-namespace Spells
-{
-    public class Defile : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = false,
-            IsDamagingSpell = true,
-            NotSingleTargetSpell = true,
-        };
-        public override void SelfExecute()
-        {
-            if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.Defile)) > 0)
-            {
-                SpellBuffRemove(owner, nameof(Buffs.Defile), (ObjAIBase)owner, 0);
-            }
-            else
-            {
-                AddBuff(attacker, target, new Buffs.Defile(), 1, 1, 30000, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
             }
         }
     }

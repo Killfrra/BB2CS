@@ -13,11 +13,6 @@ namespace Chars
         float lastTime2Executed;
         public override void OnUpdateActions()
         {
-            float chargeCooldown;
-            float cooldownMod;
-            float totalDamage;
-            float baseAD;
-            float bonusDamage;
             if(ExecutePeriodically(0.4f, ref this.lastTimeExecuted, false))
             {
                 if(owner.IsDead)
@@ -34,6 +29,11 @@ namespace Chars
             }
             if(ExecutePeriodically(2, ref this.lastTime2Executed, true))
             {
+                float chargeCooldown;
+                float cooldownMod;
+                float totalDamage;
+                float baseAD;
+                float bonusDamage;
                 chargeCooldown = 10;
                 cooldownMod = GetPercentCooldownMod(owner);
                 cooldownMod++;

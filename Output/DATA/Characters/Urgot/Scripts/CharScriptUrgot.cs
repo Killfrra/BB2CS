@@ -12,10 +12,10 @@ namespace Chars
         float lastTime2Executed;
         public override void OnUpdateActions()
         {
-            float aD;
-            float bonusDamage;
             if(ExecutePeriodically(0.5f, ref this.lastTime2Executed, true))
             {
+                float aD;
+                float bonusDamage;
                 if(owner.IsDead)
                 {
                     AddBuff((ObjAIBase)owner, owner, new Buffs.UrgotDeathParticle(), 1, 1, 25000, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0, true, false, false);

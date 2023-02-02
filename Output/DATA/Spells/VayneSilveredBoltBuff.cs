@@ -23,9 +23,6 @@ namespace Buffs
         {
             bool canMove; // UNUSED
             bool isBlinded; // UNITIALIZED
-            int count;
-            TeamId teamID;
-            Particle gragas; // UNUSED
             canMove = GetCanMove(owner);
             if(!isBlinded)
             {
@@ -41,11 +38,14 @@ namespace Buffs
                         {
                             if(hitResult != HitResult.HIT_Miss)
                             {
+                                int count;
                                 count = GetBuffCountFromCaster(target, attacker, nameof(Buffs.VayneSilveredDebuff));
                                 if(count == 2)
                                 {
+                                    TeamId teamID;
+                                    Particle gragas; // UNUSED
                                     teamID = GetTeamID(attacker);
-                                    SpellEffectCreate(out gragas, out _, "vayne_W_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, target, false, default, default, target.Position, target, default, default, true, false, false, false, false);
+                                    SpellEffectCreate(out gragas, out _, "vayne_W_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, target, false, default, default, target.Position, target, default, default, true, false, false, false, false);
                                 }
                                 AddBuff(attacker, target, new Buffs.VayneSilveredDebuff(), 3, 1, 3.5f, BuffAddType.STACKS_AND_RENEWS, BuffType.COMBAT_DEHANCER, 0, true, false, false);
                                 if(count == 2)

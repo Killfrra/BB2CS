@@ -26,9 +26,9 @@ namespace Spells
         public override void SelfExecute()
         {
             int nextBuffVars_VolibearRDamage;
+            int volibearRCharges; // UNUSED
             int nextBuffVars_VolibearRSpeed;
             float nextBuffVars_VolibearRRatio;
-            int volibearRCharges; // UNUSED
             nextBuffVars_VolibearRDamage = this.effect0[level];
             nextBuffVars_VolibearRSpeed = this.effect1[level];
             nextBuffVars_VolibearRRatio = 0.3f;

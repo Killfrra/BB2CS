@@ -23,8 +23,6 @@ namespace Buffs
             float maxHealth;
             float remainingHealth;
             float percentHealthRemaining;
-            float duration;
-            float remainingDuration;
             currentHealth = GetHealth(owner, PrimaryAbilityResourceType.MANA);
             maxHealth = GetMaxHealth(target, PrimaryAbilityResourceType.MANA);
             remainingHealth = currentHealth - damageAmount;
@@ -33,9 +31,11 @@ namespace Buffs
             {
                 if(percentHealthRemaining <= 0.3f)
                 {
+                    float duration;
                     duration = 6;
                     if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.VolibearPassiveHeal)) > 0)
                     {
+                        float remainingDuration;
                         remainingDuration = GetBuffRemainingDuration(owner, nameof(Buffs.VolibearPassiveHeal));
                         duration += remainingDuration;
                     }

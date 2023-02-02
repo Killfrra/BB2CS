@@ -33,8 +33,8 @@ namespace Spells
             teamID = GetTeamID(owner);
             AddBuff((ObjAIBase)target, owner, new Buffs.MordekaiserSyphonDmg(), 100, 1, 0.001f, BuffAddType.STACKS_AND_OVERLAPS, BuffType.INTERNAL, 0, true, false, false);
             AddBuff((ObjAIBase)owner, owner, new Buffs.MordekaiserSyphonParticle(), 1, 1, 0.2f, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0, true, false, false);
-            SpellEffectCreate(out asdf, out _, "mordakaiser_siphonOfDestruction_tar_02.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, false, false, false, false);
-            SpellEffectCreate(out asdf1, out _, "mordakaiser_siphonOfDestruction_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, false, false, false, false);
+            SpellEffectCreate(out asdf, out _, "mordakaiser_siphonOfDestruction_tar_02.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, false, false, false, false);
+            SpellEffectCreate(out asdf1, out _, "mordakaiser_siphonOfDestruction_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, false, false, false, false);
         }
     }
 }

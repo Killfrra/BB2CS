@@ -5,6 +5,35 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class VeigarDarkMatter : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            CastingBreaksStealth = true,
+            DoesntBreakShields = true,
+            TriggersSpellCasts = true,
+            IsDamagingSpell = true,
+            NotSingleTargetSpell = true,
+        };
+        int[] effect0 = {120, 170, 220, 270, 320};
+        public override void SelfExecute()
+        {
+            TeamId teamOfOwner;
+            Vector3 targetPos;
+            Region bubbleID; // UNUSED
+            Minion other3;
+            float nextBuffVars_DamageAmount;
+            teamOfOwner = GetTeamID(owner);
+            targetPos = GetCastSpellTargetPos();
+            bubbleID = AddPosPerceptionBubble(teamOfOwner, 300, targetPos, 1, default, false);
+            other3 = SpawnMinion("HiddenMinion", "TestCube", "idle.lua", targetPos, teamOfOwner ?? TeamId.TEAM_CASTER, false, true, false, true, true, true, 0, default, true, (Champion)owner);
+            nextBuffVars_DamageAmount = this.effect0[level];
+            AddBuff(attacker, other3, new Buffs.VeigarDarkMatter(nextBuffVars_DamageAmount), 1, 1, 1.2f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class VeigarDarkMatter : BBBuffScript
@@ -77,35 +106,6 @@ namespace Buffs
         public override void OnUpdateStats()
         {
             IncPercentBubbleRadiusMod(owner, -0.9f);
-        }
-    }
-}
-namespace Spells
-{
-    public class VeigarDarkMatter : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            CastingBreaksStealth = true,
-            DoesntBreakShields = true,
-            TriggersSpellCasts = true,
-            IsDamagingSpell = true,
-            NotSingleTargetSpell = true,
-        };
-        int[] effect0 = {120, 170, 220, 270, 320};
-        public override void SelfExecute()
-        {
-            TeamId teamOfOwner;
-            Vector3 targetPos;
-            Region bubbleID; // UNUSED
-            Minion other3;
-            float nextBuffVars_DamageAmount;
-            teamOfOwner = GetTeamID(owner);
-            targetPos = GetCastSpellTargetPos();
-            bubbleID = AddPosPerceptionBubble(teamOfOwner, 300, targetPos, 1, default, false);
-            other3 = SpawnMinion("HiddenMinion", "TestCube", "idle.lua", targetPos, teamOfOwner, false, true, false, true, true, true, 0, default, true, (Champion)owner);
-            nextBuffVars_DamageAmount = this.effect0[level];
-            AddBuff(attacker, other3, new Buffs.VeigarDarkMatter(nextBuffVars_DamageAmount), 1, 1, 1.2f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
         }
     }
 }

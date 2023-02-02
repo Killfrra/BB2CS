@@ -37,8 +37,8 @@ namespace Buffs
             baseAD = GetBaseAttackDamage(attacker);
             bonusAD = totalAD - baseAD;
             this.bonusDamage = bonusAD * 0.2f;
-            SpellEffectCreate(out this.blood1, out _, "talon_Q_bleed_indicator.troy", default, attackerTeamID, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false, false, false, false, false);
-            SpellEffectCreate(out this.blood2, out _, "talon_Q_bleed.troy", default, attackerTeamID, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false, false, false, false, false);
+            SpellEffectCreate(out this.blood1, out _, "talon_Q_bleed_indicator.troy", default, attackerTeamID ?? TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false, false, false, false, false);
+            SpellEffectCreate(out this.blood2, out _, "talon_Q_bleed.troy", default, attackerTeamID ?? TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false, false, false, false, false);
             this.unitBubble = AddUnitPerceptionBubble(this.attackerTeamID, 400, owner, 6, default, default, false);
         }
         public override void OnDeactivate(bool expired)
@@ -61,24 +61,24 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            Vector3 ownerPos;
-            Minion other1;
-            int level;
-            float poisonBaseDamage;
-            float poisonTotalDamage;
-            float baseAttackDamage; // UNUSED
-            float flatAPBonus;
             if(owner is Champion)
             {
                 if(ExecutePeriodically(1, ref this.lastTimeExecuted2, true))
                 {
+                    Vector3 ownerPos;
+                    Minion other1;
                     ownerPos = GetUnitPosition(owner);
-                    other1 = SpawnMinion("BloodDrop", "TestCube", "Idle.lua", ownerPos, this.attackerTeamID, false, true, false, true, true, true, 450, false, false, (Champion)attacker);
+                    other1 = SpawnMinion("BloodDrop", "TestCube", "Idle.lua", ownerPos, this.attackerTeamID ?? TeamId.TEAM_UNKNOWN, false, true, false, true, true, true, 450, false, false, (Champion)attacker);
                     SetTargetable(other1, false);
                     AddBuff(other1, other1, new Buffs.ExpirationTimer(), 1, 1, 3, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
                 }
                 if(ExecutePeriodically(1, ref this.lastTimeExecuted, true))
                 {
+                    int level;
+                    float poisonBaseDamage;
+                    float poisonTotalDamage;
+                    float baseAttackDamage; // UNUSED
+                    float flatAPBonus;
                     level = GetSlotSpellLevel(attacker, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                     poisonBaseDamage = this.effect1[level];
                     poisonTotalDamage = 0;

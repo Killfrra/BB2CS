@@ -15,7 +15,7 @@ namespace Spells
             TeamId teamID;
             float dmg;
             teamID = GetTeamID(owner);
-            attacker = GetChampionBySkinName("Shaco", teamID);
+            attacker = GetChampionBySkinName("Shaco", teamID ?? TeamId.TEAM_UNKNOWN);
             level = GetSlotSpellLevel(attacker, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             dmg = this.effect0[level];
             ApplyDamage(attacker, target, dmg, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_PROC, 1, 0.2f, 1, false, false, (ObjAIBase)owner);

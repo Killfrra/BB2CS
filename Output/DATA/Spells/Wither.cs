@@ -5,6 +5,28 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class Wither : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = true,
+            NotSingleTargetSpell = false,
+        };
+        float[] effect0 = {-0.35f, -0.35f, -0.35f, -0.35f, -0.35f};
+        float[] effect1 = {-0.03f, -0.06f, -0.09f, -0.12f, -0.15f};
+        int[] effect2 = {5, 5, 5, 5, 5};
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            float nextBuffVars_SpeedMod;
+            float nextBuffVars_BonusSpeedMod;
+            nextBuffVars_SpeedMod = this.effect0[level];
+            nextBuffVars_BonusSpeedMod = this.effect1[level];
+            AddBuff(attacker, target, new Buffs.Wither(nextBuffVars_BonusSpeedMod, nextBuffVars_SpeedMod), 1, 1, this.effect2[level], BuffAddType.STACKS_AND_OVERLAPS, BuffType.SLOW, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class Wither : BBBuffScript
@@ -42,28 +64,6 @@ namespace Buffs
             }
             IncPercentMultiplicativeAttackSpeedMod(owner, this.speedMod);
             IncPercentMultiplicativeMovementSpeedMod(owner, this.speedMod);
-        }
-    }
-}
-namespace Spells
-{
-    public class Wither : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = true,
-            NotSingleTargetSpell = false,
-        };
-        float[] effect0 = {-0.35f, -0.35f, -0.35f, -0.35f, -0.35f};
-        float[] effect1 = {-0.03f, -0.06f, -0.09f, -0.12f, -0.15f};
-        int[] effect2 = {5, 5, 5, 5, 5};
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            float nextBuffVars_SpeedMod;
-            float nextBuffVars_BonusSpeedMod;
-            nextBuffVars_SpeedMod = this.effect0[level];
-            nextBuffVars_BonusSpeedMod = this.effect1[level];
-            AddBuff(attacker, target, new Buffs.Wither(nextBuffVars_BonusSpeedMod, nextBuffVars_SpeedMod), 1, 1, this.effect2[level], BuffAddType.STACKS_AND_OVERLAPS, BuffType.SLOW, 0, true, false, false);
         }
     }
 }

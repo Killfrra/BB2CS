@@ -34,9 +34,9 @@ namespace Buffs
         }
         public override void OnDeactivate(bool expired)
         {
-            Particle ar; // UNUSED
             if(!this.willRemove)
             {
+                Particle ar; // UNUSED
                 SpellEffectCreate(out ar, out _, "shen_Feint_self_deactivate.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false);
             }
             if(this.damageBlock > 0)
@@ -46,8 +46,6 @@ namespace Buffs
         }
         public override void OnPreDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
         {
-            TeamId teamID;
-            Particle ar; // UNUSED
             this.oldArmorAmount = this.damageBlock;
             if(this.damageBlock >= damageAmount)
             {
@@ -58,11 +56,13 @@ namespace Buffs
             }
             else
             {
+                TeamId teamID;
+                Particle ar; // UNUSED
                 teamID = GetTeamID(owner);
                 damageAmount -= this.damageBlock;
                 this.damageBlock = 0;
                 ReduceShield(owner, this.oldArmorAmount, true, true);
-                SpellEffectCreate(out ar, out _, "SpellEffect_proc.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, true);
+                SpellEffectCreate(out ar, out _, "SpellEffect_proc.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, true);
                 SpellBuffRemoveCurrent(owner);
             }
         }

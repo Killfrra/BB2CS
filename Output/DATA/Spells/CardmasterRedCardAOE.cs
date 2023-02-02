@@ -18,14 +18,14 @@ namespace Buffs
             float attackDamage;
             float bonusDamage;
             float redCardDamage;
-            float nextBuffVars_MoveSpeedMod;
-            int nextBuffVars_AttackSpeedMod;
             level = GetSlotSpellLevel(attacker, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             attackDamage = GetTotalAttackDamage(attacker);
             bonusDamage = this.effect0[level];
             redCardDamage = attackDamage + bonusDamage;
             foreach(AttackableUnit unit in GetUnitsInArea(attacker, owner.Position, 325, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
             {
+                float nextBuffVars_MoveSpeedMod;
+                int nextBuffVars_AttackSpeedMod;
                 if(owner != unit)
                 {
                     BreakSpellShields(unit);

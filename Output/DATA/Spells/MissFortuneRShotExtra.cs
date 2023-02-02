@@ -47,8 +47,8 @@ namespace Spells
             damageToDeal = attackBonus + abilityDamage;
             ricochetDamage = damageToDeal * 1.15f;
             ApplyDamage(attacker, target, ricochetDamage, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_ATTACK, 1, 0.65f, 0, false, true, attacker);
-            SpellEffectCreate(out asdf, out _, "missFortune_richochet_tar_second_02.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true);
-            SpellEffectCreate(out asdf, out _, "missFortune_richochet_tar_second.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true);
+            SpellEffectCreate(out asdf, out _, "missFortune_richochet_tar_second_02.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true);
+            SpellEffectCreate(out asdf, out _, "missFortune_richochet_tar_second.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true);
         }
     }
 }

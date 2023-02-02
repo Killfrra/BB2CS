@@ -5,6 +5,35 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class ManiacalCloak : BBSpellScript
+    {
+        int[] effect0 = {10, 10, 10};
+        float[] effect1 = {2.25f, 1.75f, 1.25f};
+        public override void SelfExecute()
+        {
+            if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.ManiacalCloak)) > 0)
+            {
+                SpellBuffRemove(owner, nameof(Buffs.ManiacalCloak), (ObjAIBase)owner);
+            }
+            else
+            {
+                float nextBuffVars_TimeLastHit;
+                bool nextBuffVars_BuffAdded;
+                bool nextBuffVars_WillFade;
+                float nextBuffVars_TotalCostPerTick;
+                float nextBuffVars_StealthDelay;
+                nextBuffVars_TimeLastHit = GetTime();
+                nextBuffVars_BuffAdded = false;
+                nextBuffVars_WillFade = false;
+                nextBuffVars_TotalCostPerTick = this.effect0[level];
+                nextBuffVars_StealthDelay = this.effect1[level];
+                AddBuff(attacker, owner, new Buffs.ManiacalCloak(nextBuffVars_BuffAdded, nextBuffVars_WillFade, nextBuffVars_TimeLastHit, nextBuffVars_StealthDelay, nextBuffVars_TotalCostPerTick), 1, 1, 25000, BuffAddType.REPLACE_EXISTING, BuffType.AURA, 0);
+            }
+        }
+    }
+}
 namespace Buffs
 {
     public class ManiacalCloak : BBBuffScript
@@ -65,13 +94,11 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            float curTime;
-            float timeSinceLastHit;
             float curMana;
-            bool tempStealthed;
-            float manaCost;
             if(!this.buffAdded)
             {
+                float curTime;
+                float timeSinceLastHit;
                 curTime = GetTime();
                 timeSinceLastHit = curTime - this.timeLastHit;
                 if(timeSinceLastHit > this.stealthDelay)
@@ -96,6 +123,7 @@ namespace Buffs
             }
             else
             {
+                bool tempStealthed;
                 tempStealthed = GetStealthed(owner);
                 if(!tempStealthed)
                 {
@@ -110,6 +138,7 @@ namespace Buffs
                     curMana = GetPAR(owner, PrimaryAbilityResourceType.MANA);
                     if(curMana >= this.totalCostPerTick)
                     {
+                        float manaCost;
                         manaCost = this.totalCostPerTick * -1;
                         IncPAR(owner, manaCost);
                     }
@@ -145,35 +174,6 @@ namespace Buffs
             this.iD = PushCharacterFade(owner, 1, 0);
             this.willFade = true;
             this.buffAdded = false;
-        }
-    }
-}
-namespace Spells
-{
-    public class ManiacalCloak : BBSpellScript
-    {
-        int[] effect0 = {10, 10, 10};
-        float[] effect1 = {2.25f, 1.75f, 1.25f};
-        public override void SelfExecute()
-        {
-            float nextBuffVars_TimeLastHit;
-            bool nextBuffVars_BuffAdded;
-            bool nextBuffVars_WillFade;
-            float nextBuffVars_TotalCostPerTick;
-            float nextBuffVars_StealthDelay;
-            if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.ManiacalCloak)) > 0)
-            {
-                SpellBuffRemove(owner, nameof(Buffs.ManiacalCloak), (ObjAIBase)owner);
-            }
-            else
-            {
-                nextBuffVars_TimeLastHit = GetTime();
-                nextBuffVars_BuffAdded = false;
-                nextBuffVars_WillFade = false;
-                nextBuffVars_TotalCostPerTick = this.effect0[level];
-                nextBuffVars_StealthDelay = this.effect1[level];
-                AddBuff(attacker, owner, new Buffs.ManiacalCloak(nextBuffVars_BuffAdded, nextBuffVars_WillFade, nextBuffVars_TimeLastHit, nextBuffVars_StealthDelay, nextBuffVars_TotalCostPerTick), 1, 1, 25000, BuffAddType.REPLACE_EXISTING, BuffType.AURA, 0);
-            }
         }
     }
 }

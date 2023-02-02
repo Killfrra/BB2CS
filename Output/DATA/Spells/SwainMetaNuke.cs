@@ -21,10 +21,10 @@ namespace Spells
         public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
         {
             bool nextBuffVars_DrainedBool;
-            float nextBuffVars_DrainPercent;
             Particle ar; // UNUSED
             Vector3 targetPos;
             bool isTargetable;
+            float nextBuffVars_DrainPercent;
             level = GetSlotSpellLevel(attacker, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             nextBuffVars_DrainedBool = false;
             SpellEffectCreate(out ar, out _, "swain_heal.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, attacker, default, default, target, default, default, false, default, default, false, false);

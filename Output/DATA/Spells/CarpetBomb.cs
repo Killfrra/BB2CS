@@ -5,6 +5,90 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class CarpetBomb : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = true,
+            NotSingleTargetSpell = true,
+        };
+        float tickDuration; // UNUSED
+        int[] effect0 = {15, 16, 17, 18, 19};
+        public override bool CanCast()
+        {
+            bool returnValue = true;
+            bool canMove;
+            bool canCast;
+            canMove = GetCanMove(owner);
+            canCast = GetCanCast(owner);
+            if(!canCast)
+            {
+                returnValue = false;
+            }
+            if(!canMove)
+            {
+                returnValue = false;
+            }
+            level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
+            if(level > 0)
+            {
+                canMove = GetCanMove(owner);
+                canCast = GetCanCast(owner);
+                if(!canMove)
+                {
+                    returnValue = false;
+                }
+                if(!canCast)
+                {
+                    returnValue = false;
+                }
+            }
+            return returnValue;
+        }
+        public override void SelfExecute()
+        {
+            float tickAmount;
+            Vector3 targetPos;
+            Vector3 ownerPos;
+            float distance;
+            Vector3 nextBuffVars_TargetPos;
+            object damage; // UNITIALIZED
+            float moveSpeed;
+            float slashSpeed;
+            float duration;
+            float nextBuffVars_SelfAP;
+            object nextBuffVars_Damage; // UNUSED
+            bool nextBuffVars_WillRemove;
+            bool nextBuffVars_WillMove;
+            float nextBuffVars_SlashSpeed;
+            tickAmount = this.effect0[level];
+            targetPos = GetCastSpellTargetPos();
+            ownerPos = GetUnitPosition(owner);
+            distance = DistanceBetweenPoints(ownerPos, targetPos);
+            FaceDirection(owner, targetPos);
+            if(distance > 800)
+            {
+                targetPos = GetPointByUnitFacingOffset(owner, 800, 0);
+            }
+            nextBuffVars_TargetPos = targetPos;
+            nextBuffVars_SelfAP = GetFlatMagicDamageMod(owner);
+            nextBuffVars_Damage = damage;
+            nextBuffVars_WillRemove = false;
+            ownerPos = GetUnitPosition(owner);
+            moveSpeed = GetMovementSpeed(owner);
+            slashSpeed = moveSpeed + 650;
+            distance = DistanceBetweenPoints(ownerPos, targetPos);
+            duration = distance / slashSpeed;
+            this.tickDuration = duration / tickAmount;
+            nextBuffVars_WillMove = true;
+            nextBuffVars_SlashSpeed = slashSpeed;
+            AddBuff(attacker, owner, new Buffs.CarpetBomb(nextBuffVars_WillMove, nextBuffVars_TargetPos, nextBuffVars_SelfAP, nextBuffVars_WillRemove, nextBuffVars_SlashSpeed), 1, 1, 0.05f + duration, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+            AddBuff(attacker, owner, new Buffs.ValkyrieSound(), 1, 1, duration, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class CarpetBomb : BBBuffScript
@@ -56,10 +140,10 @@ namespace Buffs
         public override void OnUpdateStats()
         {
             float moveSpeedVal;
-            float moveSpeedDif;
             moveSpeedVal = GetMovementSpeed(owner);
             if(moveSpeedVal < 300)
             {
+                float moveSpeedDif;
                 moveSpeedDif = 300 - moveSpeedVal;
                 IncFlatMovementSpeedMod(owner, moveSpeedDif);
             }
@@ -68,23 +152,23 @@ namespace Buffs
         {
             int level;
             float tickDuration;
-            float damagePerTick;
-            float aPBonus;
-            float nextBuffVars_DamagePerTick;
-            Vector3 bombPos;
-            TeamId teamOfOwner;
-            Minion other3;
             level = GetSlotSpellLevel((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             tickDuration = this.tickDuration;
             if(ExecutePeriodically(0, ref this.lastTimeExecuted, true, tickDuration))
             {
+                float damagePerTick;
+                float aPBonus;
+                float nextBuffVars_DamagePerTick;
+                Vector3 bombPos;
+                TeamId teamOfOwner;
+                Minion other3;
                 damagePerTick = this.effect0[level];
                 aPBonus = 0.2f * this.selfAP;
                 damagePerTick += aPBonus;
                 nextBuffVars_DamagePerTick = damagePerTick;
                 bombPos = GetUnitPosition(owner);
                 teamOfOwner = GetTeamID(owner);
-                other3 = SpawnMinion("HiddenMinion", "TestCube", "idle.lua", bombPos, teamOfOwner, false, true, false, true, true, false, 0, default, true, (Champion)owner);
+                other3 = SpawnMinion("HiddenMinion", "TestCube", "idle.lua", bombPos, teamOfOwner ?? TeamId.TEAM_CASTER, false, true, false, true, true, false, 0, default, true, (Champion)owner);
                 AddBuff(attacker, other3, new Buffs.DangerZone(nextBuffVars_DamagePerTick), 1, 1, 2.5f, BuffAddType.REPLACE_EXISTING, BuffType.DAMAGE, 0, true, false, false);
             }
             if(this.willRemove)
@@ -95,90 +179,6 @@ namespace Buffs
         public override void OnMoveEnd()
         {
             SpellBuffRemoveCurrent(owner);
-        }
-    }
-}
-namespace Spells
-{
-    public class CarpetBomb : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = true,
-            NotSingleTargetSpell = true,
-        };
-        float tickDuration; // UNUSED
-        int[] effect0 = {15, 16, 17, 18, 19};
-        public override bool CanCast()
-        {
-            bool returnValue = true;
-            bool canMove;
-            bool canCast;
-            canMove = GetCanMove(owner);
-            canCast = GetCanCast(owner);
-            if(!canCast)
-            {
-                returnValue = false;
-            }
-            if(!canMove)
-            {
-                returnValue = false;
-            }
-            level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
-            if(level > 0)
-            {
-                canMove = GetCanMove(owner);
-                canCast = GetCanCast(owner);
-                if(!canMove)
-                {
-                    returnValue = false;
-                }
-                if(!canCast)
-                {
-                    returnValue = false;
-                }
-            }
-            return returnValue;
-        }
-        public override void SelfExecute()
-        {
-            float tickAmount;
-            Vector3 targetPos;
-            Vector3 ownerPos;
-            float distance;
-            Vector3 nextBuffVars_TargetPos;
-            float nextBuffVars_SelfAP;
-            object nextBuffVars_Damage;
-            bool nextBuffVars_WillRemove;
-            bool nextBuffVars_WillMove;
-            float nextBuffVars_SlashSpeed;
-            object damage; // UNITIALIZED
-            float moveSpeed;
-            float slashSpeed;
-            float duration;
-            tickAmount = this.effect0[level];
-            targetPos = GetCastSpellTargetPos();
-            ownerPos = GetUnitPosition(owner);
-            distance = DistanceBetweenPoints(ownerPos, targetPos);
-            FaceDirection(owner, targetPos);
-            if(distance > 800)
-            {
-                targetPos = GetPointByUnitFacingOffset(owner, 800, 0);
-            }
-            nextBuffVars_TargetPos = targetPos;
-            nextBuffVars_SelfAP = GetFlatMagicDamageMod(owner);
-            nextBuffVars_Damage = damage;
-            nextBuffVars_WillRemove = false;
-            ownerPos = GetUnitPosition(owner);
-            moveSpeed = GetMovementSpeed(owner);
-            slashSpeed = moveSpeed + 650;
-            distance = DistanceBetweenPoints(ownerPos, targetPos);
-            duration = distance / slashSpeed;
-            this.tickDuration = duration / tickAmount;
-            nextBuffVars_WillMove = true;
-            nextBuffVars_SlashSpeed = slashSpeed;
-            AddBuff(attacker, owner, new Buffs.CarpetBomb(nextBuffVars_WillMove, nextBuffVars_TargetPos, nextBuffVars_SelfAP, nextBuffVars_WillRemove, nextBuffVars_SlashSpeed), 1, 1, 0.05f + duration, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
-            AddBuff(attacker, owner, new Buffs.ValkyrieSound(), 1, 1, duration, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
         }
     }
 }

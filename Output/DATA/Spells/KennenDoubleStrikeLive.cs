@@ -24,7 +24,7 @@ namespace Buffs
             teamID = GetTeamID(owner);
             level = GetSlotSpellLevel((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             OverrideAutoAttack(1, SpellSlotType.ExtraSlots, owner, level, true);
-            SpellEffectCreate(out this.asdf1, out _, "kennen_ds_proc.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "r_hand", default, owner, default, default, false, false, false, false, false);
+            SpellEffectCreate(out this.asdf1, out _, "kennen_ds_proc.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "r_hand", default, owner, default, default, false, false, false, false, false);
         }
         public override void OnDeactivate(bool expired)
         {

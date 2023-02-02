@@ -5,43 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class TwoShivPoison : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateEffect = new[]{ "global_slow.troy", },
-            BuffName = "Two Shiv Poison",
-            BuffTextureName = "Jester_IncrediblyPrecise.dds",
-            PopupMessage = new[]{ "game_floatingtext_Slowed", },
-        };
-        float moveSpeedMod;
-        float missChance;
-        public TwoShivPoison(float moveSpeedMod = default, float missChance = default)
-        {
-            this.moveSpeedMod = moveSpeedMod;
-            this.missChance = missChance;
-        }
-        public override void OnActivate()
-        {
-            //RequireVar(this.missChance);
-            //RequireVar(this.moveSpeedMod);
-            ApplyAssistMarker(attacker, owner, 10);
-        }
-        public override void OnUpdateStats()
-        {
-            IncPercentMultiplicativeMovementSpeedMod(owner, this.moveSpeedMod);
-            if(owner is Champion)
-            {
-            }
-            else
-            {
-                IncFlatMissChanceMod(owner, this.missChance);
-            }
-        }
-    }
-}
 namespace Spells
 {
     public class TwoShivPoison : BBSpellScript
@@ -85,6 +48,43 @@ namespace Spells
             nextBuffVars_MoveSpeedMod = this.effect1[level];
             nextBuffVars_MissChance = this.effect2[level];
             AddBuff((ObjAIBase)owner, target, new Buffs.TwoShivPoison(nextBuffVars_MoveSpeedMod, nextBuffVars_MissChance), 1, 1, 3, BuffAddType.RENEW_EXISTING, BuffType.SLOW, 0, true, false, false);
+        }
+    }
+}
+namespace Buffs
+{
+    public class TwoShivPoison : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateEffect = new[]{ "global_slow.troy", },
+            BuffName = "Two Shiv Poison",
+            BuffTextureName = "Jester_IncrediblyPrecise.dds",
+            PopupMessage = new[]{ "game_floatingtext_Slowed", },
+        };
+        float moveSpeedMod;
+        float missChance;
+        public TwoShivPoison(float moveSpeedMod = default, float missChance = default)
+        {
+            this.moveSpeedMod = moveSpeedMod;
+            this.missChance = missChance;
+        }
+        public override void OnActivate()
+        {
+            //RequireVar(this.missChance);
+            //RequireVar(this.moveSpeedMod);
+            ApplyAssistMarker(attacker, owner, 10);
+        }
+        public override void OnUpdateStats()
+        {
+            IncPercentMultiplicativeMovementSpeedMod(owner, this.moveSpeedMod);
+            if(owner is Champion)
+            {
+            }
+            else
+            {
+                IncFlatMissChanceMod(owner, this.missChance);
+            }
         }
     }
 }

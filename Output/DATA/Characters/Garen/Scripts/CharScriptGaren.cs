@@ -16,12 +16,12 @@ namespace Chars
         float[] effect3 = {0.5f, 0.5f, 0.5f, 0.5f, 0.5f};
         public override void OnUpdateActions()
         {
-            float totalDamage;
-            float baseDamage;
-            float bonusDamage;
-            float spell3Display;
             if(ExecutePeriodically(1, ref this.lastTime2Executed, true))
             {
+                float totalDamage;
+                float baseDamage;
+                float bonusDamage;
+                float spell3Display;
                 level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 totalDamage = GetTotalAttackDamage(owner);
                 baseDamage = GetBaseAttackDamage(owner);
@@ -52,13 +52,13 @@ namespace Chars
         }
         public override void OnLevelUpSpell(int slot)
         {
-            float nextBuffVars_BonusArmor;
-            float nextBuffVars_BonusMR;
             if(slot == 1)
             {
                 level = GetSlotSpellLevel((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 if(level == 1)
                 {
+                    float nextBuffVars_BonusArmor;
+                    float nextBuffVars_BonusMR;
                     charVars.TotalBonus = 0;
                     charVars.CommandReady = 0;
                     nextBuffVars_BonusArmor = this.effect1[level];

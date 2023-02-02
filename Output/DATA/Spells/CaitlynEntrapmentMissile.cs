@@ -5,18 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class CaitlynEntrapmentMissile : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateEffect = new[]{ "caitlyn_entrapment_slow.troy", },
-            BuffName = "",
-            BuffTextureName = "",
-        };
-    }
-}
 namespace Spells
 {
     public class CaitlynEntrapmentMissile : BBSpellScript
@@ -44,7 +32,6 @@ namespace Spells
             float nextBuffVars_MoveSpeedMod;
             bool isStealthed;
             Particle asdf; // UNUSED
-            bool canSee;
             teamID = GetTeamID(owner);
             level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             nextBuffVars_MoveSpeedMod = -0.5f;
@@ -55,7 +42,7 @@ namespace Spells
                 AddBuff(attacker, target, new Buffs.Slow(nextBuffVars_MoveSpeedMod), 100, 1, this.effect0[level], BuffAddType.STACKS_AND_OVERLAPS, BuffType.SLOW, 0, true, false, false);
                 AddBuff(attacker, target, new Buffs.CaitlynEntrapmentMissile(), 100, 1, this.effect1[level], BuffAddType.STACKS_AND_OVERLAPS, BuffType.SLOW, 0, true, false, true);
                 ApplyDamage(attacker, target, this.effect2[level], DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELL, 1, 0.8f, 1, false, false, attacker);
-                SpellEffectCreate(out asdf, out _, "caitlyn_entrapment_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, owner, default, default, true);
+                SpellEffectCreate(out asdf, out _, "caitlyn_entrapment_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, owner, default, default, true);
                 DestroyMissile(missileNetworkID);
             }
             else
@@ -66,11 +53,12 @@ namespace Spells
                     AddBuff(attacker, target, new Buffs.Slow(nextBuffVars_MoveSpeedMod), 100, 1, this.effect3[level], BuffAddType.STACKS_AND_OVERLAPS, BuffType.SLOW, 0, true, false, false);
                     AddBuff(attacker, target, new Buffs.CaitlynEntrapmentMissile(), 100, 1, this.effect4[level], BuffAddType.STACKS_AND_OVERLAPS, BuffType.SLOW, 0, true, false, true);
                     ApplyDamage(attacker, target, this.effect5[level], DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELL, 1, 0.8f, 1, false, false, attacker);
-                    SpellEffectCreate(out asdf, out _, "caitlyn_entrapment_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, owner, default, default, true);
+                    SpellEffectCreate(out asdf, out _, "caitlyn_entrapment_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, owner, default, default, true);
                     DestroyMissile(missileNetworkID);
                 }
                 else
                 {
+                    bool canSee;
                     canSee = CanSeeTarget(owner, target);
                     if(canSee)
                     {
@@ -78,11 +66,23 @@ namespace Spells
                         AddBuff(attacker, target, new Buffs.Slow(nextBuffVars_MoveSpeedMod), 100, 1, this.effect6[level], BuffAddType.STACKS_AND_OVERLAPS, BuffType.SLOW, 0, true, false, false);
                         AddBuff(attacker, target, new Buffs.CaitlynEntrapmentMissile(), 100, 1, this.effect7[level], BuffAddType.STACKS_AND_OVERLAPS, BuffType.SLOW, 0, true, false, true);
                         ApplyDamage(attacker, target, this.effect8[level], DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELL, 1, 0.8f, 1, false, false, attacker);
-                        SpellEffectCreate(out asdf, out _, "caitlyn_entrapment_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, owner, default, default, true);
+                        SpellEffectCreate(out asdf, out _, "caitlyn_entrapment_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, owner, default, default, true);
                         DestroyMissile(missileNetworkID);
                     }
                 }
             }
         }
+    }
+}
+namespace Buffs
+{
+    public class CaitlynEntrapmentMissile : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateEffect = new[]{ "caitlyn_entrapment_slow.troy", },
+            BuffName = "",
+            BuffTextureName = "",
+        };
     }
 }

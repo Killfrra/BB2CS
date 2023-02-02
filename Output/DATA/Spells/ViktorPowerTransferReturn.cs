@@ -5,48 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class ViktorPowerTransferReturn : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateEffect = new[]{ "Viktor_Reverb_shield.troy", },
-            BuffName = "ViktorShield",
-            BuffTextureName = "ViktorPowerTransfer.dds",
-            NonDispellable = true,
-            PersistsThroughDeath = true,
-        };
-        public override void OnActivate()
-        {
-            if(charVars.IsChampTarget)
-            {
-                charVars.TotalDamage *= 0.4f;
-                IncreaseShield(owner, charVars.TotalDamage, true, true);
-            }
-        }
-        public override void OnDeactivate(bool expired)
-        {
-            RemoveShield(owner, 10000, true, true);
-        }
-        public override void OnPreDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
-        {
-            if(damageAmount > charVars.TotalDamage)
-            {
-                damageAmount -= charVars.TotalDamage;
-                ReduceShield(owner, damageAmount, true, true);
-                RemoveShield(owner, 0, true, true);
-                SpellBuffRemove(owner, default, (ObjAIBase)owner, 0);
-            }
-            else
-            {
-                ReduceShield(owner, damageAmount, true, true);
-                charVars.TotalDamage -= damageAmount;
-                damageAmount = 0;
-            }
-        }
-    }
-}
 namespace Spells
 {
     public class ViktorPowerTransferReturn : BBSpellScript
@@ -88,6 +46,48 @@ namespace Spells
             else
             {
                 AddBuff(attacker, target, new Buffs.ViktorPowerTransferReturn(), 1, 1, 3, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+            }
+        }
+    }
+}
+namespace Buffs
+{
+    public class ViktorPowerTransferReturn : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateEffect = new[]{ "Viktor_Reverb_shield.troy", },
+            BuffName = "ViktorShield",
+            BuffTextureName = "ViktorPowerTransfer.dds",
+            NonDispellable = true,
+            PersistsThroughDeath = true,
+        };
+        public override void OnActivate()
+        {
+            if(charVars.IsChampTarget)
+            {
+                charVars.TotalDamage *= 0.4f;
+                IncreaseShield(owner, charVars.TotalDamage, true, true);
+            }
+        }
+        public override void OnDeactivate(bool expired)
+        {
+            RemoveShield(owner, 10000, true, true);
+        }
+        public override void OnPreDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
+        {
+            if(damageAmount > charVars.TotalDamage)
+            {
+                damageAmount -= charVars.TotalDamage;
+                ReduceShield(owner, damageAmount, true, true);
+                RemoveShield(owner, 0, true, true);
+                SpellBuffRemove(owner, default, (ObjAIBase)owner, 0);
+            }
+            else
+            {
+                ReduceShield(owner, damageAmount, true, true);
+                charVars.TotalDamage -= damageAmount;
+                damageAmount = 0;
             }
         }
     }

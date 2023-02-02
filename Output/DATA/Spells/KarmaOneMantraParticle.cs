@@ -19,7 +19,7 @@ namespace Buffs
         {
             TeamId teamID;
             teamID = GetTeamID(owner);
-            SpellEffectCreate(out this.oneCharge, out _, "karma_mantraCharge_indicator_01.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false);
+            SpellEffectCreate(out this.oneCharge, out _, "karma_mantraCharge_indicator_01.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false);
         }
         public override void OnDeactivate(bool expired)
         {

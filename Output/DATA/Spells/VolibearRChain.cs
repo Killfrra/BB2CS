@@ -26,14 +26,13 @@ namespace Buffs
             Particle c; // UNUSED
             float championPriority;
             float nextBuffVars_BounceCounter;
+            TeamId unitTeamID;
+            TeamId ownerTeamID;
             float nextBuffVars_VolibearRDamage;
             float nextBuffVars_VolibearRRatio;
-            TeamId unitTeamID;
-            Particle targetParticle; // UNUSED
-            TeamId ownerTeamID;
             last = true;
             teamID = GetTeamID(attacker);
-            SpellEffectCreate(out c, out _, "Volibear_R_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "C_BUFFBONE_GLB_CENTER_LOC", default, owner, default, default, true, false, false, false, false);
+            SpellEffectCreate(out c, out _, "Volibear_R_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "C_BUFFBONE_GLB_CENTER_LOC", default, owner, default, default, true, false, false, false, false);
             //RequireVar(this.bounceCounter);
             //RequireVar(this.volibearRRatio);
             //RequireVar(this.volibearRDamage);
@@ -50,7 +49,7 @@ namespace Buffs
                 {
                     foreach(AttackableUnit unit in GetRandomVisibleUnitsInArea(attacker, owner.Position, 500, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectHeroes, 1, nameof(Buffs.VolibearRChain), false))
                     {
-                        SpellEffectCreate(out this.particleID, out _, "volibear_R_chain_lighting_01.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, unit, false, owner, "head", default, unit, "root", default, true, false, false, false, false);
+                        SpellEffectCreate(out this.particleID, out _, "volibear_R_chain_lighting_01.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, unit, false, owner, "head", default, unit, "root", default, true, false, false, false, false);
                         this.bounceCounter++;
                         nextBuffVars_BounceCounter = this.bounceCounter;
                         nextBuffVars_VolibearRDamage = this.volibearRDamage;
@@ -69,7 +68,7 @@ namespace Buffs
                 {
                     foreach(AttackableUnit unit in GetRandomVisibleUnitsInArea(attacker, owner.Position, 500, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions, 1, nameof(Buffs.VolibearRChain), false))
                     {
-                        SpellEffectCreate(out this.particleID, out _, "volibear_R_chain_lighting_01.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, unit, false, owner, "head", default, unit, "root", default, true, false, false, false, false);
+                        SpellEffectCreate(out this.particleID, out _, "volibear_R_chain_lighting_01.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, unit, false, owner, "head", default, unit, "root", default, true, false, false, false, false);
                         this.bounceCounter++;
                         nextBuffVars_BounceCounter = this.bounceCounter;
                         nextBuffVars_VolibearRDamage = this.volibearRDamage;
@@ -83,8 +82,9 @@ namespace Buffs
             }
             if(last)
             {
+                Particle targetParticle; // UNUSED
                 teamID = GetTeamID(owner);
-                SpellEffectCreate(out targetParticle, out _, "Volibear_R_lasthit_sound.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, false, false, false, false);
+                SpellEffectCreate(out targetParticle, out _, "Volibear_R_lasthit_sound.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, false, false, false, false);
             }
             ownerTeamID = GetTeamID(owner);
             AddUnitPerceptionBubble(ownerTeamID, 250, attacker, 0.75f, default, default, false);

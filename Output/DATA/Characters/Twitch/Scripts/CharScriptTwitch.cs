@@ -16,8 +16,6 @@ namespace Chars
         }
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            float nextBuffVars_DamageAmount;
-            int nextBuffVars_LastCount;
             if(hitResult != HitResult.HIT_Dodge)
             {
                 if(hitResult != HitResult.HIT_Miss)
@@ -29,6 +27,8 @@ namespace Chars
                         }
                         else
                         {
+                            float nextBuffVars_DamageAmount;
+                            int nextBuffVars_LastCount;
                             AddBuff(attacker, target, new Buffs.DeadlyVenom(), 6, 1, 6.1f, BuffAddType.STACKS_AND_RENEWS, BuffType.POISON, 0, true, false);
                             nextBuffVars_DamageAmount = charVars.DamageAmount;
                             nextBuffVars_LastCount = 1;

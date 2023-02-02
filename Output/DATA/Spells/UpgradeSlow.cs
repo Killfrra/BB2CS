@@ -22,7 +22,7 @@ namespace Buffs
         {
             TeamId teamID;
             teamID = GetTeamID(owner);
-            SpellEffectCreate(out this.frostTurrets, out _, "heimerdinger_slowAura_self.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, default, default, false, false);
+            SpellEffectCreate(out this.frostTurrets, out _, "heimerdinger_slowAura_self.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, default, default, false, false);
             this.willPop = false;
             if(GetBuffCountFromCaster(owner, attacker, nameof(Buffs.H28GEvolutionTurret)) > 0)
             {
@@ -44,9 +44,6 @@ namespace Buffs
         }
         public override void OnDeactivate(bool expired)
         {
-            int rShift; // UNUSED
-            int gShift; // UNUSED
-            int yShift; // UNUSED
             SpellEffectRemove(this.frostTurrets);
             if(this.willPop)
             {
@@ -56,16 +53,19 @@ namespace Buffs
             {
                 if(GetBuffCountFromCaster(owner, attacker, nameof(Buffs.ExplosiveCartridges)) > 0)
                 {
+                    int rShift; // UNUSED
                     rShift = PushCharacterData("HeimerTRed", owner, true);
                 }
                 else
                 {
                     if(GetBuffCountFromCaster(owner, attacker, nameof(Buffs.UrAniumRounds)) > 0)
                     {
+                        int gShift; // UNUSED
                         gShift = PushCharacterData("HeimerTGreen", owner, true);
                     }
                     else
                     {
+                        int yShift; // UNUSED
                         yShift = PushCharacterData("HeimerTYellow", owner, true);
                     }
                 }

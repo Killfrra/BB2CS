@@ -20,8 +20,8 @@ namespace Buffs
             TeamId ownerVar;
             Particle a; // UNUSED
             ownerVar = GetTeamID(owner);
-            SpellEffectCreate(out a, out _, "exile_Q_tar_03.troy", default, ownerVar, 10, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, owner, default, default, true, false, false, false, false);
-            SpellEffectCreate(out a, out _, "exile_Q_tar_04.troy", default, ownerVar, 10, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, owner, default, default, true, false, false, false, false);
+            SpellEffectCreate(out a, out _, "exile_Q_tar_03.troy", default, ownerVar ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, owner, default, default, true, false, false, false, false);
+            SpellEffectCreate(out a, out _, "exile_Q_tar_04.troy", default, ownerVar ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, owner, default, default, true, false, false, false, false);
         }
     }
 }

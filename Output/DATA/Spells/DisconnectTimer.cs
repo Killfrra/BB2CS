@@ -29,7 +29,7 @@ namespace Buffs
             TeamId teamID;
             Minion other1;
             teamID = GetTeamID(owner);
-            other1 = SpawnMinion("RunToMe", "TestCube", "idle.lua", owner.Position, teamID, false, false, false, true, false, true, 0, default, true);
+            other1 = SpawnMinion("RunToMe", "TestCube", "idle.lua", owner.Position, teamID ?? TeamId.TEAM_UNKNOWN, false, false, false, true, false, true, 0, default, true);
             AddBuff((ObjAIBase)owner, other1, new Buffs.DisconnectTarget(), 1, 1, 1, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
         }
     }

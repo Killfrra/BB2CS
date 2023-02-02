@@ -34,7 +34,6 @@ namespace Buffs
         {
             int count;
             float newDuration;
-            ObjAIBase caster;
             count = GetBuffCountFromAll(attacker, nameof(Buffs.APBonusDamageToTowers));
             if(attacker is Champion)
             {
@@ -50,6 +49,7 @@ namespace Buffs
             }
             else if(count != 0)
             {
+                ObjAIBase caster;
                 caster = GetPetOwner((Pet)attacker);
                 if(caster is Champion)
                 {
@@ -67,10 +67,6 @@ namespace Buffs
         }
         public override void OnPreDealDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
         {
-            int level;
-            float nextBuffVars_TickDamage;
-            int nextBuffVars_attackSpeedMod;
-            float nextBuffVars_MoveSpeedMod;
             if(owner is Champion)
             {
                 if(target is ObjAIBase)
@@ -79,6 +75,10 @@ namespace Buffs
                     {
                         if(damageSource == default)
                         {
+                            int level;
+                            float nextBuffVars_TickDamage;
+                            int nextBuffVars_attackSpeedMod;
+                            float nextBuffVars_MoveSpeedMod;
                             level = GetLevel(owner);
                             nextBuffVars_TickDamage = this.effect0[level];
                             nextBuffVars_attackSpeedMod = this.effect1[level];

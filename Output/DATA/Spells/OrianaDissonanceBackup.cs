@@ -21,11 +21,11 @@ namespace Spells
             Vector3 ownerPos;
             float castRange;
             float distance;
-            bool nextBuffVars_GhostAlive;
-            Vector3 nextBuffVars_CastPos;
-            Vector3 nextBuffVars_TargetPos;
+            bool nextBuffVars_GhostAlive; // UNUSED
             bool deployed;
             Vector3 castPos;
+            Vector3 nextBuffVars_CastPos; // UNUSED
+            Vector3 nextBuffVars_TargetPos; // UNUSED
             targetPos = GetCastSpellTargetPos();
             FaceDirection(owner, targetPos);
             ownerPos = GetUnitPosition(owner);

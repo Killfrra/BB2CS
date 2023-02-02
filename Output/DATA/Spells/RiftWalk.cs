@@ -5,23 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class RiftWalk : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateEffect = new[]{ "", },
-            AutoBuffActivateEvent = "",
-            BuffName = "RiftWalk",
-            BuffTextureName = "Voidwalker_Riftwalk.dds",
-        };
-        public override void OnDeactivate(bool expired)
-        {
-            SetPARCostInc((ObjAIBase)owner, 3, SpellSlotType.SpellSlots, 0, PrimaryAbilityResourceType.MANA);
-        }
-    }
-}
 namespace Spells
 {
     public class RiftWalk : BBSpellScript
@@ -86,6 +69,23 @@ namespace Spells
             {
                 SpellEffectCreate(out ar1, out _, "Riftwalk_flash.troy", default, TeamId.TEAM_PURPLE, 250, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, castPos, target, default, default, true, false, false, false, false);
             }
+        }
+    }
+}
+namespace Buffs
+{
+    public class RiftWalk : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateEffect = new[]{ "", },
+            AutoBuffActivateEvent = "",
+            BuffName = "RiftWalk",
+            BuffTextureName = "Voidwalker_Riftwalk.dds",
+        };
+        public override void OnDeactivate(bool expired)
+        {
+            SetPARCostInc((ObjAIBase)owner, 3, SpellSlotType.SpellSlots, 0, PrimaryAbilityResourceType.MANA);
         }
     }
 }

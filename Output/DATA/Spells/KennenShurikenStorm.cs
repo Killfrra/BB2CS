@@ -5,6 +5,20 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class KennenShurikenStorm : BBSpellScript
+    {
+        int[] effect0 = {80, 145, 210};
+        int[] effect1 = {3, 4, 5};
+        public override void SelfExecute()
+        {
+            float nextBuffVars_BonusDamage;
+            nextBuffVars_BonusDamage = this.effect0[level];
+            AddBuff((ObjAIBase)owner, owner, new Buffs.KennenShurikenStorm(nextBuffVars_BonusDamage), 1, 1, this.effect1[level], BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class KennenShurikenStorm : BBBuffScript
@@ -28,7 +42,7 @@ namespace Buffs
             TeamId teamOfOwner;
             //RequireVar(this.bonusDamage);
             teamOfOwner = GetTeamID(owner);
-            SpellEffectCreate(out this.particle, out this.particle2, "kennen_ss_aoe_green.troy", "kennen_ss_aoe_red.troy", teamOfOwner, 0, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, owner.Position, owner, default, owner.Position, false, default, default, false, false);
+            SpellEffectCreate(out this.particle, out this.particle2, "kennen_ss_aoe_green.troy", "kennen_ss_aoe_red.troy", teamOfOwner ?? TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, owner.Position, owner, default, owner.Position, false, default, default, false, false);
             this.level = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
         }
         public override void OnDeactivate(bool expired)
@@ -103,20 +117,6 @@ namespace Buffs
                     }
                 }
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class KennenShurikenStorm : BBSpellScript
-    {
-        int[] effect0 = {80, 145, 210};
-        int[] effect1 = {3, 4, 5};
-        public override void SelfExecute()
-        {
-            float nextBuffVars_BonusDamage;
-            nextBuffVars_BonusDamage = this.effect0[level];
-            AddBuff((ObjAIBase)owner, owner, new Buffs.KennenShurikenStorm(nextBuffVars_BonusDamage), 1, 1, this.effect1[level], BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
         }
     }
 }

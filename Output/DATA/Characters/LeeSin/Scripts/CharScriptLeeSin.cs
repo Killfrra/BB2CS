@@ -12,11 +12,11 @@ namespace Chars
         float lastTimeExecuted;
         public override void OnUpdateActions()
         {
-            float bonusAD;
-            float bonusAD200;
-            float bonusAD9;
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, true))
             {
+                float bonusAD;
+                float bonusAD200;
+                float bonusAD9;
                 bonusAD = GetFlatPhysicalDamageMod(owner);
                 bonusAD200 = bonusAD * 2;
                 bonusAD9 = bonusAD * 0.9f;

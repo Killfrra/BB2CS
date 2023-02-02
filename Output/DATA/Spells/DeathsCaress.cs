@@ -5,6 +5,31 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class DeathsCaress : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            CastingBreaksStealth = false,
+            DoesntBreakShields = true,
+            TriggersSpellCasts = false,
+            IsDamagingSpell = true,
+            NotSingleTargetSpell = true,
+        };
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.DeathsCaress)) > 0)
+            {
+                SpellBuffRemove(owner, nameof(Buffs.DeathsCaress), (ObjAIBase)owner);
+            }
+            else
+            {
+                SpellCast((ObjAIBase)owner, owner, owner.Position, owner.Position, 0, SpellSlotType.ExtraSlots, level, true, false, false, false, false, false);
+            }
+        }
+    }
+}
 namespace Buffs
 {
     public class DeathsCaress : BBBuffScript
@@ -45,12 +70,12 @@ namespace Buffs
         }
         public override void OnDeactivate(bool expired)
         {
-            Particle varrr; // UNUSED
             float cooldownStat;
             float multiplier;
             float newCooldown;
             if(this.totalArmorAmount > 0)
             {
+                Particle varrr; // UNUSED
                 RemoveShield(owner, this.totalArmorAmount, true, true);
                 SpellEffectCreate(out varrr, out _, "DeathsCaress_nova.prt", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false);
                 foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 525, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
@@ -97,31 +122,6 @@ namespace Buffs
                 this.totalArmorAmount = 0;
                 ReduceShield(owner, this.oldArmorAmount, true, true);
                 SpellBuffRemoveCurrent(owner);
-            }
-        }
-    }
-}
-namespace Spells
-{
-    public class DeathsCaress : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            CastingBreaksStealth = false,
-            DoesntBreakShields = true,
-            TriggersSpellCasts = false,
-            IsDamagingSpell = true,
-            NotSingleTargetSpell = true,
-        };
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.DeathsCaress)) > 0)
-            {
-                SpellBuffRemove(owner, nameof(Buffs.DeathsCaress), (ObjAIBase)owner);
-            }
-            else
-            {
-                SpellCast((ObjAIBase)owner, owner, owner.Position, owner.Position, 0, SpellSlotType.ExtraSlots, level, true, false, false, false, false, false);
             }
         }
     }

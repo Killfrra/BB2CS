@@ -18,7 +18,6 @@ namespace Buffs
         public override bool OnAllowAdd(BuffType type, string scriptName, int maxStack, float duration)
         {
             bool returnValue = true;
-            float distance;
             if(owner.Team != attacker.Team)
             {
                 if(scriptName == nameof(Buffs.GlobalWallPush))
@@ -83,6 +82,7 @@ namespace Buffs
                             {
                                 if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.ActionTimer)) == 0)
                                 {
+                                    float distance;
                                     distance = DistanceBetweenObjects("Attacker", "Owner");
                                     if(distance > 950)
                                     {

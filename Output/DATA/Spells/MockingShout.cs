@@ -5,34 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class MockingShout : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateAttachBoneName = new[]{ "", "", },
-            AutoBuffActivateEffect = new[]{ "", "", },
-            BuffName = "Mocking Shout",
-            BuffTextureName = "48thSlave_Pacify.dds",
-        };
-        float damageMod;
-        public MockingShout(float damageMod = default)
-        {
-            this.damageMod = damageMod;
-        }
-        public override void OnActivate()
-        {
-            //RequireVar(this.moveSpeedMod);
-            //RequireVar(this.damageMod);
-            ApplyAssistMarker(attacker, target, 10);
-        }
-        public override void OnUpdateStats()
-        {
-            IncFlatPhysicalDamageMod(owner, this.damageMod);
-        }
-    }
-}
 namespace Spells
 {
     public class MockingShout : BBSpellScript
@@ -50,10 +22,10 @@ namespace Spells
         public override bool CanCast()
         {
             bool returnValue = true;
-            bool temp;
             level = GetSlotSpellLevel((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             if(level > 0)
             {
+                bool temp;
                 temp = false;
                 foreach(AttackableUnit unit in GetRandomUnitsInArea((ObjAIBase)owner, owner.Position, 800, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectHeroes, 1, default, true))
                 {
@@ -96,6 +68,34 @@ namespace Spells
                     AddBuff(attacker, target, new Buffs.MockingShout(nextBuffVars_DamageMod), 1, 1, 4, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_DEHANCER, 0, true, false, false);
                 }
             }
+        }
+    }
+}
+namespace Buffs
+{
+    public class MockingShout : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateAttachBoneName = new[]{ "", "", },
+            AutoBuffActivateEffect = new[]{ "", "", },
+            BuffName = "Mocking Shout",
+            BuffTextureName = "48thSlave_Pacify.dds",
+        };
+        float damageMod;
+        public MockingShout(float damageMod = default)
+        {
+            this.damageMod = damageMod;
+        }
+        public override void OnActivate()
+        {
+            //RequireVar(this.moveSpeedMod);
+            //RequireVar(this.damageMod);
+            ApplyAssistMarker(attacker, target, 10);
+        }
+        public override void OnUpdateStats()
+        {
+            IncFlatPhysicalDamageMod(owner, this.damageMod);
         }
     }
 }

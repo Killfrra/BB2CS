@@ -33,13 +33,13 @@ namespace Spells
         {
             float healthMod;
             float baseCooldown;
-            float cooldownMultiplier;
             level = GetLevel(owner);
             healthMod = this.effect0[level];
             SetSpellToolTipVar(healthMod, 1, spellSlot, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_SUMMONER, (Champion)attacker);
             baseCooldown = 540;
             if(avatarVars.SummonerCooldownBonus != 0)
             {
+                float cooldownMultiplier;
                 cooldownMultiplier = 1 - avatarVars.SummonerCooldownBonus;
                 baseCooldown *= cooldownMultiplier;
             }
@@ -48,10 +48,10 @@ namespace Spells
         public override float AdjustCooldown()
         {
             float returnValue = 0;
-            float cooldownMultiplier;
-            float baseCooldown;
             if(avatarVars.SummonerCooldownBonus != 0)
             {
+                float cooldownMultiplier;
+                float baseCooldown;
                 cooldownMultiplier = 1 - avatarVars.SummonerCooldownBonus;
                 baseCooldown = 540 * cooldownMultiplier;
             }

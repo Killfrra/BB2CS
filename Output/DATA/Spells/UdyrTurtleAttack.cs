@@ -12,14 +12,14 @@ namespace Spells
         float[] effect0 = {0.1f, 0.12f, 0.14f, 0.16f, 0.18f};
         public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
         {
-            float nextBuffVars_DrainPercent;
-            float nextBuffVars_ManaDrainPercent;
-            Particle lifestealParticle; // UNUSED
             float baseDamage;
             if(target is ObjAIBase)
             {
                 if(target is not BaseTurret)
                 {
+                    float nextBuffVars_DrainPercent;
+                    Particle lifestealParticle; // UNUSED
+                    float nextBuffVars_ManaDrainPercent;
                     level = GetSlotSpellLevel((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                     nextBuffVars_DrainPercent = this.effect0[level];
                     nextBuffVars_ManaDrainPercent = 0.5f * nextBuffVars_DrainPercent;

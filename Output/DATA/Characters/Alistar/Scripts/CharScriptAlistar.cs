@@ -16,18 +16,18 @@ namespace Chars
         }
         public override void OnNearbyDeath()
         {
-            float cooldown;
-            bool noRender;
-            float newCooldown;
             level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             if(level >= 1)
             {
+                float cooldown;
                 cooldown = GetSlotSpellCooldownTime((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 if(cooldown > 0)
                 {
+                    bool noRender;
                     noRender = GetNoRender(target);
                     if(!noRender)
                     {
+                        float newCooldown;
                         newCooldown = cooldown - 2;
                         SetSlotSpellCooldownTime((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, newCooldown);
                     }

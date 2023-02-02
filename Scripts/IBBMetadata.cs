@@ -2,6 +2,11 @@ using static Utils;
 
 public class IBBMetadata
 {
+    public bool IsInitialized()
+    {
+        return this.GetType().GetFields().Any(fInfo => fInfo.GetValue(this) != null);
+    }
+
     public virtual void Parse(Dictionary<string, object> globals, HashSet<string> used)
     {
     }

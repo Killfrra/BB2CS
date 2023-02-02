@@ -5,6 +5,21 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class PotionOfBrilliance : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = false,
+            NotSingleTargetSpell = true,
+        };
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            AddBuff((ObjAIBase)owner, owner, new Buffs.PotionOfBrilliance(), 1, 1, 240, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class PotionOfBrilliance : BBBuffScript
@@ -34,21 +49,6 @@ namespace Buffs
             bonusAP = -1 * this.bonusAP;
             IncPermanentFlatMagicDamageMod(owner, bonusAP);
             IncPermanentPercentCooldownMod(owner, 0.1f);
-        }
-    }
-}
-namespace Spells
-{
-    public class PotionOfBrilliance : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = false,
-            NotSingleTargetSpell = true,
-        };
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            AddBuff((ObjAIBase)owner, owner, new Buffs.PotionOfBrilliance(), 1, 1, 240, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false);
         }
     }
 }

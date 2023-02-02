@@ -18,10 +18,10 @@ namespace Spells
         public override float AdjustCooldown()
         {
             float returnValue = 0;
-            float cooldownMultiplier;
-            float baseCooldown;
             if(avatarVars.SummonerCooldownBonus != 0)
             {
+                float cooldownMultiplier;
+                float baseCooldown;
                 cooldownMultiplier = 1 - avatarVars.SummonerCooldownBonus;
                 baseCooldown = 270 * cooldownMultiplier;
             }
@@ -39,7 +39,7 @@ namespace Spells
             int ownerLevel;
             float bonusHealth;
             float bonusRegen;
-            float nextBuffVars_FinalHPRegen;
+            float nextBuffVars_FinalHPRegen; // UNUSED
             float nextBuffVars_BonusHealth;
             SpellEffectCreate(out castParticle, out _, "Summoner_Cast.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false, default, default, false);
             minionPos = GetPointByUnitFacingOffset(owner, 200, 0);
@@ -54,7 +54,7 @@ namespace Spells
             {
                 duration += avatarVars.RallyDurationBonus;
             }
-            other3 = SpawnMinion("Beacon", "SummonerBeacon", "idle.lua", minionPos, ownerID, true, true, false, false, true, false, 0, true, false);
+            other3 = SpawnMinion("Beacon", "SummonerBeacon", "idle.lua", minionPos, ownerID ?? TeamId.TEAM_BLUE, true, true, false, false, true, false, 0, true, false);
             ownerLevel = GetLevel(owner);
             bonusHealth = ownerLevel * 25;
             bonusRegen = ownerLevel * 1.5f;

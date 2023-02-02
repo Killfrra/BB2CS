@@ -5,37 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class Parley : BBBuffScript
-    {
-        float goldGain;
-        public Parley(float goldGain = default)
-        {
-            this.goldGain = goldGain;
-        }
-        public override void OnActivate()
-        {
-            //RequireVar(this.goldGain);
-        }
-        public override void OnUpdateActions()
-        {
-            SpellBuffRemoveCurrent(owner);
-        }
-        public override void OnDeath()
-        {
-            ObjAIBase caster;
-            caster = SetBuffCasterUnit();
-            if(!attacker.IsDead)
-            {
-                if(attacker == caster)
-                {
-                    IncGold(attacker, this.goldGain);
-                }
-            }
-        }
-    }
-}
 namespace Spells
 {
     public class Parley : BBSpellScript
@@ -77,6 +46,37 @@ namespace Spells
             baseDamage *= 1;
             damageVar = parBaseDamage + baseDamage;
             ApplyDamage(attacker, target, damageVar, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_ATTACK, 1, 0, 1, false, false, attacker);
+        }
+    }
+}
+namespace Buffs
+{
+    public class Parley : BBBuffScript
+    {
+        float goldGain;
+        public Parley(float goldGain = default)
+        {
+            this.goldGain = goldGain;
+        }
+        public override void OnActivate()
+        {
+            //RequireVar(this.goldGain);
+        }
+        public override void OnUpdateActions()
+        {
+            SpellBuffRemoveCurrent(owner);
+        }
+        public override void OnDeath()
+        {
+            ObjAIBase caster;
+            caster = SetBuffCasterUnit();
+            if(!attacker.IsDead)
+            {
+                if(attacker == caster)
+                {
+                    IncGold(attacker, this.goldGain);
+                }
+            }
         }
     }
 }

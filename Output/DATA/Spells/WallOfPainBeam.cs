@@ -21,9 +21,9 @@ namespace Buffs
             teamOfOwner = GetTeamID(owner);
             SetForceRenderParticles(owner, true);
             SetForceRenderParticles(attacker, true);
-            SpellEffectCreate(out this.particle1, out this.particle, "wallofpain_new_post_green.troy", "wallofpain_new_post_red.troy", teamOfOwner, 200, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, false, default, default, false, false);
-            SpellEffectCreate(out this.particle2, out this.particle3, "wallofpain_new_post_green.troy", "wallofpain_new_post_red.troy", teamOfOwner, 200, 0, TeamId.TEAM_UNKNOWN, default, default, false, attacker, default, default, target, default, default, false, default, default, false, false);
-            SpellEffectCreate(out this.particleID6, out this.noParticle, "wallofpain__new_beam.troy", default, teamOfOwner, 200, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "bottom", default, attacker, "bottom", default, false, default, default, false, false);
+            SpellEffectCreate(out this.particle1, out this.particle, "wallofpain_new_post_green.troy", "wallofpain_new_post_red.troy", teamOfOwner ?? TeamId.TEAM_UNKNOWN, 200, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, false, default, default, false, false);
+            SpellEffectCreate(out this.particle2, out this.particle3, "wallofpain_new_post_green.troy", "wallofpain_new_post_red.troy", teamOfOwner ?? TeamId.TEAM_UNKNOWN, 200, 0, TeamId.TEAM_UNKNOWN, default, default, false, attacker, default, default, target, default, default, false, default, default, false, false);
+            SpellEffectCreate(out this.particleID6, out this.noParticle, "wallofpain__new_beam.troy", default, teamOfOwner ?? TeamId.TEAM_UNKNOWN, 200, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "bottom", default, attacker, "bottom", default, false, default, default, false, false);
         }
         public override void OnDeactivate(bool expired)
         {

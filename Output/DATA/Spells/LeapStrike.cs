@@ -5,24 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class LeapStrike : BBBuffScript
-    {
-        public override void OnMoveEnd()
-        {
-            SpellBuffRemove(owner, nameof(Buffs.LeapStrike), attacker, 0);
-        }
-        public override void OnMoveSuccess()
-        {
-            attacker = SetBuffCasterUnit();
-            if(attacker.Team != owner.Team)
-            {
-                SpellCast((ObjAIBase)owner, attacker, attacker.Position, attacker.Position, 0, SpellSlotType.ExtraSlots, 1, true, true, false, false, false, false);
-            }
-        }
-    }
-}
 namespace Spells
 {
     public class LeapStrike : BBSpellScript
@@ -106,6 +88,24 @@ namespace Spells
                 {
                     AddBuff(attacker, target, new Buffs.Destealth(), 1, 1, 2, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
                 }
+            }
+        }
+    }
+}
+namespace Buffs
+{
+    public class LeapStrike : BBBuffScript
+    {
+        public override void OnMoveEnd()
+        {
+            SpellBuffRemove(owner, nameof(Buffs.LeapStrike), attacker, 0);
+        }
+        public override void OnMoveSuccess()
+        {
+            attacker = SetBuffCasterUnit();
+            if(attacker.Team != owner.Team)
+            {
+                SpellCast((ObjAIBase)owner, attacker, attacker.Position, attacker.Position, 0, SpellSlotType.ExtraSlots, 1, true, true, false, false, false, false);
             }
         }
     }

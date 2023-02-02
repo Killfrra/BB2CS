@@ -5,29 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class ShenStandUnited : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateEffect = new[]{ "", },
-            BuffName = "Shen Stand United Channel",
-            BuffTextureName = "Shen_StandUnited.dds",
-        };
-        Particle particleID;
-        public override void OnActivate()
-        {
-            TeamId teamID;
-            teamID = GetTeamID(owner);
-            SpellEffectCreate(out this.particleID, out _, "ShenTeleport_v2.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, owner.Position, target, default, default, false, default, default, false, false);
-        }
-        public override void OnDeactivate(bool expired)
-        {
-            SpellEffectRemove(this.particleID);
-        }
-    }
-}
 namespace Spells
 {
     public class ShenStandUnited : BBSpellScript
@@ -64,6 +41,29 @@ namespace Spells
             DestroyMissileForTarget(owner);
             castPos = GetPointByUnitFacingOffset(target, 150, 180);
             TeleportToPosition(owner, castPos);
+        }
+    }
+}
+namespace Buffs
+{
+    public class ShenStandUnited : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateEffect = new[]{ "", },
+            BuffName = "Shen Stand United Channel",
+            BuffTextureName = "Shen_StandUnited.dds",
+        };
+        Particle particleID;
+        public override void OnActivate()
+        {
+            TeamId teamID;
+            teamID = GetTeamID(owner);
+            SpellEffectCreate(out this.particleID, out _, "ShenTeleport_v2.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, owner.Position, target, default, default, false, default, default, false, false);
+        }
+        public override void OnDeactivate(bool expired)
+        {
+            SpellEffectRemove(this.particleID);
         }
     }
 }

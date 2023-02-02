@@ -18,11 +18,11 @@ namespace Buffs
             teamOfOwner = GetTeamID(owner);
             if(teamOfOwner == TeamId.TEAM_BLUE)
             {
-                SpellEffectCreate(out this.newName, out _, "pantheon_grandskyfall_tar_red.troy", default, teamOfOwner, 500, 0, TeamId.TEAM_PURPLE, default, default, false, default, default, targetPos, target, default, default, false, default, default, false, false);
+                SpellEffectCreate(out this.newName, out _, "pantheon_grandskyfall_tar_red.troy", default, teamOfOwner ?? TeamId.TEAM_UNKNOWN, 500, 0, TeamId.TEAM_PURPLE, default, default, false, default, default, targetPos, target, default, default, false, default, default, false, false);
             }
             else
             {
-                SpellEffectCreate(out this.newName, out _, "pantheon_grandskyfall_tar_red.troy", default, teamOfOwner, 500, 0, TeamId.TEAM_BLUE, default, default, false, default, default, targetPos, target, default, default, false, default, default, false, false);
+                SpellEffectCreate(out this.newName, out _, "pantheon_grandskyfall_tar_red.troy", default, teamOfOwner ?? TeamId.TEAM_UNKNOWN, 500, 0, TeamId.TEAM_BLUE, default, default, false, default, default, targetPos, target, default, default, false, default, default, false, false);
             }
         }
         public override void OnDeactivate(bool expired)

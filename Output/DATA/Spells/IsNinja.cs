@@ -28,10 +28,10 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            TeamId teamID;
-            float numOtherNinjas;
             if(ExecutePeriodically(20, ref this.lastTimeExecuted, true))
             {
+                TeamId teamID;
+                float numOtherNinjas;
                 teamID = GetTeamID(owner);
                 numOtherNinjas = -1;
                 if(teamID == TeamId.TEAM_BLUE)

@@ -12,12 +12,11 @@ namespace Items
         float lastTimeExecuted;
         public override void OnUpdateActions()
         {
-            int nextBuffVars_MagicResistBonus;
-            int nextBuffVars_ArmorBonus;
-            int nextBuffVars_DamageBonus;
-            ObjAIBase caster;
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, false))
             {
+                int nextBuffVars_MagicResistBonus;
+                int nextBuffVars_ArmorBonus;
+                int nextBuffVars_DamageBonus;
                 nextBuffVars_MagicResistBonus = 15;
                 nextBuffVars_ArmorBonus = 12;
                 nextBuffVars_DamageBonus = 8;
@@ -44,6 +43,7 @@ namespace Items
                     {
                         foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 1200, SpellDataFlags.AffectFriends | SpellDataFlags.AffectHeroes, default, true))
                         {
+                            ObjAIBase caster;
                             caster = GetPetOwner((Pet)owner);
                             if(unit == owner)
                             {

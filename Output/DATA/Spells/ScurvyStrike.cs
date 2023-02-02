@@ -29,10 +29,10 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            int count;
-            float damageToDeal;
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, true))
             {
+                int count;
+                float damageToDeal;
                 count = GetBuffCountFromCaster(owner, attacker, nameof(Buffs.ScurvyStrikeParticle));
                 damageToDeal = this.dotDamage * count;
                 ApplyDamage(attacker, owner, damageToDeal, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_PROC, 1, 0, 0, false, false, attacker);

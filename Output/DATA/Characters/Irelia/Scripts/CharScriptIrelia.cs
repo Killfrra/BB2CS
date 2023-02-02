@@ -12,14 +12,14 @@ namespace Chars
         float lastTimeExecuted;
         public override void OnUpdateStats()
         {
-            float count;
-            bool canSee;
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, false))
             {
+                float count;
                 count = 0;
                 charVars.CCReduction = 1;
                 foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 1400, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectHeroes, default, true))
                 {
+                    bool canSee;
                     canSee = CanSeeTarget(owner, unit);
                     if(canSee)
                     {
@@ -86,9 +86,9 @@ namespace Buffs
         public override bool OnAllowAdd(BuffType type, string scriptName, int maxStack, float duration)
         {
             bool returnValue = true;
-            float percentReduction; // UNITIALIZED
             if(owner.Team != attacker.Team)
             {
+                float percentReduction; // UNITIALIZED
                 if(type == BuffType.SNARE)
                 {
                     duration *= charVars.CCReduction;

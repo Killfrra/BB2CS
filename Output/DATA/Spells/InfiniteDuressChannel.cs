@@ -5,6 +5,31 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class InfiniteDuressChannel : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            CastingBreaksStealth = false,
+            ChannelDuration = 2.1f,
+            DoesntBreakShields = true,
+            TriggersSpellCasts = false,
+            IsDamagingSpell = true,
+            NotSingleTargetSpell = false,
+        };
+        public override void ChannelingSuccessStop()
+        {
+            SpellBuffRemove(attacker, nameof(Buffs.InfiniteDuressSound), attacker, 0);
+        }
+        public override void ChannelingCancelStop()
+        {
+            SpellBuffRemove(attacker, nameof(Buffs.InfiniteDuressChannel), attacker, 0);
+            SpellBuffRemove(attacker, nameof(Buffs.InfiniteDuressSound), attacker, 0);
+            SpellBuffRemove(target, nameof(Buffs.Suppression), attacker, 0);
+        }
+    }
+}
 namespace Buffs
 {
     public class InfiniteDuressChannel : BBBuffScript
@@ -31,13 +56,13 @@ namespace Buffs
         }
         public override void OnDeactivate(bool expired)
         {
-            Particle arr; // UNUSED
             if(expired)
             {
                 if(this.hitsRemaining > 0)
                 {
                     while(this.hitsRemaining > 0)
                     {
+                        Particle arr; // UNUSED
                         SpellEffectCreate(out arr, out _, "InfiniteDuress_tar.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false, false, false, false, false);
                         ApplyDamage(attacker, owner, this.damagePerTick, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_ATTACK, 1, 0, 0, false, false, attacker);
                         this.hitsRemaining--;
@@ -52,7 +77,6 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            Particle arr; // UNUSED
             if(ExecutePeriodically(0.5f, ref this.lastTimeExecuted, true))
             {
                 if(GetBuffCountFromCaster(owner, attacker, nameof(Buffs.Suppression)) == 0)
@@ -66,36 +90,12 @@ namespace Buffs
                 }
                 else if(this.hitsRemaining > 0)
                 {
+                    Particle arr; // UNUSED
                     SpellEffectCreate(out arr, out _, "InfiniteDuress_tar.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false, false, false, false, false);
                     ApplyDamage(attacker, owner, this.damagePerTick, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_ATTACK, 1, 0, 0, false, false, attacker);
                     this.hitsRemaining--;
                 }
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class InfiniteDuressChannel : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            CastingBreaksStealth = false,
-            ChannelDuration = 2.1f,
-            DoesntBreakShields = true,
-            TriggersSpellCasts = false,
-            IsDamagingSpell = true,
-            NotSingleTargetSpell = false,
-        };
-        public override void ChannelingSuccessStop()
-        {
-            SpellBuffRemove(attacker, nameof(Buffs.InfiniteDuressSound), attacker, 0);
-        }
-        public override void ChannelingCancelStop()
-        {
-            SpellBuffRemove(attacker, nameof(Buffs.InfiniteDuressChannel), attacker, 0);
-            SpellBuffRemove(attacker, nameof(Buffs.InfiniteDuressSound), attacker, 0);
-            SpellBuffRemove(target, nameof(Buffs.Suppression), attacker, 0);
         }
     }
 }

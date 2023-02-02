@@ -24,7 +24,6 @@ namespace Spells
             float properDamage;
             bool isStealthed;
             Particle gfasdf; // UNUSED
-            bool canSee;
             teamID = GetTeamID(owner);
             properDamage = this.effect0[level];
             isStealthed = GetStealthed(target);
@@ -33,7 +32,7 @@ namespace Spells
                 BreakSpellShields(target);
                 AddBuff(attacker, target, new Buffs.KennenMarkofStorm(), 5, 1, 8, BuffAddType.STACKS_AND_RENEWS, BuffType.COMBAT_DEHANCER, 0, true, false, false);
                 ApplyDamage(attacker, target, properDamage, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELL, 1, 0.75f, 1, false, false, attacker);
-                SpellEffectCreate(out gfasdf, out _, "Kennen_ts_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, "spine", default, target, default, default, true, default, default, false, false);
+                SpellEffectCreate(out gfasdf, out _, "Kennen_ts_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, "spine", default, target, default, default, true, default, default, false, false);
                 DestroyMissile(missileNetworkID);
             }
             else
@@ -43,18 +42,19 @@ namespace Spells
                     BreakSpellShields(target);
                     AddBuff(attacker, target, new Buffs.KennenMarkofStorm(), 5, 1, 8, BuffAddType.STACKS_AND_RENEWS, BuffType.COMBAT_DEHANCER, 0, true, false, false);
                     ApplyDamage(attacker, target, properDamage, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELL, 1, 0.75f, 1, false, false, attacker);
-                    SpellEffectCreate(out gfasdf, out _, "Kennen_ts_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, "spine", default, target, default, default, true, default, default, false, false);
+                    SpellEffectCreate(out gfasdf, out _, "Kennen_ts_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, "spine", default, target, default, default, true, default, default, false, false);
                     DestroyMissile(missileNetworkID);
                 }
                 else
                 {
+                    bool canSee;
                     canSee = CanSeeTarget(owner, target);
                     if(canSee)
                     {
                         BreakSpellShields(target);
                         AddBuff(attacker, target, new Buffs.KennenMarkofStorm(), 5, 1, 8, BuffAddType.STACKS_AND_RENEWS, BuffType.COMBAT_DEHANCER, 0, true, false, false);
                         ApplyDamage(attacker, target, properDamage, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELL, 1, 0.75f, 1, false, false, attacker);
-                        SpellEffectCreate(out gfasdf, out _, "Kennen_ts_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, "spine", default, target, default, default, true, default, default, false, false);
+                        SpellEffectCreate(out gfasdf, out _, "Kennen_ts_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, "spine", default, target, default, default, true, default, default, false, false);
                         DestroyMissile(missileNetworkID);
                     }
                 }

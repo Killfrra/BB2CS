@@ -25,18 +25,18 @@ namespace Buffs
             kogMawSkinID = GetSkinID(attacker);
             if(kogMawSkinID == 4)
             {
-                SpellEffectCreate(out this.a, out _, "KogNoseGlow.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "BUFFBONE_CSTM_nose", default, owner, default, default, false, false, false, false, false);
+                SpellEffectCreate(out this.a, out _, "KogNoseGlow.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "BUFFBONE_CSTM_nose", default, owner, default, default, false, false, false, false, false);
             }
             else if(kogMawSkinID == 6)
             {
-                SpellEffectCreate(out this.a, out _, "Kogmaw_deepsea_glow.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "BUFFBONE_CSTM_ANGLER", default, owner, default, default, false, false, false, false, false);
+                SpellEffectCreate(out this.a, out _, "Kogmaw_deepsea_glow.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "BUFFBONE_CSTM_ANGLER", default, owner, default, default, false, false, false, false, false);
             }
         }
         public override void OnDeath()
         {
-            bool becomeZombie; // UNUSED
             if(owner is Champion)
             {
+                bool becomeZombie; // UNUSED
                 becomeZombie = true;
             }
         }

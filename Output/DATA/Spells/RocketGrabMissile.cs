@@ -5,41 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class RocketGrabMissile : BBBuffScript
-    {
-        Particle particleID;
-        bool willRemove;
-        float lastTimeExecuted;
-        public RocketGrabMissile(Particle particleID = default, bool willRemove = default)
-        {
-            this.particleID = particleID;
-            this.willRemove = willRemove;
-        }
-        public override void OnActivate()
-        {
-            object nextBuffVars_ParticleID;
-            object nextBuffVars_WillRemove;
-            //RequireVar(nextBuffVars_ParticleID);
-            //RequireVar(nextBuffVars_WillRemove);
-        }
-        public override void OnDeactivate(bool expired)
-        {
-            SpellEffectRemove(this.particleID);
-        }
-        public override void OnUpdateActions()
-        {
-            if(!this.willRemove)
-            {
-                if(ExecutePeriodically(0.1f, ref this.lastTimeExecuted, false))
-                {
-                    this.willRemove = true;
-                }
-            }
-        }
-    }
-}
 namespace Spells
 {
     public class RocketGrabMissile : BBSpellScript
@@ -59,9 +24,8 @@ namespace Spells
             float distance;
             float time;
             bool nextBuffVars_WillRemove;
-            Particle nextBuffVars_ParticleID;
             Particle particleID;
-            bool canSee;
+            Particle nextBuffVars_ParticleID;
             isStealthed = GetStealthed(target);
             if(!isStealthed)
             {
@@ -95,6 +59,7 @@ namespace Spells
                 }
                 else
                 {
+                    bool canSee;
                     canSee = CanSeeTarget(owner, target);
                     if(canSee)
                     {
@@ -110,6 +75,39 @@ namespace Spells
                         DestroyMissile(missileNetworkID);
                         AddBuff(attacker, target, new Buffs.RocketGrab2(), 1, 1, 0.6f, BuffAddType.REPLACE_EXISTING, BuffType.STUN, 0, true, false, false);
                     }
+                }
+            }
+        }
+    }
+}
+namespace Buffs
+{
+    public class RocketGrabMissile : BBBuffScript
+    {
+        Particle particleID;
+        bool willRemove;
+        float lastTimeExecuted;
+        public RocketGrabMissile(Particle particleID = default, bool willRemove = default)
+        {
+            this.particleID = particleID;
+            this.willRemove = willRemove;
+        }
+        public override void OnActivate()
+        {
+            //RequireVar(nextBuffVars_ParticleID);
+            //RequireVar(nextBuffVars_WillRemove);
+        }
+        public override void OnDeactivate(bool expired)
+        {
+            SpellEffectRemove(this.particleID);
+        }
+        public override void OnUpdateActions()
+        {
+            if(!this.willRemove)
+            {
+                if(ExecutePeriodically(0.1f, ref this.lastTimeExecuted, false))
+                {
+                    this.willRemove = true;
                 }
             }
         }

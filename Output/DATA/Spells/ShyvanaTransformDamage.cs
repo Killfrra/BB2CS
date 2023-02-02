@@ -42,7 +42,7 @@ namespace Buffs
             SetCanAttack(owner, false);
             SetCanMove(owner, false);
             teamID = GetTeamID(attacker);
-            SpellEffectCreate(out targetParticle, out _, "shyvana_ult_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, false, false, false, false);
+            SpellEffectCreate(out targetParticle, out _, "shyvana_ult_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, false, false, false, false);
         }
         public override void OnDeactivate(bool expired)
         {

@@ -18,9 +18,9 @@ namespace Buffs
         };
         public override void OnDeath()
         {
-            bool becomeZombie; // UNUSED
             if(owner is Champion)
             {
+                bool becomeZombie; // UNUSED
                 becomeZombie = true;
             }
         }

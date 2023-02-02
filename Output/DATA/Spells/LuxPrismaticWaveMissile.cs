@@ -38,13 +38,13 @@ namespace Spells
         }
         public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
         {
-            float baseDamageBlock;
-            float abilityPower;
-            float bonusHealth;
-            float damageBlock;
-            float nextBuffVars_DamageBlock;
             if(attacker != target)
             {
+                float baseDamageBlock;
+                float abilityPower;
+                float bonusHealth;
+                float damageBlock;
+                float nextBuffVars_DamageBlock;
                 baseDamageBlock = this.effect1[level];
                 abilityPower = GetFlatMagicDamageMod(owner);
                 bonusHealth = abilityPower * 0.35f;

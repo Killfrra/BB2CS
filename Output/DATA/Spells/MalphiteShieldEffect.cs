@@ -39,7 +39,6 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            float hPPool;
             if(this.shieldHealth <= 0)
             {
                 SpellBuffRemoveCurrent(owner);
@@ -48,6 +47,7 @@ namespace Buffs
             {
                 if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.MalphiteShieldBeenHit)) == 0)
                 {
+                    float hPPool;
                     this.oldArmorAmount = this.shieldHealth;
                     hPPool = GetMaxHealth(owner, PrimaryAbilityResourceType.MANA);
                     this.shieldHealth = 0.1f * hPPool;

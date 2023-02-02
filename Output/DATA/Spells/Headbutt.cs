@@ -5,6 +5,46 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class Headbutt : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            DoesntBreakShields = true,
+            TriggersSpellCasts = true,
+            NotSingleTargetSpell = false,
+            PhysicalDamageRatio = 1f,
+            SpellDamageRatio = 1f,
+        };
+        int[] effect0 = {85, 130, 175, 220, 265};
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            float nextBuffVars_Damage;
+            float distance;
+            float factor;
+            Vector3 targetPos;
+            TeamId teamID;
+            Minion other1;
+            FaceDirection(owner, target.Position);
+            nextBuffVars_Damage = this.effect0[level];
+            distance = DistanceBetweenObjects("Attacker", "Target");
+            factor = distance / 650;
+            factor = Math.Max(factor, 0.25f);
+            factor = Math.Min(factor, 0.9f);
+            PlayAnimation("Spell2", factor, owner, false, false, false);
+            targetPos = GetUnitPosition(target);
+            Move(owner, targetPos, 1500, 2, 0, ForceMovementType.FURTHEST_WITHIN_RANGE, ForceMovementOrdersType.CANCEL_ORDER, distance, ForceMovementOrdersFacing.FACE_MOVEMENT_DIRECTION);
+            teamID = GetTeamID(owner);
+            other1 = SpawnMinion("placeholder", "TestCube", "idle.lua", owner.Position, teamID ?? TeamId.TEAM_UNKNOWN, false, true, false, true, false, true, 0, false, false, (Champion)owner);
+            FaceDirection(other1, target.Position);
+            AddBuff((ObjAIBase)owner, target, new Buffs.AlistarHeadbuttMarker(), 1, 1, 3, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+            AddBuff(other1, other1, new Buffs.ExpirationTimer(), 1, 1, 3, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+            AddBuff(other1, owner, new Buffs.Headbutt(nextBuffVars_Damage), 1, 1, 2, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0.25f, true, false, false);
+            AddBuff((ObjAIBase)owner, owner, new Buffs.AlistarTrample(), 1, 1, 3, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, false, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class Headbutt : BBBuffScript
@@ -41,46 +81,6 @@ namespace Buffs
                     SpellBuffRemove(owner, nameof(Buffs.Headbutt), attacker, 0);
                 }
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class Headbutt : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            DoesntBreakShields = true,
-            TriggersSpellCasts = true,
-            NotSingleTargetSpell = false,
-            PhysicalDamageRatio = 1f,
-            SpellDamageRatio = 1f,
-        };
-        int[] effect0 = {85, 130, 175, 220, 265};
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            float nextBuffVars_Damage;
-            float distance;
-            float factor;
-            Vector3 targetPos;
-            TeamId teamID;
-            Minion other1;
-            FaceDirection(owner, target.Position);
-            nextBuffVars_Damage = this.effect0[level];
-            distance = DistanceBetweenObjects("Attacker", "Target");
-            factor = distance / 650;
-            factor = Math.Max(factor, 0.25f);
-            factor = Math.Min(factor, 0.9f);
-            PlayAnimation("Spell2", factor, owner, false, false, false);
-            targetPos = GetUnitPosition(target);
-            Move(owner, targetPos, 1500, 2, 0, ForceMovementType.FURTHEST_WITHIN_RANGE, ForceMovementOrdersType.CANCEL_ORDER, distance, ForceMovementOrdersFacing.FACE_MOVEMENT_DIRECTION);
-            teamID = GetTeamID(owner);
-            other1 = SpawnMinion("placeholder", "TestCube", "idle.lua", owner.Position, teamID, false, true, false, true, false, true, 0, false, false, (Champion)owner);
-            FaceDirection(other1, target.Position);
-            AddBuff((ObjAIBase)owner, target, new Buffs.AlistarHeadbuttMarker(), 1, 1, 3, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0, true, false, false);
-            AddBuff(other1, other1, new Buffs.ExpirationTimer(), 1, 1, 3, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0, true, false, false);
-            AddBuff(other1, owner, new Buffs.Headbutt(nextBuffVars_Damage), 1, 1, 2, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0.25f, true, false, false);
-            AddBuff((ObjAIBase)owner, owner, new Buffs.AlistarTrample(), 1, 1, 3, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, false, false, false);
         }
     }
 }

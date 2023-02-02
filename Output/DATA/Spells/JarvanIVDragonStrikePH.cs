@@ -28,16 +28,15 @@ namespace Buffs
         }
         public override void OnDeactivate(bool expired)
         {
-            int count;
-            bool isStealthed;
-            Particle particle; // UNUSED
-            bool canSee;
             ClearOverrideAnimation("Run", owner);
             foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 260, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
             {
+                int count;
                 count = GetBuffCountFromAll(unit, nameof(Buffs.SlashBeenHit));
                 if(count < 1)
                 {
+                    bool isStealthed;
+                    Particle particle; // UNUSED
                     isStealthed = GetStealthed(unit);
                     if(!isStealthed)
                     {
@@ -57,6 +56,7 @@ namespace Buffs
                         }
                         else
                         {
+                            bool canSee;
                             canSee = CanSeeTarget(owner, unit);
                             if(canSee)
                             {
@@ -72,19 +72,18 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            int count;
-            bool isStealthed;
-            Particle particle; // UNUSED
-            bool canSee;
             if(ExecutePeriodically(0.25f, ref this.lastTimeExecuted, true))
             {
                 foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 260, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
                 {
+                    int count;
                     count = GetBuffCountFromAll(unit, nameof(Buffs.SlashBeenHit));
                     if(GetBuffCountFromCaster(unit, attacker, nameof(Buffs.JarvanIVDragonStrikeBehindMe)) == 0)
                     {
                         if(count < 1)
                         {
+                            bool isStealthed;
+                            Particle particle; // UNUSED
                             isStealthed = GetStealthed(unit);
                             if(!isStealthed)
                             {
@@ -104,6 +103,7 @@ namespace Buffs
                                 }
                                 else
                                 {
+                                    bool canSee;
                                     canSee = CanSeeTarget(owner, unit);
                                     if(canSee)
                                     {
@@ -121,15 +121,14 @@ namespace Buffs
         }
         public override void OnMoveEnd()
         {
-            int count;
-            bool isStealthed;
-            Particle particle; // UNUSED
-            bool canSee;
             foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 260, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
             {
+                int count;
                 count = GetBuffCountFromAll(unit, nameof(Buffs.SlashBeenHit));
                 if(count < 1)
                 {
+                    bool isStealthed;
+                    Particle particle; // UNUSED
                     isStealthed = GetStealthed(unit);
                     if(!isStealthed)
                     {
@@ -149,6 +148,7 @@ namespace Buffs
                         }
                         else
                         {
+                            bool canSee;
                             canSee = CanSeeTarget(owner, unit);
                             if(canSee)
                             {

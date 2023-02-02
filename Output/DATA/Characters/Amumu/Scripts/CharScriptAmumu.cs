@@ -24,7 +24,6 @@ namespace Chars
         }
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            float nextBuffVars_MagicResistReduction;
             if(hitResult != HitResult.HIT_Dodge)
             {
                 if(hitResult != HitResult.HIT_Miss)
@@ -36,6 +35,7 @@ namespace Chars
                         }
                         else
                         {
+                            float nextBuffVars_MagicResistReduction;
                             nextBuffVars_MagicResistReduction = charVars.MagicResistReduction;
                             AddBuff(attacker, target, new Buffs.CursedTouch(nextBuffVars_MagicResistReduction), 1, 1, 4, BuffAddType.REPLACE_EXISTING, BuffType.SHRED, 0, true, false, false);
                         }

@@ -30,7 +30,7 @@ namespace Buffs
             SetIgnoreCallForHelp(owner, true);
             SetNoRender(owner, true);
             teamID = GetTeamID(attacker);
-            SpellEffectCreate(out this.a, out _, "shyvana_scorchedEarth_dragon_01_trail.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false, false, false, false, false);
+            SpellEffectCreate(out this.a, out _, "shyvana_scorchedEarth_dragon_01_trail.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false, false, false, false, false);
         }
         public override void OnDeactivate(bool expired)
         {
@@ -47,11 +47,11 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            float nextBuffVars_DamagePerTick;
             foreach(AttackableUnit unit in GetUnitsInArea(attacker, owner.Position, 325, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
             {
                 if(GetBuffCountFromCaster(unit, attacker, nameof(Buffs.ShyvanaIDDamage)) == 0)
                 {
+                    float nextBuffVars_DamagePerTick;
                     nextBuffVars_DamagePerTick = this.damagePerTick;
                     AddBuff(attacker, unit, new Buffs.ShyvanaIDDamage(nextBuffVars_DamagePerTick), 1, 1, 0.75f, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0, true, false, false);
                 }

@@ -39,7 +39,7 @@ namespace Buffs
             {
                 SpellBuffRemove(owner, nameof(Buffs.VayneSilverParticle1), (ObjAIBase)owner, 0);
                 this.doOnce2 = true;
-                SpellEffectCreate(out this.globeTwo, out _, "vayne_W_ring2.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, false, false, false, false);
+                SpellEffectCreate(out this.globeTwo, out _, "vayne_W_ring2.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, false, false, false, false);
             }
         }
         public override void OnDeactivate(bool expired)

@@ -32,7 +32,7 @@ namespace Buffs
             //RequireVar(this.manaShield);
             //RequireVar(this.amountToSubtract);
             teamID = GetTeamID(owner);
-            SpellEffectCreate(out this.asdf1, out _, "SteamGolemShield.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false, default, default, false, false);
+            SpellEffectCreate(out this.asdf1, out _, "SteamGolemShield.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false, default, default, false, false);
             IncreaseShield(owner, this.manaShield, true, true);
         }
         public override void OnDeactivate(bool expired)
@@ -60,14 +60,14 @@ namespace Buffs
                 damageAmount = 0;
                 this.oldArmorAmount -= this.manaShield;
                 ReduceShield(owner, this.oldArmorAmount, true, true);
-                SpellEffectCreate(out _, out _, "SteamGolemShield_hit.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, default, default, false, false);
+                SpellEffectCreate(out _, out _, "SteamGolemShield_hit.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, default, default, false, false);
             }
             else
             {
                 damageAmount -= this.manaShield;
                 this.manaShield = 0;
                 ReduceShield(owner, this.oldArmorAmount, true, true);
-                SpellEffectCreate(out _, out _, "SteamGolemShield_hit.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, default, default, false, false);
+                SpellEffectCreate(out _, out _, "SteamGolemShield_hit.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, default, default, false, false);
                 SpellBuffRemoveCurrent(owner);
             }
         }

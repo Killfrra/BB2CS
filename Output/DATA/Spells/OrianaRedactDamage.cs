@@ -27,7 +27,7 @@ namespace Buffs
             //RequireVar(this.totalDamage);
             casterTeam = GetTeamID(attacker);
             BreakSpellShields(owner);
-            SpellEffectCreate(out temp, out _, "OrianaRedact_tar.troy", default, casterTeam, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, default, default, false, false);
+            SpellEffectCreate(out temp, out _, "OrianaRedact_tar.troy", default, casterTeam ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, default, default, false, false);
             ApplyDamage(attacker, owner, this.totalDamage, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0, 0, false, false, attacker);
         }
     }

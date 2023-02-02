@@ -11,16 +11,16 @@ namespace Chars
     {
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            float cooldown;
-            float newCooldown;
             if(hitResult == HitResult.HIT_Critical)
             {
                 level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 if(level >= 1)
                 {
+                    float cooldown;
                     cooldown = GetSlotSpellCooldownTime((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                     if(cooldown > 0)
                     {
+                        float newCooldown;
                         newCooldown = cooldown - 2;
                         SetSlotSpellCooldownTime((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, newCooldown);
                     }

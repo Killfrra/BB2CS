@@ -46,11 +46,11 @@ namespace Buffs
         public override float OnHeal(float health)
         {
             float returnValue = 0;
-            float effectiveHeal;
             if(health >= 0)
             {
                 if(owner == target)
                 {
+                    float effectiveHeal;
                     effectiveHeal = health * 1.15f;
                     returnValue = effectiveHeal;
                 }

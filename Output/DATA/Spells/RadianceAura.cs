@@ -25,7 +25,6 @@ namespace Buffs
         }
         public override void OnActivate()
         {
-            TeamId teamOfOwner;
             //RequireVar(this.damageIncrease);
             //RequireVar(this.abilityPower);
             if(owner is not Champion)
@@ -35,8 +34,9 @@ namespace Buffs
             }
             if(owner is Champion)
             {
+                TeamId teamOfOwner;
                 teamOfOwner = GetTeamID(owner);
-                SpellEffectCreate(out this.particl3, out _, "Taric_GemStorm_Aura.troy", default, teamOfOwner, 0, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, false, false, false, false, false);
+                SpellEffectCreate(out this.particl3, out _, "Taric_GemStorm_Aura.troy", default, teamOfOwner ?? TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, false, false, false, false, false);
             }
         }
         public override void OnDeactivate(bool expired)

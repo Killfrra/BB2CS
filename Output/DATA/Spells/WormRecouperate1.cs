@@ -30,11 +30,11 @@ namespace Buffs
         public override void OnUpdateActions()
         {
             float healthPercent;
-            float maxHealth;
-            float healthToInc;
             healthPercent = GetHealthPercent(owner, PrimaryAbilityResourceType.MANA);
             if(healthPercent < 1)
             {
+                float maxHealth;
+                float healthToInc;
                 maxHealth = GetMaxHealth(owner, PrimaryAbilityResourceType.MANA);
                 healthToInc = maxHealth * 0.03f;
                 IncHealth(owner, healthToInc, owner);

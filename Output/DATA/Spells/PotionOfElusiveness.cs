@@ -5,6 +5,21 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class PotionOfElusiveness : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = false,
+            NotSingleTargetSpell = true,
+        };
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            AddBuff((ObjAIBase)owner, owner, new Buffs.PotionOfElusiveness(), 1, 1, 240, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class PotionOfElusiveness : BBBuffScript
@@ -35,21 +50,6 @@ namespace Buffs
             bonusAttackSpeed = -1 * this.bonusAttackSpeed;
             IncPermanentPercentAttackSpeedMod(owner, bonusAttackSpeed);
             IncPermanentFlatCritChanceMod(owner, -0.08f);
-        }
-    }
-}
-namespace Spells
-{
-    public class PotionOfElusiveness : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = false,
-            NotSingleTargetSpell = true,
-        };
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            AddBuff((ObjAIBase)owner, owner, new Buffs.PotionOfElusiveness(), 1, 1, 240, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false);
         }
     }
 }

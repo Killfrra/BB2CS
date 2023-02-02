@@ -44,11 +44,11 @@ namespace Buffs
         }
         public override void OnUpdateStats()
         {
-            float health;
-            float healthInc;
-            Particle particle; // UNUSED
             if(ExecutePeriodically(5, ref this.lastTimeExecuted, false))
             {
+                float health;
+                float healthInc;
+                Particle particle; // UNUSED
                 health = GetMaxHealth(owner, PrimaryAbilityResourceType.MANA);
                 healthInc = health * 0.03f;
                 IncHealth(owner, healthInc, owner);

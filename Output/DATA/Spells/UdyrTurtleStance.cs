@@ -5,43 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class UdyrTurtleStance : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            BuffName = "UdyrTurtleStance",
-            BuffTextureName = "Udyr_TurtleStance.dds",
-            PersistsThroughDeath = true,
-            SpellToggleSlot = 2,
-        };
-        int casterID; // UNUSED
-        Particle turtle;
-        Particle turtleparticle;
-        public override void OnActivate()
-        {
-            this.casterID = PushCharacterData("UdyrTurtle", owner, false);
-            SpellEffectCreate(out this.turtle, out _, "turtlepelt.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "head", default, owner, default, default, false);
-            SpellEffectCreate(out this.turtleparticle, out _, "TurtleStance.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true);
-            OverrideAutoAttack(2, SpellSlotType.ExtraSlots, owner, 1, true);
-        }
-        public override void OnDeactivate(bool expired)
-        {
-            SpellEffectRemove(this.turtle);
-            SpellEffectRemove(this.turtleparticle);
-            RemoveOverrideAutoAttack(owner, true);
-        }
-        public override void OnUpdateStats()
-        {
-            float critMod;
-            critMod = GetFlatCritChanceMod(owner);
-            critMod *= -1;
-            critMod += charVars.BaseCritChance;
-            IncFlatCritChanceMod(owner, critMod);
-        }
-    }
-}
 namespace Spells
 {
     public class UdyrTurtleStance : BBSpellScript
@@ -103,6 +66,43 @@ namespace Spells
             shieldAmount += aPAmount;
             nextBuffVars_ShieldAmount = shieldAmount;
             AddBuff((ObjAIBase)owner, owner, new Buffs.UdyrTurtleActivation(nextBuffVars_ShieldAmount), 1, 1, 5, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false);
+        }
+    }
+}
+namespace Buffs
+{
+    public class UdyrTurtleStance : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            BuffName = "UdyrTurtleStance",
+            BuffTextureName = "Udyr_TurtleStance.dds",
+            PersistsThroughDeath = true,
+            SpellToggleSlot = 2,
+        };
+        int casterID; // UNUSED
+        Particle turtle;
+        Particle turtleparticle;
+        public override void OnActivate()
+        {
+            this.casterID = PushCharacterData("UdyrTurtle", owner, false);
+            SpellEffectCreate(out this.turtle, out _, "turtlepelt.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "head", default, owner, default, default, false);
+            SpellEffectCreate(out this.turtleparticle, out _, "TurtleStance.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true);
+            OverrideAutoAttack(2, SpellSlotType.ExtraSlots, owner, 1, true);
+        }
+        public override void OnDeactivate(bool expired)
+        {
+            SpellEffectRemove(this.turtle);
+            SpellEffectRemove(this.turtleparticle);
+            RemoveOverrideAutoAttack(owner, true);
+        }
+        public override void OnUpdateStats()
+        {
+            float critMod;
+            critMod = GetFlatCritChanceMod(owner);
+            critMod *= -1;
+            critMod += charVars.BaseCritChance;
+            IncFlatCritChanceMod(owner, critMod);
         }
     }
 }

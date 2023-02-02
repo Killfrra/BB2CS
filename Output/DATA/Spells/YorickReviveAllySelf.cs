@@ -28,8 +28,8 @@ namespace Buffs
             this.isKarthus = false;
             this.isKogMaw = false;
             teamID = GetTeamID(attacker);
-            SpellEffectCreate(out this.particle3, out this.particle4, "yorick_ult_01_teamID_green.troy", "yorick_ult_01_teamID_red.troy", teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, false, false, false, false, false);
-            SpellEffectCreate(out this.particle, out this.particle, "yorick_ult_02.troy", default, teamID, 500, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, false, false, false, false, false);
+            SpellEffectCreate(out this.particle3, out this.particle4, "yorick_ult_01_teamID_green.troy", "yorick_ult_01_teamID_red.troy", teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, false, false, false, false, false);
+            SpellEffectCreate(out this.particle, out this.particle, "yorick_ult_02.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 500, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, false, false, false, false, false);
             if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.DeathDefied)) > 0)
             {
                 this.isKarthus = true;
@@ -77,9 +77,9 @@ namespace Buffs
         }
         public override void OnDeath()
         {
-            bool becomeZombie; // UNUSED
             if(owner is Champion)
             {
+                bool becomeZombie; // UNUSED
                 becomeZombie = true;
             }
         }

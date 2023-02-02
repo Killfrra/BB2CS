@@ -5,27 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class Mourning : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateAttachBoneName = new[]{ "", },
-            AutoBuffActivateEffect = new[]{ "bleeding_GLB2_tar.troy", },
-            BuffName = "Mourning",
-            BuffTextureName = "3069_Sword_of_Light_and_Shadow.dds",
-        };
-        float lastTimeExecuted;
-        public override void OnUpdateActions()
-        {
-            if(ExecutePeriodically(1, ref this.lastTimeExecuted, true))
-            {
-                ApplyDamage(attacker, owner, 4, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_PERIODIC, 1, 0, 1, false, false, attacker);
-            }
-        }
-    }
-}
 namespace Spells
 {
     public class Mourning : BBSpellScript
@@ -80,6 +59,27 @@ namespace Spells
             if(name5 == nameof(Spells.Mourning))
             {
                 SetSlotSpellCooldownTimeVer2(20, 5, SpellSlotType.InventorySlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner);
+            }
+        }
+    }
+}
+namespace Buffs
+{
+    public class Mourning : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateAttachBoneName = new[]{ "", },
+            AutoBuffActivateEffect = new[]{ "bleeding_GLB2_tar.troy", },
+            BuffName = "Mourning",
+            BuffTextureName = "3069_Sword_of_Light_and_Shadow.dds",
+        };
+        float lastTimeExecuted;
+        public override void OnUpdateActions()
+        {
+            if(ExecutePeriodically(1, ref this.lastTimeExecuted, true))
+            {
+                ApplyDamage(attacker, owner, 4, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_PERIODIC, 1, 0, 1, false, false, attacker);
             }
         }
     }

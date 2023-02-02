@@ -30,7 +30,6 @@ namespace Buffs
             float baseAD;
             int level;
             float totalDamage;
-            Vector3 focalPoint;
             //RequireVar(this.targetPos);
             //RequireVar(this.count);
             SealSpellSlot(2, SpellSlotType.SpellSlots, (ObjAIBase)owner, true, SpellbookType.SPELLBOOK_CHAMPION);
@@ -49,6 +48,7 @@ namespace Buffs
             }
             if(this.count != 2)
             {
+                Vector3 focalPoint;
                 focalPoint = GetPointByUnitFacingOffset(owner, 125, 0);
                 foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, focalPoint, 150, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, nameof(Buffs.RivenTriCleaveDamageDebuff), false))
                 {
@@ -105,9 +105,9 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            Vector3 focalPoint;
             if(this.count != 2)
             {
+                Vector3 focalPoint;
                 focalPoint = GetPointByUnitFacingOffset(owner, 125, 0);
                 foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, focalPoint, 175, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, nameof(Buffs.RivenTriCleaveDamageDebuff), false))
                 {
@@ -136,7 +136,6 @@ namespace Buffs
             Vector3 focalPoint;
             float range;
             Particle temp; // UNUSED
-            float dist; // UNUSED
             SealSpellSlot(2, SpellSlotType.SpellSlots, (ObjAIBase)owner, false, SpellbookType.SPELLBOOK_CHAMPION);
             level = GetSlotSpellLevel((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             teamID = GetTeamID(owner);
@@ -149,22 +148,22 @@ namespace Buffs
                     range *= 1.25f;
                     if(this.count == 1)
                     {
-                        SpellEffectCreate(out temp, out _, "exile_Q_02_detonate_ult.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, focalPoint, default, default, focalPoint, true, false, false, false, true, owner);
+                        SpellEffectCreate(out temp, out _, "exile_Q_02_detonate_ult.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, focalPoint, default, default, focalPoint, true, false, false, false, true, owner);
                     }
                     else
                     {
-                        SpellEffectCreate(out temp, out _, "exile_Q_02_detonate_ult.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, focalPoint, default, default, focalPoint, true, false, false, false, true, owner);
+                        SpellEffectCreate(out temp, out _, "exile_Q_02_detonate_ult.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, focalPoint, default, default, focalPoint, true, false, false, false, true, owner);
                     }
                 }
                 else
                 {
                     if(this.count == 1)
                     {
-                        SpellEffectCreate(out temp, out _, "exile_Q_02_detonate.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, focalPoint, default, default, focalPoint, true, false, false, false, true, owner);
+                        SpellEffectCreate(out temp, out _, "exile_Q_02_detonate.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, focalPoint, default, default, focalPoint, true, false, false, false, true, owner);
                     }
                     else
                     {
-                        SpellEffectCreate(out temp, out _, "exile_Q_01_detonate.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, focalPoint, default, default, focalPoint, true, false, false, false, true, owner);
+                        SpellEffectCreate(out temp, out _, "exile_Q_01_detonate.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, focalPoint, default, default, focalPoint, true, false, false, false, true, owner);
                     }
                 }
                 foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, focalPoint, range, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, nameof(Buffs.RivenTriCleaveDamageDebuff), false))
@@ -178,15 +177,16 @@ namespace Buffs
                 range = 265;
                 if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.RivenFengShuiEngine)) > 0)
                 {
-                    SpellEffectCreate(out temp, out _, "exile_Q_03_detonate_ult.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, focalPoint, default, default, focalPoint, true, false, false, false, false);
+                    SpellEffectCreate(out temp, out _, "exile_Q_03_detonate_ult.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, focalPoint, default, default, focalPoint, true, false, false, false, false);
                     range *= 1.25f;
                 }
                 else
                 {
-                    SpellEffectCreate(out temp, out _, "exile_Q_03_detonate.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, focalPoint, default, default, focalPoint, true, false, false, false, false);
+                    SpellEffectCreate(out temp, out _, "exile_Q_03_detonate.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, focalPoint, default, default, focalPoint, true, false, false, false, false);
                 }
                 foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, focalPoint, range, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, nameof(Buffs.RivenTriCleaveDamageDebuff), false))
                 {
+                    float dist; // UNUSED
                     AddBuff((ObjAIBase)owner, unit, new Buffs.RivenTriCleaveDamageDebuff2(), 1, 1, 1, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
                     dist = DistanceBetweenObjects("Unit", "Owner");
                     ApplyDamage((ObjAIBase)owner, unit, this.totalDamage, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0, 0, false, true, (ObjAIBase)owner);
@@ -207,23 +207,23 @@ namespace Buffs
             int level; // UNUSED
             Vector3 focalPoint;
             TeamId teamID;
-            float range;
-            Particle temp; // UNUSED
             SealSpellSlot(2, SpellSlotType.SpellSlots, (ObjAIBase)owner, false, SpellbookType.SPELLBOOK_CHAMPION);
             level = GetSlotSpellLevel((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             focalPoint = GetPointByUnitFacingOffset(owner, 100, 0);
             teamID = GetTeamID(owner);
             if(this.count == 2)
             {
+                float range;
+                Particle temp; // UNUSED
                 range = 265;
                 if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.RivenFengShuiEngine)) > 0)
                 {
-                    SpellEffectCreate(out temp, out _, "exile_Q_03_detonate_ult.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, focalPoint, default, default, focalPoint, true, false, false, false, false);
+                    SpellEffectCreate(out temp, out _, "exile_Q_03_detonate_ult.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, focalPoint, default, default, focalPoint, true, false, false, false, false);
                     range *= 1.25f;
                 }
                 else
                 {
-                    SpellEffectCreate(out temp, out _, "exile_Q_03_detonate.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, focalPoint, default, default, focalPoint, true, false, false, false, false);
+                    SpellEffectCreate(out temp, out _, "exile_Q_03_detonate.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, focalPoint, default, default, focalPoint, true, false, false, false, false);
                 }
                 foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, focalPoint, range, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, nameof(Buffs.RivenTriCleaveDamageDebuff), false))
                 {

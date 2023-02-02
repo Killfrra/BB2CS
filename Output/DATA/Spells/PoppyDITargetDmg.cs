@@ -17,10 +17,10 @@ namespace Buffs
         float[] effect0 = {1.2f, 1.3f, 1.4f};
         public override void OnPreDealDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
         {
-            int level;
-            float levelMultiplier;
             if(GetBuffCountFromCaster(target, owner, nameof(Buffs.PoppyDITarget)) > 0)
             {
+                int level;
+                float levelMultiplier;
                 level = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 levelMultiplier = this.effect0[level];
                 damageAmount *= levelMultiplier;

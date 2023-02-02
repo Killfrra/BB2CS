@@ -5,6 +5,34 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class AspectOfTheCougar : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            CastingBreaksStealth = true,
+            DoesntBreakShields = true,
+            TriggersSpellCasts = true,
+            IsDamagingSpell = false,
+            NotSingleTargetSpell = true,
+        };
+        int[] effect0 = {10, 20, 30};
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.AspectOfTheCougar)) > 0)
+            {
+                SpellBuffRemove(owner, default, (ObjAIBase)owner, 0);
+            }
+            else
+            {
+                float nextBuffVars_armorMod;
+                nextBuffVars_armorMod = this.effect0[level];
+                AddBuff(attacker, owner, new Buffs.AspectOfTheCougar(nextBuffVars_armorMod), 1, 1, 25000, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+            }
+        }
+    }
+}
 namespace Buffs
 {
     public class AspectOfTheCougar : BBBuffScript
@@ -77,39 +105,11 @@ namespace Buffs
         }
         public override void OnLevelUpSpell(int slot)
         {
-            int level;
             if(slot == 3)
             {
+                int level;
                 level = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 this.armorMod = this.effect0[level];
-            }
-        }
-    }
-}
-namespace Spells
-{
-    public class AspectOfTheCougar : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            CastingBreaksStealth = true,
-            DoesntBreakShields = true,
-            TriggersSpellCasts = true,
-            IsDamagingSpell = false,
-            NotSingleTargetSpell = true,
-        };
-        int[] effect0 = {10, 20, 30};
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            float nextBuffVars_armorMod;
-            if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.AspectOfTheCougar)) > 0)
-            {
-                SpellBuffRemove(owner, default, (ObjAIBase)owner, 0);
-            }
-            else
-            {
-                nextBuffVars_armorMod = this.effect0[level];
-                AddBuff(attacker, owner, new Buffs.AspectOfTheCougar(nextBuffVars_armorMod), 1, 1, 25000, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
             }
         }
     }

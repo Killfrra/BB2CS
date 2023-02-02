@@ -11,7 +11,6 @@ namespace Items
     {
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            int nextBuffVars_ArmorReduction;
             if(hitResult != HitResult.HIT_Miss)
             {
                 if(target is ObjAIBase)
@@ -21,6 +20,7 @@ namespace Items
                     }
                     else
                     {
+                        int nextBuffVars_ArmorReduction;
                         nextBuffVars_ArmorReduction = -15;
                         AddBuff(attacker, target, new Buffs.BlackCleaver(nextBuffVars_ArmorReduction), 3, 1, 5, BuffAddType.STACKS_AND_RENEWS, BuffType.SHRED, 0, true, false, false);
                     }
@@ -29,11 +29,11 @@ namespace Items
         }
         public override void OnBeingDodged()
         {
-            float nextBuffVars_ArmorReduction;
             if(attacker is ObjAIBase)
             {
                 if(attacker is not BaseTurret)
                 {
+                    float nextBuffVars_ArmorReduction;
                     nextBuffVars_ArmorReduction = -15;
                     AddBuff((ObjAIBase)owner, attacker, new Buffs.BlackCleaver(nextBuffVars_ArmorReduction), 3, 1, 5, BuffAddType.STACKS_AND_RENEWS, BuffType.SHRED, 0, true, false, false);
                 }

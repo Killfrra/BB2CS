@@ -23,8 +23,6 @@ namespace Spells
             int homed;
             float distance;
             TeamId teamID;
-            float distanceObjs;
-            Particle hit; // UNUSED
             targetPos = GetCastSpellTargetPos();
             FaceDirection(owner, targetPos);
             ownerPos = GetUnitPosition(owner);
@@ -33,6 +31,8 @@ namespace Spells
             teamID = GetTeamID(owner);
             if(distance <= 3000)
             {
+                float distanceObjs;
+                Particle hit; // UNUSED
                 foreach(AttackableUnit unit in GetClosestUnitsInArea(owner, targetPos, 350, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectHeroes, 999, nameof(Buffs.UrgotCorrosiveDebuff), true))
                 {
                     if(homed == 0)
@@ -40,10 +40,10 @@ namespace Spells
                         distanceObjs = DistanceBetweenObjects("Owner", "Unit");
                         if(distanceObjs <= 1200)
                         {
-                            SpellEffectCreate(out hit, out _, "UrgotHeatseekingIndicator.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, true, default, default, targetPos, default, default, targetPos, true);
+                            SpellEffectCreate(out hit, out _, "UrgotHeatseekingIndicator.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, true, default, default, targetPos, default, default, targetPos, true);
                             homed = 1;
                             SpellCast((ObjAIBase)owner, unit, owner.Position, owner.Position, 1, SpellSlotType.ExtraSlots, level, true, false, false, false, false, false);
-                            SpellEffectCreate(out hit, out _, "UrgotTargetIndicator.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true);
+                            SpellEffectCreate(out hit, out _, "UrgotTargetIndicator.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true);
                         }
                     }
                 }
@@ -56,10 +56,10 @@ namespace Spells
                             distanceObjs = DistanceBetweenObjects("Owner", "Unit");
                             if(distanceObjs <= 1200)
                             {
-                                SpellEffectCreate(out hit, out _, "UrgotHeatseekingIndicator.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, true, default, default, targetPos, default, default, targetPos, true);
+                                SpellEffectCreate(out hit, out _, "UrgotHeatseekingIndicator.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, true, default, default, targetPos, default, default, targetPos, true);
                                 homed = 1;
                                 SpellCast((ObjAIBase)owner, unit, owner.Position, owner.Position, 1, SpellSlotType.ExtraSlots, level, true, false, false, false, false, false);
-                                SpellEffectCreate(out hit, out _, "UrgotTargetIndicator.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true);
+                                SpellEffectCreate(out hit, out _, "UrgotTargetIndicator.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true);
                             }
                         }
                     }

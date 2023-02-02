@@ -5,6 +5,25 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class RivenFengShuiEngine : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            CastingBreaksStealth = true,
+            DoesntBreakShields = true,
+            TriggersSpellCasts = true,
+            IsDamagingSpell = false,
+            NotSingleTargetSpell = true,
+        };
+        int[] effect0 = {15, 15, 15};
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            AddBuff(attacker, target, new Buffs.RivenFengShuiEngine(), 1, 1, this.effect0[level], BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class RivenFengShuiEngine : BBBuffScript
@@ -138,25 +157,6 @@ namespace Buffs
                 SpellEffectRemove(this.temp2);
                 SpellEffectCreate(out this.temp2, out _, "exile_ult_blade_swap_base.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "BUFFBONE_GLB_WEAPON_2", default, owner, "BUFFBONE_GLB_WEAPON_2", default, false, false, false, false, false);
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class RivenFengShuiEngine : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            CastingBreaksStealth = true,
-            DoesntBreakShields = true,
-            TriggersSpellCasts = true,
-            IsDamagingSpell = false,
-            NotSingleTargetSpell = true,
-        };
-        int[] effect0 = {15, 15, 15};
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            AddBuff(attacker, target, new Buffs.RivenFengShuiEngine(), 1, 1, this.effect0[level], BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
         }
     }
 }

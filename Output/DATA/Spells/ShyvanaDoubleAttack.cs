@@ -5,6 +5,25 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class ShyvanaDoubleAttack : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            CastingBreaksStealth = false,
+            DoesntBreakShields = true,
+        };
+        int[] effect0 = {10, 9, 8, 7, 6};
+        public override void SelfExecute()
+        {
+            int nextBuffVars_SpellCooldown;
+            nextBuffVars_SpellCooldown = this.effect0[level];
+            AddBuff((ObjAIBase)owner, owner, new Buffs.ShyvanaDoubleAttack(nextBuffVars_SpellCooldown), 1, 1, 6, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+            SetSlotSpellCooldownTime((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, 0);
+        }
+    }
+}
 namespace Buffs
 {
     public class ShyvanaDoubleAttack : BBBuffScript
@@ -54,25 +73,6 @@ namespace Buffs
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
             SpellBuffRemove(owner, nameof(Buffs.ShyvanaDoubleAttack), (ObjAIBase)owner, 0);
-        }
-    }
-}
-namespace Spells
-{
-    public class ShyvanaDoubleAttack : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            CastingBreaksStealth = false,
-            DoesntBreakShields = true,
-        };
-        int[] effect0 = {10, 9, 8, 7, 6};
-        public override void SelfExecute()
-        {
-            int nextBuffVars_SpellCooldown;
-            nextBuffVars_SpellCooldown = this.effect0[level];
-            AddBuff((ObjAIBase)owner, owner, new Buffs.ShyvanaDoubleAttack(nextBuffVars_SpellCooldown), 1, 1, 6, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
-            SetSlotSpellCooldownTime((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, 0);
         }
     }
 }

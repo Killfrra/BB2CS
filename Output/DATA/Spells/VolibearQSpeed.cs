@@ -30,12 +30,12 @@ namespace Buffs
         }
         public override void OnUpdateStats()
         {
-            bool visible;
             bool hunt;
             foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 2000, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectHeroes, default, true))
             {
                 if(IsInFront(owner, unit))
                 {
+                    bool visible;
                     visible = CanSeeTarget(owner, unit);
                     if(visible)
                     {

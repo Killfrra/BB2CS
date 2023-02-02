@@ -73,10 +73,10 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            float lowerArmorLess;
-            float lowerMRLess;
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, true))
             {
+                float lowerArmorLess;
+                float lowerMRLess;
                 lowerArmorLess = this.survivability * this.ownerArmor;
                 lowerMRLess = this.survivability * this.ownerMR;
                 this.instancedArmor -= lowerArmorLess;

@@ -76,15 +76,15 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            bool run;
-            bool killedGuardian;
             if(ExecutePeriodically(0.25f, ref this.lastTimeExecuted, false))
             {
+                bool run;
                 run = false;
                 if(run)
                 {
                     if(!owner.IsDead)
                     {
+                        bool killedGuardian;
                         killedGuardian = false;
                         foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 450, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions, nameof(Buffs.OdinGuardianBuff), true))
                         {

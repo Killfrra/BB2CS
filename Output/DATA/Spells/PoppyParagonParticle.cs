@@ -14,7 +14,7 @@ namespace Buffs
         {
             TeamId teamID;
             teamID = GetTeamID(owner);
-            SpellEffectCreate(out this.maxParticle, out _, "PoppyDemacia_max.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "L_finger", default, owner, default, default, true);
+            SpellEffectCreate(out this.maxParticle, out _, "PoppyDemacia_max.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "L_finger", default, owner, default, default, true);
         }
         public override void OnDeactivate(bool expired)
         {

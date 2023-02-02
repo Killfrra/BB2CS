@@ -25,8 +25,8 @@ namespace Spells
             Particle b; // UNUSED
             bool debuff;
             teamID = GetTeamID(owner);
-            SpellEffectCreate(out a, out _, "Xerath_Bolt_hit_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, false, false, false, false);
-            SpellEffectCreate(out b, out _, "Xerath_Bolt_hit.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, false, false, false, false);
+            SpellEffectCreate(out a, out _, "Xerath_Bolt_hit_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, false, false, false, false);
+            SpellEffectCreate(out b, out _, "Xerath_Bolt_hit.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, false, false, false, false);
             debuff = true;
             if(GetBuffCountFromCaster(target, target, nameof(Buffs.ResistantSkinDragon)) > 0)
             {

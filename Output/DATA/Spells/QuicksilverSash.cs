@@ -21,12 +21,12 @@ namespace Spells
         {
             Particle castParticle; // UNUSED
             float slotCheck;
-            string name;
             SpellEffectCreate(out castParticle, out _, "Summoner_Cast.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false, false, false, false, false);
             DispellNegativeBuffs(owner);
             slotCheck = 0;
             while(slotCheck <= 5)
             {
+                string name;
                 name = GetSlotSpellName((ObjAIBase)owner, slotCheck, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.InventorySlots);
                 if(name == nameof(Spells.QuicksilverSash))
                 {

@@ -13,12 +13,12 @@ namespace Spells
         {
             float baseAttackDamage;
             int kMSkinID;
-            Particle a; // UNUSED
             hitResult = HitResult.HIT_Critical;
             baseAttackDamage = GetBaseAttackDamage(owner);
             kMSkinID = GetSkinID(attacker);
             if(target is ObjAIBase)
             {
+                Particle a; // UNUSED
                 if(kMSkinID == 5)
                 {
                     SpellEffectCreate(out a, out _, "KogMawChineseBasicAttack_tar.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true);

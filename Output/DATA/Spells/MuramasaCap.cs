@@ -27,9 +27,9 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            int count;
             if(ExecutePeriodically(0.3f, ref this.lastTimeExecuted, false))
             {
+                int count;
                 count = GetBuffCountFromAll(owner, nameof(Buffs.MuramasaStats));
                 if(count != 20)
                 {

@@ -23,10 +23,10 @@ namespace Buffs
         }
         public override void OnActivate()
         {
-            Vector3 particlePosition;
-            TeamId teamID;
             if(owner is Champion)
             {
+                Vector3 particlePosition;
+                TeamId teamID;
                 particlePosition = this.particlePosition;
                 teamID = GetTeamID(owner);
                 SpellEffectCreate(out this.castParticle, out _, "TwistedTreelineClairvoyance.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, particlePosition, target, default, default, false);
@@ -55,9 +55,9 @@ namespace Buffs
         }
         public override void OnDeath()
         {
-            Vector3 nextBuffVars_ParticlePosition;
             if(owner is not Champion)
             {
+                Vector3 nextBuffVars_ParticlePosition;
                 nextBuffVars_ParticlePosition = this.particlePosition;
                 AddBuff(attacker, attacker, new Buffs.DragonVisionBuff(nextBuffVars_ParticlePosition), 1, 1, 90, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0);
             }

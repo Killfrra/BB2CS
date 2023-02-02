@@ -100,12 +100,12 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            float totalAD;
-            float baseDamage;
-            float bonusDamage;
-            float critDisplay;
             if(ExecutePeriodically(2, ref this.lastTimeExecuted, true))
             {
+                float totalAD;
+                float baseDamage;
+                float bonusDamage;
+                float critDisplay;
                 totalAD = GetTotalAttackDamage(owner);
                 baseDamage = GetBaseAttackDamage(owner);
                 bonusDamage = totalAD - baseDamage;
@@ -117,8 +117,6 @@ namespace Buffs
         }
         public override void OnKill()
         {
-            int level;
-            float cooldown;
             if(target is not BaseTurret)
             {
                 if(target is ObjAIBase)
@@ -130,9 +128,11 @@ namespace Buffs
             {
                 if(target is Champion)
                 {
+                    int level;
                     level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                     if(level >= 1)
                     {
+                        float cooldown;
                         cooldown = GetSlotSpellCooldownTime((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                         if(cooldown > 0)
                         {
@@ -144,15 +144,15 @@ namespace Buffs
         }
         public override void OnAssist()
         {
-            int level;
-            float cooldown;
             if(1 == 0)
             {
                 if(target is Champion)
                 {
+                    int level;
                     level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                     if(level >= 1)
                     {
+                        float cooldown;
                         cooldown = GetSlotSpellCooldownTime((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                         if(cooldown > 0)
                         {

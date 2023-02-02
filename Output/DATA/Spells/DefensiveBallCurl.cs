@@ -5,6 +5,27 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class DefensiveBallCurl : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = true,
+            NotSingleTargetSpell = true,
+        };
+        int[] effect0 = {50, 75, 100, 125, 150};
+        int[] effect1 = {15, 25, 35, 45, 55};
+        public override void SelfExecute()
+        {
+            float nextBuffVars_ArmorAmount;
+            float nextBuffVars_DamageReturn;
+            nextBuffVars_ArmorAmount = this.effect0[level];
+            nextBuffVars_DamageReturn = this.effect1[level];
+            AddBuff(attacker, owner, new Buffs.DefensiveBallCurl(nextBuffVars_ArmorAmount, nextBuffVars_DamageReturn), 1, 1, 6, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class DefensiveBallCurl : BBBuffScript
@@ -63,41 +84,20 @@ namespace Buffs
         }
         public override void OnBeingHit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            float baseArmor;
-            float armorMod;
-            float damageReturn;
             if(attacker is BaseTurret)
             {
             }
             else
             {
+                float baseArmor;
+                float armorMod;
+                float damageReturn;
                 baseArmor = GetArmor(owner);
                 armorMod = baseArmor * 0.1f;
                 damageReturn = armorMod + this.damageReturn;
                 ApplyDamage((ObjAIBase)owner, attacker, damageReturn, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0, 1, false, false, (ObjAIBase)owner);
                 SpellEffectCreate(out _, out _, "Thornmail_tar.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, attacker, default, default, target, default, default, false, false, false, false, false);
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class DefensiveBallCurl : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = true,
-            NotSingleTargetSpell = true,
-        };
-        int[] effect0 = {50, 75, 100, 125, 150};
-        int[] effect1 = {15, 25, 35, 45, 55};
-        public override void SelfExecute()
-        {
-            float nextBuffVars_ArmorAmount;
-            float nextBuffVars_DamageReturn;
-            nextBuffVars_ArmorAmount = this.effect0[level];
-            nextBuffVars_DamageReturn = this.effect1[level];
-            AddBuff(attacker, owner, new Buffs.DefensiveBallCurl(nextBuffVars_ArmorAmount, nextBuffVars_DamageReturn), 1, 1, 6, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
         }
     }
 }

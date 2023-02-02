@@ -5,54 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class KarmaChakra : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateEffect = new[]{ "karma_matraCharge_self.troy", },
-            BuffName = "KarmaMantraEnergized",
-            BuffTextureName = "KarmaMantraActivate.dds",
-            SpellToggleSlot = 4,
-        };
-        public override void OnActivate()
-        {
-            float cooldown;
-            float cooldown2;
-            float cooldown3;
-            cooldown = GetSlotSpellCooldownTime((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
-            SetSpell((ObjAIBase)owner, 0, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, nameof(Spells.KarmaHeavenlyWaveC));
-            SetSlotSpellCooldownTimeVer2(cooldown, 0, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner, false);
-            cooldown2 = GetSlotSpellCooldownTime((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
-            SetSpell((ObjAIBase)owner, 1, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, nameof(Spells.KarmaSpiritBondC));
-            SetSlotSpellCooldownTimeVer2(cooldown2, 1, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner, false);
-            cooldown3 = GetSlotSpellCooldownTime((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
-            SetSpell((ObjAIBase)owner, 2, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, nameof(Spells.KarmaSoulShieldC));
-            SetSlotSpellCooldownTimeVer2(cooldown3, 2, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner, false);
-        }
-        public override void OnDeactivate(bool expired)
-        {
-            int count;
-            float cooldown;
-            float cooldown2;
-            float cooldown3;
-            count = GetBuffCountFromCaster(owner, owner, nameof(Buffs.KarmaChakra));
-            if(count == 0)
-            {
-                cooldown = GetSlotSpellCooldownTime((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
-                SetSpell((ObjAIBase)owner, 0, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, nameof(Spells.KarmaHeavenlyWave));
-                SetSlotSpellCooldownTimeVer2(cooldown, 0, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner, false);
-                cooldown2 = GetSlotSpellCooldownTime((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
-                SetSpell((ObjAIBase)owner, 1, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, nameof(Spells.KarmaSpiritBond));
-                SetSlotSpellCooldownTimeVer2(cooldown2, 1, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner, false);
-                cooldown3 = GetSlotSpellCooldownTime((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
-                SetSpell((ObjAIBase)owner, 2, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, nameof(Spells.KarmaSoulShield));
-                SetSlotSpellCooldownTimeVer2(cooldown3, 2, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner, false);
-            }
-        }
-    }
-}
 namespace Spells
 {
     public class KarmaChakra : BBSpellScript
@@ -83,7 +35,6 @@ namespace Spells
         public override void SelfExecute()
         {
             int count;
-            float remainingDuration;
             count = GetBuffCountFromAll(owner, nameof(Buffs.KarmaChakraCharge));
             if(count > 2)
             {
@@ -103,8 +54,57 @@ namespace Spells
             }
             else
             {
+                float remainingDuration;
                 remainingDuration = GetBuffRemainingDuration(owner, nameof(Buffs.KarmaChakraTimer));
                 SetSlotSpellCooldownTimeVer2(remainingDuration, 3, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner, true);
+            }
+        }
+    }
+}
+namespace Buffs
+{
+    public class KarmaChakra : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateEffect = new[]{ "karma_matraCharge_self.troy", },
+            BuffName = "KarmaMantraEnergized",
+            BuffTextureName = "KarmaMantraActivate.dds",
+            SpellToggleSlot = 4,
+        };
+        public override void OnActivate()
+        {
+            float cooldown;
+            float cooldown2;
+            float cooldown3;
+            cooldown = GetSlotSpellCooldownTime((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
+            SetSpell((ObjAIBase)owner, 0, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, nameof(Spells.KarmaHeavenlyWaveC));
+            SetSlotSpellCooldownTimeVer2(cooldown, 0, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner, false);
+            cooldown2 = GetSlotSpellCooldownTime((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
+            SetSpell((ObjAIBase)owner, 1, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, nameof(Spells.KarmaSpiritBondC));
+            SetSlotSpellCooldownTimeVer2(cooldown2, 1, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner, false);
+            cooldown3 = GetSlotSpellCooldownTime((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
+            SetSpell((ObjAIBase)owner, 2, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, nameof(Spells.KarmaSoulShieldC));
+            SetSlotSpellCooldownTimeVer2(cooldown3, 2, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner, false);
+        }
+        public override void OnDeactivate(bool expired)
+        {
+            int count;
+            count = GetBuffCountFromCaster(owner, owner, nameof(Buffs.KarmaChakra));
+            if(count == 0)
+            {
+                float cooldown;
+                float cooldown2;
+                float cooldown3;
+                cooldown = GetSlotSpellCooldownTime((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
+                SetSpell((ObjAIBase)owner, 0, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, nameof(Spells.KarmaHeavenlyWave));
+                SetSlotSpellCooldownTimeVer2(cooldown, 0, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner, false);
+                cooldown2 = GetSlotSpellCooldownTime((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
+                SetSpell((ObjAIBase)owner, 1, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, nameof(Spells.KarmaSpiritBond));
+                SetSlotSpellCooldownTimeVer2(cooldown2, 1, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner, false);
+                cooldown3 = GetSlotSpellCooldownTime((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
+                SetSpell((ObjAIBase)owner, 2, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, nameof(Spells.KarmaSoulShield));
+                SetSlotSpellCooldownTimeVer2(cooldown3, 2, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner, false);
             }
         }
     }

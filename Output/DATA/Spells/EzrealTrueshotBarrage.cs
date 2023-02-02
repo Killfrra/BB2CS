@@ -33,13 +33,13 @@ namespace Spells
         {
             int ownerSkinID;
             TeamId ownerTeamID;
-            Particle asdf; // UNUSED
             ownerSkinID = GetSkinID(owner);
             ownerTeamID = GetTeamID(owner);
             if(ownerSkinID == 5)
             {
-                SpellEffectCreate(out asdf, out _, "Ezreal_PulseFire_Ult_Thrusters.troy", default, ownerTeamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "BUFFBONE_Vent_Low_R", default, owner, default, default, true, false, false, false, false);
-                SpellEffectCreate(out asdf, out _, "Ezreal_PulseFire_Ult_Thrusters.troy", default, ownerTeamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "BUFFBONE_Vent_Low_L", default, owner, default, default, true, false, false, false, false);
+                Particle asdf; // UNUSED
+                SpellEffectCreate(out asdf, out _, "Ezreal_PulseFire_Ult_Thrusters.troy", default, ownerTeamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "BUFFBONE_Vent_Low_R", default, owner, default, default, true, false, false, false, false);
+                SpellEffectCreate(out asdf, out _, "Ezreal_PulseFire_Ult_Thrusters.troy", default, ownerTeamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "BUFFBONE_Vent_Low_L", default, owner, default, default, true, false, false, false, false);
             }
         }
         public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
@@ -60,7 +60,7 @@ namespace Spells
             baseDamage = GetBaseAttackDamage(owner);
             bonusDamage = totalDamage - baseDamage;
             bonusDamage *= 1;
-            SpellEffectCreate(out asdf, out _, "Ezreal_TrueShot_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, "spine", default, target, default, default, true, false, false, false, false);
+            SpellEffectCreate(out asdf, out _, "Ezreal_TrueShot_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, "spine", default, target, default, default, true, false, false, false, false);
             AddBuff(attacker, attacker, new Buffs.EzrealRisingSpellForce(), 5, 1, 6 + this.effect0[level], BuffAddType.STACKS_AND_RENEWS, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
             physPreMod = GetFlatPhysicalDamageMod(owner);
             physPostMod = 1 * physPreMod;

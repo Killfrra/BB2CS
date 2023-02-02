@@ -5,6 +5,38 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class CannonBarrage : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            CastingBreaksStealth = true,
+            DoesntBreakShields = true,
+            TriggersSpellCasts = true,
+            IsDamagingSpell = true,
+            NotSingleTargetSpell = true,
+        };
+        float[] effect0 = {-0.25f, -0.25f, -0.25f};
+        int[] effect1 = {0, 0, 0, 0, 0};
+        public override void SelfExecute()
+        {
+            TeamId teamOfOwner;
+            Vector3 castPosition;
+            Vector3 nextBuffVars_CastPosition;
+            Minion other1;
+            float nextBuffVars_MoveSpeedMod;
+            int nextBuffVars_AttackSpeedMod;
+            teamOfOwner = GetTeamID(owner);
+            castPosition = GetCastSpellTargetPos();
+            nextBuffVars_CastPosition = castPosition;
+            nextBuffVars_MoveSpeedMod = this.effect0[level];
+            nextBuffVars_AttackSpeedMod = this.effect1[level];
+            other1 = SpawnMinion("HiddenMinion", "TestCube", "idle.lua", castPosition, teamOfOwner ?? TeamId.TEAM_CASTER, false, true, true, true, true, true, 0, false, true);
+            AddBuff((ObjAIBase)owner, other1, new Buffs.CannonBarrage(nextBuffVars_CastPosition, nextBuffVars_MoveSpeedMod, nextBuffVars_AttackSpeedMod), 1, 1, 6, BuffAddType.RENEW_EXISTING, BuffType.AURA, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class CannonBarrage : BBBuffScript
@@ -29,7 +61,7 @@ namespace Buffs
             AddBuff((ObjAIBase)owner, owner, new Buffs.ExpirationTimer(), 1, 1, 12, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
             teamOfOwner = GetTeamID(attacker);
             castPosition = this.castPosition;
-            SpellEffectCreate(out this.particle, out this.particle2, "pirate_cannonBarrage_aoe_indicator_green.troy", "pirate_cannonBarrage_aoe_indicator_red.troy", teamOfOwner, 500, 0, TeamId.TEAM_UNKNOWN, default, default, false, default, default, castPosition, target, default, default, false, false, false, false, false);
+            SpellEffectCreate(out this.particle, out this.particle2, "pirate_cannonBarrage_aoe_indicator_green.troy", "pirate_cannonBarrage_aoe_indicator_red.troy", teamOfOwner ?? TeamId.TEAM_UNKNOWN, 500, 0, TeamId.TEAM_UNKNOWN, default, default, false, default, default, castPosition, target, default, default, false, false, false, false, false);
             this.bubbleID = AddPosPerceptionBubble(teamOfOwner, 650, castPosition, 8, default, false);
         }
         public override void OnDeactivate(bool expired)
@@ -81,38 +113,6 @@ namespace Buffs
             {
                 AddBuff(attacker, unit, new Buffs.Slow(nextBuffVars_MoveSpeedMod, nextBuffVars_AttackSpeedMod), 100, 1, 1, BuffAddType.STACKS_AND_OVERLAPS, BuffType.SLOW, 0, true, false, false);
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class CannonBarrage : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            CastingBreaksStealth = true,
-            DoesntBreakShields = true,
-            TriggersSpellCasts = true,
-            IsDamagingSpell = true,
-            NotSingleTargetSpell = true,
-        };
-        float[] effect0 = {-0.25f, -0.25f, -0.25f};
-        int[] effect1 = {0, 0, 0, 0, 0};
-        public override void SelfExecute()
-        {
-            TeamId teamOfOwner;
-            Vector3 castPosition;
-            Vector3 nextBuffVars_CastPosition;
-            float nextBuffVars_MoveSpeedMod;
-            int nextBuffVars_AttackSpeedMod;
-            Minion other1;
-            teamOfOwner = GetTeamID(owner);
-            castPosition = GetCastSpellTargetPos();
-            nextBuffVars_CastPosition = castPosition;
-            nextBuffVars_MoveSpeedMod = this.effect0[level];
-            nextBuffVars_AttackSpeedMod = this.effect1[level];
-            other1 = SpawnMinion("HiddenMinion", "TestCube", "idle.lua", castPosition, teamOfOwner, false, true, true, true, true, true, 0, false, true);
-            AddBuff((ObjAIBase)owner, other1, new Buffs.CannonBarrage(nextBuffVars_CastPosition, nextBuffVars_MoveSpeedMod, nextBuffVars_AttackSpeedMod), 1, 1, 6, BuffAddType.RENEW_EXISTING, BuffType.AURA, 0, true, false, false);
         }
     }
 }

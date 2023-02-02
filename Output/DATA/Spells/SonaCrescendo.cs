@@ -5,6 +5,25 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class SonaCrescendo : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = true,
+            NotSingleTargetSpell = true,
+        };
+        float[] effect0 = {50, 83.3f, 116.6f};
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            float nextBuffVars_DamageAmount;
+            nextBuffVars_DamageAmount = this.effect0[level];
+            BreakSpellShields(target);
+            AddBuff(attacker, target, new Buffs.SonaCrescendo(nextBuffVars_DamageAmount), 1, 1, 1.5f, BuffAddType.REPLACE_EXISTING, BuffType.STUN, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class SonaCrescendo : BBBuffScript
@@ -53,25 +72,6 @@ namespace Buffs
             {
                 ApplyDamage(attacker, owner, this.damageAmount, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_PERIODIC, 1, 0.266f, 1, false, false, attacker);
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class SonaCrescendo : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = true,
-            NotSingleTargetSpell = true,
-        };
-        float[] effect0 = {50, 83.3f, 116.6f};
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            float nextBuffVars_DamageAmount;
-            nextBuffVars_DamageAmount = this.effect0[level];
-            BreakSpellShields(target);
-            AddBuff(attacker, target, new Buffs.SonaCrescendo(nextBuffVars_DamageAmount), 1, 1, 1.5f, BuffAddType.REPLACE_EXISTING, BuffType.STUN, 0, true, false, false);
         }
     }
 }

@@ -15,11 +15,11 @@ namespace Chars
         int[] effect2 = {9999, 9999, 9999, 9999, 9999};
         public override void OnUpdateStats()
         {
-            float totalBonus;
             //RequireVar(championAPGain);
             //RequireVar(charVars.TotalBonus);
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, false))
             {
+                float totalBonus;
                 totalBonus = 0 + charVars.TotalBonus;
                 totalBonus = charVars.APGain + charVars.TotalBonus;
                 SetSpellToolTipVar(totalBonus, 1, 0, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (Champion)owner);
@@ -29,12 +29,12 @@ namespace Chars
         }
         public override void OnKill()
         {
-            float championAPGain;
             if(target is Champion)
             {
                 level = GetSlotSpellLevel((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 if(level > 0)
                 {
+                    float championAPGain;
                     championAPGain = this.effect0[level];
                     charVars.APGain += championAPGain;
                 }
@@ -50,9 +50,9 @@ namespace Chars
         }
         public override void OnLevelUpSpell(int slot)
         {
-            int nextBuffVars_BonusAP;
             if(slot == 0)
             {
+                int nextBuffVars_BonusAP; // UNUSED
                 level = GetSlotSpellLevel((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 nextBuffVars_BonusAP = this.effect1[level];
                 charVars.MaxBonus = this.effect2[level];

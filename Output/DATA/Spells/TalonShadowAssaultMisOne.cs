@@ -5,6 +5,91 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class TalonShadowAssaultMisOne : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = false,
+            NotSingleTargetSpell = true,
+            PhysicalDamageRatio = 0.5f,
+            SpellDamageRatio = 0.5f,
+        };
+        int[] effect0 = {120, 190, 260, 85, 100};
+        int[] effect1 = {120, 190, 260, 85, 100};
+        int[] effect2 = {120, 190, 260, 85, 100};
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            int count;
+            TeamId ownerTeam;
+            count = GetBuffCountFromCaster(target, target, nameof(Buffs.TalonShadowAssaultMisBuff));
+            ownerTeam = GetTeamID(owner);
+            if(count == 0)
+            {
+                bool isStealthed;
+                Particle part; // UNUSED
+                float baseDamage;
+                float totalAD;
+                float bonusDamage;
+                isStealthed = GetStealthed(target);
+                if(!isStealthed)
+                {
+                    SpellEffectCreate(out part, out _, "talon_ult_tar.troy", default, ownerTeam ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, target.Position, target, default, default, true, false, false, false, false);
+                    AddBuff((ObjAIBase)target, target, new Buffs.TalonShadowAssaultMisBuff(), 9, 1, 0.5f, BuffAddType.STACKS_AND_RENEWS, BuffType.INTERNAL, 0, true, false, false);
+                    BreakSpellShields(target);
+                    baseDamage = GetBaseAttackDamage(owner);
+                    totalAD = GetTotalAttackDamage(owner);
+                    baseDamage = totalAD - baseDamage;
+                    baseDamage *= 0.9f;
+                    level = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
+                    bonusDamage = this.effect0[level];
+                    baseDamage += bonusDamage;
+                    ApplyDamage((ObjAIBase)owner, target, baseDamage, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0, 0, false, false, attacker);
+                    level = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
+                }
+                else
+                {
+                    if(target is Champion)
+                    {
+                        SpellEffectCreate(out part, out _, "talon_ult_tar.troy", default, ownerTeam ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, target.Position, target, default, default, true, false, false, false, false);
+                        AddBuff((ObjAIBase)target, target, new Buffs.TalonShadowAssaultMisBuff(), 9, 1, 0.5f, BuffAddType.STACKS_AND_RENEWS, BuffType.INTERNAL, 0, true, false, false);
+                        BreakSpellShields(target);
+                        baseDamage = GetBaseAttackDamage(owner);
+                        totalAD = GetTotalAttackDamage(owner);
+                        baseDamage = totalAD - baseDamage;
+                        baseDamage *= 0.9f;
+                        level = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
+                        bonusDamage = this.effect1[level];
+                        baseDamage += bonusDamage;
+                        ApplyDamage((ObjAIBase)owner, target, baseDamage, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0, 0, false, false, attacker);
+                        level = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
+                    }
+                    else
+                    {
+                        bool canSee;
+                        canSee = CanSeeTarget(owner, target);
+                        if(canSee)
+                        {
+                            SpellEffectCreate(out part, out _, "bowmaster_BasicAttack_tar.troy", default, ownerTeam ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, target.Position, target, default, default, true, false, false, false, false);
+                            AddBuff((ObjAIBase)target, target, new Buffs.TalonShadowAssaultMisBuff(), 9, 1, 0.5f, BuffAddType.STACKS_AND_RENEWS, BuffType.INTERNAL, 0, true, false, false);
+                            BreakSpellShields(target);
+                            baseDamage = GetBaseAttackDamage(owner);
+                            totalAD = GetTotalAttackDamage(owner);
+                            baseDamage = totalAD - baseDamage;
+                            baseDamage *= 0.9f;
+                            level = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
+                            bonusDamage = this.effect2[level];
+                            baseDamage += bonusDamage;
+                            ApplyDamage((ObjAIBase)owner, target, baseDamage, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0, 0, false, false, attacker);
+                            level = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 namespace Buffs
 {
     public class TalonShadowAssaultMisOne : BBBuffScript
@@ -18,8 +103,6 @@ namespace Buffs
         {
             int level;
             Vector3 ownerPos;
-            Vector3 unitPos;
-            float newDistance;
             float cooldownVal;
             float flatCDVal;
             float flatCD;
@@ -30,6 +113,8 @@ namespace Buffs
             {
                 if(GetBuffCountFromCaster(unit, owner, nameof(Buffs.TalonShadowAssaultMarker)) > 0)
                 {
+                    Vector3 unitPos;
+                    float newDistance;
                     unitPos = GetUnitPosition(unit);
                     newDistance = DistanceBetweenObjects("Owner", "Unit");
                     if(newDistance > 100)
@@ -55,14 +140,14 @@ namespace Buffs
         }
         public override void OnMissileEnd(string spellName, Vector3 missileEndPosition)
         {
-            Vector3 ownerPos;
-            TeamId teamOfOwner;
-            Minion other3;
             if(spellName == nameof(Spells.TalonShadowAssaultMisOne))
             {
+                Vector3 ownerPos;
+                TeamId teamOfOwner;
+                Minion other3;
                 ownerPos = GetUnitPosition(owner);
                 teamOfOwner = GetTeamID(owner);
-                other3 = SpawnMinion("HiddenMinion", "TestCube", "idle.lua", missileEndPosition, teamOfOwner, false, true, false, false, false, true, 0, false, true, (Champion)owner);
+                other3 = SpawnMinion("HiddenMinion", "TestCube", "idle.lua", missileEndPosition, teamOfOwner ?? TeamId.TEAM_CASTER, false, true, false, false, false, true, 0, false, true, (Champion)owner);
                 FaceDirection(other3, ownerPos);
                 SetInvulnerable(other3, true);
                 SetTargetable(other3, false);
@@ -81,91 +166,6 @@ namespace Buffs
         {
             SpellMissile missileId; // UNITIALIZED
             charVars.MISSILEID = missileId;
-        }
-    }
-}
-namespace Spells
-{
-    public class TalonShadowAssaultMisOne : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = false,
-            NotSingleTargetSpell = true,
-            PhysicalDamageRatio = 0.5f,
-            SpellDamageRatio = 0.5f,
-        };
-        int[] effect0 = {120, 190, 260, 85, 100};
-        int[] effect1 = {120, 190, 260, 85, 100};
-        int[] effect2 = {120, 190, 260, 85, 100};
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            int count;
-            TeamId ownerTeam;
-            bool isStealthed;
-            Particle part; // UNUSED
-            float baseDamage;
-            float totalAD;
-            float bonusDamage;
-            bool canSee;
-            count = GetBuffCountFromCaster(target, target, nameof(Buffs.TalonShadowAssaultMisBuff));
-            ownerTeam = GetTeamID(owner);
-            if(count == 0)
-            {
-                isStealthed = GetStealthed(target);
-                if(!isStealthed)
-                {
-                    SpellEffectCreate(out part, out _, "talon_ult_tar.troy", default, ownerTeam, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, target.Position, target, default, default, true, false, false, false, false);
-                    AddBuff((ObjAIBase)target, target, new Buffs.TalonShadowAssaultMisBuff(), 9, 1, 0.5f, BuffAddType.STACKS_AND_RENEWS, BuffType.INTERNAL, 0, true, false, false);
-                    BreakSpellShields(target);
-                    baseDamage = GetBaseAttackDamage(owner);
-                    totalAD = GetTotalAttackDamage(owner);
-                    baseDamage = totalAD - baseDamage;
-                    baseDamage *= 0.9f;
-                    level = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
-                    bonusDamage = this.effect0[level];
-                    baseDamage += bonusDamage;
-                    ApplyDamage((ObjAIBase)owner, target, baseDamage, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0, 0, false, false, attacker);
-                    level = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
-                }
-                else
-                {
-                    if(target is Champion)
-                    {
-                        SpellEffectCreate(out part, out _, "talon_ult_tar.troy", default, ownerTeam, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, target.Position, target, default, default, true, false, false, false, false);
-                        AddBuff((ObjAIBase)target, target, new Buffs.TalonShadowAssaultMisBuff(), 9, 1, 0.5f, BuffAddType.STACKS_AND_RENEWS, BuffType.INTERNAL, 0, true, false, false);
-                        BreakSpellShields(target);
-                        baseDamage = GetBaseAttackDamage(owner);
-                        totalAD = GetTotalAttackDamage(owner);
-                        baseDamage = totalAD - baseDamage;
-                        baseDamage *= 0.9f;
-                        level = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
-                        bonusDamage = this.effect1[level];
-                        baseDamage += bonusDamage;
-                        ApplyDamage((ObjAIBase)owner, target, baseDamage, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0, 0, false, false, attacker);
-                        level = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
-                    }
-                    else
-                    {
-                        canSee = CanSeeTarget(owner, target);
-                        if(canSee)
-                        {
-                            SpellEffectCreate(out part, out _, "bowmaster_BasicAttack_tar.troy", default, ownerTeam, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, target.Position, target, default, default, true, false, false, false, false);
-                            AddBuff((ObjAIBase)target, target, new Buffs.TalonShadowAssaultMisBuff(), 9, 1, 0.5f, BuffAddType.STACKS_AND_RENEWS, BuffType.INTERNAL, 0, true, false, false);
-                            BreakSpellShields(target);
-                            baseDamage = GetBaseAttackDamage(owner);
-                            totalAD = GetTotalAttackDamage(owner);
-                            baseDamage = totalAD - baseDamage;
-                            baseDamage *= 0.9f;
-                            level = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
-                            bonusDamage = this.effect2[level];
-                            baseDamage += bonusDamage;
-                            ApplyDamage((ObjAIBase)owner, target, baseDamage, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0, 0, false, false, attacker);
-                            level = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
-                        }
-                    }
-                }
-            }
         }
     }
 }

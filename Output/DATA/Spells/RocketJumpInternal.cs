@@ -12,17 +12,17 @@ namespace Buffs
         public override void OnDeath()
         {
             ObjAIBase caster;
-            int level;
-            float cooldown;
             caster = SetBuffCasterUnit();
             if(caster.IsDead)
             {
             }
             else
             {
+                int level;
                 level = GetSlotSpellLevel(caster, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 if(level >= 1)
                 {
+                    float cooldown;
                     cooldown = GetSlotSpellCooldownTime(caster, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                     if(cooldown > 0)
                     {

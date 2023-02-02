@@ -25,7 +25,6 @@ namespace Spells
             float damageAmount;
             Particle part; // UNUSED
             Vector3 targetPos;
-            bool canSee;
             teamID = GetTeamID(owner);
             isStealthed = GetStealthed(target);
             baseDamage = this.effect0[level];
@@ -34,7 +33,7 @@ namespace Spells
             damageAmount = bonusAttackDamage + baseDamage;
             if(!isStealthed)
             {
-                SpellEffectCreate(out part, out _, "corki_MissleBarrage_std_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, "spine", target.Position, target, default, default, true, default, default, false, false);
+                SpellEffectCreate(out part, out _, "corki_MissleBarrage_std_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, "spine", target.Position, target, default, default, true, default, default, false, false);
                 targetPos = GetUnitPosition(target);
                 foreach(AttackableUnit unit in GetUnitsInArea(attacker, targetPos, 200, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
                 {
@@ -47,7 +46,7 @@ namespace Spells
             {
                 if(target is Champion)
                 {
-                    SpellEffectCreate(out part, out _, "corki_MissleBarrage_std_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, "spine", target.Position, target, default, default, true, default, default, false, false);
+                    SpellEffectCreate(out part, out _, "corki_MissleBarrage_std_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, "spine", target.Position, target, default, default, true, default, default, false, false);
                     targetPos = GetUnitPosition(target);
                     foreach(AttackableUnit unit in GetUnitsInArea(attacker, targetPos, 200, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
                     {
@@ -58,10 +57,11 @@ namespace Spells
                 }
                 else
                 {
+                    bool canSee;
                     canSee = CanSeeTarget(owner, target);
                     if(canSee)
                     {
-                        SpellEffectCreate(out part, out _, "corki_MissleBarrage_std_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, "spine", target.Position, target, default, default, true, default, default, false, false);
+                        SpellEffectCreate(out part, out _, "corki_MissleBarrage_std_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, "spine", target.Position, target, default, default, true, default, default, false, false);
                         targetPos = GetUnitPosition(target);
                         foreach(AttackableUnit unit in GetUnitsInArea(attacker, targetPos, 200, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
                         {

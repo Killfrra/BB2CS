@@ -30,7 +30,6 @@ namespace Buffs
             Vector3 currentPos;
             ObjAIBase caster;
             string skinName;
-            int skinID;
             Vector3 attackerPos; // UNUSED
             float distance;
             currentPos = GetUnitPosition(owner);
@@ -51,6 +50,7 @@ namespace Buffs
             {
                 if(caster != owner)
                 {
+                    int skinID;
                     skinID = GetSkinID(caster);
                     if(skinID == 1)
                     {
@@ -111,12 +111,12 @@ namespace Buffs
         {
             ObjAIBase caster;
             int level;
-            float defenseBonus;
             float distance;
             caster = SetBuffCasterUnit();
             level = GetSlotSpellLevel(caster, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             if(level > 0)
             {
+                float defenseBonus;
                 defenseBonus = this.effect0[level];
                 IncFlatArmorMod(owner, defenseBonus);
                 IncFlatSpellBlockMod(owner, defenseBonus);
@@ -160,9 +160,6 @@ namespace Buffs
             Vector3 castPos;
             TeamId teamID;
             Particle temp; // UNUSED
-            bool noRender;
-            Vector3 missileEndPosition;
-            Minion other3;
             caster = SetBuffCasterUnit();
             distance = DistanceBetweenObjects("Caster", "Owner");
             if(distance > 1125)
@@ -174,9 +171,9 @@ namespace Buffs
                 SpellBuffClear(owner, nameof(Buffs.OrianaGhost));
                 castPos = GetUnitPosition(owner);
                 teamID = GetTeamID(owner);
-                SpellEffectCreate(out temp, out _, "Orianna_Ball_Flash.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, "root", castPos, owner, default, default, true, false, false, false, false);
+                SpellEffectCreate(out temp, out _, "Orianna_Ball_Flash.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, "root", castPos, owner, default, default, true, false, false, false, false);
                 AddBuff(caster, caster, new Buffs.OrianaGhostSelf(), 1, 1, 25000, BuffAddType.REPLACE_EXISTING, BuffType.AURA, 0, true, false, false);
-                SpellEffectCreate(out temp, out _, "Orianna_Ball_Flash_Reverse.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, caster, false, caster, "SpinnigBottomRidge", castPos, caster, default, default, true, false, false, false, false);
+                SpellEffectCreate(out temp, out _, "Orianna_Ball_Flash_Reverse.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, caster, false, caster, "SpinnigBottomRidge", castPos, caster, default, default, true, false, false, false, false);
                 SealSpellSlot(0, SpellSlotType.SpellSlots, caster, false, SpellbookType.SPELLBOOK_CHAMPION);
                 SealSpellSlot(1, SpellSlotType.SpellSlots, caster, false, SpellbookType.SPELLBOOK_CHAMPION);
                 SealSpellSlot(2, SpellSlotType.SpellSlots, caster, false, SpellbookType.SPELLBOOK_CHAMPION);
@@ -191,12 +188,13 @@ namespace Buffs
                         caster = SetBuffCasterUnit();
                         AddBuff(caster, caster, new Buffs.OrianaGhostSelf(), 1, 1, 25000, BuffAddType.RENEW_EXISTING, BuffType.AURA, 0, true, false, false);
                         SpellBuffClear(owner, nameof(Buffs.OrianaGhost));
-                        SpellEffectCreate(out temp, out _, "Orianna_Ball_Flash_Reverse.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, caster, false, caster, "SpinnigBottomRidge", castPos, caster, default, default, true, false, false, false, false);
+                        SpellEffectCreate(out temp, out _, "Orianna_Ball_Flash_Reverse.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, caster, false, caster, "SpinnigBottomRidge", castPos, caster, default, default, true, false, false, false, false);
                     }
                 }
             }
             else
             {
+                bool noRender;
                 noRender = GetNoRender(owner);
                 if(owner is Champion)
                 {
@@ -209,9 +207,9 @@ namespace Buffs
                         SpellBuffClear(owner, nameof(Buffs.OrianaGhost));
                         castPos = GetUnitPosition(owner);
                         teamID = GetTeamID(owner);
-                        SpellEffectCreate(out temp, out _, "Orianna_Ball_Flash.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, "root", castPos, owner, default, default, true, false, false, false, false);
+                        SpellEffectCreate(out temp, out _, "Orianna_Ball_Flash.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, "root", castPos, owner, default, default, true, false, false, false, false);
                         AddBuff(caster, caster, new Buffs.OrianaGhostSelf(), 1, 1, 25000, BuffAddType.REPLACE_EXISTING, BuffType.AURA, 0, true, false, false);
-                        SpellEffectCreate(out temp, out _, "Orianna_Ball_Flash_Reverse.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, caster, false, caster, "SpinnigBottomRidge", castPos, caster, default, default, true, false, false, false, false);
+                        SpellEffectCreate(out temp, out _, "Orianna_Ball_Flash_Reverse.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, caster, false, caster, "SpinnigBottomRidge", castPos, caster, default, default, true, false, false, false, false);
                         SealSpellSlot(0, SpellSlotType.SpellSlots, caster, false, SpellbookType.SPELLBOOK_CHAMPION);
                         SealSpellSlot(1, SpellSlotType.SpellSlots, caster, false, SpellbookType.SPELLBOOK_CHAMPION);
                         SealSpellSlot(2, SpellSlotType.SpellSlots, caster, false, SpellbookType.SPELLBOOK_CHAMPION);
@@ -225,11 +223,13 @@ namespace Buffs
                 {
                     if(owner.IsDead)
                     {
+                        Vector3 missileEndPosition;
+                        Minion other3;
                         caster = SetBuffCasterUnit();
                         missileEndPosition = GetUnitPosition(owner);
                         teamID = GetTeamID(attacker);
                         this.ghostSpawned = true;
-                        other3 = SpawnMinion("TheDoomBall", "OriannaBall", "idle.lua", missileEndPosition, teamID, false, true, false, true, true, true, 0, false, true, (Champion)caster);
+                        other3 = SpawnMinion("TheDoomBall", "OriannaBall", "idle.lua", missileEndPosition, teamID ?? TeamId.TEAM_BLUE, false, true, false, true, true, true, 0, false, true, (Champion)caster);
                         AddBuff(attacker, other3, new Buffs.OrianaGhost(), 1, 1, 25000, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
                         AddBuff(attacker, other3, new Buffs.OrianaGhostMinion(), 1, 1, 25000, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
                         SpellBuffClear(owner, nameof(Buffs.OrianaGhost));
@@ -248,20 +248,20 @@ namespace Buffs
         }
         public override void OnDeath()
         {
-            ObjAIBase caster;
-            Vector3 missileEndPosition;
-            TeamId teamID;
-            Minion other3;
             SpellEffectRemove(this.orianaPointer);
             if(!this.ghostSpawned)
             {
                 if(!this.minionBall)
                 {
+                    ObjAIBase caster;
+                    Vector3 missileEndPosition;
+                    TeamId teamID;
+                    Minion other3;
                     caster = SetBuffCasterUnit();
                     missileEndPosition = GetUnitPosition(owner);
                     teamID = GetTeamID(caster);
                     this.ghostSpawned = true;
-                    other3 = SpawnMinion("TheDoomBall", "OriannaBall", "idle.lua", missileEndPosition, teamID, false, true, false, true, true, true, 0, false, true, (Champion)caster);
+                    other3 = SpawnMinion("TheDoomBall", "OriannaBall", "idle.lua", missileEndPosition, teamID ?? TeamId.TEAM_BLUE, false, true, false, true, true, true, 0, false, true, (Champion)caster);
                     AddBuff(caster, other3, new Buffs.OrianaGhost(), 1, 1, 25000, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0, true, false, false);
                     AddBuff(caster, other3, new Buffs.OrianaGhostMinion(), 1, 1, 25000, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0, true, false, false);
                     SpellBuffClear(owner, nameof(Buffs.OrianaGhost));

@@ -5,39 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class SummonerFlash : BBBuffScript
-    {
-        Vector3 castPos;
-        public SummonerFlash(Vector3 castPos = default)
-        {
-            this.castPos = castPos;
-        }
-        public override void OnActivate()
-        {
-            //RequireVar(this.castPos);
-            SetCanAttack(owner, false);
-            SetCanCast(owner, false);
-            SetCanMove(owner, false);
-        }
-        public override void OnDeactivate(bool expired)
-        {
-            Vector3 castPos;
-            castPos = this.castPos;
-            SetCanAttack(owner, true);
-            SetCanCast(owner, true);
-            SetCanMove(owner, true);
-            TeleportToPosition(owner, castPos);
-        }
-        public override void OnUpdateStats()
-        {
-            SetCanAttack(owner, false);
-            SetCanCast(owner, false);
-            SetCanMove(owner, false);
-        }
-    }
-}
 namespace Spells
 {
     public class SummonerFlash : BBSpellScript
@@ -68,7 +35,6 @@ namespace Spells
         public override void UpdateTooltip(int spellSlot)
         {
             float baseCooldown;
-            float cooldownMultiplier;
             if(avatarVars.UtilityMastery == 1)
             {
                 baseCooldown = 250;
@@ -79,6 +45,7 @@ namespace Spells
             }
             if(avatarVars.SummonerCooldownBonus != 0)
             {
+                float cooldownMultiplier;
                 cooldownMultiplier = 1 - avatarVars.SummonerCooldownBonus;
                 baseCooldown *= cooldownMultiplier;
             }
@@ -88,7 +55,6 @@ namespace Spells
         {
             float returnValue = 0;
             float baseCooldown;
-            float cooldownMultiplier;
             if(avatarVars.UtilityMastery == 1)
             {
                 baseCooldown = 250;
@@ -99,6 +65,7 @@ namespace Spells
             }
             if(avatarVars.SummonerCooldownBonus != 0)
             {
+                float cooldownMultiplier;
                 cooldownMultiplier = 1 - avatarVars.SummonerCooldownBonus;
                 baseCooldown *= cooldownMultiplier;
             }
@@ -113,7 +80,6 @@ namespace Spells
             Particle p3; // UNUSED
             Particle ar; // UNUSED
             Particle ar1; // UNUSED
-            Vector3 nextBuffVars_CastPos;
             castPos = GetCastSpellTargetPos();
             ownerPos = GetUnitPosition(owner);
             distance = DistanceBetweenPoints(ownerPos, castPos);
@@ -128,6 +94,7 @@ namespace Spells
             SpellEffectCreate(out ar1, out _, "summoner_flash.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false, false, false, false, false);
             if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.FlashBeenHit)) > 0)
             {
+                Vector3 nextBuffVars_CastPos;
                 nextBuffVars_CastPos = castPos;
                 AddBuff((ObjAIBase)owner, owner, new Buffs.SummonerFlash(nextBuffVars_CastPos), 1, 1, 1, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
             }
@@ -135,6 +102,39 @@ namespace Spells
             {
                 TeleportToPosition(owner, castPos);
             }
+        }
+    }
+}
+namespace Buffs
+{
+    public class SummonerFlash : BBBuffScript
+    {
+        Vector3 castPos;
+        public SummonerFlash(Vector3 castPos = default)
+        {
+            this.castPos = castPos;
+        }
+        public override void OnActivate()
+        {
+            //RequireVar(this.castPos);
+            SetCanAttack(owner, false);
+            SetCanCast(owner, false);
+            SetCanMove(owner, false);
+        }
+        public override void OnDeactivate(bool expired)
+        {
+            Vector3 castPos;
+            castPos = this.castPos;
+            SetCanAttack(owner, true);
+            SetCanCast(owner, true);
+            SetCanMove(owner, true);
+            TeleportToPosition(owner, castPos);
+        }
+        public override void OnUpdateStats()
+        {
+            SetCanAttack(owner, false);
+            SetCanCast(owner, false);
+            SetCanMove(owner, false);
         }
     }
 }

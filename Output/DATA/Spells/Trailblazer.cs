@@ -31,17 +31,17 @@ namespace Buffs
             float moveSpeed;
             float moveSpeedMod;
             float nextBuffVars_MoveSpeedMod;
-            int level;
-            float tooltipAmount;
             curPos = GetPointByUnitFacingOffset(owner, 30, 180);
             teamID = GetTeamID(attacker);
-            other3 = SpawnMinion("AcidTrail", "TestCube", "idle.lua", curPos, teamID, true, false, false, true, false, true, 0, default, default, (Champion)attacker);
+            other3 = SpawnMinion("AcidTrail", "TestCube", "idle.lua", curPos, teamID ?? TeamId.TEAM_CASTER, true, false, false, true, false, true, 0, default, default, (Champion)attacker);
             moveSpeed = GetMovementSpeed(attacker);
             moveSpeedMod = moveSpeed / 2500;
             nextBuffVars_MoveSpeedMod = moveSpeedMod;
             AddBuff((ObjAIBase)owner, other3, new Buffs.TrailblazerApplicator(nextBuffVars_MoveSpeedMod), 1, 1, charVars.TrailDuration, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0);
             if(ExecutePeriodically(10, ref this.lastTimeExecuted, true))
             {
+                int level;
+                float tooltipAmount;
                 level = GetLevel(owner);
                 tooltipAmount = this.effect0[level];
                 if(tooltipAmount > this.lastTooltip)

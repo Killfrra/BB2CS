@@ -25,9 +25,9 @@ namespace Items
         }
         public override void OnActivate()
         {
-            ObjAIBase caster;
             if(owner is not Champion)
             {
+                ObjAIBase caster;
                 caster = GetPetOwner((Pet)owner);
                 if(GetBuffCountFromCaster(caster, caster, nameof(Buffs.WillRevive)) > 0)
                 {

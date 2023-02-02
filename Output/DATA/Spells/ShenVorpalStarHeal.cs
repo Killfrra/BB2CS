@@ -26,10 +26,10 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            Particle num; // UNUSED
-            float temp1;
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, true))
             {
+                Particle num; // UNUSED
+                float temp1;
                 SpellEffectCreate(out num, out _, "shen_vorpalStar_lifetap_tar_02.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false);
                 temp1 = GetHealthPercent(target, PrimaryAbilityResourceType.MANA);
                 if(temp1 < 1)

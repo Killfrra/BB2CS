@@ -20,7 +20,7 @@ namespace Buffs
             SetIgnoreCallForHelp(owner, true);
             SetForceRenderParticles(owner, true);
             teamID = GetTeamID(owner);
-            SpellEffectCreate(out a, out _, "Incinerate_cas.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "top", default, target, default, default, true, false, false, false, false);
+            SpellEffectCreate(out a, out _, "Incinerate_cas.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "top", default, target, default, default, true, false, false, false, false);
         }
         public override void OnDeactivate(bool expired)
         {

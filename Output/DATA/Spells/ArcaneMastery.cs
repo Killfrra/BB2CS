@@ -18,11 +18,11 @@ namespace Buffs
         };
         public override void OnSpellCast(string spellName, SpellScriptMetaData spellVars)
         {
-            int slot;
-            float cooldown;
-            float newCooldown;
             if(!spellVars.DoesntTriggerSpellCasts)
             {
+                int slot;
+                float cooldown;
+                float newCooldown;
                 slot = GetSpellSlot();
                 if(slot != 0)
                 {

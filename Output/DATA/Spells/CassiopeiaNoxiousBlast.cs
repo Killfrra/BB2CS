@@ -5,6 +5,33 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class CassiopeiaNoxiousBlast : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            DoesntBreakShields = true,
+            TriggersSpellCasts = true,
+            IsDamagingSpell = true,
+            NotSingleTargetSpell = true,
+        };
+        float[] effect0 = {25, 38.33f, 51.66f, 65, 78.33f};
+        public override void SelfExecute()
+        {
+            Vector3 targetPos;
+            TeamId teamOfOwner;
+            Minion other3;
+            float nextBuffVars_PoisonPerTick;
+            targetPos = GetCastSpellTargetPos();
+            teamOfOwner = GetTeamID(owner);
+            other3 = SpawnMinion("HiddenMinion", "TestCube", "idle.lua", targetPos, teamOfOwner ?? TeamId.TEAM_CASTER, false, true, false, true, true, true, 0, false, true, (Champion)owner);
+            nextBuffVars_PoisonPerTick = this.effect0[level];
+            AddBuff(attacker, other3, new Buffs.CassiopeiaNoxiousBlast(nextBuffVars_PoisonPerTick), 1, 1, 0.25f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+            AddBuff(attacker, other3, new Buffs.ExpirationTimer(), 1, 1, 0.5f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class CassiopeiaNoxiousBlast : BBBuffScript
@@ -26,23 +53,23 @@ namespace Buffs
             SetSuppressCallForHelp(owner, true);
             SetCallForHelpSuppresser(owner, true);
             this.teamOfOwner = GetTeamID(owner);
-            SpellEffectCreate(out this.particle, out this.particle2, "CassNoxiousSnakePlane_green.troy", "CassNoxiousSnakePlane_red.troy", this.teamOfOwner, 10, 0, TeamId.TEAM_UNKNOWN, default, default, false, default, default, owner.Position, target, default, default, true, default, default, false, false);
+            SpellEffectCreate(out this.particle, out this.particle2, "CassNoxiousSnakePlane_green.troy", "CassNoxiousSnakePlane_red.troy", this.teamOfOwner ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, default, false, default, default, owner.Position, target, default, default, true, default, default, false, false);
         }
         public override void OnDeactivate(bool expired)
         {
             int level;
             Particle particle; // UNUSED
-            float nextBuffVars_DamagePerTick;
-            float nextBuffVars_MoveSpeedMod;
             level = GetSlotSpellLevel(attacker, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
-            SpellEffectCreate(out particle, out _, "CassNoxious_tar.troy", default, this.teamOfOwner, 200, 0, TeamId.TEAM_UNKNOWN, default, default, false, default, default, owner.Position, target, default, default, true, default, default, false, false);
+            SpellEffectCreate(out particle, out _, "CassNoxious_tar.troy", default, this.teamOfOwner ?? TeamId.TEAM_UNKNOWN, 200, 0, TeamId.TEAM_UNKNOWN, default, default, false, default, default, owner.Position, target, default, default, true, default, default, false, false);
             foreach(AttackableUnit unit in GetUnitsInArea(attacker, owner.Position, 200, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
             {
+                float nextBuffVars_DamagePerTick;
                 BreakSpellShields(unit);
                 nextBuffVars_DamagePerTick = this.poisonPerTick;
                 AddBuff(attacker, unit, new Buffs.CassiopeiaNoxiousBlastPoison(nextBuffVars_DamagePerTick), 1, 1, 3.25f, BuffAddType.REPLACE_EXISTING, BuffType.POISON, 0, true, false, false);
                 if(unit is Champion)
                 {
+                    float nextBuffVars_MoveSpeedMod;
                     nextBuffVars_MoveSpeedMod = this.effect0[level];
                     AddBuff(attacker, attacker, new Buffs.CassiopeiaNoxiousBlastHaste(nextBuffVars_MoveSpeedMod), 1, 1, 3, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
                 }
@@ -54,33 +81,6 @@ namespace Buffs
         public override void OnUpdateStats()
         {
             IncPercentBubbleRadiusMod(owner, -0.9f);
-        }
-    }
-}
-namespace Spells
-{
-    public class CassiopeiaNoxiousBlast : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            DoesntBreakShields = true,
-            TriggersSpellCasts = true,
-            IsDamagingSpell = true,
-            NotSingleTargetSpell = true,
-        };
-        float[] effect0 = {25, 38.33f, 51.66f, 65, 78.33f};
-        public override void SelfExecute()
-        {
-            Vector3 targetPos;
-            TeamId teamOfOwner;
-            Minion other3;
-            float nextBuffVars_PoisonPerTick;
-            targetPos = GetCastSpellTargetPos();
-            teamOfOwner = GetTeamID(owner);
-            other3 = SpawnMinion("HiddenMinion", "TestCube", "idle.lua", targetPos, teamOfOwner, false, true, false, true, true, true, 0, false, true, (Champion)owner);
-            nextBuffVars_PoisonPerTick = this.effect0[level];
-            AddBuff(attacker, other3, new Buffs.CassiopeiaNoxiousBlast(nextBuffVars_PoisonPerTick), 1, 1, 0.25f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
-            AddBuff(attacker, other3, new Buffs.ExpirationTimer(), 1, 1, 0.5f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
         }
     }
 }

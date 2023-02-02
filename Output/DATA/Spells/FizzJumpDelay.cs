@@ -22,13 +22,13 @@ namespace Buffs
         }
         public override void OnDeactivate(bool expired)
         {
-            float cDReduction;
-            int level;
-            float baseCD;
-            float lowerCD;
-            float newCD;
             if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.FizzJumpTwo)) == 0)
             {
+                float cDReduction;
+                int level;
+                float baseCD;
+                float lowerCD;
+                float newCD;
                 SealSpellSlot(0, SpellSlotType.SpellSlots, (ObjAIBase)owner, false, SpellbookType.SPELLBOOK_SUMMONER);
                 SetTargetable(owner, true);
                 SetGhosted(owner, false);

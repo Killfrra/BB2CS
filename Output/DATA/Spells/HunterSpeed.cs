@@ -71,9 +71,9 @@ namespace Buffs
         }
         public override void OnUpdateStats()
         {
-            int level;
             if(ExecutePeriodically(8, ref this.lastTimeExecuted, false))
             {
+                int level;
                 level = GetSlotSpellLevel((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 this.movementSpeedMod = this.effect0[level];
             }

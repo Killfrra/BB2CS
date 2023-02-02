@@ -21,7 +21,7 @@ namespace Buffs
         {
             TeamId teamID;
             teamID = GetTeamID(owner);
-            SpellEffectCreate(out this.a, out _, "Cardmaster_stackready.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false, default, default, false);
+            SpellEffectCreate(out this.a, out _, "Cardmaster_stackready.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false, default, default, false);
         }
         public override void OnDeactivate(bool expired)
         {

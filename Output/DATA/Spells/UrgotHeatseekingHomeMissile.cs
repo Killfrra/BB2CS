@@ -26,7 +26,7 @@ namespace Spells
             float scaling;
             float bonusAD;
             float totalDamage;
-            float nextBuffVars_MoveSpeedMod;
+            float nextBuffVars_MoveSpeedMod; // UNUSED
             Particle asdf; // UNUSED
             teamID = GetTeamID(attacker);
             level = GetSlotSpellLevel((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
@@ -45,7 +45,7 @@ namespace Spells
                 AddBuff(attacker, target, new Buffs.UrgotSlow(), 100, 1, 1.5f, BuffAddType.RENEW_EXISTING, BuffType.SLOW, 0, true, false, false);
             }
             AddBuff((ObjAIBase)owner, target, new Buffs.UrgotEntropyPassive(), 1, 1, 2.5f, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_DEHANCER, 0, true, false, false);
-            SpellEffectCreate(out asdf, out _, "UrgotHeatSeekingMissile_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false, false);
+            SpellEffectCreate(out asdf, out _, "UrgotHeatSeekingMissile_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false, false);
             DestroyMissile(missileNetworkID);
         }
     }

@@ -5,12 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class YorickRARevive : BBBuffScript
-    {
-    }
-}
 namespace Spells
 {
     public class YorickRARevive : BBSpellScript
@@ -27,5 +21,11 @@ namespace Spells
             AddBuff((ObjAIBase)owner, other1, new Buffs.YorickRAPetBuff2(), 1, 1, 10, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
             AddBuff(other1, owner, new Buffs.YorickRARemovePet(), 1, 1, 10, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
         }
+    }
+}
+namespace Buffs
+{
+    public class YorickRARevive : BBBuffScript
+    {
     }
 }

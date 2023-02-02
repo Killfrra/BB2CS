@@ -5,12 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class OdinDisintegrate : BBBuffScript
-    {
-    }
-}
 namespace Spells
 {
     public class OdinDisintegrate : BBSpellScript
@@ -34,5 +28,11 @@ namespace Spells
             damage = targetMaxHealth * 0.0525f;
             ApplyDamage(attacker, target, damage, DamageType.DAMAGE_TYPE_TRUE, DamageSource.DAMAGE_SOURCE_RAW, 1, 0, 0, true, true, attacker);
         }
+    }
+}
+namespace Buffs
+{
+    public class OdinDisintegrate : BBBuffScript
+    {
     }
 }

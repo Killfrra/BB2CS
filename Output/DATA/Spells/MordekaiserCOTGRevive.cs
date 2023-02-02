@@ -28,16 +28,16 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            bool zombie;
-            int level; // UNUSED
-            Vector3 pos;
-            Pet other1;
-            float temp1;
             if(attacker.IsDead)
             {
+                bool zombie;
                 zombie = GetIsZombie(attacker);
                 if(!zombie)
                 {
+                    int level; // UNUSED
+                    Vector3 pos;
+                    Pet other1;
+                    float temp1;
                     level = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                     pos = GetUnitPosition(attacker);
                     other1 = CloneUnitPet(attacker, nameof(Buffs.MordekaiserCOTGPetSlow), 0, pos, 0, 0, false);

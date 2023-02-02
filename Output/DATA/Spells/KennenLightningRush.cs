@@ -5,6 +5,30 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class KennenLightningRush : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            CastingBreaksStealth = true,
+            DoesntBreakShields = false,
+            TriggersSpellCasts = true,
+            IsDamagingSpell = true,
+            NotSingleTargetSpell = true,
+        };
+        int[] effect0 = {85, 125, 165, 205, 245};
+        public override void SelfExecute()
+        {
+            int nextBuffVars_RushDamage;
+            nextBuffVars_RushDamage = this.effect0[level];
+            AddBuff((ObjAIBase)owner, owner, new Buffs.KennenLightningRushDamage(nextBuffVars_RushDamage), 1, 1, 2.2f, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0.1f, true, false);
+            AddBuff((ObjAIBase)owner, owner, new Buffs.KennenLightningRush(), 1, 1, 2, BuffAddType.RENEW_EXISTING, BuffType.HASTE, 0, true, false);
+            SetSpell((ObjAIBase)owner, 2, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, nameof(Spells.KennenLRCancel));
+            SetSlotSpellCooldownTime((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, 0.5f);
+        }
+    }
+}
 namespace Buffs
 {
     public class KennenLightningRush : BBBuffScript
@@ -64,30 +88,6 @@ namespace Buffs
         {
             IncPercentMovementSpeedMod(owner, this.moveSpeedMod);
             IncFlatAttackRangeMod(owner, -575);
-        }
-    }
-}
-namespace Spells
-{
-    public class KennenLightningRush : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            CastingBreaksStealth = true,
-            DoesntBreakShields = false,
-            TriggersSpellCasts = true,
-            IsDamagingSpell = true,
-            NotSingleTargetSpell = true,
-        };
-        int[] effect0 = {85, 125, 165, 205, 245};
-        public override void SelfExecute()
-        {
-            int nextBuffVars_RushDamage;
-            nextBuffVars_RushDamage = this.effect0[level];
-            AddBuff((ObjAIBase)owner, owner, new Buffs.KennenLightningRushDamage(nextBuffVars_RushDamage), 1, 1, 2.2f, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0.1f, true, false);
-            AddBuff((ObjAIBase)owner, owner, new Buffs.KennenLightningRush(), 1, 1, 2, BuffAddType.RENEW_EXISTING, BuffType.HASTE, 0, true, false);
-            SetSpell((ObjAIBase)owner, 2, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, nameof(Spells.KennenLRCancel));
-            SetSlotSpellCooldownTime((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, 0.5f);
         }
     }
 }

@@ -26,9 +26,9 @@ namespace Buffs
         }
         public override void OnLevelUpSpell(int slot)
         {
-            int level;
             if(slot == 2)
             {
+                int level;
                 level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 this.manaRegenBonus = this.effect0[level];
             }

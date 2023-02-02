@@ -29,7 +29,7 @@ namespace Buffs
         {
             TeamId teamID;
             teamID = GetTeamID(attacker);
-            SpellEffectCreate(out this.particle3, out this.particle4, "yorick_ult_03_teamID_green.troy", "yorick_ult_03_teamID_red.troy", teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, false, default, default, false, false);
+            SpellEffectCreate(out this.particle3, out this.particle4, "yorick_ult_03_teamID_green.troy", "yorick_ult_03_teamID_red.troy", teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, false, default, default, false, false);
             this.hasHealed = false;
             SealSpellSlot(0, SpellSlotType.SpellSlots, (ObjAIBase)owner, true, SpellbookType.SPELLBOOK_SUMMONER);
             SealSpellSlot(1, SpellSlotType.SpellSlots, (ObjAIBase)owner, true, SpellbookType.SPELLBOOK_SUMMONER);
@@ -85,11 +85,11 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            float maxHealth;
-            float currentHealth;
-            float healthDecay;
             if(ExecutePeriodically(0.95f, ref this.lastTimeExecuted, false))
             {
+                float maxHealth;
+                float currentHealth;
+                float healthDecay;
                 maxHealth = GetMaxHealth(owner, PrimaryAbilityResourceType.MANA);
                 currentHealth = GetHealth(owner, PrimaryAbilityResourceType.MANA);
                 healthDecay = 0.1f * maxHealth;
@@ -111,12 +111,12 @@ namespace Buffs
         }
         public override void OnPreMitigationDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
         {
-            float currentHealth;
             if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.UndyingRage)) > 0)
             {
             }
             else
             {
+                float currentHealth;
                 currentHealth = GetHealth(owner, PrimaryAbilityResourceType.MANA);
                 if(damageAmount >= currentHealth)
                 {
@@ -127,11 +127,11 @@ namespace Buffs
         public override float OnHeal(float health)
         {
             float returnValue = 0;
-            float effectiveHeal;
             if(this.hasHealed)
             {
                 if(health >= 0)
                 {
+                    float effectiveHeal;
                     effectiveHeal = health * 0;
                     returnValue = effectiveHeal;
                 }

@@ -13,8 +13,6 @@ namespace Chars
         int[] effect0 = {20, 27, 34, 41, 48};
         public override void OnKill()
         {
-            float manaToInc;
-            Particle particle; // UNUSED
             if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.Defile)) > 0)
             {
             }
@@ -23,6 +21,8 @@ namespace Chars
                 level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 if(level > 0)
                 {
+                    float manaToInc;
+                    Particle particle; // UNUSED
                     manaToInc = this.effect0[level];
                     IncPAR(owner, manaToInc, PrimaryAbilityResourceType.MANA);
                     SpellEffectCreate(out particle, out _, "NeutralMonster_buf.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false, default, default, false, false);

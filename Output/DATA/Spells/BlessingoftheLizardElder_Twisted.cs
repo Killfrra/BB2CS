@@ -60,7 +60,6 @@ namespace Buffs
             int count;
             float newDuration;
             Vector3 nextBuffVars_ParticlePosition;
-            ObjAIBase caster;
             count = GetBuffCountFromAll(attacker, nameof(Buffs.APBonusDamageToTowers));
             newDuration = 90;
             nextBuffVars_ParticlePosition = this.particlePosition;
@@ -84,6 +83,7 @@ namespace Buffs
             }
             else if(count != 0)
             {
+                ObjAIBase caster;
                 caster = GetPetOwner((Pet)attacker);
                 if(caster is Champion)
                 {
@@ -108,11 +108,6 @@ namespace Buffs
         }
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            int level;
-            float nextBuffVars_TickDamage;
-            float nextBuffVars_attackSpeedMod;
-            float nextBuffVars_MoveSpeedMod;
-            float nextBuffVars_AttackSpeedMod;
             if(hitResult != HitResult.HIT_Dodge)
             {
                 if(hitResult != HitResult.HIT_Miss)
@@ -126,6 +121,11 @@ namespace Buffs
                             }
                             else
                             {
+                                int level;
+                                float nextBuffVars_TickDamage;
+                                float nextBuffVars_attackSpeedMod;
+                                float nextBuffVars_MoveSpeedMod;
+                                float nextBuffVars_AttackSpeedMod;
                                 level = GetLevel(owner);
                                 nextBuffVars_TickDamage = this.effect0[level];
                                 nextBuffVars_attackSpeedMod = this.effect1[level];

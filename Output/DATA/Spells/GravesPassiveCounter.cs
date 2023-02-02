@@ -31,9 +31,9 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            int count;
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, false))
             {
+                int count;
                 count = GetBuffCountFromAll(owner, nameof(Buffs.GravesPassiveGrit));
                 if(count >= 11)
                 {

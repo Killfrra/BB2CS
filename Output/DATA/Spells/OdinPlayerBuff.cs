@@ -45,12 +45,12 @@ namespace Buffs
         }
         public override void OnTakeDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
         {
-            float hP_Percent;
-            float maxHealth;
-            float damagePercent;
             this.totalDamageOT += damageAmount;
             if(attacker is Champion)
             {
+                float hP_Percent;
+                float maxHealth;
+                float damagePercent;
                 hP_Percent = GetHealthPercent(owner, PrimaryAbilityResourceType.MANA);
                 maxHealth = GetMaxHealth(owner, PrimaryAbilityResourceType.MANA);
                 damagePercent = this.totalDamageOT / maxHealth;

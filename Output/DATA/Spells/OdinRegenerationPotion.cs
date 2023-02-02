@@ -5,32 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class OdinRegenerationPotion : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateEffect = new[]{ "Regenerationpotion_itm.troy", },
-            BuffName = "Health Potion",
-            BuffTextureName = "2003_Regeneration_Potion.dds",
-        };
-        float lastTimeExecuted;
-        public override void OnUpdateActions()
-        {
-            float curHealth;
-            float maxHealth;
-            float percentHealth; // UNUSED
-            curHealth = GetHealth(owner, PrimaryAbilityResourceType.MANA);
-            maxHealth = GetMaxHealth(owner, PrimaryAbilityResourceType.MANA);
-            percentHealth = curHealth / maxHealth;
-            if(ExecutePeriodically(1, ref this.lastTimeExecuted, false))
-            {
-                IncHealth(owner, 10, owner);
-            }
-        }
-    }
-}
 namespace Spells
 {
     public class OdinRegenerationPotion : BBSpellScript
@@ -97,6 +71,32 @@ namespace Spells
             if(name5 == nameof(Spells.OdinRegenerationPotion))
             {
                 SetSlotSpellCooldownTimeVer2(60, 5, SpellSlotType.InventorySlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner, false);
+            }
+        }
+    }
+}
+namespace Buffs
+{
+    public class OdinRegenerationPotion : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateEffect = new[]{ "Regenerationpotion_itm.troy", },
+            BuffName = "Health Potion",
+            BuffTextureName = "2003_Regeneration_Potion.dds",
+        };
+        float lastTimeExecuted;
+        public override void OnUpdateActions()
+        {
+            float curHealth;
+            float maxHealth;
+            float percentHealth; // UNUSED
+            curHealth = GetHealth(owner, PrimaryAbilityResourceType.MANA);
+            maxHealth = GetMaxHealth(owner, PrimaryAbilityResourceType.MANA);
+            percentHealth = curHealth / maxHealth;
+            if(ExecutePeriodically(1, ref this.lastTimeExecuted, false))
+            {
+                IncHealth(owner, 10, owner);
             }
         }
     }

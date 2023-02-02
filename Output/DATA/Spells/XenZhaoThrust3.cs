@@ -25,7 +25,6 @@ namespace Spells
             float combo1Damage;
             int count; // UNUSED
             Particle bye; // UNUSED
-            float comboDamageCrit;
             if(hitResult == HitResult.HIT_Dodge)
             {
                 hitResult = HitResult.HIT_Normal;
@@ -38,6 +37,7 @@ namespace Spells
             SpellEffectCreate(out bye, out _, "xenZiou_ChainAttack_03.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, false);
             if(hitResult == HitResult.HIT_Critical)
             {
+                float comboDamageCrit;
                 comboDamageCrit = attackDmg * 2;
                 combo1Damage = combo1DamageLeet + comboDamageCrit;
             }

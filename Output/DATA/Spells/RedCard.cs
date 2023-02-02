@@ -52,7 +52,6 @@ namespace Buffs
             float attackDamage;
             float bonusDamage;
             float redCardDamage;
-            Particle ar; // UNUSED
             float nextBuffVars_MoveSpeedMod;
             float nextBuffVars_AttackSpeedMod;
             level = GetSlotSpellLevel((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
@@ -61,6 +60,7 @@ namespace Buffs
             redCardDamage = attackDamage + bonusDamage;
             if(target is ObjAIBase)
             {
+                Particle ar; // UNUSED
                 SpellEffectCreate(out ar, out _, "Pulverize_cas.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, false);
             }
             nextBuffVars_MoveSpeedMod = this.effect1[level];

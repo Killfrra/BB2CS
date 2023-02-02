@@ -19,17 +19,17 @@ namespace Buffs
         int[] effect0 = {35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35};
         public override void OnUpdateActions()
         {
-            float maxEnergy;
-            int level;
-            float shieldMax;
-            float shieldPercent;
-            float shieldDecay;
-            float baseDamage;
-            float totalDamage;
-            float bonusDamage;
-            float tooltipNumber;
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, false))
             {
+                float maxEnergy;
+                int level;
+                float shieldMax;
+                float shieldPercent;
+                float shieldDecay;
+                float baseDamage;
+                float totalDamage;
+                float bonusDamage;
+                float tooltipNumber;
                 maxEnergy = GetMaxPAR(owner, PrimaryAbilityResourceType.Shield);
                 level = GetLevel(owner);
                 shieldMax = level * 30;

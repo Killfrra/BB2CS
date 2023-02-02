@@ -27,9 +27,9 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            float nextBuffVars_MoveSpeedMod;
             if(ExecutePeriodically(0.5f, ref this.lastTimeExecuted, true))
             {
+                float nextBuffVars_MoveSpeedMod;
                 nextBuffVars_MoveSpeedMod = this.moveSpeedMod;
                 foreach(AttackableUnit unit in GetUnitsInArea(attacker, owner.Position, 275, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
                 {

@@ -12,11 +12,11 @@ namespace Buffs
         public override void OnPreDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
         {
             float curHealth;
-            TeamId teamID;
-            Particle arm8; // UNUSED
             curHealth = GetHealth(owner, PrimaryAbilityResourceType.MANA);
             if(curHealth <= damageAmount)
             {
+                TeamId teamID;
+                Particle arm8; // UNUSED
                 teamID = GetTeamID(owner);
                 SpellEffectCreate(out arm8, out _, "teleportarrive.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false);
                 if(teamID == TeamId.TEAM_BLUE)

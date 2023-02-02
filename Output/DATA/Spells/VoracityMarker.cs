@@ -27,12 +27,12 @@ namespace Buffs
         }
         public override void OnDeath()
         {
-            Particle placeholder; // UNUSED
-            float dLCooldown;
             foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 25000, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectHeroes))
             {
                 if(GetBuffCountFromCaster(unit, unit, nameof(Buffs.Voracity)) > 0)
                 {
+                    Particle placeholder; // UNUSED
+                    float dLCooldown;
                     SpellEffectCreate(out placeholder, out _, "katarina_spell_refresh_indicator.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, false);
                     IncGold(unit, 50);
                     SetSlotSpellCooldownTime((ObjAIBase)unit, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, 0);

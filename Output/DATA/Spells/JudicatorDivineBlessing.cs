@@ -5,32 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class JudicatorDivineBlessing : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateAttachBoneName = new[]{ null, "root", },
-            AutoBuffActivateEffect = new[]{ "InterventionHeal_buf.troy", "Interventionspeed_buf.troy", },
-            BuffName = "JudicatorDivineBlessing",
-            BuffTextureName = "Judicator_AngelicEmbrace.dds",
-        };
-        float moveSpeedMod;
-        public JudicatorDivineBlessing(float moveSpeedMod = default)
-        {
-            this.moveSpeedMod = moveSpeedMod;
-        }
-        public override void OnActivate()
-        {
-            //RequireVar(this.moveSpeedMod);
-        }
-        public override void OnUpdateStats()
-        {
-            IncPercentMovementSpeedMod(owner, this.moveSpeedMod);
-        }
-    }
-}
 namespace Spells
 {
     public class JudicatorDivineBlessing : BBSpellScript
@@ -58,6 +32,32 @@ namespace Spells
             IncHealth(target, healAmount, owner);
             ApplyAssistMarker(attacker, target, 10);
             AddBuff((ObjAIBase)owner, owner, new Buffs.KayleDivineBlessingAnim(), 1, 1, 1, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+        }
+    }
+}
+namespace Buffs
+{
+    public class JudicatorDivineBlessing : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateAttachBoneName = new[]{ null, "root", },
+            AutoBuffActivateEffect = new[]{ "InterventionHeal_buf.troy", "Interventionspeed_buf.troy", },
+            BuffName = "JudicatorDivineBlessing",
+            BuffTextureName = "Judicator_AngelicEmbrace.dds",
+        };
+        float moveSpeedMod;
+        public JudicatorDivineBlessing(float moveSpeedMod = default)
+        {
+            this.moveSpeedMod = moveSpeedMod;
+        }
+        public override void OnActivate()
+        {
+            //RequireVar(this.moveSpeedMod);
+        }
+        public override void OnUpdateStats()
+        {
+            IncPercentMovementSpeedMod(owner, this.moveSpeedMod);
         }
     }
 }

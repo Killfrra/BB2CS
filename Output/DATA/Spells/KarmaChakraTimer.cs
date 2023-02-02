@@ -17,9 +17,9 @@ namespace Buffs
         };
         public override void OnDeactivate(bool expired)
         {
-            int count;
             if(!owner.IsDead)
             {
+                int count;
                 AddBuff((ObjAIBase)owner, owner, new Buffs.KarmaChakraCharge(), 2, 1, 25000, BuffAddType.STACKS_AND_RENEWS, BuffType.AURA, 0, true, false, false);
                 if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.KarmaOneMantraParticle)) > 0)
                 {

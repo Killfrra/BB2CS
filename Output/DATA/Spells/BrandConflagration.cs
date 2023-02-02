@@ -5,26 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class BrandConflagration : BBBuffScript
-    {
-        public override void OnActivate()
-        {
-            Vector3 targetPos;
-            int level;
-            foreach(AttackableUnit unit in GetUnitsInArea(attacker, owner.Position, 375, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
-            {
-                if(unit != target)
-                {
-                    targetPos = GetUnitPosition(target);
-                    level = GetSlotSpellLevel(attacker, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
-                    SpellCast(attacker, unit, default, default, 2, SpellSlotType.ExtraSlots, level, true, true, false, true, false, true, targetPos);
-                }
-            }
-        }
-    }
-}
 namespace Spells
 {
     public class BrandConflagration : BBSpellScript
@@ -47,11 +27,11 @@ namespace Spells
             teamID = GetTeamID(attacker);
             if(brandSkinID == 3)
             {
-                SpellEffectCreate(out varA, out _, "BrandConflagration_buf_frost.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, false, false, false, false);
+                SpellEffectCreate(out varA, out _, "BrandConflagration_buf_frost.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, false, false, false, false);
             }
             else
             {
-                SpellEffectCreate(out varA, out _, "BrandConflagration_buf.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, false, false, false, false);
+                SpellEffectCreate(out varA, out _, "BrandConflagration_buf.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, false, false, false, false);
             }
             if(GetBuffCountFromCaster(target, owner, nameof(Buffs.BrandAblaze)) > 0)
             {
@@ -59,6 +39,26 @@ namespace Spells
             }
             ApplyDamage(attacker, target, this.effect0[level], DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELL, 1, 0.55f, 0, false, false, attacker);
             AddBuff(attacker, target, new Buffs.BrandAblaze(), 1, 1, 4, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_DEHANCER, 0, true, false, false);
+        }
+    }
+}
+namespace Buffs
+{
+    public class BrandConflagration : BBBuffScript
+    {
+        public override void OnActivate()
+        {
+            foreach(AttackableUnit unit in GetUnitsInArea(attacker, owner.Position, 375, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
+            {
+                if(unit != target)
+                {
+                    Vector3 targetPos;
+                    int level;
+                    targetPos = GetUnitPosition(target);
+                    level = GetSlotSpellLevel(attacker, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
+                    SpellCast(attacker, unit, default, default, 2, SpellSlotType.ExtraSlots, level, true, true, false, true, false, true, targetPos);
+                }
+            }
         }
     }
 }

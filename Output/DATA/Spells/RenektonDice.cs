@@ -5,6 +5,76 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class RenektonDice : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            CastingBreaksStealth = true,
+            DoesntBreakShields = false,
+            TriggersSpellCasts = true,
+            IsDamagingSpell = true,
+            NotSingleTargetSpell = true,
+        };
+        int[] effect0 = {20, 18, 16, 14, 12};
+        int[] effect1 = {30, 60, 90, 120, 150};
+        float[] effect2 = {-0.15f, -0.175f, -0.2f, -0.225f, -0.25f};
+        public override void SelfExecute()
+        {
+            Vector3 targetPos;
+            Vector3 ownerPos;
+            float moveSpeed;
+            float dashSpeed;
+            float distance;
+            bool nextBuffVars_DiceVersion;
+            float nextBuffVars_DashSpeed;
+            int nextBuffVars_BonusDamage;
+            float nextBuffVars_ArmorShred;
+            float nextBuffVars_Distance;
+            Vector3 nextBuffVars_TargetPos;
+            foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 1250, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, nameof(Buffs.RenektonTargetSliced), true))
+            {
+                SpellBuffClear(unit, nameof(Buffs.RenektonTargetSliced));
+            }
+            targetPos = GetCastSpellTargetPos();
+            ownerPos = GetUnitPosition(owner);
+            moveSpeed = GetMovementSpeed(owner);
+            dashSpeed = moveSpeed + 750;
+            distance = DistanceBetweenPoints(ownerPos, targetPos);
+            if(distance >= 0)
+            {
+                FaceDirection(owner, targetPos);
+                distance = 450;
+                targetPos = GetPointByUnitFacingOffset(owner, 450, 0);
+            }
+            if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.RenektonSliceAndDiceDelay)) == 0)
+            {
+                float cooldownMod;
+                float multiplier;
+                float cooldownTime;
+                float debuffTime;
+                cooldownMod = GetPercentCooldownMod(owner);
+                multiplier = 1 + cooldownMod;
+                cooldownTime = this.effect0[level];
+                debuffTime = multiplier * cooldownTime;
+                AddBuff((ObjAIBase)owner, owner, new Buffs.RenektonSliceAndDiceTimer(), 1, 1, debuffTime, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+                nextBuffVars_DiceVersion = false;
+            }
+            else
+            {
+                nextBuffVars_DiceVersion = true;
+                SpellBuffClear(owner, nameof(Buffs.RenektonSliceAndDiceDelay));
+            }
+            nextBuffVars_DashSpeed = dashSpeed;
+            nextBuffVars_BonusDamage = this.effect1[level];
+            nextBuffVars_ArmorShred = this.effect2[level];
+            nextBuffVars_Distance = distance;
+            nextBuffVars_TargetPos = targetPos;
+            AddBuff(attacker, owner, new Buffs.RenektonSliceAndDice(nextBuffVars_DiceVersion, nextBuffVars_DashSpeed, nextBuffVars_BonusDamage, nextBuffVars_ArmorShred, nextBuffVars_Distance, nextBuffVars_TargetPos), 1, 1, 2, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0.1f, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class RenektonDice : BBBuffScript
@@ -38,18 +108,16 @@ namespace Buffs
         }
         public override void OnCollision()
         {
-            bool shouldHit;
-            bool visible;
-            float baseAttack;
-            float hitDamage;
-            float nextBuffVars_ArmorShred;
-            TeamId ownerVar; // UNUSED
             if(owner.Team != target.Team)
             {
                 if(target is ObjAIBase)
                 {
                     foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 175, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, nameof(Buffs.RenektonTargetSliced), false))
                     {
+                        bool shouldHit;
+                        bool visible;
+                        float baseAttack;
+                        float hitDamage;
                         shouldHit = true;
                         visible = CanSeeTarget(owner, unit);
                         if(!visible)
@@ -80,11 +148,13 @@ namespace Buffs
                         }
                         if(shouldHit)
                         {
+                            TeamId ownerVar; // UNUSED
                             ownerVar = GetTeamID(owner);
                             BreakSpellShields(unit);
                             AddBuff((ObjAIBase)owner, unit, new Buffs.RenektonBloodSplatterTarget(), 1, 1, 0.25f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
                             if(this.rageBonus)
                             {
+                                float nextBuffVars_ArmorShred;
                                 nextBuffVars_ArmorShred = this.armorShred;
                                 AddBuff((ObjAIBase)owner, unit, new Buffs.RenektonSliceAndDiceDebuff(nextBuffVars_ArmorShred), 1, 1, 4, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_DEHANCER, 0, true, false, false);
                                 ApplyDamage((ObjAIBase)owner, unit, hitDamage, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1.5f, 0, 0.9f, false, false, (ObjAIBase)owner);
@@ -103,12 +173,6 @@ namespace Buffs
             TeamId teamID; // UNUSED
             Vector3 targetPos;
             float rageAmount;
-            bool shouldHit;
-            bool visible;
-            float baseAttack;
-            float hitDamage;
-            float nextBuffVars_ArmorShred;
-            TeamId ownerVar; // UNUSED
             teamID = GetTeamID(owner);
             PlayAnimation("Spell3", 0, owner, true, false, true);
             StartTrackingCollisions(owner, true);
@@ -147,6 +211,10 @@ namespace Buffs
             SealSpellSlot(0, SpellSlotType.SpellSlots, (ObjAIBase)owner, true, SpellbookType.SPELLBOOK_CHAMPION);
             foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 175, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, nameof(Buffs.RenektonTargetSliced), false))
             {
+                bool shouldHit;
+                bool visible;
+                float baseAttack;
+                float hitDamage;
                 shouldHit = true;
                 visible = CanSeeTarget(owner, unit);
                 if(!visible)
@@ -177,11 +245,13 @@ namespace Buffs
                 }
                 if(shouldHit)
                 {
+                    TeamId ownerVar; // UNUSED
                     ownerVar = GetTeamID(owner);
                     BreakSpellShields(unit);
                     AddBuff((ObjAIBase)owner, unit, new Buffs.RenektonBloodSplatterTarget(), 1, 1, 0.25f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
                     if(this.rageBonus)
                     {
+                        float nextBuffVars_ArmorShred;
                         nextBuffVars_ArmorShred = this.armorShred;
                         AddBuff((ObjAIBase)owner, unit, new Buffs.RenektonSliceAndDiceDebuff(nextBuffVars_ArmorShred), 1, 1, 4, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_DEHANCER, 0, true, false, false);
                         ApplyDamage((ObjAIBase)owner, unit, hitDamage, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1.5f, 0, 0.9f, false, false, (ObjAIBase)owner);
@@ -196,12 +266,6 @@ namespace Buffs
         public override void OnDeactivate(bool expired)
         {
             float ragePercent; // UNUSED
-            bool shouldHit;
-            bool visible;
-            float baseAttack;
-            float hitDamage;
-            float nextBuffVars_ArmorShred;
-            TeamId ownerVar; // UNUSED
             UnlockAnimation(owner, true);
             StartTrackingCollisions(owner, false);
             SealSpellSlot(0, SpellSlotType.SpellSlots, (ObjAIBase)owner, false, SpellbookType.SPELLBOOK_CHAMPION);
@@ -211,6 +275,10 @@ namespace Buffs
             ragePercent = GetPARPercent(owner, PrimaryAbilityResourceType.Shield);
             foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 175, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, nameof(Buffs.RenektonTargetSliced), false))
             {
+                bool shouldHit;
+                bool visible;
+                float baseAttack;
+                float hitDamage;
                 shouldHit = true;
                 visible = CanSeeTarget(owner, unit);
                 if(!visible)
@@ -241,11 +309,13 @@ namespace Buffs
                 }
                 if(shouldHit)
                 {
+                    TeamId ownerVar; // UNUSED
                     ownerVar = GetTeamID(owner);
                     BreakSpellShields(unit);
                     AddBuff((ObjAIBase)owner, unit, new Buffs.RenektonBloodSplatterTarget(), 1, 1, 0.25f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
                     if(this.rageBonus)
                     {
+                        float nextBuffVars_ArmorShred;
                         nextBuffVars_ArmorShred = this.armorShred;
                         AddBuff((ObjAIBase)owner, unit, new Buffs.RenektonSliceAndDiceDebuff(nextBuffVars_ArmorShred), 1, 1, 4, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_DEHANCER, 0, true, false, false);
                         ApplyDamage((ObjAIBase)owner, unit, hitDamage, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1.5f, 0, 0.9f, false, false, (ObjAIBase)owner);
@@ -271,16 +341,14 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            bool shouldHit;
-            bool visible;
-            float baseAttack;
-            float hitDamage;
-            float nextBuffVars_ArmorShred;
-            TeamId ownerVar; // UNUSED
             SealSpellSlot(0, SpellSlotType.SpellSlots, (ObjAIBase)owner, true, SpellbookType.SPELLBOOK_CHAMPION);
             SetCanAttack(owner, false);
             foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 175, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, nameof(Buffs.RenektonTargetSliced), false))
             {
+                bool shouldHit;
+                bool visible;
+                float baseAttack;
+                float hitDamage;
                 shouldHit = true;
                 visible = CanSeeTarget(owner, unit);
                 if(!visible)
@@ -311,11 +379,13 @@ namespace Buffs
                 }
                 if(shouldHit)
                 {
+                    TeamId ownerVar; // UNUSED
                     ownerVar = GetTeamID(owner);
                     BreakSpellShields(unit);
                     AddBuff((ObjAIBase)owner, unit, new Buffs.RenektonBloodSplatterTarget(), 1, 1, 0.25f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
                     if(this.rageBonus)
                     {
+                        float nextBuffVars_ArmorShred;
                         nextBuffVars_ArmorShred = this.armorShred;
                         AddBuff((ObjAIBase)owner, unit, new Buffs.RenektonSliceAndDiceDebuff(nextBuffVars_ArmorShred), 1, 1, 4, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_DEHANCER, 0, true, false, false);
                         ApplyDamage((ObjAIBase)owner, unit, hitDamage, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1.5f, 0, 0.9f, false, false, (ObjAIBase)owner);
@@ -335,76 +405,6 @@ namespace Buffs
             SetCanAttack(owner, false);
             AddBuff((ObjAIBase)owner, owner, new Buffs.RenektonUnlockAnimationAttack(), 1, 1, 0.01f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
             SpellBuffRemove(owner, nameof(Buffs.RenektonSliceAndDice), (ObjAIBase)owner, 0);
-        }
-    }
-}
-namespace Spells
-{
-    public class RenektonDice : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            CastingBreaksStealth = true,
-            DoesntBreakShields = false,
-            TriggersSpellCasts = true,
-            IsDamagingSpell = true,
-            NotSingleTargetSpell = true,
-        };
-        int[] effect0 = {20, 18, 16, 14, 12};
-        int[] effect1 = {30, 60, 90, 120, 150};
-        float[] effect2 = {-0.15f, -0.175f, -0.2f, -0.225f, -0.25f};
-        public override void SelfExecute()
-        {
-            Vector3 targetPos;
-            Vector3 ownerPos;
-            float moveSpeed;
-            float dashSpeed;
-            float distance;
-            float cooldownMod;
-            float multiplier;
-            float cooldownTime;
-            float debuffTime;
-            bool nextBuffVars_DiceVersion;
-            float nextBuffVars_DashSpeed;
-            int nextBuffVars_BonusDamage;
-            float nextBuffVars_ArmorShred;
-            float nextBuffVars_Distance;
-            Vector3 nextBuffVars_TargetPos;
-            foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 1250, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, nameof(Buffs.RenektonTargetSliced), true))
-            {
-                SpellBuffClear(unit, nameof(Buffs.RenektonTargetSliced));
-            }
-            targetPos = GetCastSpellTargetPos();
-            ownerPos = GetUnitPosition(owner);
-            moveSpeed = GetMovementSpeed(owner);
-            dashSpeed = moveSpeed + 750;
-            distance = DistanceBetweenPoints(ownerPos, targetPos);
-            if(distance >= 0)
-            {
-                FaceDirection(owner, targetPos);
-                distance = 450;
-                targetPos = GetPointByUnitFacingOffset(owner, 450, 0);
-            }
-            if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.RenektonSliceAndDiceDelay)) == 0)
-            {
-                cooldownMod = GetPercentCooldownMod(owner);
-                multiplier = 1 + cooldownMod;
-                cooldownTime = this.effect0[level];
-                debuffTime = multiplier * cooldownTime;
-                AddBuff((ObjAIBase)owner, owner, new Buffs.RenektonSliceAndDiceTimer(), 1, 1, debuffTime, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
-                nextBuffVars_DiceVersion = false;
-            }
-            else
-            {
-                nextBuffVars_DiceVersion = true;
-                SpellBuffClear(owner, nameof(Buffs.RenektonSliceAndDiceDelay));
-            }
-            nextBuffVars_DashSpeed = dashSpeed;
-            nextBuffVars_BonusDamage = this.effect1[level];
-            nextBuffVars_ArmorShred = this.effect2[level];
-            nextBuffVars_Distance = distance;
-            nextBuffVars_TargetPos = targetPos;
-            AddBuff(attacker, owner, new Buffs.RenektonSliceAndDice(nextBuffVars_DiceVersion, nextBuffVars_DashSpeed, nextBuffVars_BonusDamage, nextBuffVars_ArmorShred, nextBuffVars_Distance, nextBuffVars_TargetPos), 1, 1, 2, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0.1f, true, false, false);
         }
     }
 }

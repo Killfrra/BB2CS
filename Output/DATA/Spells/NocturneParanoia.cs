@@ -5,74 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class NocturneParanoia : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateEffect = new[]{ "", },
-            BuffName = "NocturneParanoia",
-            BuffTextureName = "Nocturne_Paranoia.dds",
-            SpellToggleSlot = 4,
-        };
-        float newCd;
-        bool vOSoundCreated;
-        float lastTimeExecuted;
-        public NocturneParanoia(float newCd = default)
-        {
-            this.newCd = newCd;
-        }
-        public override void OnActivate()
-        {
-            //RequireVar(this.newCd);
-            SetTargetingType(3, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, TargetingType.Target, owner);
-            SetPARCostInc((ObjAIBase)owner, 3, SpellSlotType.SpellSlots, -100, PrimaryAbilityResourceType.MANA);
-            this.vOSoundCreated = false;
-        }
-        public override void OnDeactivate(bool expired)
-        {
-            float cooldownStat;
-            float multiplier;
-            float newCooldown;
-            SetTargetingType(3, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, TargetingType.SelfAOE, owner);
-            SetPARCostInc((ObjAIBase)owner, 3, SpellSlotType.SpellSlots, 0, PrimaryAbilityResourceType.MANA);
-            cooldownStat = GetPercentCooldownMod(owner);
-            multiplier = 1 + cooldownStat;
-            newCooldown = multiplier * this.newCd;
-            SetSpell((ObjAIBase)owner, 3, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, nameof(Spells.NocturneParanoia));
-            SealSpellSlot(3, SpellSlotType.SpellSlots, (ObjAIBase)owner, false, SpellbookType.SPELLBOOK_CHAMPION);
-            SetSlotSpellCooldownTimeVer2(newCooldown, 3, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner, true);
-        }
-        public override void OnUpdateActions()
-        {
-            TeamId teamOfOwner;
-            if(ExecutePeriodically(0.1f, ref this.lastTimeExecuted, false))
-            {
-                if(!this.vOSoundCreated)
-                {
-                    this.vOSoundCreated = true;
-                    AddBuff(attacker, attacker, new Buffs.NocturneParanoiaVO(), 1, 1, 4, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_DEHANCER, 0, true, false, true);
-                    teamOfOwner = GetTeamID(owner);
-                    if(teamOfOwner == TeamId.TEAM_BLUE)
-                    {
-                        foreach(Champion unit in GetChampions(TeamId.TEAM_UNKNOWN, default, true))
-                        {
-                            AddBuff(attacker, unit, new Buffs.NocturneParanoiaTargetOrderVO(), 1, 1, 4, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_DEHANCER, 0, true, false, true);
-                        }
-                    }
-                    else
-                    {
-                        foreach(Champion unit in GetChampions(TeamId.TEAM_UNKNOWN, default, true))
-                        {
-                            AddBuff(attacker, unit, new Buffs.NocturneParanoiaTargetChaosVO(), 1, 1, 4, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_DEHANCER, 0, true, false, true);
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
 namespace Spells
 {
     public class NocturneParanoia : BBSpellScript
@@ -91,10 +23,6 @@ namespace Spells
         public override void SelfExecute()
         {
             TeamId teamOfOwner;
-            float nextBuffVars_NewCd;
-            int nextBuffVars_SightReduction;
-            int nextBuffVars_SpellLevel;
-            Particle asdf; // UNUSED
             teamOfOwner = GetTeamID(owner);
             if(teamOfOwner == TeamId.TEAM_BLUE)
             {
@@ -113,6 +41,10 @@ namespace Spells
             }
             else
             {
+                float nextBuffVars_NewCd;
+                Particle asdf; // UNUSED
+                int nextBuffVars_SightReduction;
+                int nextBuffVars_SpellLevel; // UNUSED
                 AddBuff((ObjAIBase)owner, owner, new Buffs.UnlockAnimation(), 1, 1, 0.25f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
                 PlayAnimation("Spell4b", 1, owner, false, false, true);
                 nextBuffVars_NewCd = this.effect0[level];
@@ -157,6 +89,74 @@ namespace Spells
                     foreach(Champion unit in GetChampions(TeamId.TEAM_UNKNOWN, default, true))
                     {
                         AddBuff(attacker, unit, new Buffs.NocturneParanoiaTargetChaos(), 1, 1, 4, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_DEHANCER, 0, true, false, true);
+                    }
+                }
+            }
+        }
+    }
+}
+namespace Buffs
+{
+    public class NocturneParanoia : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateEffect = new[]{ "", },
+            BuffName = "NocturneParanoia",
+            BuffTextureName = "Nocturne_Paranoia.dds",
+            SpellToggleSlot = 4,
+        };
+        float newCd;
+        bool vOSoundCreated;
+        float lastTimeExecuted;
+        public NocturneParanoia(float newCd = default)
+        {
+            this.newCd = newCd;
+        }
+        public override void OnActivate()
+        {
+            //RequireVar(this.newCd);
+            SetTargetingType(3, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, TargetingType.Target, owner);
+            SetPARCostInc((ObjAIBase)owner, 3, SpellSlotType.SpellSlots, -100, PrimaryAbilityResourceType.MANA);
+            this.vOSoundCreated = false;
+        }
+        public override void OnDeactivate(bool expired)
+        {
+            float cooldownStat;
+            float multiplier;
+            float newCooldown;
+            SetTargetingType(3, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, TargetingType.SelfAOE, owner);
+            SetPARCostInc((ObjAIBase)owner, 3, SpellSlotType.SpellSlots, 0, PrimaryAbilityResourceType.MANA);
+            cooldownStat = GetPercentCooldownMod(owner);
+            multiplier = 1 + cooldownStat;
+            newCooldown = multiplier * this.newCd;
+            SetSpell((ObjAIBase)owner, 3, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, nameof(Spells.NocturneParanoia));
+            SealSpellSlot(3, SpellSlotType.SpellSlots, (ObjAIBase)owner, false, SpellbookType.SPELLBOOK_CHAMPION);
+            SetSlotSpellCooldownTimeVer2(newCooldown, 3, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner, true);
+        }
+        public override void OnUpdateActions()
+        {
+            if(ExecutePeriodically(0.1f, ref this.lastTimeExecuted, false))
+            {
+                if(!this.vOSoundCreated)
+                {
+                    TeamId teamOfOwner;
+                    this.vOSoundCreated = true;
+                    AddBuff(attacker, attacker, new Buffs.NocturneParanoiaVO(), 1, 1, 4, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_DEHANCER, 0, true, false, true);
+                    teamOfOwner = GetTeamID(owner);
+                    if(teamOfOwner == TeamId.TEAM_BLUE)
+                    {
+                        foreach(Champion unit in GetChampions(TeamId.TEAM_UNKNOWN, default, true))
+                        {
+                            AddBuff(attacker, unit, new Buffs.NocturneParanoiaTargetOrderVO(), 1, 1, 4, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_DEHANCER, 0, true, false, true);
+                        }
+                    }
+                    else
+                    {
+                        foreach(Champion unit in GetChampions(TeamId.TEAM_UNKNOWN, default, true))
+                        {
+                            AddBuff(attacker, unit, new Buffs.NocturneParanoiaTargetChaosVO(), 1, 1, 4, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_DEHANCER, 0, true, false, true);
+                        }
                     }
                 }
             }

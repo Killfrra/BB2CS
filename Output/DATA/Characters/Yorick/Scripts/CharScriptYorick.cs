@@ -12,10 +12,10 @@ namespace Chars
         float lastTimeExecuted;
         public override void OnUpdateActions()
         {
-            float bonusAD;
-            float bonusAD80;
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, true))
             {
+                float bonusAD;
+                float bonusAD80;
                 bonusAD = GetFlatPhysicalDamageMod(owner);
                 bonusAD80 = bonusAD * 0.8f;
                 SetSpellToolTipVar(bonusAD, 1, 0, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (Champion)attacker);

@@ -5,6 +5,27 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class KogMawBioArcaneBarrage : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            CastingBreaksStealth = true,
+            DoesntBreakShields = true,
+            TriggersSpellCasts = true,
+            IsDamagingSpell = true,
+            NotSingleTargetSpell = true,
+        };
+        int[] effect0 = {130, 150, 170, 190, 210};
+        public override void SelfExecute()
+        {
+            float nextBuffVars_AttackRangeIncrease;
+            nextBuffVars_AttackRangeIncrease = this.effect0[level];
+            AddBuff(attacker, target, new Buffs.KogMawBioArcaneBarrage(nextBuffVars_AttackRangeIncrease), 1, 1, 8, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class KogMawBioArcaneBarrage : BBBuffScript
@@ -38,27 +59,6 @@ namespace Buffs
         public override void OnUpdateStats()
         {
             IncFlatAttackRangeMod(owner, this.attackRangeIncrease);
-        }
-    }
-}
-namespace Spells
-{
-    public class KogMawBioArcaneBarrage : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            CastingBreaksStealth = true,
-            DoesntBreakShields = true,
-            TriggersSpellCasts = true,
-            IsDamagingSpell = true,
-            NotSingleTargetSpell = true,
-        };
-        int[] effect0 = {130, 150, 170, 190, 210};
-        public override void SelfExecute()
-        {
-            float nextBuffVars_AttackRangeIncrease;
-            nextBuffVars_AttackRangeIncrease = this.effect0[level];
-            AddBuff(attacker, target, new Buffs.KogMawBioArcaneBarrage(nextBuffVars_AttackRangeIncrease), 1, 1, 8, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
         }
     }
 }

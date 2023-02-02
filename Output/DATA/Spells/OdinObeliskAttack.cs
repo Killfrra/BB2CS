@@ -24,7 +24,6 @@ namespace Spells
             float health;
             float damageAmount;
             TeamId myTeam;
-            float currentHealthPercent;
             AddBuff(attacker, target, new Buffs.OdinGrdObeliskSuppression(), 1, 1, 1.25f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
             damagePercent = 0.15f;
             targetTeam = GetTeamID(target);
@@ -39,6 +38,7 @@ namespace Spells
             {
                 if(myTeam == TeamId.TEAM_BLUE)
                 {
+                    float currentHealthPercent;
                     currentHealthPercent = GetHealthPercent(target, PrimaryAbilityResourceType.MANA);
                     if(currentHealthPercent >= 0.96f)
                     {

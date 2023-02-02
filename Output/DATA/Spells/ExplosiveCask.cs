@@ -5,12 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class ExplosiveCask : BBBuffScript
-    {
-    }
-}
 namespace Spells
 {
     public class ExplosiveCask : BBSpellScript
@@ -27,5 +21,11 @@ namespace Spells
             }
             ApplyDamage(attacker, unit, this.effect0[level], DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELL, 1, 1, default, false, false);
         }
+    }
+}
+namespace Buffs
+{
+    public class ExplosiveCask : BBBuffScript
+    {
     }
 }

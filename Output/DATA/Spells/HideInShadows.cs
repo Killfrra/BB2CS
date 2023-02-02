@@ -5,6 +5,46 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class HideInShadows : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            CastingBreaksStealth = true,
+            TriggersSpellCasts = true,
+            IsDamagingSpell = false,
+            NotSingleTargetSpell = true,
+        };
+        float[] effect0 = {0.3f, 0.4f, 0.5f, 0.6f, 0.7f};
+        int[] effect1 = {10, 20, 30, 40, 50};
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            TeamId teamID;
+            teamID = GetTeamID(owner);
+            if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.HideInShadows)) > 0)
+            {
+                SpellBuffRemove(owner, nameof(Buffs.HideInShadows), (ObjAIBase)owner);
+                SpellBuffRemove(owner, nameof(Buffs.HideInShadows_internal), (ObjAIBase)owner);
+            }
+            else
+            {
+                Particle nextBuffVars_a; // UNUSED
+                float nextBuffVars_InitialTime; // UNUSED
+                float nextBuffVars_TimeLastHit;
+                float nextBuffVars_AttackSpeedMod;
+                int nextBuffVars_StealthDuration;
+                SpellEffectCreate(out nextBuffVars_a, out _, "twitch_invis_cas.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, true);
+                SetSlotSpellCooldownTime((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, 0);
+                nextBuffVars_InitialTime = GetTime();
+                nextBuffVars_TimeLastHit = GetTime();
+                nextBuffVars_AttackSpeedMod = this.effect0[level];
+                nextBuffVars_StealthDuration = this.effect1[level];
+                AddBuff((ObjAIBase)owner, owner, new Buffs.HideInShadows_internal(nextBuffVars_TimeLastHit, nextBuffVars_AttackSpeedMod, nextBuffVars_StealthDuration), 1, 1, 5, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+            }
+        }
+    }
+}
 namespace Buffs
 {
     public class HideInShadows : BBBuffScript
@@ -102,46 +142,6 @@ namespace Buffs
         public override void OnLaunchAttack()
         {
             SpellBuffRemoveCurrent(owner);
-        }
-    }
-}
-namespace Spells
-{
-    public class HideInShadows : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            CastingBreaksStealth = true,
-            TriggersSpellCasts = true,
-            IsDamagingSpell = false,
-            NotSingleTargetSpell = true,
-        };
-        float[] effect0 = {0.3f, 0.4f, 0.5f, 0.6f, 0.7f};
-        int[] effect1 = {10, 20, 30, 40, 50};
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            TeamId teamID;
-            Particle nextBuffVars_a;
-            float nextBuffVars_InitialTime;
-            float nextBuffVars_TimeLastHit;
-            float nextBuffVars_AttackSpeedMod;
-            int nextBuffVars_StealthDuration;
-            teamID = GetTeamID(owner);
-            if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.HideInShadows)) > 0)
-            {
-                SpellBuffRemove(owner, nameof(Buffs.HideInShadows), (ObjAIBase)owner);
-                SpellBuffRemove(owner, nameof(Buffs.HideInShadows_internal), (ObjAIBase)owner);
-            }
-            else
-            {
-                SpellEffectCreate(out nextBuffVars_a, out _, "twitch_invis_cas.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, true);
-                SetSlotSpellCooldownTime((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, 0);
-                nextBuffVars_InitialTime = GetTime();
-                nextBuffVars_TimeLastHit = GetTime();
-                nextBuffVars_AttackSpeedMod = this.effect0[level];
-                nextBuffVars_StealthDuration = this.effect1[level];
-                AddBuff((ObjAIBase)owner, owner, new Buffs.HideInShadows_internal(nextBuffVars_TimeLastHit, nextBuffVars_AttackSpeedMod, nextBuffVars_StealthDuration), 1, 1, 5, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
-            }
         }
     }
 }

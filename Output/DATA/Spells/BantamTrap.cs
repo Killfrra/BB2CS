@@ -5,6 +5,58 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class BantamTrap : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = true,
+            IsDamagingSpell = false,
+            NotSingleTargetSpell = true,
+        };
+        public override bool CanCast()
+        {
+            bool returnValue = true;
+            bool canMove; // UNUSED
+            bool canCast; // UNUSED
+            int count;
+            canMove = GetCanMove(owner);
+            canCast = GetCanCast(owner);
+            count = GetBuffCountFromAll(owner, nameof(Buffs.TeemoMushrooms));
+            if(count <= 1)
+            {
+                returnValue = false;
+            }
+            else
+            {
+                returnValue = true;
+            }
+            return returnValue;
+        }
+        public override void SelfExecute()
+        {
+            float duration;
+            TeamId teamID;
+            Vector3 targetPos;
+            Minion other3;
+            duration = GetBuffRemainingDuration(owner, nameof(Buffs.TeemoMushrooms));
+            if(duration > 40)
+            {
+                SpellBuffRemove(owner, nameof(Buffs.TeemoMushrooms), (ObjAIBase)owner, charVars.MushroomCooldown);
+            }
+            else
+            {
+                SpellBuffRemove(owner, nameof(Buffs.TeemoMushrooms), (ObjAIBase)owner, 0);
+            }
+            teamID = GetTeamID(owner);
+            targetPos = GetCastSpellTargetPos();
+            other3 = SpawnMinion("Noxious Trap", "TeemoMushroom", "idle.lua", targetPos, teamID ?? TeamId.TEAM_UNKNOWN, true, true, false, false, true, false, 0, true, false, (Champion)owner);
+            AddBuff(attacker, other3, new Buffs.BantamTrap(), 1, 1, 600, BuffAddType.REPLACE_EXISTING, BuffType.INVISIBILITY, 0, true, false, false);
+            AddBuff(attacker, other3, new Buffs.SharedWardBuff(), 1, 1, 600, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class BantamTrap : BBBuffScript
@@ -140,14 +192,6 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            int nextBuffVars_DamagePerTick;
-            float nextBuffVars_MoveSpeedMod;
-            int nextBuffVars_AttackSpeedMod;
-            TeamId teamID;
-            TeamId mushroomTeamID;
-            Vector3 ownerPos;
-            Particle particle; // UNUSED
-            int level;
             if(lifeTime >= 2)
             {
                 AddBuff((ObjAIBase)owner, owner, new Buffs.Stealth(), 1, 1, 600, BuffAddType.RENEW_EXISTING, BuffType.INVISIBILITY, 0, true, false, true);
@@ -158,13 +202,21 @@ namespace Buffs
             {
                 foreach(AttackableUnit unit in GetClosestUnitsInArea(attacker, owner.Position, 160, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, 1, default, true))
                 {
+                    int nextBuffVars_DamagePerTick;
+                    TeamId teamID;
+                    TeamId mushroomTeamID;
+                    Vector3 ownerPos;
+                    Particle particle; // UNUSED
+                    int level;
+                    float nextBuffVars_MoveSpeedMod;
+                    int nextBuffVars_AttackSpeedMod;
                     this.activated = false;
                     teamID = GetTeamID(attacker);
                     mushroomTeamID = GetTeamID(owner);
                     SpellBuffRemove(owner, nameof(Buffs.Stealth), (ObjAIBase)owner, 0);
                     ownerPos = GetUnitPosition(owner);
                     AddPosPerceptionBubble(mushroomTeamID, 700, ownerPos, 4, default, false);
-                    SpellEffectCreate(out particle, out _, "ShroomMine.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, owner.Position, owner, default, default, true, false, false, false, false);
+                    SpellEffectCreate(out particle, out _, "ShroomMine.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, owner.Position, owner, default, default, true, false, false, false, false);
                     level = GetSlotSpellLevel(attacker, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                     nextBuffVars_DamagePerTick = this.effect0[level];
                     nextBuffVars_MoveSpeedMod = this.effect1[level];
@@ -179,58 +231,6 @@ namespace Buffs
                     ApplyDamage((ObjAIBase)owner, owner, 500, DamageType.DAMAGE_TYPE_TRUE, DamageSource.DAMAGE_SOURCE_INTERNALRAW, 1, 1, 1, false, false, attacker);
                 }
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class BantamTrap : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = true,
-            IsDamagingSpell = false,
-            NotSingleTargetSpell = true,
-        };
-        public override bool CanCast()
-        {
-            bool returnValue = true;
-            bool canMove; // UNUSED
-            bool canCast; // UNUSED
-            int count;
-            canMove = GetCanMove(owner);
-            canCast = GetCanCast(owner);
-            count = GetBuffCountFromAll(owner, nameof(Buffs.TeemoMushrooms));
-            if(count <= 1)
-            {
-                returnValue = false;
-            }
-            else
-            {
-                returnValue = true;
-            }
-            return returnValue;
-        }
-        public override void SelfExecute()
-        {
-            float duration;
-            TeamId teamID;
-            Vector3 targetPos;
-            Minion other3;
-            duration = GetBuffRemainingDuration(owner, nameof(Buffs.TeemoMushrooms));
-            if(duration > 40)
-            {
-                SpellBuffRemove(owner, nameof(Buffs.TeemoMushrooms), (ObjAIBase)owner, charVars.MushroomCooldown);
-            }
-            else
-            {
-                SpellBuffRemove(owner, nameof(Buffs.TeemoMushrooms), (ObjAIBase)owner, 0);
-            }
-            teamID = GetTeamID(owner);
-            targetPos = GetCastSpellTargetPos();
-            other3 = SpawnMinion("Noxious Trap", "TeemoMushroom", "idle.lua", targetPos, teamID, true, true, false, false, true, false, 0, true, false, (Champion)owner);
-            AddBuff(attacker, other3, new Buffs.BantamTrap(), 1, 1, 600, BuffAddType.REPLACE_EXISTING, BuffType.INVISIBILITY, 0, true, false, false);
-            AddBuff(attacker, other3, new Buffs.SharedWardBuff(), 1, 1, 600, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
         }
     }
 }

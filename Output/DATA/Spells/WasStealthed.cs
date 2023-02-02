@@ -36,13 +36,13 @@ namespace Buffs
         }
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            float nextBuffVars_MoveSpeedMod;
             this.willRemove = true;
             if(target is ObjAIBase)
             {
                 BreakSpellShields(target);
                 if(target is not BaseTurret)
                 {
+                    float nextBuffVars_MoveSpeedMod;
                     nextBuffVars_MoveSpeedMod = this.moveSpeedMod;
                     AddBuff(attacker, target, new Buffs.Slow(nextBuffVars_MoveSpeedMod), 100, 1, 3, BuffAddType.STACKS_AND_OVERLAPS, BuffType.SLOW, 0, true, false, false);
                 }

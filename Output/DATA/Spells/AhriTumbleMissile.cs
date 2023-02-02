@@ -21,15 +21,15 @@ namespace Spells
         int[] effect1 = {100, 140, 180, 0, 0};
         public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
         {
-            Particle ar; // UNUSED
-            Particle asdf; // UNUSED
-            TeamId teamID; // UNITIALIZED
             float nextBuffVars_DrainPercent;
             bool nextBuffVars_DrainedBool;
             if(charVars.TumbleIsActive == 1)
             {
+                Particle ar; // UNUSED
+                Particle asdf; // UNUSED
+                TeamId teamID; // UNITIALIZED
                 SpellEffectCreate(out ar, out _, "Ahri_PassiveHeal.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, attacker, default, default, attacker, default, default, false, false, false, false, false);
-                SpellEffectCreate(out asdf, out _, "Ahri_passive_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, "spine", default, target, default, default, true, false, false, false, false);
+                SpellEffectCreate(out asdf, out _, "Ahri_passive_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, "spine", default, target, default, default, true, false, false, false, false);
                 AddBuff(attacker, attacker, new Buffs.AhriSoulCrusher2(), 1, 1, 0.5f, BuffAddType.STACKS_AND_CONTINUE, BuffType.INTERNAL, 0, true, false, false);
                 nextBuffVars_DrainPercent = 0.35f;
                 nextBuffVars_DrainedBool = false;

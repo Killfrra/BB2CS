@@ -13,17 +13,17 @@ namespace Chars
         float[] effect1 = {0.1f, 0.15f, 0.2f, 0.25f, 0.3f};
         public override void OnSpellCast(string spellName, SpellScriptMetaData spellVars)
         {
-            int slot;
-            float buffDuration;
-            float nextBuffVars_MagicPen;
             if(spellVars.DoesntTriggerSpellCasts)
             {
             }
             else
             {
+                int slot;
                 slot = GetSpellSlot();
                 if(slot == 1)
                 {
+                    float buffDuration;
+                    float nextBuffVars_MagicPen;
                     level = GetSlotSpellLevel((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                     buffDuration = this.effect0[level];
                     nextBuffVars_MagicPen = this.effect1[level];

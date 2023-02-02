@@ -5,6 +5,48 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class JarvanIVDemacianStandard : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            CastTime = 0.115f,
+            DoesntBreakShields = true,
+            TriggersSpellCasts = true,
+            IsDamagingSpell = false,
+            NotSingleTargetSpell = true,
+        };
+        int[] effect0 = {60, 105, 150, 195, 240};
+        public override void SelfExecute()
+        {
+            TeamId teamOfOwner;
+            Vector3 targetPos;
+            Particle a; // UNUSED
+            Minion other3;
+            int nextBuffVars_Level;
+            float baseDamage;
+            float abilityPower;
+            float abilityPowerPostMod;
+            float damageToDeal;
+            float nextBuffVars_DamageToDeal;
+            teamOfOwner = GetTeamID(owner);
+            targetPos = GetCastSpellTargetPos();
+            SpellEffectCreate(out a, out _, "JarvanDemacianStandard_mis.troy", default, TeamId.TEAM_BLUE, 100, 0, TeamId.TEAM_UNKNOWN, default, attacker, false, attacker, "R_Hand", default, attacker, default, default, true, default, default, false, false);
+            other3 = SpawnMinion("HiddenMinion", "TestCube", "idle.lua", targetPos, teamOfOwner ?? TeamId.TEAM_CASTER, false, true, false, true, true, false, 0, false, false, (Champion)owner);
+            level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
+            nextBuffVars_Level = level;
+            baseDamage = this.effect0[level];
+            abilityPower = GetFlatMagicDamageMod(owner);
+            abilityPowerPostMod = 0.8f * abilityPower;
+            damageToDeal = abilityPowerPostMod + baseDamage;
+            nextBuffVars_DamageToDeal = damageToDeal;
+            AddBuff(attacker, other3, new Buffs.JarvanIVDemacianStandardDelay(nextBuffVars_Level, nextBuffVars_DamageToDeal), 1, 1, 0.25f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+            FaceDirection(owner, targetPos);
+            PlayAnimation("Spell3", 0.75f, owner, false, true, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class JarvanIVDemacianStandard : BBBuffScript
@@ -39,7 +81,7 @@ namespace Buffs
             SetCallForHelpSuppresser(owner, true);
             SetIgnoreCallForHelp(owner, true);
             teamID = GetTeamID(attacker);
-            SpellEffectCreate(out this.particle, out this.particle2, "JarvanDemacianStandard_buf_green.troy", "JarvanDemacianStandard_buf_red.troy", teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, false, default, default, false, false);
+            SpellEffectCreate(out this.particle, out this.particle2, "JarvanDemacianStandard_buf_green.troy", "JarvanDemacianStandard_buf_red.troy", teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, false, default, default, false, false);
             SetNotTargetableToTeam(owner, false, true);
         }
         public override void OnDeactivate(bool expired)
@@ -78,48 +120,6 @@ namespace Buffs
                     damageAmount = 1;
                 }
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class JarvanIVDemacianStandard : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            CastTime = 0.115f,
-            DoesntBreakShields = true,
-            TriggersSpellCasts = true,
-            IsDamagingSpell = false,
-            NotSingleTargetSpell = true,
-        };
-        int[] effect0 = {60, 105, 150, 195, 240};
-        public override void SelfExecute()
-        {
-            TeamId teamOfOwner;
-            Vector3 targetPos;
-            Particle a; // UNUSED
-            Minion other3;
-            int nextBuffVars_Level;
-            float nextBuffVars_DamageToDeal;
-            float baseDamage;
-            float abilityPower;
-            float abilityPowerPostMod;
-            float damageToDeal;
-            teamOfOwner = GetTeamID(owner);
-            targetPos = GetCastSpellTargetPos();
-            SpellEffectCreate(out a, out _, "JarvanDemacianStandard_mis.troy", default, TeamId.TEAM_BLUE, 100, 0, TeamId.TEAM_UNKNOWN, default, attacker, false, attacker, "R_Hand", default, attacker, default, default, true, default, default, false, false);
-            other3 = SpawnMinion("HiddenMinion", "TestCube", "idle.lua", targetPos, teamOfOwner, false, true, false, true, true, false, 0, false, false, (Champion)owner);
-            level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
-            nextBuffVars_Level = level;
-            baseDamage = this.effect0[level];
-            abilityPower = GetFlatMagicDamageMod(owner);
-            abilityPowerPostMod = 0.8f * abilityPower;
-            damageToDeal = abilityPowerPostMod + baseDamage;
-            nextBuffVars_DamageToDeal = damageToDeal;
-            AddBuff(attacker, other3, new Buffs.JarvanIVDemacianStandardDelay(nextBuffVars_Level, nextBuffVars_DamageToDeal), 1, 1, 0.25f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
-            FaceDirection(owner, targetPos);
-            PlayAnimation("Spell3", 0.75f, owner, false, true, false);
         }
     }
 }

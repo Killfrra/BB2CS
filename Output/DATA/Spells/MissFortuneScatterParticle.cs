@@ -16,11 +16,11 @@ namespace Buffs
             TeamId teamID;
             Particle a; // UNUSED
             teamID = GetTeamID(owner);
-            SpellEffectCreate(out this.boom, out this.boom2, "missFortune_makeItRain_tar_green.troy", "missFortune_makeItRain_tar_red.troy", teamID, 200, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, false, false, false, false, false);
-            SpellEffectCreate(out a, out a, "missFortune_makeItRain_incoming.troy", default, teamID, 100, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, true, false, false, false, false);
-            SpellEffectCreate(out a, out a, "missFortune_makeItRain_incoming_02.troy", default, teamID, 100, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, true, false, false, false, false);
-            SpellEffectCreate(out a, out a, "missFortune_makeItRain_incoming_03.troy", default, teamID, 100, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, true, false, false, false, false);
-            SpellEffectCreate(out a, out a, "missFortune_makeItRain_incoming_04.troy", default, teamID, 100, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, true, false, false, false, false);
+            SpellEffectCreate(out this.boom, out this.boom2, "missFortune_makeItRain_tar_green.troy", "missFortune_makeItRain_tar_red.troy", teamID ?? TeamId.TEAM_UNKNOWN, 200, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, false, false, false, false, false);
+            SpellEffectCreate(out a, out a, "missFortune_makeItRain_incoming.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 100, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, true, false, false, false, false);
+            SpellEffectCreate(out a, out a, "missFortune_makeItRain_incoming_02.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 100, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, true, false, false, false, false);
+            SpellEffectCreate(out a, out a, "missFortune_makeItRain_incoming_03.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 100, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, true, false, false, false, false);
+            SpellEffectCreate(out a, out a, "missFortune_makeItRain_incoming_04.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 100, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, true, false, false, false, false);
             SetNoRender(owner, true);
             SetForceRenderParticles(owner, true);
             SetGhosted(owner, true);

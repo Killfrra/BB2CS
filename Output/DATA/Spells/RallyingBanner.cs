@@ -25,7 +25,6 @@ namespace Buffs
         }
         public override void OnUpdateStats()
         {
-            float dist;
             IncFlatArmorMod(owner, this.armorMod);
             if(attacker.IsDead)
             {
@@ -33,6 +32,7 @@ namespace Buffs
             }
             else
             {
+                float dist;
                 dist = DistanceBetweenObjects("Attacker", "Owner");
                 if(dist >= 1200)
                 {

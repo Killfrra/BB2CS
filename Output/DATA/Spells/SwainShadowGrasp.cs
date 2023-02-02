@@ -5,6 +5,32 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class SwainShadowGrasp : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            DoesntBreakShields = true,
+        };
+        int[] effect0 = {2, 2, 2, 2, 2};
+        int[] effect1 = {80, 120, 160, 200, 240};
+        public override void SelfExecute()
+        {
+            Vector3 targetPos;
+            TeamId teamOfOwner;
+            Minion other3;
+            float nextBuffVars_RootDuration;
+            float nextBuffVars_GraspDamage;
+            targetPos = GetCastSpellTargetPos();
+            teamOfOwner = GetTeamID(owner);
+            other3 = SpawnMinion("HiddenMinion", "TestCube", "idle.lua", targetPos, teamOfOwner ?? TeamId.TEAM_CASTER, false, true, false, true, true, true, 0, false, false, (Champion)owner);
+            nextBuffVars_RootDuration = this.effect0[level];
+            nextBuffVars_GraspDamage = this.effect1[level];
+            AddBuff(attacker, other3, new Buffs.SwainShadowGrasp(nextBuffVars_GraspDamage, nextBuffVars_RootDuration), 1, 1, 0.75f, BuffAddType.REPLACE_EXISTING, BuffType.DAMAGE, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class SwainShadowGrasp : BBBuffScript
@@ -32,8 +58,8 @@ namespace Buffs
             SetIgnoreCallForHelp(owner, true);
             SetCallForHelpSuppresser(owner, true);
             teamOfOwner = GetTeamID(owner);
-            SpellEffectCreate(out this.groundParticleEffect, out this.groundParticleEffect2, "Swain_shadowGrasp_warning_green.troy", "Swain_shadowGrasp_warning_red.troy", teamOfOwner, 200, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, false, default, default, false, false);
-            SpellEffectCreate(out this.a, out _, "swain_shadowGrasp_transform.troy", default, teamOfOwner, 200, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, true, default, default, false, false);
+            SpellEffectCreate(out this.groundParticleEffect, out this.groundParticleEffect2, "Swain_shadowGrasp_warning_green.troy", "Swain_shadowGrasp_warning_red.troy", teamOfOwner ?? TeamId.TEAM_UNKNOWN, 200, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, false, default, default, false, false);
+            SpellEffectCreate(out this.a, out _, "swain_shadowGrasp_transform.troy", default, teamOfOwner ?? TeamId.TEAM_UNKNOWN, 200, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, true, default, default, false, false);
         }
         public override void OnDeactivate(bool expired)
         {
@@ -48,32 +74,6 @@ namespace Buffs
             }
             SetTargetable(owner, true);
             ApplyDamage((ObjAIBase)owner, owner, 1000, DamageType.DAMAGE_TYPE_TRUE, DamageSource.DAMAGE_SOURCE_INTERNALRAW, 1, 1, 1, false, false, attacker);
-        }
-    }
-}
-namespace Spells
-{
-    public class SwainShadowGrasp : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            DoesntBreakShields = true,
-        };
-        int[] effect0 = {2, 2, 2, 2, 2};
-        int[] effect1 = {80, 120, 160, 200, 240};
-        public override void SelfExecute()
-        {
-            Vector3 targetPos;
-            TeamId teamOfOwner;
-            Minion other3;
-            float nextBuffVars_RootDuration;
-            float nextBuffVars_GraspDamage;
-            targetPos = GetCastSpellTargetPos();
-            teamOfOwner = GetTeamID(owner);
-            other3 = SpawnMinion("HiddenMinion", "TestCube", "idle.lua", targetPos, teamOfOwner, false, true, false, true, true, true, 0, false, false, (Champion)owner);
-            nextBuffVars_RootDuration = this.effect0[level];
-            nextBuffVars_GraspDamage = this.effect1[level];
-            AddBuff(attacker, other3, new Buffs.SwainShadowGrasp(nextBuffVars_GraspDamage, nextBuffVars_RootDuration), 1, 1, 0.75f, BuffAddType.REPLACE_EXISTING, BuffType.DAMAGE, 0, true, false, false);
         }
     }
 }

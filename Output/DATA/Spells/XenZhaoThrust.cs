@@ -24,7 +24,6 @@ namespace Spells
             float combo1DamageLeet;
             float combo1Damage;
             Particle bye; // UNUSED
-            float comboDamageCrit;
             if(hitResult == HitResult.HIT_Dodge)
             {
                 hitResult = HitResult.HIT_Normal;
@@ -39,6 +38,7 @@ namespace Spells
             AddBuff(attacker, attacker, new Buffs.XenZhaoComboAuto(), 1, 1, 5, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false);
             if(hitResult == HitResult.HIT_Critical)
             {
+                float comboDamageCrit;
                 comboDamageCrit = attackDmg * 2;
                 combo1Damage = combo1DamageLeet + comboDamageCrit;
             }

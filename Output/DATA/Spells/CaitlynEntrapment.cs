@@ -5,26 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class CaitlynEntrapment : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateEffect = new[]{ "DarkBinding_tar.troy", },
-            BuffName = "",
-            BuffTextureName = "",
-        };
-        public override void OnActivate()
-        {
-            OverrideAnimation("Run", "Spell3b", owner);
-        }
-        public override void OnDeactivate(bool expired)
-        {
-            ClearOverrideAnimation("Run", owner);
-        }
-    }
-}
 namespace Spells
 {
     public class CaitlynEntrapment : BBSpellScript
@@ -61,6 +41,26 @@ namespace Spells
                 AddBuff(attacker, attacker, new Buffs.CaitlynEntrapment(), 1, 1, 0.25f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
                 MoveAway(owner, pushbackPos, 1000, 3, 500, 0, ForceMovementType.FURTHEST_WITHIN_RANGE, ForceMovementOrdersType.POSTPONE_CURRENT_ORDER, 0, ForceMovementOrdersFacing.KEEP_CURRENT_FACING);
             }
+        }
+    }
+}
+namespace Buffs
+{
+    public class CaitlynEntrapment : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateEffect = new[]{ "DarkBinding_tar.troy", },
+            BuffName = "",
+            BuffTextureName = "",
+        };
+        public override void OnActivate()
+        {
+            OverrideAnimation("Run", "Spell3b", owner);
+        }
+        public override void OnDeactivate(bool expired)
+        {
+            ClearOverrideAnimation("Run", owner);
         }
     }
 }

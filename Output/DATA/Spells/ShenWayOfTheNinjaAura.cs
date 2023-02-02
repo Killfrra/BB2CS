@@ -23,8 +23,8 @@ namespace Buffs
             TeamId teamID;
             teamID = GetTeamID(owner);
             OverrideAutoAttack(0, SpellSlotType.ExtraSlots, owner, 1, false);
-            SpellEffectCreate(out this.leftHand, out _, "shen_kiStrike_ready_indicator.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "l_hand", default, owner, default, default, true, default, default, false);
-            SpellEffectCreate(out this.rightHand, out _, "shen_kiStrike_ready_indicator.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "r_hand", default, target, default, default, true, default, default, false);
+            SpellEffectCreate(out this.leftHand, out _, "shen_kiStrike_ready_indicator.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "l_hand", default, owner, default, default, true, default, default, false);
+            SpellEffectCreate(out this.rightHand, out _, "shen_kiStrike_ready_indicator.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "r_hand", default, target, default, default, true, default, default, false);
             SetDodgePiercing(owner, true);
         }
         public override void OnDeactivate(bool expired)

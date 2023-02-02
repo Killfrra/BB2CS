@@ -20,10 +20,10 @@ namespace Buffs
         };
         public override void OnKill()
         {
-            Particle placeholder; // UNUSED
-            float dLCooldown;
             if(target is Champion)
             {
+                Particle placeholder; // UNUSED
+                float dLCooldown;
                 SpellEffectCreate(out placeholder, out _, "katarina_spell_refresh_indicator.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false);
                 IncGold(owner, 25);
                 SetSlotSpellCooldownTime((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, 0);

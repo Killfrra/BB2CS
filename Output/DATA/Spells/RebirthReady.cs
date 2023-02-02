@@ -40,8 +40,6 @@ namespace Buffs
         public override void OnPreDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
         {
             float curHealth;
-            int level;
-            float nextBuffVars_RebirthArmorMod;
             curHealth = GetHealth(owner, PrimaryAbilityResourceType.MANA);
             if(curHealth <= damageAmount)
             {
@@ -55,6 +53,8 @@ namespace Buffs
                     {
                         if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.YorickRAZombie)) == 0)
                         {
+                            int level;
+                            float nextBuffVars_RebirthArmorMod;
                             level = GetLevel(owner);
                             nextBuffVars_RebirthArmorMod = this.effect1[level];
                             AddBuff((ObjAIBase)owner, owner, new Buffs.Rebirth(nextBuffVars_RebirthArmorMod), 1, 1, 6, BuffAddType.RENEW_EXISTING, BuffType.AURA, 0, true, false, false);

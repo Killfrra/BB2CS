@@ -30,12 +30,12 @@ namespace Buffs
         }
         public override void OnUpdateStats()
         {
-            float maxMana;
-            float manaRegen;
-            float maxEnergy;
-            float energyRegen;
             if(owner is Champion)
             {
+                float maxMana;
+                float manaRegen;
+                float maxEnergy;
+                float energyRegen;
                 IncPercentCooldownMod(owner, -0.2f);
                 maxMana = GetMaxPAR(target, PrimaryAbilityResourceType.MANA);
                 manaRegen = maxMana * 0.01f;
@@ -49,7 +49,6 @@ namespace Buffs
         {
             int count;
             float newDuration;
-            ObjAIBase caster;
             count = GetBuffCountFromAll(attacker, nameof(Buffs.APBonusDamageToTowers));
             if(attacker is Champion)
             {
@@ -65,6 +64,7 @@ namespace Buffs
             }
             else if(count != 0)
             {
+                ObjAIBase caster;
                 caster = GetPetOwner((Pet)attacker);
                 if(caster is Champion)
                 {

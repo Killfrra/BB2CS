@@ -25,10 +25,10 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            int level;
-            float tooltipAmount;
             if(ExecutePeriodically(10, ref this.lastTimeExecuted, true))
             {
+                int level;
+                float tooltipAmount;
                 level = GetLevel(owner);
                 tooltipAmount = this.effect0[level];
                 if(tooltipAmount > this.lastTooltip)

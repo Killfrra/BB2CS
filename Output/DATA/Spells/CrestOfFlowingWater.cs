@@ -30,7 +30,6 @@ namespace Buffs
         {
             int count;
             float newDuration;
-            ObjAIBase caster;
             count = GetBuffCountFromAll(attacker, nameof(Buffs.APBonusDamageToTowers));
             newDuration = 60;
             if(attacker is Champion)
@@ -46,6 +45,7 @@ namespace Buffs
             }
             else if(count != 0)
             {
+                ObjAIBase caster;
                 caster = GetPetOwner((Pet)attacker);
                 if(caster is Champion)
                 {

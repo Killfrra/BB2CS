@@ -14,9 +14,6 @@ namespace Spells
             float baseDamage;
             float weaponDamage;
             float damage;
-            float takedownDamage;
-            float healthPercent;
-            float bonusPercent;
             baseDamage = GetBaseAttackDamage(owner);
             weaponDamage = GetFlatPhysicalDamageMod(owner);
             damage = baseDamage + weaponDamage;
@@ -28,6 +25,9 @@ namespace Spells
                 }
                 else
                 {
+                    float takedownDamage;
+                    float healthPercent;
+                    float bonusPercent;
                     takedownDamage = charVars.TakedownDamage;
                     damage += takedownDamage;
                     healthPercent = GetHealthPercent(target, PrimaryAbilityResourceType.MANA);

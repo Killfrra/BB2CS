@@ -41,19 +41,19 @@ namespace Buffs
         }
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            TeamId teamID;
-            Particle c; // UNUSED
             if(target is ObjAIBase)
             {
                 if(target is not BaseTurret)
                 {
                     if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.CardmasterStackParticle)) > 0)
                     {
+                        TeamId teamID;
+                        Particle c; // UNUSED
                         SpellBuffRemove(owner, nameof(Buffs.CardmasterStackParticle), (ObjAIBase)owner);
                         teamID = GetTeamID(owner);
                         BreakSpellShields(target);
                         ApplyDamage(attacker, target, this.bonusDamage, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELL, 1, 0.4f, 1, false, false, attacker);
-                        SpellEffectCreate(out c, out _, "CardmasterStackAttack_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false);
+                        SpellEffectCreate(out c, out _, "CardmasterStackAttack_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false);
                     }
                     else
                     {

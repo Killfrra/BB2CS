@@ -13,14 +13,14 @@ namespace Chars
         int[] effect0 = {1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3};
         public override void OnUpdateActions()
         {
-            float totalAD;
-            float baseAD;
-            float bonusAD;
-            float aD1;
-            float aD3A;
-            float aD3B;
             if(ExecutePeriodically(5, ref this.lastTimeExecuted, false))
             {
+                float totalAD;
+                float baseAD;
+                float bonusAD;
+                float aD1;
+                float aD3A;
+                float aD3B;
                 totalAD = GetTotalAttackDamage(owner);
                 baseAD = GetBaseAttackDamage(owner);
                 bonusAD = totalAD - baseAD;
@@ -38,7 +38,6 @@ namespace Chars
         }
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            float cD;
             if(target is ObjAIBase)
             {
                 if(target is not BaseTurret)
@@ -46,6 +45,7 @@ namespace Chars
                     level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                     if(level >= 0)
                     {
+                        float cD;
                         cD = GetSlotSpellCooldownTime((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                         if(cD > 0)
                         {

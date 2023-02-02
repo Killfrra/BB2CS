@@ -16,8 +16,6 @@ namespace Buffs
         }
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            int level;
-            float nextBuffVars_DamagePerTick;
             if(target is ObjAIBase)
             {
                 if(target is not BaseTurret)
@@ -26,6 +24,8 @@ namespace Buffs
                     {
                         if(hitResult != HitResult.HIT_Dodge)
                         {
+                            int level;
+                            float nextBuffVars_DamagePerTick;
                             level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                             nextBuffVars_DamagePerTick = this.effect0[level];
                             AddBuff((ObjAIBase)owner, target, new Buffs.ToxicShotParticle(nextBuffVars_DamagePerTick), 1, 1, 5.1f, BuffAddType.REPLACE_EXISTING, BuffType.POISON, 0, true, false, false);

@@ -13,20 +13,20 @@ namespace Spells
         int[] effect1 = {140, 170, 210};
         public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
         {
-            float attackDamage; // UNUSED
-            float bonusAttackDamage;
-            float bonusDamage;
-            float physicalBonus;
-            float aOEDmg;
-            float baseAttackDamage;
-            Particle a; // UNUSED
             if(hitResult != HitResult.HIT_Dodge)
             {
                 if(hitResult != HitResult.HIT_Miss)
                 {
+                    float attackDamage; // UNUSED
+                    float baseAttackDamage;
+                    Particle a; // UNUSED
                     attackDamage = GetTotalAttackDamage(owner);
                     if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.EmpowerTwo)) > 0)
                     {
+                        float bonusAttackDamage;
+                        float bonusDamage;
+                        float physicalBonus;
+                        float aOEDmg;
                         bonusAttackDamage = GetFlatPhysicalDamageMod(owner);
                         level = GetSlotSpellLevel((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                         bonusDamage = this.effect0[level];

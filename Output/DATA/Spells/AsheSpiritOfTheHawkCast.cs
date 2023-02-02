@@ -5,6 +5,36 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class AsheSpiritOfTheHawkCast : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = true,
+            IsDamagingSpell = true,
+            NotSingleTargetSpell = true,
+            PhysicalDamageRatio = 0.5f,
+            SpellDamageRatio = 0.5f,
+        };
+        int[] effect0 = {2500, 3250, 4000, 4750, 5500};
+        public override void SelfExecute()
+        {
+            TeamId teamID; // UNUSED
+            Vector3 targetPos;
+            Vector3 nextBuffVars_TargetPos;
+            AttackableUnit other1; // UNITIALIZED
+            float dist;
+            teamID = GetTeamID(owner);
+            targetPos = GetCastSpellTargetPos();
+            nextBuffVars_TargetPos = targetPos;
+            AddBuff(attacker, other1, new Buffs.AsheSpiritOfTheHawkCast(nextBuffVars_TargetPos), 1, 1, 30, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0, true, false);
+            SpellCast((ObjAIBase)owner, default, targetPos, targetPos, 2, SpellSlotType.ExtraSlots, level, true, true, false, false, default, false);
+            dist = this.effect0[level];
+            Move(other1, targetPos, 1350, 0, 0, ForceMovementType.FURTHEST_WITHIN_RANGE, ForceMovementOrdersType.CANCEL_ORDER, dist);
+        }
+    }
+}
 namespace Buffs
 {
     public class AsheSpiritOfTheHawkCast : BBBuffScript
@@ -49,36 +79,6 @@ namespace Buffs
             {
                 SpellBuffRemoveCurrent(owner);
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class AsheSpiritOfTheHawkCast : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = true,
-            IsDamagingSpell = true,
-            NotSingleTargetSpell = true,
-            PhysicalDamageRatio = 0.5f,
-            SpellDamageRatio = 0.5f,
-        };
-        int[] effect0 = {2500, 3250, 4000, 4750, 5500};
-        public override void SelfExecute()
-        {
-            TeamId teamID; // UNUSED
-            Vector3 targetPos;
-            Vector3 nextBuffVars_TargetPos;
-            AttackableUnit other1; // UNITIALIZED
-            float dist;
-            teamID = GetTeamID(owner);
-            targetPos = GetCastSpellTargetPos();
-            nextBuffVars_TargetPos = targetPos;
-            AddBuff(attacker, other1, new Buffs.AsheSpiritOfTheHawkCast(nextBuffVars_TargetPos), 1, 1, 30, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0, true, false);
-            SpellCast((ObjAIBase)owner, default, targetPos, targetPos, 2, SpellSlotType.ExtraSlots, level, true, true, false, false, default, false);
-            dist = this.effect0[level];
-            Move(other1, targetPos, 1350, 0, 0, ForceMovementType.FURTHEST_WITHIN_RANGE, ForceMovementOrdersType.CANCEL_ORDER, dist);
         }
     }
 }

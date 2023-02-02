@@ -29,11 +29,11 @@ namespace Buffs
             float remainingDuration;
             int level;
             float nextBuffVars_MovementSpeed;
-            int nextBuffVars_DamagePerTick;
-            int nextBuffVars_SpellCooldown;
             float cooldown;
             float cooldown2;
             float cooldown3;
+            int nextBuffVars_DamagePerTick;
+            int nextBuffVars_SpellCooldown;
             this.casterID = PushCharacterData("ShyvanaDragon", owner, false);
             if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.ShyvanaImmolationAura)) > 0)
             {
@@ -66,9 +66,6 @@ namespace Buffs
         public override void OnDeactivate(bool expired)
         {
             int nextBuffVars_CasterID;
-            float nextBuffVars_MovementSpeed;
-            float nextBuffVars_DamagePerTick;
-            int nextBuffVars_SpellCooldown;
             float remainingDuration;
             int level;
             float cooldown;
@@ -76,6 +73,9 @@ namespace Buffs
             float cooldown3;
             TeamId teamID;
             Particle a; // UNUSED
+            float nextBuffVars_MovementSpeed;
+            float nextBuffVars_DamagePerTick;
+            int nextBuffVars_SpellCooldown;
             if(owner.IsDead)
             {
                 nextBuffVars_CasterID = this.casterID;
@@ -113,14 +113,14 @@ namespace Buffs
             SetSpell((ObjAIBase)owner, 2, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, nameof(Spells.ShyvanaFireball));
             SetSlotSpellCooldownTimeVer2(cooldown3, 2, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner, false);
             teamID = GetTeamID(owner);
-            SpellEffectCreate(out a, out _, "shyvana_ult_transform_end.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, false, false, false, false);
+            SpellEffectCreate(out a, out _, "shyvana_ult_transform_end.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, false, false, false, false);
             AddBuff((ObjAIBase)owner, owner, new Buffs.ShyvanaDragonScales(), 1, 1, 25000, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
         }
         public override void OnUpdateActions()
         {
-            float furyRemaining;
             if(ExecutePeriodically(0.5f, ref this.lastTimeExecuted, true))
             {
+                float furyRemaining;
                 IncPAR(owner, -3, PrimaryAbilityResourceType.Other);
                 furyRemaining = GetPAR(owner, PrimaryAbilityResourceType.Other);
                 if(furyRemaining <= 0)
@@ -131,10 +131,10 @@ namespace Buffs
         }
         public override void OnSpellCast(string spellName, SpellScriptMetaData spellVars)
         {
-            float furyRemaining;
             spellName = GetSpellName();
             if(spellName == nameof(Spells.ShyvanaFireballDragon))
             {
+                float furyRemaining;
                 furyRemaining = GetPAR(owner, PrimaryAbilityResourceType.Other);
                 if(furyRemaining <= 3)
                 {

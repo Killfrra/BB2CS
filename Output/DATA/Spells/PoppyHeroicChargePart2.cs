@@ -48,7 +48,7 @@ namespace Buffs
             SetCanCast(owner, false);
             SetCanMove(owner, false);
             Move(owner, newTargetPos, this.slashSpeed, 0, 0, ForceMovementType.FIRST_COLLISION_HIT, ForceMovementOrdersType.CANCEL_ORDER, 0, ForceMovementOrdersFacing.FACE_MOVEMENT_DIRECTION);
-            SpellEffectCreate(out this.particleCharge2, out _, "HeroicCharge_cas.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false, false, false, false, false);
+            SpellEffectCreate(out this.particleCharge2, out _, "HeroicCharge_cas.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false, false, false, false, false);
             ApplyAssistMarker(caster, owner, 10);
         }
         public override void OnDeactivate(bool expired)
@@ -74,7 +74,6 @@ namespace Buffs
             ObjAIBase caster;
             TeamId teamID;
             float distanceVar;
-            Particle targetParticle; // UNUSED
             caster = SetBuffCasterUnit();
             teamID = GetTeamID(caster);
             distanceVar = DistanceBetweenObjectAndPoint(owner, this.newTargetPos);
@@ -84,8 +83,9 @@ namespace Buffs
                 {
                     if(owner != caster)
                     {
+                        Particle targetParticle; // UNUSED
                         BreakSpellShields(owner);
-                        SpellEffectCreate(out targetParticle, out _, "HeroicCharge_tar2.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, false, false, false, false);
+                        SpellEffectCreate(out targetParticle, out _, "HeroicCharge_tar2.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, false, false, false, false);
                         ApplyDamage(caster, owner, this.damageTwo, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELL, 1, 0.4f, 1, false, false, attacker);
                         ApplyStun(caster, owner, 1.5f);
                         if(owner is Champion)

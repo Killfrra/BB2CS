@@ -5,6 +5,93 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class SummonerTeleport : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            CastingBreaksStealth = true,
+            TriggersSpellCasts = false,
+            NotSingleTargetSpell = true,
+        };
+        public override void UpdateTooltip(int spellSlot)
+        {
+            float duration;
+            float baseCooldown;
+            duration = 4;
+            if(avatarVars.UtilityMastery == 1)
+            {
+                duration = 3.5f;
+            }
+            SetSpellToolTipVar(duration, 1, spellSlot, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_SUMMONER, (Champion)attacker);
+            baseCooldown = 300;
+            if(avatarVars.SummonerCooldownBonus != 0)
+            {
+                float cooldownMultiplier;
+                cooldownMultiplier = 1 - avatarVars.SummonerCooldownBonus;
+                baseCooldown *= cooldownMultiplier;
+            }
+            SetSpellToolTipVar(baseCooldown, 2, spellSlot, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_SUMMONER, (Champion)attacker);
+        }
+        public override float AdjustCooldown()
+        {
+            float returnValue = 0;
+            if(avatarVars.SummonerCooldownBonus != 0)
+            {
+                float cooldownMultiplier;
+                float baseCooldown;
+                cooldownMultiplier = 1 - avatarVars.SummonerCooldownBonus;
+                baseCooldown = 300 * cooldownMultiplier;
+            }
+            returnValue = baseCooldown;
+            return returnValue;
+        }
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            charVars.TeleportCancelled = false;
+            if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.SummonerTeleport)) > 0)
+            {
+                SpellBuffRemove(owner, nameof(Buffs.SummonerTeleport), (ObjAIBase)owner, 0);
+            }
+            else
+            {
+                Vector3 castPosition;
+                Vector3 nextBuffVars_CastPosition;
+                float duration;
+                float nextBuffVars_BuffDuration;
+                castPosition = GetRandomPointInAreaUnit(target, 100, 50);
+                nextBuffVars_CastPosition = castPosition;
+                if(avatarVars.UtilityMastery == 1)
+                {
+                    duration = 3.5f;
+                }
+                else
+                {
+                    duration = 4;
+                }
+                nextBuffVars_BuffDuration = duration;
+                AddBuff((ObjAIBase)owner, owner, new Buffs.SummonerTeleport(nextBuffVars_CastPosition, nextBuffVars_BuffDuration), 1, 1, duration, BuffAddType.REPLACE_EXISTING, BuffType.STUN, 0, true, false, false);
+                if(target is ObjAIBase)
+                {
+                    if(target is BaseTurret)
+                    {
+                        AddBuff(attacker, target, new Buffs.Teleport_Turret(), 1, 1, nextBuffVars_BuffDuration, BuffAddType.RENEW_EXISTING, BuffType.STUN, 0, true, false, false);
+                    }
+                    else
+                    {
+                        AddBuff(attacker, target, new Buffs.Teleport_Target(), 1, 1, 0.1f + nextBuffVars_BuffDuration, BuffAddType.RENEW_EXISTING, BuffType.STUN, 0, true, false, false);
+                    }
+                }
+                AddBuff((ObjAIBase)target, owner, new Buffs.Teleport_DeathRemoval(), 1, 1, 4, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+                if(GetBuffCountFromCaster(target, default, nameof(Buffs.SharedWardBuff)) > 0)
+                {
+                    AddBuff(attacker, target, new Buffs.Destealth(), 1, 1, 1 + nextBuffVars_BuffDuration, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+                }
+            }
+        }
+    }
+}
 namespace Buffs
 {
     public class SummonerTeleport : BBBuffScript
@@ -101,9 +188,6 @@ namespace Buffs
         {
             float finishedTime;
             float totalTime;
-            Vector3 castPosition;
-            Particle akc; // UNUSED
-            float cooldownMultiplier;
             float baseCooldown;
             //RequireVar(this.interrupted);
             //RequireVar(this.activateTime);
@@ -116,12 +200,15 @@ namespace Buffs
                 {
                     if(totalTime >= this.buffDuration)
                     {
+                        Vector3 castPosition;
+                        Particle akc; // UNUSED
                         castPosition = this.castPosition;
                         DestroyMissileForTarget(owner);
                         TeleportToPosition(owner, castPosition);
                         SpellEffectCreate(out akc, out _, "summoner_teleportarrive.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false, false, false, false, false);
                         if(avatarVars.SummonerCooldownBonus != 0)
                         {
+                            float cooldownMultiplier;
                             cooldownMultiplier = 1 - avatarVars.SummonerCooldownBonus;
                             baseCooldown = 300 * cooldownMultiplier;
                         }
@@ -165,93 +252,6 @@ namespace Buffs
             SetCanAttack(owner, false);
             SetCanCast(owner, false);
             SetCanMove(owner, false);
-        }
-    }
-}
-namespace Spells
-{
-    public class SummonerTeleport : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            CastingBreaksStealth = true,
-            TriggersSpellCasts = false,
-            NotSingleTargetSpell = true,
-        };
-        public override void UpdateTooltip(int spellSlot)
-        {
-            float duration;
-            float baseCooldown;
-            float cooldownMultiplier;
-            duration = 4;
-            if(avatarVars.UtilityMastery == 1)
-            {
-                duration = 3.5f;
-            }
-            SetSpellToolTipVar(duration, 1, spellSlot, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_SUMMONER, (Champion)attacker);
-            baseCooldown = 300;
-            if(avatarVars.SummonerCooldownBonus != 0)
-            {
-                cooldownMultiplier = 1 - avatarVars.SummonerCooldownBonus;
-                baseCooldown *= cooldownMultiplier;
-            }
-            SetSpellToolTipVar(baseCooldown, 2, spellSlot, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_SUMMONER, (Champion)attacker);
-        }
-        public override float AdjustCooldown()
-        {
-            float returnValue = 0;
-            float cooldownMultiplier;
-            float baseCooldown;
-            if(avatarVars.SummonerCooldownBonus != 0)
-            {
-                cooldownMultiplier = 1 - avatarVars.SummonerCooldownBonus;
-                baseCooldown = 300 * cooldownMultiplier;
-            }
-            returnValue = baseCooldown;
-            return returnValue;
-        }
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            Vector3 castPosition;
-            Vector3 nextBuffVars_CastPosition;
-            float nextBuffVars_BuffDuration;
-            float duration;
-            charVars.TeleportCancelled = false;
-            if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.SummonerTeleport)) > 0)
-            {
-                SpellBuffRemove(owner, nameof(Buffs.SummonerTeleport), (ObjAIBase)owner, 0);
-            }
-            else
-            {
-                castPosition = GetRandomPointInAreaUnit(target, 100, 50);
-                nextBuffVars_CastPosition = castPosition;
-                if(avatarVars.UtilityMastery == 1)
-                {
-                    duration = 3.5f;
-                }
-                else
-                {
-                    duration = 4;
-                }
-                nextBuffVars_BuffDuration = duration;
-                AddBuff((ObjAIBase)owner, owner, new Buffs.SummonerTeleport(nextBuffVars_CastPosition, nextBuffVars_BuffDuration), 1, 1, duration, BuffAddType.REPLACE_EXISTING, BuffType.STUN, 0, true, false, false);
-                if(target is ObjAIBase)
-                {
-                    if(target is BaseTurret)
-                    {
-                        AddBuff(attacker, target, new Buffs.Teleport_Turret(), 1, 1, nextBuffVars_BuffDuration, BuffAddType.RENEW_EXISTING, BuffType.STUN, 0, true, false, false);
-                    }
-                    else
-                    {
-                        AddBuff(attacker, target, new Buffs.Teleport_Target(), 1, 1, 0.1f + nextBuffVars_BuffDuration, BuffAddType.RENEW_EXISTING, BuffType.STUN, 0, true, false, false);
-                    }
-                }
-                AddBuff((ObjAIBase)target, owner, new Buffs.Teleport_DeathRemoval(), 1, 1, 4, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
-                if(GetBuffCountFromCaster(target, default, nameof(Buffs.SharedWardBuff)) > 0)
-                {
-                    AddBuff(attacker, target, new Buffs.Destealth(), 1, 1, 1 + nextBuffVars_BuffDuration, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
-                }
-            }
         }
     }
 }

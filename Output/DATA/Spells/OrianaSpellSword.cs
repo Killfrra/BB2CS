@@ -26,12 +26,12 @@ namespace Buffs
         int[] effect2 = {5, 5, 5, 10, 10, 10, 15, 15, 15, 20, 20, 20, 25, 25, 25, 30, 30, 30, 35, 35, 35};
         public override void OnUpdateActions()
         {
-            int level;
-            float baseDamage;
-            float aPBonus;
-            float damage;
             if(ExecutePeriodically(10, ref this.lastTimeExecuted, true))
             {
+                int level;
+                float baseDamage;
+                float aPBonus;
+                float damage;
                 level = GetLevel(owner);
                 baseDamage = this.effect0[level];
                 SetBuffToolTipVar(2, baseDamage);
@@ -45,13 +45,12 @@ namespace Buffs
         public override void OnSpellCast(string spellName, SpellScriptMetaData spellVars)
         {
             int castSlot;
-            TeamId teamID;
-            bool deployed;
-            Vector3 targetPos;
-            bool isStealth;
             castSlot = GetSpellSlot();
             if(castSlot == 3)
             {
+                TeamId teamID;
+                bool deployed;
+                Vector3 targetPos;
                 teamID = GetTeamID(owner);
                 deployed = false;
                 foreach(AttackableUnit unit in GetClosestUnitsInArea(owner, owner.Position, 25000, SpellDataFlags.AffectFriends | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes | SpellDataFlags.NotAffectSelf | SpellDataFlags.AffectUntargetable, 1, nameof(Buffs.OrianaGhost), true))
@@ -60,24 +59,25 @@ namespace Buffs
                     targetPos = GetUnitPosition(unit);
                     if(unit is Champion)
                     {
+                        bool isStealth;
                         isStealth = GetStealthed(owner);
                         if(!isStealth)
                         {
-                            SpellEffectCreate(out this.particle, out _, "OrianaVacuumIndicator_ally.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, "spinnigtopridge", targetPos, default, default, targetPos, true, false, false, false, false);
+                            SpellEffectCreate(out this.particle, out _, "OrianaVacuumIndicator_ally.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, "spinnigtopridge", targetPos, default, default, targetPos, true, false, false, false, false);
                             charVars.UltimateType = 0;
                             charVars.UltimateTargetPos = targetPos;
                         }
                         else
                         {
-                            SpellEffectCreate(out this.particle, out _, "OrianaVacuumIndicatorSelfNoRing.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, "root", targetPos, default, default, targetPos, true, false, false, false, false);
-                            SpellEffectCreate(out this.particle, out _, "OrianaVacuumIndicatorSelfRing.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, "root", targetPos, default, default, targetPos, true, false, false, false, false);
+                            SpellEffectCreate(out this.particle, out _, "OrianaVacuumIndicatorSelfNoRing.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, "root", targetPos, default, default, targetPos, true, false, false, false, false);
+                            SpellEffectCreate(out this.particle, out _, "OrianaVacuumIndicatorSelfRing.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, "root", targetPos, default, default, targetPos, true, false, false, false, false);
                             charVars.UltimateType = 1;
                             charVars.UltimateTargetPos = targetPos;
                         }
                     }
                     else
                     {
-                        SpellEffectCreate(out this.particle, out _, "OrianaVacuumIndicator.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, "spinnigtopridge", targetPos, default, default, targetPos, true, false, false, false, false);
+                        SpellEffectCreate(out this.particle, out _, "OrianaVacuumIndicator.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, "spinnigtopridge", targetPos, default, default, targetPos, true, false, false, false, false);
                         charVars.UltimateType = 1;
                         charVars.UltimateTargetPos = targetPos;
                     }
@@ -87,16 +87,16 @@ namespace Buffs
                     if(GetBuffCountFromCaster(owner, default, nameof(Buffs.OriannaBallTracker)) > 0)
                     {
                         targetPos = charVars.BallPosition;
-                        SpellEffectCreate(out this.particle, out _, "OrianaVacuumIndicatorSelfNoRing.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, "root", targetPos, default, default, targetPos, true, false, false, false, false);
-                        SpellEffectCreate(out this.particle, out _, "OrianaVacuumIndicatorSelfRing.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, "root", targetPos, default, default, targetPos, true, false, false, false, false);
+                        SpellEffectCreate(out this.particle, out _, "OrianaVacuumIndicatorSelfNoRing.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, "root", targetPos, default, default, targetPos, true, false, false, false, false);
+                        SpellEffectCreate(out this.particle, out _, "OrianaVacuumIndicatorSelfRing.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, "root", targetPos, default, default, targetPos, true, false, false, false, false);
                         charVars.UltimateType = 5;
                         charVars.UltimateTargetPos = targetPos;
                     }
                     else
                     {
                         targetPos = GetPointByUnitFacingOffset(owner, 0, 0);
-                        SpellEffectCreate(out this.particle, out _, "OrianaVacuumIndicatorSelfNoRing.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "spinnigtopridge", targetPos, default, default, targetPos, true, false, false, false, false);
-                        SpellEffectCreate(out this.particle, out _, "OrianaVacuumIndicatorSelfRing.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, "root", targetPos, default, default, targetPos, true, false, false, false, false);
+                        SpellEffectCreate(out this.particle, out _, "OrianaVacuumIndicatorSelfNoRing.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "spinnigtopridge", targetPos, default, default, targetPos, true, false, false, false, false);
+                        SpellEffectCreate(out this.particle, out _, "OrianaVacuumIndicatorSelfRing.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, "root", targetPos, default, default, targetPos, true, false, false, false, false);
                         charVars.UltimateType = 3;
                         charVars.UltimateTargetPos = targetPos;
                     }

@@ -42,7 +42,7 @@ namespace Spells
             ApplyDamage(attacker, target, damageToDeal + this.effect0[level], DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, percentOfAttack, 0, 0, false, false, attacker);
             charVars.PercentOfAttack *= 0.8f;
             charVars.PercentOfAttack = Math.Max(charVars.PercentOfAttack, 0.4f);
-            SpellEffectCreate(out afa, out _, "SpiralBlade_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, "spine", default, target, default, default, true, false, false, false, false);
+            SpellEffectCreate(out afa, out _, "SpiralBlade_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, "spine", default, target, default, default, true, false, false, false, false);
         }
     }
 }

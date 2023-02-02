@@ -24,12 +24,10 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            float currentTime;
-            float timePassed;
-            float myMaxHealth;
-            float healthToDecreaseBy;
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, false))
             {
+                float currentTime;
+                float timePassed;
                 currentTime = GetGameTime();
                 timePassed = currentTime - this.previousTakeDamageTime;
                 if(timePassed >= 10)
@@ -41,6 +39,8 @@ namespace Buffs
                 {
                     if(timePassed > 0.5f)
                     {
+                        float myMaxHealth;
+                        float healthToDecreaseBy;
                         this.dealtDamage = 1;
                         myMaxHealth = GetMaxHealth(owner, PrimaryAbilityResourceType.MANA);
                         healthToDecreaseBy = 0.6f * myMaxHealth;

@@ -42,16 +42,16 @@ namespace Spells
         public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
         {
             TeamId teamOfOwner;
-            Vector3 ownerPos; // UNUSED
-            Vector3 targetPos;
-            float distance;
-            int nextBuffVars_dashSpeed;
-            Vector3 nextBuffVars_TargetPos;
-            float nextBuffVars_Distance;
-            Particle nextBuffVars_GreenDash;
             teamOfOwner = GetTeamID(owner);
             if(GetBuffCountFromCaster(attacker, attacker, nameof(Buffs.NocturneParanoia)) > 0)
             {
+                Vector3 ownerPos; // UNUSED
+                Vector3 targetPos;
+                float distance;
+                int nextBuffVars_dashSpeed;
+                Vector3 nextBuffVars_TargetPos;
+                float nextBuffVars_Distance; // UNUSED
+                Particle nextBuffVars_GreenDash;
                 if(teamOfOwner == TeamId.TEAM_BLUE)
                 {
                     foreach(Champion unit in GetChampions(TeamId.TEAM_PURPLE, default, true))

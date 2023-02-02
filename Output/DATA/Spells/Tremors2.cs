@@ -5,6 +5,29 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class Tremors2 : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            CastingBreaksStealth = true,
+            DoesntBreakShields = true,
+            TriggersSpellCasts = true,
+            IsDamagingSpell = true,
+            NotSingleTargetSpell = true,
+        };
+        int[] effect0 = {65, 130, 195};
+        int[] effect1 = {8, 8, 8, 8, 8};
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            float nextBuffVars_TremDamage;
+            level = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
+            nextBuffVars_TremDamage = this.effect0[level];
+            AddBuff(attacker, target, new Buffs.Tremors2(nextBuffVars_TremDamage), 1, 1, this.effect1[level], BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class Tremors2 : BBBuffScript
@@ -48,29 +71,6 @@ namespace Buffs
         public override void OnDeath()
         {
             SpellEffectRemove(this.tremorsFx);
-        }
-    }
-}
-namespace Spells
-{
-    public class Tremors2 : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            CastingBreaksStealth = true,
-            DoesntBreakShields = true,
-            TriggersSpellCasts = true,
-            IsDamagingSpell = true,
-            NotSingleTargetSpell = true,
-        };
-        int[] effect0 = {65, 130, 195};
-        int[] effect1 = {8, 8, 8, 8, 8};
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            float nextBuffVars_TremDamage;
-            level = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
-            nextBuffVars_TremDamage = this.effect0[level];
-            AddBuff(attacker, target, new Buffs.Tremors2(nextBuffVars_TremDamage), 1, 1, this.effect1[level], BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
         }
     }
 }

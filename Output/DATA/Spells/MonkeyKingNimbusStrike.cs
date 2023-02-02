@@ -5,6 +5,39 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class MonkeyKingNimbusStrike : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            CastingBreaksStealth = true,
+            DoesntBreakShields = true,
+            TriggersSpellCasts = true,
+            IsDamagingSpell = false,
+            NotSingleTargetSpell = true,
+        };
+        float[] effect0 = {0.01f, 0.01f, 0.01f, 0.01f, 0.01f};
+        int[] effect1 = {7, 14, 21, 28, 35};
+        float[] effect2 = {0.09f, 0.12f, 0.15f, 0.18f, 0.21f};
+        public override void SelfExecute()
+        {
+            float maxHealth;
+            float healthPercent;
+            float baseDamage;
+            float nextBuffVars_LifestealStat;
+            float healthDamage;
+            float nextBuffVars_DamageGain;
+            maxHealth = GetMaxHealth(owner, PrimaryAbilityResourceType.MANA);
+            healthPercent = this.effect0[level];
+            baseDamage = this.effect1[level];
+            nextBuffVars_LifestealStat = this.effect2[level];
+            healthDamage = healthPercent * maxHealth;
+            nextBuffVars_DamageGain = healthDamage + baseDamage;
+            AddBuff((ObjAIBase)owner, owner, new Buffs.MonkeyKingNimbusStrike(nextBuffVars_DamageGain, nextBuffVars_LifestealStat), 1, 1, 6, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class MonkeyKingNimbusStrike : BBBuffScript
@@ -44,39 +77,6 @@ namespace Buffs
         {
             Particle healParticle; // UNUSED
             SpellEffectCreate(out healParticle, out _, "olaf_viciousStrikes_heal.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true);
-        }
-    }
-}
-namespace Spells
-{
-    public class MonkeyKingNimbusStrike : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            CastingBreaksStealth = true,
-            DoesntBreakShields = true,
-            TriggersSpellCasts = true,
-            IsDamagingSpell = false,
-            NotSingleTargetSpell = true,
-        };
-        float[] effect0 = {0.01f, 0.01f, 0.01f, 0.01f, 0.01f};
-        int[] effect1 = {7, 14, 21, 28, 35};
-        float[] effect2 = {0.09f, 0.12f, 0.15f, 0.18f, 0.21f};
-        public override void SelfExecute()
-        {
-            float maxHealth;
-            float healthPercent;
-            float baseDamage;
-            float nextBuffVars_LifestealStat;
-            float nextBuffVars_DamageGain;
-            float healthDamage;
-            maxHealth = GetMaxHealth(owner, PrimaryAbilityResourceType.MANA);
-            healthPercent = this.effect0[level];
-            baseDamage = this.effect1[level];
-            nextBuffVars_LifestealStat = this.effect2[level];
-            healthDamage = healthPercent * maxHealth;
-            nextBuffVars_DamageGain = healthDamage + baseDamage;
-            AddBuff((ObjAIBase)owner, owner, new Buffs.MonkeyKingNimbusStrike(nextBuffVars_DamageGain, nextBuffVars_LifestealStat), 1, 1, 6, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
         }
     }
 }

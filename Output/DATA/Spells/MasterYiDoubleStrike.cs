@@ -5,28 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class MasterYiDoubleStrike : BBBuffScript
-    {
-        public override void OnDeactivate(bool expired)
-        {
-            float totalAttackDamage;
-            if(owner.IsDead)
-            {
-            }
-            else
-            {
-                totalAttackDamage = GetBaseAttackDamage(attacker);
-                ApplyDamage(attacker, owner, totalAttackDamage, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_ATTACK, 1, 0, 1, false, false);
-                if(target is ObjAIBase)
-                {
-                    SpellEffectCreate(out _, out _, "globalhit_yellow_tar.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false);
-                }
-            }
-        }
-    }
-}
 namespace Spells
 {
     public class MasterYiDoubleStrike : BBSpellScript
@@ -46,6 +24,28 @@ namespace Spells
             ApplyDamage(attacker, target, baseDamage, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_ATTACK, 1, 0, 1, false, false);
             RemoveOverrideAutoAttack(owner, false);
             SpellBuffRemove(owner, nameof(Buffs.DoubleStrikeIcon), (ObjAIBase)owner);
+        }
+    }
+}
+namespace Buffs
+{
+    public class MasterYiDoubleStrike : BBBuffScript
+    {
+        public override void OnDeactivate(bool expired)
+        {
+            if(owner.IsDead)
+            {
+            }
+            else
+            {
+                float totalAttackDamage;
+                totalAttackDamage = GetBaseAttackDamage(attacker);
+                ApplyDamage(attacker, owner, totalAttackDamage, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_ATTACK, 1, 0, 1, false, false);
+                if(target is ObjAIBase)
+                {
+                    SpellEffectCreate(out _, out _, "globalhit_yellow_tar.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false);
+                }
+            }
         }
     }
 }

@@ -46,7 +46,6 @@ namespace Spells
             float damageVar;
             float kIDamage;
             float nextBuffVars_DamageReduction;
-            Particle pH; // UNUSED
             FaceDirection(owner, target.Position);
             distance = DistanceBetweenObjects("Owner", "Target");
             finalDistance = distance + 0;
@@ -71,6 +70,7 @@ namespace Spells
             }
             if(target.Team != owner.Team)
             {
+                Particle pH; // UNUSED
                 SpellEffectCreate(out pH, out _, "katarina_shadowStep_tar.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, targetPos, target, default, default, true, false, false, false, false);
                 ApplyDamage(attacker, target, damageVar, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELL, 1, 0.75f, 1, false, false, attacker);
                 if(target is Champion)

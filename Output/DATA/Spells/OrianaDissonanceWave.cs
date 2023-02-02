@@ -42,10 +42,10 @@ namespace Buffs
         public override void OnUpdateActions()
         {
             Vector3 targetPos;
-            int nextBuffVars_Level;
             targetPos = this.targetPos;
             if(ExecutePeriodically(0.25f, ref this.lastTimeExecuted, true))
             {
+                int nextBuffVars_Level;
                 foreach(AttackableUnit unit in GetUnitsInArea(attacker, targetPos, 225, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, nameof(Buffs.OrianaShock), false))
                 {
                     nextBuffVars_Level = GetSlotSpellLevel((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);

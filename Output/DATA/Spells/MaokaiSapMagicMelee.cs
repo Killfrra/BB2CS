@@ -18,27 +18,27 @@ namespace Buffs
         };
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            float healthPercent;
-            TeamId teamID;
-            float maxHealth;
-            int level; // UNUSED
-            float regenPercent;
-            float healthToInc;
-            Particle ar; // UNUSED
             if(target is ObjAIBase)
             {
                 if(target is not BaseTurret)
                 {
+                    float healthPercent;
                     healthPercent = GetHealthPercent(owner, PrimaryAbilityResourceType.MANA);
                     if(healthPercent < 1)
                     {
+                        TeamId teamID;
+                        float maxHealth;
+                        int level; // UNUSED
+                        float regenPercent;
+                        float healthToInc;
+                        Particle ar; // UNUSED
                         teamID = GetTeamID(owner);
                         maxHealth = GetMaxHealth(attacker, PrimaryAbilityResourceType.MANA);
                         level = GetLevel(owner);
                         regenPercent = 0.07f;
                         healthToInc = maxHealth * regenPercent;
                         IncHealth(owner, healthToInc, owner);
-                        SpellEffectCreate(out ar, out _, "Maokai_Heal.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, false, false, false, false);
+                        SpellEffectCreate(out ar, out _, "Maokai_Heal.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, false, false, false, false);
                         SpellBuffClear(owner, nameof(Buffs.MaokaiSapMagicMelee));
                     }
                 }

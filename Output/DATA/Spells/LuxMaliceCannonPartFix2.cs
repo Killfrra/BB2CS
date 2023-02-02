@@ -24,9 +24,9 @@ namespace Buffs
             beam1 = GetPointByUnitFacingOffset(owner, 1884, 0);
             beam2 = GetPointByUnitFacingOffset(owner, 2826, 0);
             beam3 = GetPointByUnitFacingOffset(owner, 2475, 0);
-            other1 = SpawnMinion("hiu", "TestCube", "idle.lua", beam1, teamID, false, true, false, false, false, true, 300, default, false, (Champion)owner);
-            other2 = SpawnMinion("hiu", "TestCube", "idle.lua", beam2, teamID, false, true, false, false, false, true, 300, default, false, (Champion)owner);
-            other3 = SpawnMinion("hiu", "TestCube", "idle.lua", beam3, teamID, false, true, false, false, false, true, 300, default, false, (Champion)owner);
+            other1 = SpawnMinion("hiu", "TestCube", "idle.lua", beam1, teamID ?? TeamId.TEAM_CASTER, false, true, false, false, false, true, 300, default, false, (Champion)owner);
+            other2 = SpawnMinion("hiu", "TestCube", "idle.lua", beam2, teamID ?? TeamId.TEAM_CASTER, false, true, false, false, false, true, 300, default, false, (Champion)owner);
+            other3 = SpawnMinion("hiu", "TestCube", "idle.lua", beam3, teamID ?? TeamId.TEAM_CASTER, false, true, false, false, false, true, 300, default, false, (Champion)owner);
             LinkVisibility(other1, attacker);
             LinkVisibility(other2, attacker);
             LinkVisibility(other3, attacker);

@@ -5,20 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class XerathArcaneBarrageWrapper : BBBuffScript
-    {
-        public override void OnActivate()
-        {
-            SetPARMultiplicativeCostInc(owner, 3, SpellSlotType.SpellSlots, -1, PrimaryAbilityResourceType.MANA);
-        }
-        public override void OnDeactivate(bool expired)
-        {
-            SetPARMultiplicativeCostInc(owner, 3, SpellSlotType.SpellSlots, 0, PrimaryAbilityResourceType.MANA);
-        }
-    }
-}
 namespace Spells
 {
     public class XerathArcaneBarrageWrapper : BBSpellScript
@@ -53,6 +39,20 @@ namespace Spells
                     AddBuff((ObjAIBase)owner, owner, new Buffs.XerathArcaneBarrageWrapper(), 1, 1, 15, BuffAddType.STACKS_AND_RENEWS, BuffType.INTERNAL, 0, true, false, false);
                 }
             }
+        }
+    }
+}
+namespace Buffs
+{
+    public class XerathArcaneBarrageWrapper : BBBuffScript
+    {
+        public override void OnActivate()
+        {
+            SetPARMultiplicativeCostInc(owner, 3, SpellSlotType.SpellSlots, -1, PrimaryAbilityResourceType.MANA);
+        }
+        public override void OnDeactivate(bool expired)
+        {
+            SetPARMultiplicativeCostInc(owner, 3, SpellSlotType.SpellSlots, 0, PrimaryAbilityResourceType.MANA);
         }
     }
 }

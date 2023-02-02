@@ -42,13 +42,13 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            int count;
-            float nextBuffVars_DamagePerTick;
             foreach(AttackableUnit unit in GetUnitsInArea(attacker, owner.Position, 180, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
             {
+                int count;
                 count = GetBuffCountFromAll(unit, nameof(Buffs.PoisonTrailMarker));
                 if(count == 0)
                 {
+                    float nextBuffVars_DamagePerTick;
                     AddBuff(attacker, unit, new Buffs.PoisonTrailMarker(), 1, 1, 0.5f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false);
                     nextBuffVars_DamagePerTick = this.damagePerTick;
                     AddBuff(attacker, unit, new Buffs.PoisonTrailTarget(nextBuffVars_DamagePerTick), 1, 1, 2.1f, BuffAddType.RENEW_EXISTING, BuffType.POISON, 0, true, false);

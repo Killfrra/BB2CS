@@ -40,7 +40,7 @@ namespace Buffs
             SetNoRender(owner, true);
             ownerPos = GetUnitPosition(owner);
             teamID = GetTeamID(owner);
-            SpellEffectCreate(out fadeParticle, out _, "HallucinatePoof.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, ownerPos, target, default, default, true, false, false, false, false);
+            SpellEffectCreate(out fadeParticle, out _, "HallucinatePoof.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, ownerPos, target, default, default, true, false, false, false, false);
         }
         public override void OnDeactivate(bool expired)
         {
@@ -49,11 +49,11 @@ namespace Buffs
             Pet other1;
             TeamId teamID;
             float nextBuffVars_DamageAmount;
-            float nextBuffVars_DamageDealt;
-            float nextBuffVars_DamageTaken;
-            float nextBuffVars_shacoDamageTaken;
             Particle fadeParticle; // UNUSED
             Vector3 pos2;
+            float nextBuffVars_DamageDealt;
+            float nextBuffVars_DamageTaken;
+            float nextBuffVars_shacoDamageTaken; // UNUSED
             SetStunned(owner, false);
             SetNoRender(owner, false);
             SetTargetable(owner, true);
@@ -69,11 +69,11 @@ namespace Buffs
             AddBuff((ObjAIBase)owner, other1, new Buffs.APBonusDamageToTowers(), 1, 1, 25000, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0, true, false, false);
             AddBuff((ObjAIBase)owner, other1, new Buffs.ChampionChampionDelta(), 1, 1, 25000, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0, true, false, false);
             AddBuff((ObjAIBase)owner, other1, new Buffs.Backstab(), 1, 1, 25000, BuffAddType.REPLACE_EXISTING, BuffType.AURA, 0, true, false, false);
-            SpellEffectCreate(out fadeParticle, out _, "HallucinatePoof.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, other1, default, default, target, default, default, true, false, false, false, false);
+            SpellEffectCreate(out fadeParticle, out _, "HallucinatePoof.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, other1, default, default, target, default, default, true, false, false, false, false);
             SetStealthed(other1, false);
             pos2 = GetRandomPointInAreaUnit(owner, 250, 50);
             TeleportToPosition(owner, pos2);
-            SpellEffectCreate(out fadeParticle, out _, "HallucinatePoof.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, true, false, false, false, false);
+            SpellEffectCreate(out fadeParticle, out _, "HallucinatePoof.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, true, false, false, false, false);
         }
     }
 }

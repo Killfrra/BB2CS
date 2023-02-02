@@ -39,11 +39,11 @@ namespace Chars
         }
         public override void OnLevelUpSpell(int slot)
         {
-            int nextBuffVars_BonusDamage;
-            float nextBuffVars_CooldownBonus;
-            float nextBuffVars_AttackSpeedBonus;
             if(slot == 2)
             {
+                int nextBuffVars_BonusDamage;
+                float nextBuffVars_CooldownBonus;
+                float nextBuffVars_AttackSpeedBonus;
                 level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 nextBuffVars_BonusDamage = this.effect0[level];
                 nextBuffVars_CooldownBonus = this.effect1[level];

@@ -5,6 +5,37 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class MordekaiserMaceOfSpades : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = true,
+            IsDamagingSpell = true,
+            NotSingleTargetSpell = false,
+        };
+        int[] effect0 = {25, 32, 39, 46, 53};
+        int[] effect1 = {8, 7, 6, 5, 4};
+        public override void SelfExecute()
+        {
+            float healthCost;
+            float temp1;
+            float nextBuffVars_SpellCooldown;
+            healthCost = this.effect0[level];
+            temp1 = GetHealth(owner, PrimaryAbilityResourceType.MANA);
+            if(healthCost >= temp1)
+            {
+                healthCost = temp1 - 1;
+            }
+            healthCost *= -1;
+            IncHealth(owner, healthCost, owner);
+            nextBuffVars_SpellCooldown = this.effect1[level];
+            AddBuff((ObjAIBase)owner, owner, new Buffs.MordekaiserMaceOfSpades(nextBuffVars_SpellCooldown), 1, 1, 10, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+            SetSlotSpellCooldownTime((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, 0);
+        }
+    }
+}
 namespace Buffs
 {
     public class MordekaiserMaceOfSpades : BBBuffScript
@@ -52,20 +83,6 @@ namespace Buffs
         }
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            TeamId teamID;
-            float nextBuffVars_BaseDamage;
-            int level;
-            float baseDamage;
-            float baseDamage;
-            float totalDamage;
-            float damageDifference;
-            float bonusDamage;
-            float abilityPower;
-            float bonusAPDamage;
-            float unitCount;
-            Particle a; // UNUSED
-            Vector3 targetPos;
-            Particle b; // UNUSED
             if(target is not ObjAIBase)
             {
             }
@@ -74,6 +91,17 @@ namespace Buffs
             }
             else
             {
+                TeamId teamID;
+                float nextBuffVars_BaseDamage;
+                int level;
+                float baseDamage;
+                float baseDamage;
+                float totalDamage;
+                float damageDifference;
+                float bonusDamage;
+                float abilityPower;
+                float bonusAPDamage;
+                float unitCount;
                 teamID = GetTeamID(owner);
                 this.willRemove = true;
                 AddBuff((ObjAIBase)owner, owner, new Buffs.MordekaiserSyphonParticle(), 1, 1, 0.2f, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0, true, false, false);
@@ -98,7 +126,9 @@ namespace Buffs
                 }
                 if(unitCount > 1)
                 {
-                    SpellEffectCreate(out a, out _, "mordakaiser_maceOfSpades_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, false, false, false, false);
+                    Particle a; // UNUSED
+                    Vector3 targetPos;
+                    SpellEffectCreate(out a, out _, "mordakaiser_maceOfSpades_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, false, false, false, false);
                     targetPos = GetUnitPosition(target);
                     foreach(AttackableUnit unit in GetClosestUnitsInArea(owner, target.Position, 450, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, 4, default, true))
                     {
@@ -110,8 +140,9 @@ namespace Buffs
                 }
                 else
                 {
+                    Particle b; // UNUSED
                     baseDamage *= 1.65f;
-                    SpellEffectCreate(out b, out _, "mordakaiser_maceOfSpades_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, false, false, false, false);
+                    SpellEffectCreate(out b, out _, "mordakaiser_maceOfSpades_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, false, false, false, false);
                 }
                 if(damageDifference > 0)
                 {
@@ -121,37 +152,6 @@ namespace Buffs
                 nextBuffVars_BaseDamage = baseDamage;
                 AddBuff((ObjAIBase)target, owner, new Buffs.MordekaiserMaceOfSpadesDmg(nextBuffVars_BaseDamage), 1, 1, 0.001f, BuffAddType.STACKS_AND_RENEWS, BuffType.INTERNAL, 0, true, false, false);
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class MordekaiserMaceOfSpades : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = true,
-            IsDamagingSpell = true,
-            NotSingleTargetSpell = false,
-        };
-        int[] effect0 = {25, 32, 39, 46, 53};
-        int[] effect1 = {8, 7, 6, 5, 4};
-        public override void SelfExecute()
-        {
-            float healthCost;
-            float temp1;
-            float nextBuffVars_SpellCooldown;
-            healthCost = this.effect0[level];
-            temp1 = GetHealth(owner, PrimaryAbilityResourceType.MANA);
-            if(healthCost >= temp1)
-            {
-                healthCost = temp1 - 1;
-            }
-            healthCost *= -1;
-            IncHealth(owner, healthCost, owner);
-            nextBuffVars_SpellCooldown = this.effect1[level];
-            AddBuff((ObjAIBase)owner, owner, new Buffs.MordekaiserMaceOfSpades(nextBuffVars_SpellCooldown), 1, 1, 10, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
-            SetSlotSpellCooldownTime((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, 0);
         }
     }
 }

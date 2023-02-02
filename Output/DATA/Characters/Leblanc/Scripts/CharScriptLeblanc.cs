@@ -11,10 +11,10 @@ namespace Chars
     {
         public override void OnSpellCast(string spellName, SpellScriptMetaData spellVars)
         {
-            string slotName;
-            float cooldown;
             if(GetBuffCountFromCaster(owner, default, nameof(Buffs.LeblancSlideM)) == 0)
             {
+                string slotName;
+                float cooldown;
                 level = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 slotName = GetSpellName();
                 cooldown = GetSlotSpellCooldownTime((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);

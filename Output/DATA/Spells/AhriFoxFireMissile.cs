@@ -5,26 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class AhriFoxFireMissile : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            BuffName = "AhriFoxFire",
-            BuffTextureName = "Ahri_FoxFire.dds",
-        };
-        public override void OnDeactivate(bool expired)
-        {
-            int count;
-            count = GetBuffCountFromAll(owner, nameof(Buffs.AhriFoxFireMissile));
-            if(count <= 0)
-            {
-                SpellBuffRemove(owner, nameof(Buffs.AhriFoxFire), (ObjAIBase)owner, 0);
-            }
-        }
-    }
-}
 namespace Spells
 {
     public class AhriFoxFireMissile : BBSpellScript
@@ -40,19 +20,10 @@ namespace Spells
         int[] effect0 = {30, 60, 90, 120, 150};
         public override void OnMissileUpdate(SpellMissile missileNetworkID, Vector3 missilePosition)
         {
-            int count;
-            float baseDamage;
-            float myAP;
-            float myAPBonus;
-            float totalDamage;
-            float theirSpellBlock;
-            float theirSpellBlockPercent;
-            float theirSpellBlockRatio;
-            float projectedDamage;
-            float theirHealth;
             spellVars.Ready++;
             if(spellVars.Ready >= 3)
             {
+                int count;
                 count = 0;
                 level = GetSlotSpellLevel((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 foreach(AttackableUnit unit in GetClosestVisibleUnitsInArea(owner, missilePosition, 650, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectHeroes, 1, default, true))
@@ -66,6 +37,15 @@ namespace Spells
                 {
                     foreach(AttackableUnit unit in GetClosestVisibleUnitsInArea(owner, missilePosition, 650, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, 1, default, true))
                     {
+                        float baseDamage;
+                        float myAP;
+                        float myAPBonus;
+                        float totalDamage;
+                        float theirSpellBlock;
+                        float theirSpellBlockPercent;
+                        float theirSpellBlockRatio;
+                        float projectedDamage;
+                        float theirHealth;
                         SpellCast((ObjAIBase)owner, unit, default, default, 3, SpellSlotType.ExtraSlots, level, true, true, false, true, false, true, missilePosition);
                         DestroyMissile(missileNetworkID);
                         SpellBuffRemoveStacks(owner, owner, nameof(Buffs.AhriFoxFireMissile), 1);
@@ -100,6 +80,26 @@ namespace Spells
                         }
                     }
                 }
+            }
+        }
+    }
+}
+namespace Buffs
+{
+    public class AhriFoxFireMissile : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            BuffName = "AhriFoxFire",
+            BuffTextureName = "Ahri_FoxFire.dds",
+        };
+        public override void OnDeactivate(bool expired)
+        {
+            int count;
+            count = GetBuffCountFromAll(owner, nameof(Buffs.AhriFoxFireMissile));
+            if(count <= 0)
+            {
+                SpellBuffRemove(owner, nameof(Buffs.AhriFoxFire), (ObjAIBase)owner, 0);
             }
         }
     }

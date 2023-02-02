@@ -5,38 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class WriggleLantern : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateAttachBoneName = new[]{ "", "", },
-            AutoBuffActivateEffect = new[]{ "", "", },
-            BuffName = "WriggleLantern",
-            BuffTextureName = "3154_WriggleLantern.dds",
-        };
-        public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
-        {
-            if(target is ObjAIBase)
-            {
-                if(RandomChance() < 0.2f)
-                {
-                    if(target is not BaseTurret)
-                    {
-                        if(target is not Champion)
-                        {
-                            if(GetBuffCountFromCaster(target, default, nameof(Buffs.OdinGolemBombBuff)) == 0)
-                            {
-                                ApplyDamage(attacker, target, 425, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_PROC, 1, 0, 0, false, false, attacker);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
 namespace Spells
 {
     public class WriggleLantern : BBSpellScript
@@ -62,7 +30,7 @@ namespace Spells
             float newCooldown;
             teamID = GetTeamID(owner);
             targetPos = GetCastSpellTargetPos();
-            other3 = SpawnMinion("WriggleLantern", "WriggleLantern", "idle.lua", targetPos, teamID, true, true, false, false, false, false, 0, true, false, (Champion)owner);
+            other3 = SpawnMinion("WriggleLantern", "WriggleLantern", "idle.lua", targetPos, teamID ?? TeamId.TEAM_UNKNOWN, true, true, false, false, false, false, 0, true, false, (Champion)owner);
             AddBuff(attacker, other3, new Buffs.SharedWardBuff(), 1, 1, 180, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
             AddBuff((ObjAIBase)owner, other3, new Buffs.WriggleLanternWard(), 1, 1, 180, BuffAddType.REPLACE_EXISTING, BuffType.INVISIBILITY, 0, true, false, false);
             AddBuff(attacker, other3, new Buffs.ItemPlacementMissile(), 1, 1, 2, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
@@ -103,6 +71,38 @@ namespace Spells
             if(name5 == nameof(Spells.WriggleLantern))
             {
                 SetSlotSpellCooldownTimeVer2(newCooldown, 5, SpellSlotType.InventorySlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner, false);
+            }
+        }
+    }
+}
+namespace Buffs
+{
+    public class WriggleLantern : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateAttachBoneName = new[]{ "", "", },
+            AutoBuffActivateEffect = new[]{ "", "", },
+            BuffName = "WriggleLantern",
+            BuffTextureName = "3154_WriggleLantern.dds",
+        };
+        public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
+        {
+            if(target is ObjAIBase)
+            {
+                if(RandomChance() < 0.2f)
+                {
+                    if(target is not BaseTurret)
+                    {
+                        if(target is not Champion)
+                        {
+                            if(GetBuffCountFromCaster(target, default, nameof(Buffs.OdinGolemBombBuff)) == 0)
+                            {
+                                ApplyDamage(attacker, target, 425, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_PROC, 1, 0, 0, false, false, attacker);
+                            }
+                        }
+                    }
+                }
             }
         }
     }

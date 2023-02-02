@@ -20,21 +20,21 @@ namespace Spells
             TeamId teamID;
             float damageAmount;
             Vector3 ownerPos;
-            Particle asdf; // UNUSED
-            Particle asdf2; // UNUSED
             teamID = GetTeamID(target);
             level = GetSlotSpellLevel((ObjAIBase)target, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             damageAmount = this.effect0[level];
             ownerPos = GetUnitPosition(owner);
-            SpellEffectCreate(out this.a, out _, "Xerath_E_tar.troy", default, teamID, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, default, default, ownerPos, true, false, false, false, false);
+            SpellEffectCreate(out this.a, out _, "Xerath_E_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, default, default, ownerPos, true, false, false, false, false);
             foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)target, owner.Position, 275, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
             {
-                SpellEffectCreate(out asdf, out _, "Xerath_Barrage_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
+                Particle asdf; // UNUSED
+                SpellEffectCreate(out asdf, out _, "Xerath_Barrage_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
                 BreakSpellShields(unit);
                 ApplyDamage((ObjAIBase)target, unit, damageAmount, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0.6f, 0, false, false, (ObjAIBase)target);
                 if(GetBuffCountFromCaster(unit, target, nameof(Buffs.XerathMageChains)) > 0)
                 {
-                    SpellEffectCreate(out asdf2, out _, "Xerath_MageChains_consume.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
+                    Particle asdf2; // UNUSED
+                    SpellEffectCreate(out asdf2, out _, "Xerath_MageChains_consume.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
                     AddBuff((ObjAIBase)target, unit, new Buffs.XerathMageChainsRoot(), 1, 1, 1.5f, BuffAddType.REPLACE_EXISTING, BuffType.STUN, 0, true, true, false);
                     SpellBuffRemove(unit, nameof(Buffs.XerathMageChains), (ObjAIBase)target, 0);
                 }

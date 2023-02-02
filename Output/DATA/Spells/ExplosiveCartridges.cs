@@ -16,16 +16,15 @@ namespace Buffs
         };
         public override void OnSpellHit()
         {
-            TeamId teamID;
-            Particle asdf; // UNUSED
-            float dmg;
-            float thirdDA;
             if(target is ObjAIBase)
             {
                 if(target is not BaseTurret)
                 {
+                    TeamId teamID;
+                    Particle asdf; // UNUSED
+                    float dmg;
                     teamID = GetTeamID(owner);
-                    attacker = GetChampionBySkinName("Heimerdinger", teamID);
+                    attacker = GetChampionBySkinName("Heimerdinger", teamID ?? TeamId.TEAM_UNKNOWN);
                     AddBuff(attacker, target, new Buffs.UrAniumRoundsHit(), 50, 1, 3, BuffAddType.STACKS_AND_RENEWS, BuffType.SHRED, 0, true, false, false);
                     SpellEffectCreate(out asdf, out _, "TiamatMelee_itm.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, false, false, false, false, false);
                     dmg = GetTotalAttackDamage(owner);
@@ -33,6 +32,7 @@ namespace Buffs
                     {
                         if(target != unit)
                         {
+                            float thirdDA;
                             thirdDA = 0.4f * dmg;
                             ApplyDamage(attacker, unit, thirdDA, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_PROC, 1, 0, 1, false, false, attacker);
                         }

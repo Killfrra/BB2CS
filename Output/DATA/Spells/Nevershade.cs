@@ -19,9 +19,6 @@ namespace Buffs
         float lastTimeExecuted;
         public override void OnUpdateStats()
         {
-            float maxHealth;
-            float regen;
-            float healthInc;
             if(owner.IsDead)
             {
             }
@@ -29,6 +26,9 @@ namespace Buffs
             {
                 if(ExecutePeriodically(1, ref this.lastTimeExecuted, false))
                 {
+                    float maxHealth;
+                    float regen;
+                    float healthInc;
                     maxHealth = GetMaxHealth(owner, PrimaryAbilityResourceType.MANA);
                     regen = 0.003f;
                     healthInc = regen * maxHealth;

@@ -24,7 +24,6 @@ namespace Buffs
         {
             bool returnValue = true;
             float durationMod;
-            Particle ar; // UNUSED
             if(this.willRemove)
             {
                 durationMod = 0.5f;
@@ -66,6 +65,7 @@ namespace Buffs
             }
             else if(duration == 37037)
             {
+                Particle ar; // UNUSED
                 SpellEffectCreate(out ar, out _, "SpellEffect_proc.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false, default, default, false, false);
                 this.willRemove = true;
                 if(owner.Team != attacker.Team)
@@ -123,15 +123,15 @@ namespace Buffs
         }
         public override void OnBeingSpellHit(SpellScriptMetaData spellVars)
         {
-            bool isAttack;
-            Particle ar; // UNUSED
             SetTriggerUnit(attacker);
             owner = SetBuffCasterUnit();
             if(owner.Team != attacker.Team)
             {
+                bool isAttack;
                 isAttack = GetIsAttackOverride();
                 if(!isAttack)
                 {
+                    Particle ar; // UNUSED
                     if(!spellVars.DoesntBreakShields)
                     {
                         this.willRemove = true;

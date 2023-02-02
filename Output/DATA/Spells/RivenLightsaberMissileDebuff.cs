@@ -23,9 +23,9 @@ namespace Buffs
             teamID = GetTeamID(attacker);
             if(owner is Champion)
             {
-                SpellEffectCreate(out temp, out temp2, "exile_ult_mis_tar.troy ", "exile_ult_mis_tar.troy ", teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, false, false, false, false);
+                SpellEffectCreate(out temp, out temp2, "exile_ult_mis_tar.troy ", "exile_ult_mis_tar.troy ", teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, false, false, false, false);
             }
-            SpellEffectCreate(out temp, out temp2, "exile_ult_mis_tar_minion.troy ", "exile_ult_mis_tar_minion.troy ", teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, false, false, false, false);
+            SpellEffectCreate(out temp, out temp2, "exile_ult_mis_tar_minion.troy ", "exile_ult_mis_tar_minion.troy ", teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, false, false, false, false);
         }
     }
 }

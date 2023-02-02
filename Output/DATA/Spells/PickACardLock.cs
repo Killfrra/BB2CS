@@ -5,6 +5,22 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class PickACardLock : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = false,
+            IsDamagingSpell = false,
+            NotSingleTargetSpell = false,
+        };
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            SealSpellSlot(1, SpellSlotType.SpellSlots, (ObjAIBase)owner, true, SpellbookType.SPELLBOOK_CHAMPION);
+        }
+    }
+}
 namespace Buffs
 {
     public class PickACardLock : BBBuffScript
@@ -19,22 +35,6 @@ namespace Buffs
         public override void OnDeactivate(bool expired)
         {
             SpellBuffRemove(owner, nameof(Buffs.PickACard), (ObjAIBase)owner);
-        }
-    }
-}
-namespace Spells
-{
-    public class PickACardLock : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = false,
-            IsDamagingSpell = false,
-            NotSingleTargetSpell = false,
-        };
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            SealSpellSlot(1, SpellSlotType.SpellSlots, (ObjAIBase)owner, true, SpellbookType.SPELLBOOK_CHAMPION);
         }
     }
 }

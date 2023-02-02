@@ -19,10 +19,10 @@ namespace Chars
         }
         public override void OnResurrect()
         {
-            int nextBuffVars_CounterVar;
             level = GetSlotSpellLevel((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             if(level >= 1)
             {
+                int nextBuffVars_CounterVar; // UNUSED
                 nextBuffVars_CounterVar = this.effect0[level];
                 charVars.Count = 0;
                 AddBuff((ObjAIBase)owner, owner, new Buffs.KennenDoubleStrikeProc(), 1, 1, 25000, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);

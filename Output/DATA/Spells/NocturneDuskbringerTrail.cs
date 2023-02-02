@@ -30,20 +30,20 @@ namespace Buffs
         {
             TeamId casterID;
             int level;
-            Vector3 curPos;
-            float distance;
-            Minion other3;
-            float nextBuffVars_HastePercent;
-            int nextBuffVars_BonusAD;
             casterID = GetTeamID(attacker);
             level = GetSlotSpellLevel(attacker, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             if(ExecutePeriodically(0.25f, ref this.lastTimeExecuted, true))
             {
+                Vector3 curPos;
+                float distance;
                 curPos = GetPointByUnitFacingOffset(owner, 0, 0);
                 distance = DistanceBetweenPoints(this.lastPosition, curPos);
                 if(distance > 25)
                 {
-                    other3 = SpawnMinion("DarkPath", "testcube", "idle.lua", curPos, casterID, true, true, true, true, false, true, 0, default, true);
+                    Minion other3;
+                    float nextBuffVars_HastePercent;
+                    int nextBuffVars_BonusAD;
+                    other3 = SpawnMinion("DarkPath", "testcube", "idle.lua", curPos, casterID ?? TeamId.TEAM_CASTER, true, true, true, true, false, true, 0, default, true);
                     nextBuffVars_HastePercent = this.effect0[level];
                     nextBuffVars_BonusAD = this.effect1[level];
                     AddBuff(attacker, other3, new Buffs.NocturneDuskbringer(nextBuffVars_HastePercent, nextBuffVars_BonusAD), 1, 1, 4, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0, true, false, false);

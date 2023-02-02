@@ -5,6 +5,25 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class WujuStyle : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = true,
+            NotSingleTargetSpell = false,
+        };
+        public override void SelfExecute()
+        {
+            SpellBuffRemove(owner, nameof(Buffs.WujuStyle), (ObjAIBase)owner);
+        }
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            AddBuff(attacker, owner, new Buffs.WujuStyleSuperCharged(), 1, 1, 10, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class WujuStyle : BBBuffScript
@@ -32,25 +51,6 @@ namespace Buffs
             levelDamage = 5 * level;
             totalDamage = levelDamage + baseDamage;
             IncFlatPhysicalDamageMod(owner, totalDamage);
-        }
-    }
-}
-namespace Spells
-{
-    public class WujuStyle : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = true,
-            NotSingleTargetSpell = false,
-        };
-        public override void SelfExecute()
-        {
-            SpellBuffRemove(owner, nameof(Buffs.WujuStyle), (ObjAIBase)owner);
-        }
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            AddBuff(attacker, owner, new Buffs.WujuStyleSuperCharged(), 1, 1, 10, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false);
         }
     }
 }

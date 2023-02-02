@@ -18,11 +18,11 @@ namespace Buffs
         };
         public override void OnDeath()
         {
-            int level;
             foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 25000, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectHeroes, default, true))
             {
                 if(GetBuffCountFromCaster(unit, unit, nameof(Buffs.SilentKiller)) > 0)
                 {
+                    int level;
                     level = GetSlotSpellLevel((ObjAIBase)unit, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                     if(level > 0)
                     {

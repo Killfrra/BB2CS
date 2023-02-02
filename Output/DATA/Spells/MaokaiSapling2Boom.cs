@@ -27,7 +27,7 @@ namespace Spells
             level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             teamID = GetTeamID(owner);
             buffDuration = this.effect0[level];
-            SpellEffectCreate(out particle, out _, "maoki_sapling_unit_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, default, false, default, default, targetPos, default, default, targetPos, true, default, default, false, false);
+            SpellEffectCreate(out particle, out _, "maoki_sapling_unit_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, default, false, default, default, targetPos, default, default, targetPos, true, default, default, false, false);
             damageAmount = this.effect1[level];
             mineDamageAmount = this.effect2[level];
             foreach(AttackableUnit unit in GetUnitsInArea(attacker, targetPos, 240, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
@@ -35,7 +35,7 @@ namespace Spells
                 BreakSpellShields(unit);
                 ApplyDamage(attacker, unit, damageAmount, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0.4f, 1, false, false, attacker);
             }
-            other1 = SpawnMinion("DoABarrelRoll", "MaokaiSproutling", "idle.lua", targetPos, teamID, false, false, false, false, false, false, 0, false, false, (Champion)attacker);
+            other1 = SpawnMinion("DoABarrelRoll", "MaokaiSproutling", "idle.lua", targetPos, teamID ?? TeamId.TEAM_CASTER, false, false, false, false, false, false, 0, false, false, (Champion)attacker);
             SetCanMove(other1, false);
             SetCanAttack(other1, false);
             nextBuffVars_MineDamageAmount = mineDamageAmount;

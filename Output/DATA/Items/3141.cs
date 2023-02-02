@@ -12,9 +12,9 @@ namespace Items
         float lastTimeExecuted;
         public override void OnUpdateActions()
         {
-            int count;
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, false))
             {
+                int count;
                 AddBuff(attacker, target, new Buffs.MuramasaCheck(), 1, 1, 1.2f, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0);
                 count = GetBuffCountFromAll(owner, nameof(Buffs.MuramasaStats));
                 if(count == 20)

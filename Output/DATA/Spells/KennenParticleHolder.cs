@@ -18,7 +18,7 @@ namespace Buffs
         {
             TeamId teamID;
             teamID = GetTeamID(attacker);
-            SpellEffectCreate(out this.globeOne, out _, "kennen_mos1.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true);
+            SpellEffectCreate(out this.globeOne, out _, "kennen_mos1.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true);
         }
         public override void OnDeactivate(bool expired)
         {

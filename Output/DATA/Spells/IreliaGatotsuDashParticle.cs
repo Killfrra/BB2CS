@@ -15,7 +15,7 @@ namespace Buffs
             Particle pH; // UNUSED
             Vector3 targetPos; // UNITIALIZED
             teamID = GetTeamID(owner);
-            SpellEffectCreate(out pH, out _, "irelia_gotasu_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, targetPos, owner, default, default, true);
+            SpellEffectCreate(out pH, out _, "irelia_gotasu_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, targetPos, owner, default, default, true);
         }
     }
 }

@@ -5,6 +5,21 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class MoveQuick : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = true,
+            NotSingleTargetSpell = true,
+        };
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            AddBuff(attacker, target, new Buffs.MoveQuick(), 1, 1, 3, BuffAddType.REPLACE_EXISTING, BuffType.HASTE, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class MoveQuick : BBBuffScript
@@ -64,21 +79,6 @@ namespace Buffs
             moveSpeedBonus = this.effect0[level];
             IncPercentMovementSpeedMod(owner, moveSpeedBonus);
             teemoSkinID = GetSkinID(owner);
-        }
-    }
-}
-namespace Spells
-{
-    public class MoveQuick : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = true,
-            NotSingleTargetSpell = true,
-        };
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            AddBuff(attacker, target, new Buffs.MoveQuick(), 1, 1, 3, BuffAddType.REPLACE_EXISTING, BuffType.HASTE, 0, true, false, false);
         }
     }
 }

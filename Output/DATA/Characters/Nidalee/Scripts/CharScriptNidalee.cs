@@ -16,8 +16,6 @@ namespace Chars
         public override void OnUpdateActions()
         {
             bool isInBrush;
-            int ownerLevel;
-            int unitLevel;
             isInBrush = IsInBrush(attacker);
             if(isInBrush)
             {
@@ -25,11 +23,13 @@ namespace Chars
             }
             if(ExecutePeriodically(5, ref this.lastTimeExecuted, true))
             {
+                int ownerLevel;
                 ownerLevel = GetLevel(owner);
                 foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 500, SpellDataFlags.AffectFriends | SpellDataFlags.AffectHeroes | SpellDataFlags.NotAffectSelf, default, true))
                 {
                     if(unit is Champion)
                     {
+                        int unitLevel;
                         unitLevel = GetLevel(unit);
                         if(ownerLevel > unitLevel)
                         {

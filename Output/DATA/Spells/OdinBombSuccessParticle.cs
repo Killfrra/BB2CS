@@ -44,28 +44,27 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            float currentTime;
-            float timePassed;
-            int chaosChannelBuff;
-            int orderChannelCount;
-            float totalBuffCount;
-            float modifier;
-            float pAR_to_modify;
-            float maxPAR;
-            float currentPAR;
-            float pAR_Percent;
-            float newDuration;
             if(ExecutePeriodically(0.5f, ref this.lastTimeExecuted, true))
             {
+                float currentTime;
+                float timePassed;
                 currentTime = GetGameTime();
                 timePassed = currentTime - this.startTime;
                 if(timePassed >= 0)
                 {
+                    int chaosChannelBuff;
+                    int orderChannelCount;
+                    float totalBuffCount;
                     chaosChannelBuff = GetBuffCountFromAll(owner, nameof(Buffs.OdinBombSuppressionChaos));
                     orderChannelCount = GetBuffCountFromAll(owner, nameof(Buffs.OdinBombSuppressionOrder));
                     totalBuffCount = Math.Max(chaosChannelBuff, orderChannelCount);
                     if(totalBuffCount > 0)
                     {
+                        float modifier;
+                        float pAR_to_modify;
+                        float maxPAR;
+                        float currentPAR;
+                        float pAR_Percent;
                         modifier = totalBuffCount - 1;
                         modifier *= -700;
                         pAR_to_modify = modifier + -7000;
@@ -75,6 +74,7 @@ namespace Buffs
                         pAR_Percent = currentPAR / maxPAR;
                         if(pAR_Percent <= 0.05f)
                         {
+                            float newDuration;
                             newDuration = 50;
                             if(GetBuffCountFromCaster(attacker, attacker, nameof(Buffs.MonsterBuffs)) > 0)
                             {

@@ -5,6 +5,24 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class JudicatorIntervention : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            AutoCooldownByLevel = new[]{ 90f, 90f, 90f, 90f, 90f, },
+            TriggersSpellCasts = true,
+            NotSingleTargetSpell = true,
+        };
+        float[] effect0 = {2, 2.5f, 3};
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            AddBuff((ObjAIBase)owner, owner, new Buffs.KayleInterventionAnim(), 1, 1, 1, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+            AddBuff((ObjAIBase)owner, target, new Buffs.JudicatorIntervention(), 1, 1, this.effect0[level], BuffAddType.RENEW_EXISTING, BuffType.INVULNERABILITY, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class JudicatorIntervention : BBBuffScript
@@ -45,24 +63,6 @@ namespace Buffs
         public override void OnUpdateStats()
         {
             SetInvulnerable(owner, true);
-        }
-    }
-}
-namespace Spells
-{
-    public class JudicatorIntervention : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            AutoCooldownByLevel = new[]{ 90f, 90f, 90f, 90f, 90f, },
-            TriggersSpellCasts = true,
-            NotSingleTargetSpell = true,
-        };
-        float[] effect0 = {2, 2.5f, 3};
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            AddBuff((ObjAIBase)owner, owner, new Buffs.KayleInterventionAnim(), 1, 1, 1, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
-            AddBuff((ObjAIBase)owner, target, new Buffs.JudicatorIntervention(), 1, 1, this.effect0[level], BuffAddType.RENEW_EXISTING, BuffType.INVULNERABILITY, 0, true, false, false);
         }
     }
 }

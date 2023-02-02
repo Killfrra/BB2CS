@@ -27,8 +27,8 @@ namespace Spells
             float missingHealthPercent;
             float healthToRestore;
             teamID = GetTeamID(target);
-            SpellEffectCreate(out ar, out _, "VampHeal.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, false, false, false, false, false);
-            SpellEffectCreate(out arr, out _, "Meditate_eff.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, false, false, false, false, false);
+            SpellEffectCreate(out ar, out _, "VampHeal.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, false, false, false, false, false);
+            SpellEffectCreate(out arr, out _, "Meditate_eff.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, false, false, false, false, false);
             healthPercent = GetHealthPercent(target, PrimaryAbilityResourceType.MANA);
             missingHealthPercent = 1 - healthPercent;
             healthToRestore = 60 * missingHealthPercent;

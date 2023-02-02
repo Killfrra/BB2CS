@@ -14,14 +14,14 @@ namespace Chars
         float[] effect1 = {1.06f, 1.07f, 1.08f, 1.09f, 1.1f};
         public override void OnUpdateActions()
         {
-            float kayleAP;
-            float damageMod;
-            float attackDamage;
-            float baseAD;
-            float totalAD;
-            float bonusAD;
             if(ExecutePeriodically(2, ref this.lastTimeExecuted, true))
             {
+                float kayleAP;
+                float damageMod;
+                float attackDamage;
+                float baseAD;
+                float totalAD;
+                float bonusAD;
                 level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 if(level == 0)
                 {
@@ -49,12 +49,12 @@ namespace Chars
         }
         public override void OnPreDealDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
         {
-            float damagePercent;
             if(GetBuffCountFromCaster(target, owner, nameof(Buffs.JudicatorReckoning)) > 0)
             {
                 level = GetSlotSpellLevel((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 if(level > 0)
                 {
+                    float damagePercent;
                     damagePercent = this.effect1[level];
                     damageAmount *= damagePercent;
                 }

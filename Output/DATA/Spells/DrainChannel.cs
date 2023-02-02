@@ -5,20 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class DrainChannel : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateEffect = new[]{ "", },
-            BuffName = "Drain",
-            BuffTextureName = "Fiddlesticks_ConjureScarecrow.dds",
-            IsDeathRecapSource = true,
-            SpellFXOverrideSkins = new[]{ "SurprisePartyFiddlesticks", },
-        };
-    }
-}
 namespace Spells
 {
     public class DrainChannel : BBSpellScript
@@ -44,12 +30,12 @@ namespace Spells
         {
             float abilityPower;
             float nextBuffVars_DrainPercent;
-            bool nextBuffVars_DrainedBool;
             float baseDamage;
             float bonusDamage;
             float damageToDeal;
             TeamId teamID; // UNUSED
             int fiddlesticksSkinID;
+            bool nextBuffVars_DrainedBool;
             level = GetSlotSpellLevel((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             abilityPower = GetFlatMagicDamageMod(owner);
             AddBuff((ObjAIBase)owner, target, new Buffs.DrainChannel(), 1, 1, 5, BuffAddType.REPLACE_EXISTING, BuffType.DAMAGE, 0, true, false, false);
@@ -73,15 +59,9 @@ namespace Spells
         }
         public override void ChannelingUpdateActions()
         {
-            float distance;
-            float nextBuffVars_DrainPercent;
-            bool nextBuffVars_DrainedBool;
-            float abilityPower;
-            float baseDamage;
-            float bonusDamage;
-            float damageToDeal;
             if(ExecutePeriodically(0.5f, ref this.drainExecuted, false))
             {
+                float distance;
                 distance = DistanceBetweenObjects("Target", "Owner");
                 if(distance >= 650)
                 {
@@ -99,6 +79,12 @@ namespace Spells
                     }
                     else
                     {
+                        float nextBuffVars_DrainPercent;
+                        float abilityPower;
+                        float baseDamage;
+                        float bonusDamage;
+                        float damageToDeal;
+                        bool nextBuffVars_DrainedBool;
                         level = GetSlotSpellLevel((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                         nextBuffVars_DrainPercent = this.effect2[level];
                         nextBuffVars_DrainedBool = false;
@@ -154,5 +140,19 @@ namespace Spells
                 SpellEffectRemove(this.confetti);
             }
         }
+    }
+}
+namespace Buffs
+{
+    public class DrainChannel : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateEffect = new[]{ "", },
+            BuffName = "Drain",
+            BuffTextureName = "Fiddlesticks_ConjureScarecrow.dds",
+            IsDeathRecapSource = true,
+            SpellFXOverrideSkins = new[]{ "SurprisePartyFiddlesticks", },
+        };
     }
 }

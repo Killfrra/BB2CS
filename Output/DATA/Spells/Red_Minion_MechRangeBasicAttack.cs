@@ -18,7 +18,7 @@ namespace Spells
             float abilityPowerBonus;
             float totalDmg;
             teamID = GetTeamID(owner);
-            attacker = GetChampionBySkinName("Jester", teamID);
+            attacker = GetChampionBySkinName("Jester", teamID ?? TeamId.TEAM_UNKNOWN);
             level = GetSlotSpellLevel(attacker, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             dmg = this.effect0[level];
             abilityPower = GetFlatMagicDamageMod(attacker);

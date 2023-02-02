@@ -36,10 +36,10 @@ namespace Buffs
         }
         public override void OnSpellCast(string spellName, SpellScriptMetaData spellVars)
         {
-            int count;
             spellName = GetSpellName();
             if(spellName == nameof(Spells.UrgotHeatseekingMissile))
             {
+                int count;
                 count = GetBuffCountFromAll(owner, nameof(Buffs.UrgotHeatseekingAmmo));
                 if(count == 4)
                 {

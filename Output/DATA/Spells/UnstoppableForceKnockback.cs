@@ -17,15 +17,15 @@ namespace Buffs
         }
         public override void OnActivate()
         {
-            object level;
-            float distance; // UNUSED
-            Vector3 landingPos;
-            float distanceTwo; // UNUSED
             if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.UnstoppableForceStun)) > 0)
             {
             }
             else
             {
+                object level;
+                float distance; // UNUSED
+                Vector3 landingPos;
+                float distanceTwo; // UNUSED
                 //RequireVar(this.level);
                 level = this.level;
                 distance = DistanceBetweenObjects("Attacker", "Owner");

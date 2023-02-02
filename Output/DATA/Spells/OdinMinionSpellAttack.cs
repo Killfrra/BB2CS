@@ -5,12 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class OdinMinionSpellAttack : BBBuffScript
-    {
-    }
-}
 namespace Spells
 {
     public class OdinMinionSpellAttack : BBSpellScript
@@ -22,10 +16,6 @@ namespace Spells
             string skinName; // UNUSED
             float healthToDecreaseBy;
             TeamId myTeamID;
-            float healthPercent; // UNUSED
-            float attackerMaxHealth;
-            float damageReturn;
-            Particle noEstada; // UNUSED
             myMaxHealth = GetMaxPAR(target, PrimaryAbilityResourceType.MANA);
             targetTeamID = GetTeamID(target);
             skinName = GetUnitSkinName(owner);
@@ -84,6 +74,10 @@ namespace Spells
             }
             if(targetTeamID == TeamId.TEAM_NEUTRAL)
             {
+                float healthPercent; // UNUSED
+                float attackerMaxHealth;
+                float damageReturn;
+                Particle noEstada; // UNUSED
                 healthPercent = GetHealthPercent(target, PrimaryAbilityResourceType.MANA);
                 attackerMaxHealth = GetMaxHealth(attacker, PrimaryAbilityResourceType.MANA);
                 if(GetBuffCountFromCaster(attacker, attacker, nameof(Buffs.OdinGolemBombBuff)) > 0)
@@ -107,5 +101,11 @@ namespace Spells
             }
             AddBuff((ObjAIBase)owner, target, new Buffs.OdinMinionSpellAttack(), 1, 1, 1, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
         }
+    }
+}
+namespace Buffs
+{
+    public class OdinMinionSpellAttack : BBBuffScript
+    {
     }
 }

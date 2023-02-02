@@ -5,6 +5,25 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class SweepingBlow : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = true,
+            IsDamagingSpell = true,
+            NotSingleTargetSpell = false,
+            PhysicalDamageRatio = 1f,
+            SpellDamageRatio = 1f,
+        };
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            AddBuff(attacker, target, new Buffs.SweepingBlow(), 1, 1, 0.5f, BuffAddType.REPLACE_EXISTING, BuffType.STUN, 0, true, false);
+            ApplyDamage(attacker, target, 200, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 1, 1, false, false, attacker);
+        }
+    }
+}
 namespace Buffs
 {
     public class SweepingBlow : BBBuffScript
@@ -31,25 +50,6 @@ namespace Buffs
             SetCanAttack(owner, false);
             SetCanMove(owner, false);
             SetCanCast(owner, false);
-        }
-    }
-}
-namespace Spells
-{
-    public class SweepingBlow : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = true,
-            IsDamagingSpell = true,
-            NotSingleTargetSpell = false,
-            PhysicalDamageRatio = 1f,
-            SpellDamageRatio = 1f,
-        };
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            AddBuff(attacker, target, new Buffs.SweepingBlow(), 1, 1, 0.5f, BuffAddType.REPLACE_EXISTING, BuffType.STUN, 0, true, false);
-            ApplyDamage(attacker, target, 200, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 1, 1, false, false, attacker);
         }
     }
 }

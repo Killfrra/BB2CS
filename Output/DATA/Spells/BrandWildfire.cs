@@ -5,18 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class BrandWildfire : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            BuffName = "Spell Flux",
-            BuffTextureName = "Ryze_LightningFlux.dds",
-            SpellFXOverrideSkins = new[]{ "FrostFireBrand", },
-        };
-    }
-}
 namespace Spells
 {
     public class BrandWildfire : BBSpellScript
@@ -39,9 +27,6 @@ namespace Spells
             TeamId teamID; // UNUSED
             bool doOnce;
             float damageToDeal;
-            bool isStealthed;
-            Vector3 attackerPos;
-            bool canSee;
             int brandSkinID;
             Particle ablazeHitEffect; // UNUSED
             SpellBuffClear(owner, nameof(Buffs.BrandWildfire));
@@ -55,6 +40,8 @@ namespace Spells
                 {
                     if(!doOnce)
                     {
+                        bool isStealthed;
+                        Vector3 attackerPos;
                         isStealthed = GetStealthed(unit);
                         if(!isStealthed)
                         {
@@ -72,6 +59,7 @@ namespace Spells
                         }
                         else
                         {
+                            bool canSee;
                             canSee = CanSeeTarget(attacker, unit);
                             if(canSee)
                             {
@@ -122,5 +110,17 @@ namespace Spells
                 }
             }
         }
+    }
+}
+namespace Buffs
+{
+    public class BrandWildfire : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            BuffName = "Spell Flux",
+            BuffTextureName = "Ryze_LightningFlux.dds",
+            SpellFXOverrideSkins = new[]{ "FrostFireBrand", },
+        };
     }
 }

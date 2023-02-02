@@ -5,34 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class GragasDrunkenRage : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateAttachBoneName = new[]{ "L_BUFFBONE_GLB_HAND_LOC", "R_BUFFBONE_GLB_HAND_LOC", },
-            AutoBuffActivateEffect = new[]{ "gragas_drunkenRage_attack_buf.troy", "gragas_drunkenRage_attack_buf.troy", },
-            BuffName = "GragasDrunkenRage",
-            BuffTextureName = "GragasDrunkenRage.dds",
-        };
-        float manaTick;
-        public GragasDrunkenRage(float manaTick = default)
-        {
-            this.manaTick = manaTick;
-        }
-        public override void OnActivate()
-        {
-            //RequireVar(this.manaTick);
-            IncPAR(owner, this.manaTick, PrimaryAbilityResourceType.MANA);
-        }
-        public override void OnDeactivate(bool expired)
-        {
-            IncPAR(owner, this.manaTick, PrimaryAbilityResourceType.MANA);
-            SpellBuffRemove(owner, nameof(Buffs.GragasDrunkenRage), (ObjAIBase)owner);
-        }
-    }
-}
 namespace Spells
 {
     public class GragasDrunkenRage : BBSpellScript
@@ -68,6 +40,34 @@ namespace Spells
         }
         public override void ChannelingCancelStop()
         {
+            SpellBuffRemove(owner, nameof(Buffs.GragasDrunkenRage), (ObjAIBase)owner);
+        }
+    }
+}
+namespace Buffs
+{
+    public class GragasDrunkenRage : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateAttachBoneName = new[]{ "L_BUFFBONE_GLB_HAND_LOC", "R_BUFFBONE_GLB_HAND_LOC", },
+            AutoBuffActivateEffect = new[]{ "gragas_drunkenRage_attack_buf.troy", "gragas_drunkenRage_attack_buf.troy", },
+            BuffName = "GragasDrunkenRage",
+            BuffTextureName = "GragasDrunkenRage.dds",
+        };
+        float manaTick;
+        public GragasDrunkenRage(float manaTick = default)
+        {
+            this.manaTick = manaTick;
+        }
+        public override void OnActivate()
+        {
+            //RequireVar(this.manaTick);
+            IncPAR(owner, this.manaTick, PrimaryAbilityResourceType.MANA);
+        }
+        public override void OnDeactivate(bool expired)
+        {
+            IncPAR(owner, this.manaTick, PrimaryAbilityResourceType.MANA);
             SpellBuffRemove(owner, nameof(Buffs.GragasDrunkenRage), (ObjAIBase)owner);
         }
     }

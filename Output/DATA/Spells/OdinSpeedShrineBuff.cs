@@ -32,8 +32,8 @@ namespace Buffs
             this.massiveBoostOverseer = 1;
             this.massiveSpeedMod = this.speedMod * 2;
             teamID = GetTeamID(owner);
-            SpellEffectCreate(out this.buffParticle, out _, "invis_runes_01.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false, false, false, false, false);
-            SpellEffectCreate(out this.buffParticle2, out _, "Odin_Speed_Shrine_buf.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "root", default, owner, default, default, false, false, false, false, false);
+            SpellEffectCreate(out this.buffParticle, out _, "invis_runes_01.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false, false, false, false, false);
+            SpellEffectCreate(out this.buffParticle2, out _, "Odin_Speed_Shrine_buf.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "root", default, owner, default, default, false, false, false, false, false);
         }
         public override void OnDeactivate(bool expired)
         {

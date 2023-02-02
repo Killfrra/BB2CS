@@ -39,19 +39,19 @@ namespace Spells
         public override void SelfExecute()
         {
             TeamId teamID;
-            float baseDamage;
-            Particle hi; // UNUSED
             teamID = GetTeamID(owner);
             foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 925, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
             {
                 if(GetBuffCountFromCaster(unit, owner, nameof(Buffs.KennenMarkofStorm)) > 0)
                 {
+                    float baseDamage;
+                    Particle hi; // UNUSED
                     BreakSpellShields(unit);
                     AddBuff(attacker, unit, new Buffs.KennenMarkofStorm(), 5, 1, 8, BuffAddType.STACKS_AND_RENEWS, BuffType.COMBAT_DEHANCER, 0, true, false, false);
                     baseDamage = this.effect0[level];
-                    SpellEffectCreate(out this.particleID, out _, "kennen_btl_beam.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, unit, false, attacker, "head", default, unit, "root", default, true);
+                    SpellEffectCreate(out this.particleID, out _, "kennen_btl_beam.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, unit, false, attacker, "head", default, unit, "root", default, true);
                     ApplyDamage(attacker, unit, baseDamage, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0.55f, 1, false, false, attacker);
-                    SpellEffectCreate(out hi, out _, "kennen_btl_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true);
+                    SpellEffectCreate(out hi, out _, "kennen_btl_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true);
                 }
             }
         }

@@ -42,11 +42,11 @@ namespace Buffs
         }
         public override void OnPreAttack()
         {
-            int level;
             if(target is not BaseTurret)
             {
                 if(target is ObjAIBase)
                 {
+                    int level;
                     level = GetSlotSpellLevel((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                     SkipNextAutoAttack(owner);
                     SpellCast((ObjAIBase)owner, target, target.Position, target.Position, 2, SpellSlotType.ExtraSlots, level, false, false, false, false, true, false);

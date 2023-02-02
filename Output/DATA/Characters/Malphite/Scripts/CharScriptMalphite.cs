@@ -12,13 +12,13 @@ namespace Chars
         float lastTimeExecuted;
         public override void OnUpdateActions()
         {
-            float armorVal;
             if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.MalphiteShieldBeenHit)) == 0)
             {
                 AddBuff((ObjAIBase)owner, owner, new Buffs.MalphiteShieldEffect(), 1, 1, 25000, BuffAddType.RENEW_EXISTING, BuffType.AURA, 0, true, false, false);
             }
             if(ExecutePeriodically(0.5f, ref this.lastTimeExecuted, true))
             {
+                float armorVal;
                 level = GetSlotSpellLevel((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 if(level > 0)
                 {

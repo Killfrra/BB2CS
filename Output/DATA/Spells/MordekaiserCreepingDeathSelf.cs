@@ -27,11 +27,11 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            float nextBuffVars_DamagePerTick;
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, false))
             {
                 foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 350, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes))
                 {
+                    float nextBuffVars_DamagePerTick;
                     nextBuffVars_DamagePerTick = this.damagePerTick;
                     AddBuff((ObjAIBase)owner, unit, new Buffs.MordekaiserCreepingDeathDebuff(nextBuffVars_DamagePerTick), 1, 1, 1, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_DEHANCER, 0);
                 }

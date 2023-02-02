@@ -56,22 +56,18 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            float currentTime;
-            float timePassed;
-            int run;
-            int chaosChannelBuff;
-            int orderChannelCount;
-            float totalBuffCount;
-            float damageMultiplier;
-            int prilisasBlessingCount;
-            float totalHP;
-            float dtD;
             if(ExecutePeriodically(0.25f, ref this.lastTimeExecuted, true))
             {
+                float currentTime;
+                float timePassed;
                 currentTime = GetGameTime();
                 timePassed = currentTime - this.startTime;
                 if(timePassed >= 1.5f)
                 {
+                    int run;
+                    int chaosChannelBuff;
+                    int orderChannelCount;
+                    float totalBuffCount;
                     run = 1;
                     chaosChannelBuff = GetBuffCountFromAll(owner, nameof(Buffs.OdinGuardianSuppressionChaos));
                     orderChannelCount = GetBuffCountFromAll(owner, nameof(Buffs.OdinGuardianSuppressionOrder));
@@ -92,6 +88,10 @@ namespace Buffs
                     totalBuffCount = Math.Max(orderChannelCount, chaosChannelBuff);
                     if(run == 1)
                     {
+                        float damageMultiplier;
+                        int prilisasBlessingCount;
+                        float totalHP;
+                        float dtD;
                         damageMultiplier = totalBuffCount - 1;
                         damageMultiplier *= 0.4f;
                         prilisasBlessingCount = GetBuffCountFromAll(owner, nameof(Buffs.PrilisasBlessing));

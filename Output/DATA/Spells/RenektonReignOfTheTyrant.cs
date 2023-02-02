@@ -5,6 +5,41 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class RenektonReignOfTheTyrant : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            CastingBreaksStealth = true,
+            DoesntBreakShields = true,
+            TriggersSpellCasts = true,
+            IsDamagingSpell = true,
+            NotSingleTargetSpell = true,
+        };
+        int[] effect0 = {300, 450, 600};
+        int[] effect1 = {20, 35, 50};
+        float[] effect2 = {0.75f, 1, 1.25f};
+        public override void SelfExecute()
+        {
+            int nextBuffVars_Level;
+            float baseBurn;
+            float selfAP;
+            float aPBonus;
+            float nextBuffVars_BonusHealth;
+            float nextBuffVars_MaximumSpeed; // UNUSED
+            float nextBuffVars_BurnDamage;
+            nextBuffVars_Level = level;
+            nextBuffVars_BonusHealth = this.effect0[level];
+            baseBurn = this.effect1[level];
+            nextBuffVars_MaximumSpeed = this.effect2[level];
+            selfAP = GetFlatMagicDamageMod(owner);
+            aPBonus = 0.05f * selfAP;
+            nextBuffVars_BurnDamage = baseBurn + aPBonus;
+            AddBuff((ObjAIBase)owner, owner, new Buffs.RenektonReignOfTheTyrant(nextBuffVars_Level, nextBuffVars_BonusHealth, nextBuffVars_BurnDamage), 1, 1, 15, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class RenektonReignOfTheTyrant : BBBuffScript
@@ -57,10 +92,10 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            int level;
-            float healthPercent;
             if(ExecutePeriodically(0.5f, ref this.lastTimeExecuted, false))
             {
+                int level;
+                float healthPercent;
                 level = this.level;
                 healthPercent = GetHealthPercent(target, PrimaryAbilityResourceType.Other);
                 IncPAR(owner, this.effect0[level], PrimaryAbilityResourceType.Other);
@@ -78,41 +113,6 @@ namespace Buffs
                 }
                 AddBuff((ObjAIBase)owner, owner, new Buffs.RenektonInCombat(), 1, 1, 12.5f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class RenektonReignOfTheTyrant : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            CastingBreaksStealth = true,
-            DoesntBreakShields = true,
-            TriggersSpellCasts = true,
-            IsDamagingSpell = true,
-            NotSingleTargetSpell = true,
-        };
-        int[] effect0 = {300, 450, 600};
-        int[] effect1 = {20, 35, 50};
-        float[] effect2 = {0.75f, 1, 1.25f};
-        public override void SelfExecute()
-        {
-            int nextBuffVars_Level;
-            float nextBuffVars_BonusHealth;
-            float nextBuffVars_MaximumSpeed;
-            float nextBuffVars_BurnDamage;
-            float baseBurn;
-            float selfAP;
-            float aPBonus;
-            nextBuffVars_Level = level;
-            nextBuffVars_BonusHealth = this.effect0[level];
-            baseBurn = this.effect1[level];
-            nextBuffVars_MaximumSpeed = this.effect2[level];
-            selfAP = GetFlatMagicDamageMod(owner);
-            aPBonus = 0.05f * selfAP;
-            nextBuffVars_BurnDamage = baseBurn + aPBonus;
-            AddBuff((ObjAIBase)owner, owner, new Buffs.RenektonReignOfTheTyrant(nextBuffVars_Level, nextBuffVars_BonusHealth, nextBuffVars_BurnDamage), 1, 1, 15, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
         }
     }
 }

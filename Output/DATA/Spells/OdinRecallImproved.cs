@@ -5,41 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class OdinRecallImproved : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            BuffName = "Recall",
-            BuffTextureName = "RecallHome.dds",
-        };
-        bool willRemove;
-        public OdinRecallImproved(bool willRemove = default)
-        {
-            this.willRemove = willRemove;
-        }
-        public override void OnActivate()
-        {
-            //RequireVar(this.willRemove);
-        }
-        public override void OnUpdateActions()
-        {
-            if(this.willRemove)
-            {
-                StopChanneling((ObjAIBase)owner, ChannelingStopCondition.Cancel, ChannelingStopSource.LostTarget);
-                SpellBuffRemoveCurrent(owner);
-            }
-        }
-        public override void OnTakeDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
-        {
-            if(damageSource != default)
-            {
-                this.willRemove = true;
-            }
-        }
-    }
-}
 namespace Spells
 {
     public class OdinRecallImproved : BBSpellScript
@@ -80,6 +45,41 @@ namespace Spells
         {
             SpellEffectRemove(this.particleID);
             SpellBuffRemove(owner, nameof(Buffs.OdinRecallImproved), (ObjAIBase)owner, 0);
+        }
+    }
+}
+namespace Buffs
+{
+    public class OdinRecallImproved : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            BuffName = "Recall",
+            BuffTextureName = "RecallHome.dds",
+        };
+        bool willRemove;
+        public OdinRecallImproved(bool willRemove = default)
+        {
+            this.willRemove = willRemove;
+        }
+        public override void OnActivate()
+        {
+            //RequireVar(this.willRemove);
+        }
+        public override void OnUpdateActions()
+        {
+            if(this.willRemove)
+            {
+                StopChanneling((ObjAIBase)owner, ChannelingStopCondition.Cancel, ChannelingStopSource.LostTarget);
+                SpellBuffRemoveCurrent(owner);
+            }
+        }
+        public override void OnTakeDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
+        {
+            if(damageSource != default)
+            {
+                this.willRemove = true;
+            }
         }
     }
 }

@@ -12,9 +12,9 @@ namespace Chars
         float[] effect0 = {0.00066f, 0.00133f, 0.002f};
         public override void OnUpdateStats()
         {
-            float nextBuffVars_multiplier;
             if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.StrengthOfSpirit)) == 0)
             {
+                float nextBuffVars_multiplier;
                 level = talentLevel;
                 nextBuffVars_multiplier = this.effect0[level];
                 AddBuff((ObjAIBase)owner, owner, new Buffs.StrengthOfSpirit(nextBuffVars_multiplier), 1, 1, 25000, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);

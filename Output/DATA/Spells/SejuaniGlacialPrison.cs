@@ -5,42 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class SejuaniGlacialPrison : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateAttachBoneName = new[]{ "head", },
-            AutoBuffActivateEffect = new[]{ "Stun_glb.troy", },
-            BuffName = "SejuaniGlacialPrison",
-            BuffTextureName = "Sejuani_GlacialPrison.dds",
-            PopupMessage = new[]{ "game_floatingtext_Stunned", },
-        };
-        Particle crystalineParticle;
-        public override void OnActivate()
-        {
-            ObjAIBase caster;
-            TeamId teamID;
-            caster = SetBuffCasterUnit();
-            teamID = GetTeamID(caster);
-            SetStunned(owner, true);
-            PauseAnimation(owner, true);
-            SpellEffectCreate(out this.crystalineParticle, out _, "sejuani_ult_tar_03.troy", default, teamID, 0, 0, TeamId.TEAM_UNKNOWN, default, attacker, false, owner, "BUFFBONE_GLB_GROUND_LOC", default, attacker, "Bird_head", default, false, false, false, false, false);
-        }
-        public override void OnDeactivate(bool expired)
-        {
-            SetStunned(owner, false);
-            PauseAnimation(owner, false);
-            SpellEffectRemove(this.crystalineParticle);
-        }
-        public override void OnUpdateStats()
-        {
-            SetStunned(owner, true);
-            PauseAnimation(owner, true);
-        }
-    }
-}
 namespace Spells
 {
     public class SejuaniGlacialPrison : BBSpellScript
@@ -59,7 +23,6 @@ namespace Spells
             bool isStealthed;
             float stunDuration;
             float prisonDamage;
-            bool canSee;
             isStealthed = GetStealthed(target);
             stunDuration = 2;
             prisonDamage = this.effect0[level];
@@ -85,6 +48,7 @@ namespace Spells
                 }
                 else
                 {
+                    bool canSee;
                     canSee = CanSeeTarget(owner, target);
                     if(canSee)
                     {
@@ -97,6 +61,42 @@ namespace Spells
                     }
                 }
             }
+        }
+    }
+}
+namespace Buffs
+{
+    public class SejuaniGlacialPrison : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateAttachBoneName = new[]{ "head", },
+            AutoBuffActivateEffect = new[]{ "Stun_glb.troy", },
+            BuffName = "SejuaniGlacialPrison",
+            BuffTextureName = "Sejuani_GlacialPrison.dds",
+            PopupMessage = new[]{ "game_floatingtext_Stunned", },
+        };
+        Particle crystalineParticle;
+        public override void OnActivate()
+        {
+            ObjAIBase caster;
+            TeamId teamID;
+            caster = SetBuffCasterUnit();
+            teamID = GetTeamID(caster);
+            SetStunned(owner, true);
+            PauseAnimation(owner, true);
+            SpellEffectCreate(out this.crystalineParticle, out _, "sejuani_ult_tar_03.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, attacker, false, owner, "BUFFBONE_GLB_GROUND_LOC", default, attacker, "Bird_head", default, false, false, false, false, false);
+        }
+        public override void OnDeactivate(bool expired)
+        {
+            SetStunned(owner, false);
+            PauseAnimation(owner, false);
+            SpellEffectRemove(this.crystalineParticle);
+        }
+        public override void OnUpdateStats()
+        {
+            SetStunned(owner, true);
+            PauseAnimation(owner, true);
         }
     }
 }

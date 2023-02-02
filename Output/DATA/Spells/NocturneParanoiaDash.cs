@@ -38,8 +38,6 @@ namespace Buffs
             float baseDamage;
             float physPreMod;
             float physPostMod;
-            float distance;
-            Particle asdf; // UNUSED
             OverrideAnimation("Run", "Spell4", owner);
             //RequireVar(this.greenDash);
             //RequireVar(this.dashSpeed);
@@ -60,9 +58,11 @@ namespace Buffs
             this.damageToDeal = physPostMod + baseDamage;
             if(!this.hasDealtDamage)
             {
+                float distance;
                 distance = DistanceBetweenObjects("Owner", "Attacker");
                 if(distance <= 300)
                 {
+                    Particle asdf; // UNUSED
                     BreakSpellShields(attacker);
                     ApplyDamage((ObjAIBase)owner, attacker, this.damageToDeal, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_SPELL, 1, 0, 0, true, true, (ObjAIBase)owner);
                     SpellEffectCreate(out asdf, out _, "NocturneParanoiaDash_tar.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, default, false, attacker, default, default, attacker, default, default, true, default, default, false, false);
@@ -85,17 +85,17 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            float distance;
-            Particle asdf; // UNUSED
             if(this.willRemove)
             {
                 SpellBuffRemoveCurrent(owner);
             }
             if(!this.hasDealtDamage)
             {
+                float distance;
                 distance = DistanceBetweenObjects("Owner", "Attacker");
                 if(distance <= 300)
                 {
+                    Particle asdf; // UNUSED
                     BreakSpellShields(attacker);
                     ApplyDamage((ObjAIBase)owner, attacker, this.damageToDeal, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_SPELL, 1, 0, 0, true, true, (ObjAIBase)owner);
                     SpellEffectCreate(out asdf, out _, "NocturneParanoiaDash_tar.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, default, false, attacker, default, default, attacker, default, default, true, default, default, false, false);

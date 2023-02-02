@@ -5,18 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class FizzQ1 : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            BuffName = "RenekthonCleaveReady",
-            BuffTextureName = "AkaliCrescentSlash.dds",
-            SpellToggleSlot = 1,
-        };
-    }
-}
 namespace Spells
 {
     public class FizzQ1 : BBSpellScript
@@ -59,12 +47,24 @@ namespace Spells
             CancelAutoAttack(owner, true);
             teamID = GetTeamID(owner);
             startPos = GetPointByUnitFacingOffset(owner, -75, 0);
-            other1 = SpawnMinion("TestCube", "TestCube", "idle.lua", startPos, teamID, false, true, true, true, true, true, 10, true, false);
+            other1 = SpawnMinion("TestCube", "TestCube", "idle.lua", startPos, teamID ?? TeamId.TEAM_UNKNOWN, false, true, true, true, true, true, 10, true, false);
             endPos = GetPointByUnitFacingOffset(owner, 550, 0);
-            other2 = SpawnMinion("TestCube", "TestCube", "idle.lua", endPos, teamID, false, true, true, true, true, true, 10, true, false);
+            other2 = SpawnMinion("TestCube", "TestCube", "idle.lua", endPos, teamID ?? TeamId.TEAM_UNKNOWN, false, true, true, true, true, true, 10, true, false);
             AddBuff(other1, other1, new Buffs.ExpirationTimer(), 1, 1, 0.1f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
             AddBuff(other2, other2, new Buffs.ExpirationTimer(), 1, 1, 0.1f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
-            SpellEffectCreate(out this.particleID, out _, "kennen_btl_beam.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, unit, false, other1, "head", default, other2, "head", default, true, false, false, false, false);
+            SpellEffectCreate(out this.particleID, out _, "kennen_btl_beam.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, unit, false, other1, "head", default, other2, "head", default, true, false, false, false, false);
         }
+    }
+}
+namespace Buffs
+{
+    public class FizzQ1 : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            BuffName = "RenekthonCleaveReady",
+            BuffTextureName = "AkaliCrescentSlash.dds",
+            SpellToggleSlot = 1,
+        };
     }
 }

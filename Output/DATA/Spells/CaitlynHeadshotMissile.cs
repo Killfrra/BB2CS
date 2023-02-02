@@ -21,13 +21,13 @@ namespace Spells
                 {
                     damageAmount *= 1.75f;
                     teamID = GetTeamID(attacker);
-                    SpellEffectCreate(out motaExplosion, out _, "caitlyn_headshot_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, target, false, target, default, default, target, default, default, true);
+                    SpellEffectCreate(out motaExplosion, out _, "caitlyn_headshot_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, target, false, target, default, default, target, default, default, true);
                 }
                 else
                 {
                     damageAmount *= 2.5f;
                     teamID = GetTeamID(attacker);
-                    SpellEffectCreate(out motaExplosion, out _, "caitlyn_headshot_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, target, false, target, default, default, target, default, default, true);
+                    SpellEffectCreate(out motaExplosion, out _, "caitlyn_headshot_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, target, false, target, default, default, target, default, default, true);
                 }
             }
             else
@@ -36,13 +36,13 @@ namespace Spells
                 {
                     damageAmount *= 1.25f;
                     teamID = GetTeamID(attacker);
-                    SpellEffectCreate(out motaExplosion, out _, "caitlyn_headshot_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, target, false, target, default, default, target, default, default, true);
+                    SpellEffectCreate(out motaExplosion, out _, "caitlyn_headshot_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, target, false, target, default, default, target, default, default, true);
                 }
                 else
                 {
                     damageAmount *= 1.5f;
                     teamID = GetTeamID(attacker);
-                    SpellEffectCreate(out motaExplosion, out _, "caitlyn_headshot_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, target, false, target, default, default, target, default, default, true);
+                    SpellEffectCreate(out motaExplosion, out _, "caitlyn_headshot_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, target, false, target, default, default, target, default, default, true);
                 }
             }
             ApplyDamage(attacker, target, damageAmount, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_ATTACK, 1, 0, 0, false, false, attacker);

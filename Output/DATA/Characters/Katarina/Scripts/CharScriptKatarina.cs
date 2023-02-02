@@ -12,13 +12,13 @@ namespace Chars
         float lastTimeExecuted;
         public override void OnUpdateActions()
         {
-            float totalDamage;
-            float baseDamage;
-            float bonusDamage;
-            float bbBonusDamage;
-            float dlBonusDamage;
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, true))
             {
+                float totalDamage;
+                float baseDamage;
+                float bonusDamage;
+                float bbBonusDamage;
+                float dlBonusDamage;
                 totalDamage = GetTotalAttackDamage(owner);
                 baseDamage = GetBaseAttackDamage(owner);
                 bonusDamage = totalDamage - baseDamage;

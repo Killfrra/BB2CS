@@ -11,12 +11,12 @@ namespace Buffs
     {
         public override void OnUpdateActions()
         {
-            int level;
-            float baseDamage;
-            float secondDamage;
-            float totalTime;
             if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.AbsoluteZeroBonusDamage2)) > 0)
             {
+                int level;
+                float baseDamage;
+                float secondDamage;
+                float totalTime;
                 level = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 baseDamage = level * 250;
                 secondDamage = baseDamage + 250;

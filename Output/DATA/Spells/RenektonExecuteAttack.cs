@@ -17,8 +17,7 @@ namespace Spells
         int[] effect0 = {35, 70, 105, 140, 175};
         public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
         {
-            int nextBuffVars_BonusDamage;
-            float ragePercent;
+            int nextBuffVars_BonusDamage; // UNUSED
             float damageAmount;
             level = GetSlotSpellLevel((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             nextBuffVars_BonusDamage = this.effect0[level];
@@ -30,6 +29,7 @@ namespace Spells
                 }
                 else
                 {
+                    float ragePercent;
                     ragePercent = GetPARPercent(owner, PrimaryAbilityResourceType.Other);
                     if(ragePercent >= 0.5f)
                     {

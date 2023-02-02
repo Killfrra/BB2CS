@@ -20,21 +20,21 @@ namespace Spells
         {
             Vector3 damagePoint;
             TeamId teamID;
-            Particle motaExplosion; // UNUSED
-            Particle asdf; // UNUSED
             damagePoint = GetPointByUnitFacingOffset(owner, 1650, 0);
             teamID = GetTeamID(attacker);
             foreach(AttackableUnit unit in GetUnitsInRectangle(owner, damagePoint, 100, 1700, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes | SpellDataFlags.NotAffectSelf, default, true))
             {
+                Particle asdf; // UNUSED
                 BreakSpellShields(unit);
                 if(GetBuffCountFromCaster(unit, attacker, nameof(Buffs.LuxIlluminatingFraulein)) > 0)
                 {
+                    Particle motaExplosion; // UNUSED
                     teamID = GetTeamID(unit);
                     ApplyDamage(attacker, unit, charVars.IlluminateDamage, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0, 1, false, false, attacker);
-                    SpellEffectCreate(out motaExplosion, out _, "LuxPassive_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, default, default, false);
+                    SpellEffectCreate(out motaExplosion, out _, "LuxPassive_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, default, default, false);
                     SpellBuffRemove(unit, nameof(Buffs.LuxIlluminatingFraulein), attacker);
                 }
-                SpellEffectCreate(out asdf, out _, "LuxMaliceCannon_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, default, default, false);
+                SpellEffectCreate(out asdf, out _, "LuxMaliceCannon_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, default, default, false);
                 ApplyDamage(attacker, unit, this.effect0[level], DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0.75f, 1, false, false, attacker);
                 if(unit is not BaseTurret)
                 {

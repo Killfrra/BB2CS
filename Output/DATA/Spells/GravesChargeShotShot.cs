@@ -5,19 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class GravesChargeShotShot : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateEffect = new[]{ "", "", },
-            BuffName = "RapidFire",
-            BuffTextureName = "FallenAngel_DarkBinding.dds",
-            PopupMessage = new[]{ "game_floatingtext_Snared", },
-        };
-    }
-}
 namespace Spells
 {
     public class GravesChargeShotShot : BBSpellScript
@@ -46,18 +33,18 @@ namespace Spells
             int _1; // UNITIALIZED
             teamIDAttacker = GetTeamID(attacker);
             teamIDTarget = GetTeamID(target);
-            other1 = SpawnMinion("SpellBook1", "SpellBook1", "idle.lua", charVars.BriggsCastPos, teamIDAttacker, false, true, false, true, true, true, 0, false, false, (Champion)owner);
+            other1 = SpawnMinion("SpellBook1", "SpellBook1", "idle.lua", charVars.BriggsCastPos, teamIDAttacker ?? TeamId.TEAM_CASTER, false, true, false, true, true, true, 0, false, false, (Champion)owner);
             FaceDirection(other1, missileEndPosition);
             AddBuff(attacker, other1, new Buffs.ExpirationTimer(), 1, 1, 1, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
             distance = DistanceBetweenObjectAndPoint(other1, missileEndPosition);
             distance -= 150;
             spawnPos = GetPointByUnitFacingOffset(other1, distance, 0);
-            other3 = SpawnMinion("SpellBook1", "SpellBook1", "idle.lua", spawnPos, teamIDAttacker, false, true, false, true, true, true, 0, false, true, (Champion)owner);
+            other3 = SpawnMinion("SpellBook1", "SpellBook1", "idle.lua", spawnPos, teamIDAttacker ?? TeamId.TEAM_CASTER, false, true, false, true, true, true, 0, false, true, (Champion)owner);
             FaceDirection(other3, missileEndPosition);
             point1 = GetPointByUnitFacingOffset(other3, 400, 30);
             point2 = GetPointByUnitFacingOffset(other3, 400, -30);
             point3 = GetPointByUnitFacingOffset(other3, 400, 0);
-            other2 = SpawnMinion("ParticleTarget", "SpellBook1", "idle.lua", point3, teamIDAttacker, false, true, false, true, true, true, 0, false, true, (Champion)owner);
+            other2 = SpawnMinion("ParticleTarget", "SpellBook1", "idle.lua", point3, teamIDAttacker ?? TeamId.TEAM_CASTER, false, true, false, true, true, true, 0, false, true, (Champion)owner);
             FaceDirection(other2, other1.Position);
             shockwaveTarget = GetPointByUnitFacingOffset(other3, 700, 0);
             AddBuff(attacker, other2, new Buffs.ExpirationTimer(), 1, 1, 1, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
@@ -88,5 +75,18 @@ namespace Spells
             spellBaseDamage += bonusAD;
             ApplyDamage(attacker, target, spellBaseDamage, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_SPELL, 1, 0, 0, false, false, attacker);
         }
+    }
+}
+namespace Buffs
+{
+    public class GravesChargeShotShot : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateEffect = new[]{ "", "", },
+            BuffName = "RapidFire",
+            BuffTextureName = "FallenAngel_DarkBinding.dds",
+            PopupMessage = new[]{ "game_floatingtext_Snared", },
+        };
     }
 }

@@ -30,11 +30,11 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            int level;
-            float currentHeal;
-            float manaAmount;
             if(ExecutePeriodically(10, ref this.lastTimeExecuted, true))
             {
+                int level;
+                float currentHeal;
+                float manaAmount;
                 level = GetLevel(owner);
                 currentHeal = this.effect0[level];
                 manaAmount = this.effect1[level];

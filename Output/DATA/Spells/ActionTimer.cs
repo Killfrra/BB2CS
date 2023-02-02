@@ -17,11 +17,11 @@ namespace Buffs
         {
             bool _false; // UNITIALIZED
             bool foundUnit;
-            bool _true; // UNITIALIZED
-            bool canSee;
             foundUnit = _false;
             foreach(AttackableUnit unit in GetClosestUnitsInArea(owner, owner.Position, 900, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectHeroes, 1, nameof(Buffs.Stealth), false))
             {
+                bool _true; // UNITIALIZED
+                bool canSee;
                 foundUnit = _true;
                 canSee = CanSeeTarget(owner, unit);
                 if(canSee)

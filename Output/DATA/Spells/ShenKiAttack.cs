@@ -20,7 +20,6 @@ namespace Spells
         int[] effect0 = {10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105};
         public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
         {
-            Particle hi; // UNUSED
             float baseDmg;
             float maxHP;
             float bonusDmgFromHP;
@@ -28,6 +27,7 @@ namespace Spells
             float damageToDeal;
             if(target is ObjAIBase)
             {
+                Particle hi; // UNUSED
                 SpellEffectCreate(out hi, out _, "Globalhit_red.troy", default, TeamId.TEAM_NEUTRAL, 900, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, owner.Position, owner, default, default, true, default, default, false);
             }
             baseDmg = GetBaseAttackDamage(owner);

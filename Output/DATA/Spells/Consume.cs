@@ -5,28 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class Consume : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateEffect = new[]{ "Consume_buf.troy", },
-            BuffName = "",
-            BuffTextureName = "Yeti_Consume.dds",
-            SpellVOOverrideSkins = new[]{ "NunuBot", },
-        };
-        float armorIncrease;
-        public Consume(float armorIncrease = default)
-        {
-            this.armorIncrease = armorIncrease;
-        }
-        public override void UpdateBuffs()
-        {
-            IncFlatArmorMod(owner, this.armorIncrease);
-        }
-    }
-}
 namespace Spells
 {
     public class Consume : BBSpellScript
@@ -62,6 +40,28 @@ namespace Spells
             {
                 ApplyDamage(attacker, target, this.effect2[level], DamageType.DAMAGE_TYPE_TRUE, DamageSource.DAMAGE_SOURCE_DEFAULT, 1, 0, 1, false, false, attacker);
             }
+        }
+    }
+}
+namespace Buffs
+{
+    public class Consume : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateEffect = new[]{ "Consume_buf.troy", },
+            BuffName = "",
+            BuffTextureName = "Yeti_Consume.dds",
+            SpellVOOverrideSkins = new[]{ "NunuBot", },
+        };
+        float armorIncrease;
+        public Consume(float armorIncrease = default)
+        {
+            this.armorIncrease = armorIncrease;
+        }
+        public override void UpdateBuffs()
+        {
+            IncFlatArmorMod(owner, this.armorIncrease);
         }
     }
 }

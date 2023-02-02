@@ -5,41 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class BilgewaterCutlass : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateAttachBoneName = new[]{ null, null, "", },
-            AutoBuffActivateEffect = new[]{ "", "", "", },
-            BuffName = "BilgewaterCutlass",
-            BuffTextureName = "3144_Bilgewater_Cutlass.dds",
-            PopupMessage = new[]{ "game_floatingtext_Slowed", },
-        };
-        float moveSpeedMod;
-        Particle slow;
-        public BilgewaterCutlass(float moveSpeedMod = default)
-        {
-            this.moveSpeedMod = moveSpeedMod;
-        }
-        public override void OnActivate()
-        {
-            //RequireVar(this.moveSpeedMod);
-            SpellEffectCreate(out this.slow, out _, "Global_Slow.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, false);
-        }
-        public override void OnDeactivate(bool expired)
-        {
-            SpellEffectRemove(this.slow);
-        }
-        public override void OnUpdateStats()
-        {
-            float moveSpeedMod;
-            moveSpeedMod = this.moveSpeedMod;
-            IncPercentMultiplicativeMovementSpeedMod(owner, moveSpeedMod);
-        }
-    }
-}
 namespace Spells
 {
     public class BilgewaterCutlass : BBSpellScript
@@ -98,6 +63,41 @@ namespace Spells
             ApplyDamage(attacker, target, 150, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_DEFAULT, 1, 0, 1, true, true, attacker);
             nextBuffVars_MoveSpeedMod = -0.5f;
             AddBuff(attacker, target, new Buffs.BilgewaterCutlass(nextBuffVars_MoveSpeedMod), 1, 1, 3, BuffAddType.STACKS_AND_RENEWS, BuffType.SLOW, 0, true, false);
+        }
+    }
+}
+namespace Buffs
+{
+    public class BilgewaterCutlass : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateAttachBoneName = new[]{ null, null, "", },
+            AutoBuffActivateEffect = new[]{ "", "", "", },
+            BuffName = "BilgewaterCutlass",
+            BuffTextureName = "3144_Bilgewater_Cutlass.dds",
+            PopupMessage = new[]{ "game_floatingtext_Slowed", },
+        };
+        float moveSpeedMod;
+        Particle slow;
+        public BilgewaterCutlass(float moveSpeedMod = default)
+        {
+            this.moveSpeedMod = moveSpeedMod;
+        }
+        public override void OnActivate()
+        {
+            //RequireVar(this.moveSpeedMod);
+            SpellEffectCreate(out this.slow, out _, "Global_Slow.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, false);
+        }
+        public override void OnDeactivate(bool expired)
+        {
+            SpellEffectRemove(this.slow);
+        }
+        public override void OnUpdateStats()
+        {
+            float moveSpeedMod;
+            moveSpeedMod = this.moveSpeedMod;
+            IncPercentMultiplicativeMovementSpeedMod(owner, moveSpeedMod);
         }
     }
 }

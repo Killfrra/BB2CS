@@ -18,7 +18,7 @@ namespace Spells
         };
         public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
         {
-            int nextBuffVars_SpellLevel;
+            int nextBuffVars_SpellLevel; // UNUSED
             float baseDamage;
             level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             nextBuffVars_SpellLevel = level;

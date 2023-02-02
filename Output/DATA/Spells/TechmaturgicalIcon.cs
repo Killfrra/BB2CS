@@ -36,13 +36,13 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            int level;
-            int nextBuffVars_healthRegen;
-            float baseCooldown;
-            float cooldownMod;
-            float newCooldown;
             if(ExecutePeriodically(1, ref charVars.LastTimeExecuted, true))
             {
+                int level;
+                int nextBuffVars_healthRegen;
+                float baseCooldown;
+                float cooldownMod;
+                float newCooldown;
                 level = GetLevel(owner);
                 nextBuffVars_healthRegen = this.effect1[level];
                 foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 1000, SpellDataFlags.AffectFriends | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes | SpellDataFlags.AffectTurrets | SpellDataFlags.NotAffectSelf, default, true))
@@ -58,7 +58,6 @@ namespace Buffs
         }
         public override void OnPreDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
         {
-            float distance;
             if(owner.Team != attacker.Team)
             {
                 if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.IfHasBuffCheck)) == 0)
@@ -69,6 +68,7 @@ namespace Buffs
                         {
                             if(GetBuffCountFromCaster(unit, default, nameof(Buffs.H28GEvolutionTurretSpell1)) == 0)
                             {
+                                float distance;
                                 SetTriggerUnit(attacker);
                                 distance = DistanceBetweenObjects("Attacker", "Unit");
                                 if(distance <= 450)
@@ -133,16 +133,13 @@ namespace Buffs
         }
         public override void OnLevelUpSpell(int slot)
         {
-            int level;
-            float baseHealth;
-            float healthByLevel;
-            float totalHealth;
-            int slotLevel;
-            float baseCooldown;
-            float cooldownMod;
-            float newCooldown; // UNUSED
             if(slot == 0)
             {
+                int level;
+                float baseHealth;
+                float healthByLevel;
+                float totalHealth;
+                int slotLevel;
                 level = GetLevel(owner);
                 baseHealth = 260;
                 healthByLevel = 15 * level;
@@ -155,6 +152,9 @@ namespace Buffs
                 SetSpellToolTipVar(totalHealth, 2, 0, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (Champion)attacker);
                 if(slotLevel == 1)
                 {
+                    float baseCooldown;
+                    float cooldownMod;
+                    float newCooldown; // UNUSED
                     baseCooldown = 25;
                     cooldownMod = GetPercentCooldownMod(owner);
                     cooldownMod++;

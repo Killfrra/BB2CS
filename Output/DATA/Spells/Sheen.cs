@@ -43,11 +43,11 @@ namespace Buffs
         }
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            float percentBase;
             if(hitResult != HitResult.HIT_Dodge)
             {
                 if(hitResult != HitResult.HIT_Miss)
                 {
+                    float percentBase;
                     if(!this.isSheen)
                     {
                         percentBase = this.baseDamage * 1.5f;

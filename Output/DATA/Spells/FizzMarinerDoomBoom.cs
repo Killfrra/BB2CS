@@ -5,6 +5,29 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class FizzMarinerDoomBoom : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = true,
+            IsDamagingSpell = true,
+            NotSingleTargetSpell = false,
+        };
+        public override void SelfExecute()
+        {
+            SpellBuffClear(owner, nameof(Buffs.FizzMarinerDoomMissile));
+            foreach(Champion unit in GetChampions(TeamId.TEAM_UNKNOWN, default, true))
+            {
+                if(GetBuffCountFromCaster(unit, owner, nameof(Buffs.FizzMarinerDoomBomb)) > 0)
+                {
+                    SpellBuffClear(unit, nameof(Buffs.FizzMarinerDoomBomb));
+                }
+            }
+        }
+    }
+}
 namespace Buffs
 {
     public class FizzMarinerDoomBoom : BBBuffScript
@@ -36,29 +59,6 @@ namespace Buffs
             lowerCD = baseCD * cDReduction;
             newCD = baseCD + lowerCD;
             SetSlotSpellCooldownTimeVer2(newCD, 3, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner, false);
-        }
-    }
-}
-namespace Spells
-{
-    public class FizzMarinerDoomBoom : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = true,
-            IsDamagingSpell = true,
-            NotSingleTargetSpell = false,
-        };
-        public override void SelfExecute()
-        {
-            SpellBuffClear(owner, nameof(Buffs.FizzMarinerDoomMissile));
-            foreach(Champion unit in GetChampions(TeamId.TEAM_UNKNOWN, default, true))
-            {
-                if(GetBuffCountFromCaster(unit, owner, nameof(Buffs.FizzMarinerDoomBomb)) > 0)
-                {
-                    SpellBuffClear(unit, nameof(Buffs.FizzMarinerDoomBomb));
-                }
-            }
         }
     }
 }

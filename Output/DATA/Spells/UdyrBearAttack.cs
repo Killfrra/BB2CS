@@ -13,7 +13,6 @@ namespace Spells
         public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
         {
             float baseDamage;
-            Particle c; // UNUSED
             baseDamage = GetBaseAttackDamage(owner);
             ApplyDamage(attacker, target, baseDamage, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_ATTACK, 1, 1, 1, false, false);
             if(target is ObjAIBase)
@@ -25,6 +24,7 @@ namespace Spells
                     }
                     else
                     {
+                        Particle c; // UNUSED
                         AddBuff(attacker, target, new Buffs.UdyrBearStunCheck(), 1, 1, this.effect0[level], BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0);
                         BreakSpellShields(target);
                         ApplyStun(attacker, target, 1);

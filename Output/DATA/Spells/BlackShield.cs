@@ -5,6 +5,34 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class BlackShield : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            AutoCooldownByLevel = new[]{ 16f, 16f, 16f, 16f, 16f, },
+            TriggersSpellCasts = true,
+            NotSingleTargetSpell = false,
+        };
+        int[] effect0 = {95, 160, 225, 290, 355};
+        int[] effect1 = {5, 5, 5, 5, 5};
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            float abilityPower;
+            float baseHealth;
+            float abilityPowerMod;
+            float shieldHealth;
+            float nextBuffVars_ShieldHealth;
+            abilityPower = GetFlatMagicDamageMod(owner);
+            baseHealth = this.effect0[level];
+            abilityPowerMod = abilityPower * 0.7f;
+            shieldHealth = abilityPowerMod + baseHealth;
+            nextBuffVars_ShieldHealth = shieldHealth;
+            AddBuff(attacker, target, new Buffs.BlackShield(nextBuffVars_ShieldHealth), 1, 1, this.effect1[level], BuffAddType.RENEW_EXISTING, BuffType.SPELL_IMMUNITY, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class BlackShield : BBBuffScript
@@ -131,34 +159,6 @@ namespace Buffs
                     ReduceShield(owner, this.oldArmorAmount, true, false);
                 }
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class BlackShield : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            AutoCooldownByLevel = new[]{ 16f, 16f, 16f, 16f, 16f, },
-            TriggersSpellCasts = true,
-            NotSingleTargetSpell = false,
-        };
-        int[] effect0 = {95, 160, 225, 290, 355};
-        int[] effect1 = {5, 5, 5, 5, 5};
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            float abilityPower;
-            float baseHealth;
-            float abilityPowerMod;
-            float shieldHealth;
-            float nextBuffVars_ShieldHealth;
-            abilityPower = GetFlatMagicDamageMod(owner);
-            baseHealth = this.effect0[level];
-            abilityPowerMod = abilityPower * 0.7f;
-            shieldHealth = abilityPowerMod + baseHealth;
-            nextBuffVars_ShieldHealth = shieldHealth;
-            AddBuff(attacker, target, new Buffs.BlackShield(nextBuffVars_ShieldHealth), 1, 1, this.effect1[level], BuffAddType.RENEW_EXISTING, BuffType.SPELL_IMMUNITY, 0, true, false, false);
         }
     }
 }

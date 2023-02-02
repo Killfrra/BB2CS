@@ -27,7 +27,7 @@ namespace Spells
             float damageToDeal;
             baseDamage = this.effect0[level];
             teamID = GetTeamID(owner);
-            caster = GetChampionBySkinName("MonkeyKing", teamID);
+            caster = GetChampionBySkinName("MonkeyKing", teamID ?? TeamId.TEAM_UNKNOWN);
             monkeyKingAP = GetFlatMagicDamageMod(caster);
             monkeyKingAP *= 0.6f;
             damageToDeal = baseDamage + monkeyKingAP;

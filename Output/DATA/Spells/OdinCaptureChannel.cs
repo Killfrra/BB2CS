@@ -5,58 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class OdinCaptureChannel : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateAttachBoneName = new[]{ "", },
-            AutoBuffActivateEffect = new[]{ "", },
-            BuffName = "",
-            BuffTextureName = "",
-        };
-        float channelStartTime;
-        public override void OnActivate()
-        {
-            this.channelStartTime = GetBuffStartTime(owner, nameof(Buffs.OdinCaptureChannel));
-        }
-        public override void OnPreDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
-        {
-            string buffName;
-            float damageStartTime;
-            bool cancelChannel;
-            Particle asdf; // UNUSED
-            if(attacker is Champion)
-            {
-                if(damageSource == DamageSource.DAMAGE_SOURCE_PERIODIC)
-                {
-                }
-                else
-                {
-                    buffName = GetDamagingBuffName();
-                    damageStartTime = GetBuffStartTime(owner, buffName);
-                    cancelChannel = false;
-                    if(damageStartTime == 0)
-                    {
-                        cancelChannel = true;
-                    }
-                    if(damageStartTime >= this.channelStartTime)
-                    {
-                        cancelChannel = true;
-                    }
-                    if(cancelChannel)
-                    {
-                        SpellEffectCreate(out asdf, out _, "Ezreal_essenceflux_tar.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "root", default, owner, default, default, true, false, false, false, false);
-                        SpellBuffClear(owner, nameof(Buffs.OdinCaptureChannel));
-                        IssueOrder(owner, OrderType.Hold, default, owner);
-                        AddBuff(attacker, owner, new Buffs.OdinCaptureInterrupt(), 1, 1, 3, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
-                    }
-                }
-            }
-        }
-    }
-}
 namespace Spells
 {
     public class OdinCaptureChannel : BBSpellScript
@@ -120,12 +68,12 @@ namespace Spells
         public override void ChannelingUpdateActions()
         {
             float accumTime; // UNITIALIZED
-            TeamId teamOfOwner;
             float distance;
             if(accumTime >= 1.5f)
             {
                 if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.OdinShrineBombBuff)) > 0)
                 {
+                    TeamId teamOfOwner;
                     teamOfOwner = GetTeamID(owner);
                     if(teamOfOwner == TeamId.TEAM_BLUE)
                     {
@@ -153,12 +101,12 @@ namespace Spells
         }
         public override void ChannelingUpdateStats()
         {
-            float accumTime; // UNITIALIZED
             TeamId teamOfOwner;
             TeamId targetTeam;
             TeamId myTeam;
             if(this.chargeTimePassed == 0)
             {
+                float accumTime; // UNITIALIZED
                 if(accumTime > 1.5f)
                 {
                     this.chargeTimePassed = 1;
@@ -251,6 +199,58 @@ namespace Spells
                 SpellBuffRemoveStacks(target, owner, nameof(Buffs.PrilisasBlessing), 1);
             }
             SpellBuffClear(owner, nameof(Buffs.OdinCaptureChannel));
+        }
+    }
+}
+namespace Buffs
+{
+    public class OdinCaptureChannel : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateAttachBoneName = new[]{ "", },
+            AutoBuffActivateEffect = new[]{ "", },
+            BuffName = "",
+            BuffTextureName = "",
+        };
+        float channelStartTime;
+        public override void OnActivate()
+        {
+            this.channelStartTime = GetBuffStartTime(owner, nameof(Buffs.OdinCaptureChannel));
+        }
+        public override void OnPreDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
+        {
+            if(attacker is Champion)
+            {
+                if(damageSource == DamageSource.DAMAGE_SOURCE_PERIODIC)
+                {
+                }
+                else
+                {
+                    string buffName;
+                    float damageStartTime;
+                    bool cancelChannel;
+                    buffName = GetDamagingBuffName();
+                    damageStartTime = GetBuffStartTime(owner, buffName);
+                    cancelChannel = false;
+                    if(damageStartTime == 0)
+                    {
+                        cancelChannel = true;
+                    }
+                    if(damageStartTime >= this.channelStartTime)
+                    {
+                        cancelChannel = true;
+                    }
+                    if(cancelChannel)
+                    {
+                        Particle asdf; // UNUSED
+                        SpellEffectCreate(out asdf, out _, "Ezreal_essenceflux_tar.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "root", default, owner, default, default, true, false, false, false, false);
+                        SpellBuffClear(owner, nameof(Buffs.OdinCaptureChannel));
+                        IssueOrder(owner, OrderType.Hold, default, owner);
+                        AddBuff(attacker, owner, new Buffs.OdinCaptureInterrupt(), 1, 1, 3, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+                    }
+                }
+            }
         }
     }
 }

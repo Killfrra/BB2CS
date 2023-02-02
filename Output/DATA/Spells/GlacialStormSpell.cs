@@ -57,17 +57,17 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            float distance; // UNUSED
-            float nextBuffVars_MovementSpeedMod;
-            float nextBuffVars_AttackSpeedMod;
             if(ExecutePeriodically(0.25f, ref this.lastTimeExecuted, true))
             {
                 SpellEffectCreate(out this.ambientParticle, out _, "cryo_storm.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false);
                 if(GetBuffCountFromCaster(attacker, owner, nameof(Buffs.GlacialStorm)) > 0)
                 {
+                    float distance; // UNUSED
                     distance = DistanceBetweenObjects("Attacker", "Owner");
                     foreach(AttackableUnit unit in GetUnitsInArea(attacker, owner.Position, 400, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes))
                     {
+                        float nextBuffVars_MovementSpeedMod;
+                        float nextBuffVars_AttackSpeedMod;
                         ApplyDamage(attacker, unit, this.damagePerLevel, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0.0625f, 1, false, false);
                         nextBuffVars_MovementSpeedMod = -0.3f;
                         nextBuffVars_AttackSpeedMod = -0.15f;

@@ -5,6 +5,38 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class SowTheWind : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            CastingBreaksStealth = true,
+            DoesntBreakShields = true,
+            TriggersSpellCasts = true,
+            IsDamagingSpell = true,
+            NotSingleTargetSpell = false,
+            PhysicalDamageRatio = 1f,
+            SpellDamageRatio = 1f,
+        };
+        float[] effect0 = {-0.24f, -0.3f, -0.36f, -0.42f, -0.48f};
+        int[] effect1 = {60, 115, 170, 225, 280};
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            TeamId teamID;
+            float nextBuffVars_AttackSpeedMod;
+            Particle asdf; // UNUSED
+            float nextBuffVars_MoveSpeedMod;
+            teamID = GetTeamID(attacker);
+            BreakSpellShields(target);
+            nextBuffVars_AttackSpeedMod = 0;
+            nextBuffVars_MoveSpeedMod = this.effect0[level];
+            ApplyDamage(attacker, target, this.effect1[level], DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELL, 1, 0.8f, 1, false, false, attacker);
+            SpellEffectCreate(out asdf, out _, "SowTheWind_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true);
+            AddBuff(attacker, target, new Buffs.Slow(nextBuffVars_MoveSpeedMod, nextBuffVars_AttackSpeedMod), 100, 1, 4, BuffAddType.STACKS_AND_OVERLAPS, BuffType.SLOW, 0, true, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class SowTheWind : BBBuffScript
@@ -24,8 +56,8 @@ namespace Buffs
             TeamId teamID;
             Particle part; // UNUSED
             teamID = GetTeamID(owner);
-            SpellEffectCreate(out part, out _, "SowTheWind_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false);
-            SpellEffectCreate(out this.particle, out _, "SowTheWind_buf.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "head", default, owner, "head", default, false);
+            SpellEffectCreate(out part, out _, "SowTheWind_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false);
+            SpellEffectCreate(out this.particle, out _, "SowTheWind_buf.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "head", default, owner, "head", default, false);
             SetGhosted(owner, true);
             this.sowCast = 0;
         }
@@ -57,38 +89,6 @@ namespace Buffs
             {
                 SpellBuffRemoveCurrent(owner);
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class SowTheWind : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            CastingBreaksStealth = true,
-            DoesntBreakShields = true,
-            TriggersSpellCasts = true,
-            IsDamagingSpell = true,
-            NotSingleTargetSpell = false,
-            PhysicalDamageRatio = 1f,
-            SpellDamageRatio = 1f,
-        };
-        float[] effect0 = {-0.24f, -0.3f, -0.36f, -0.42f, -0.48f};
-        int[] effect1 = {60, 115, 170, 225, 280};
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            TeamId teamID;
-            float nextBuffVars_AttackSpeedMod;
-            float nextBuffVars_MoveSpeedMod;
-            Particle asdf; // UNUSED
-            teamID = GetTeamID(attacker);
-            BreakSpellShields(target);
-            nextBuffVars_AttackSpeedMod = 0;
-            nextBuffVars_MoveSpeedMod = this.effect0[level];
-            ApplyDamage(attacker, target, this.effect1[level], DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELL, 1, 0.8f, 1, false, false, attacker);
-            SpellEffectCreate(out asdf, out _, "SowTheWind_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true);
-            AddBuff(attacker, target, new Buffs.Slow(nextBuffVars_MoveSpeedMod, nextBuffVars_AttackSpeedMod), 100, 1, 4, BuffAddType.STACKS_AND_OVERLAPS, BuffType.SLOW, 0, true, false);
         }
     }
 }

@@ -28,13 +28,13 @@ namespace Buffs
         }
         public override void OnPreDealDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
         {
-            int level;
-            float percentLeech;
-            float shieldAmount;
             if(damageType == DamageType.DAMAGE_TYPE_MAGICAL)
             {
                 if(!this.doOnce)
                 {
+                    int level;
+                    float percentLeech;
+                    float shieldAmount;
                     level = GetLevel(owner);
                     percentLeech = this.effect0[level];
                     shieldAmount = percentLeech * damageAmount;

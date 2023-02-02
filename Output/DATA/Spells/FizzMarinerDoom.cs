@@ -5,24 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class FizzMarinerDoom : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateEffect = new[]{ "", "", },
-            BuffName = "",
-            BuffTextureName = "",
-        };
-        public override void OnLaunchMissile(SpellMissile missileId)
-        {
-            object missileId; // UNITIALIZED
-            charVars.UltMissileID = missileId;
-            SpellBuffClear(owner, nameof(Buffs.FizzMarinerDoom));
-        }
-    }
-}
 namespace Spells
 {
     public class FizzMarinerDoom : BBSpellScript
@@ -58,6 +40,24 @@ namespace Spells
             AddBuff((ObjAIBase)owner, owner, new Buffs.FizzMarinerDoom(), 1, 1, 5, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
             SpellCast((ObjAIBase)owner, default, targetPos, targetPos, 4, SpellSlotType.ExtraSlots, level, true, true, false, false, false, false);
             charVars.UltFired = true;
+        }
+    }
+}
+namespace Buffs
+{
+    public class FizzMarinerDoom : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateEffect = new[]{ "", "", },
+            BuffName = "",
+            BuffTextureName = "",
+        };
+        public override void OnLaunchMissile(SpellMissile missileId)
+        {
+            object missileId; // UNITIALIZED
+            charVars.UltMissileID = missileId;
+            SpellBuffClear(owner, nameof(Buffs.FizzMarinerDoom));
         }
     }
 }

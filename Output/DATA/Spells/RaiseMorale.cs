@@ -5,31 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class RaiseMorale : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateAttachBoneName = new[]{ "", "", },
-            AutoBuffActivateEffect = new[]{ "", "", },
-            BuffName = "RaiseMorale",
-            BuffTextureName = "Pirate_RaiseMorale.dds",
-            IsPetDurationBuff = true,
-            NonDispellable = true,
-            PersistsThroughDeath = true,
-        };
-        float[] effect0 = {0.03f, 0.04f, 0.05f, 0.06f, 0.07f};
-        int[] effect1 = {8, 10, 12, 14, 16};
-        public override void OnUpdateStats()
-        {
-            int level;
-            level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
-            IncPercentMovementSpeedMod(owner, this.effect0[level]);
-            IncFlatPhysicalDamageMod(owner, this.effect1[level]);
-        }
-    }
-}
 namespace Spells
 {
     public class RaiseMorale : BBSpellScript
@@ -60,6 +35,31 @@ namespace Spells
             {
                 AddBuff(attacker, unit, new Buffs.RaiseMoraleTeamBuff(nextBuffVars_MoveSpeedMod, nextBuffVars_AttackDmgMod), 1, 1, 7, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
             }
+        }
+    }
+}
+namespace Buffs
+{
+    public class RaiseMorale : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateAttachBoneName = new[]{ "", "", },
+            AutoBuffActivateEffect = new[]{ "", "", },
+            BuffName = "RaiseMorale",
+            BuffTextureName = "Pirate_RaiseMorale.dds",
+            IsPetDurationBuff = true,
+            NonDispellable = true,
+            PersistsThroughDeath = true,
+        };
+        float[] effect0 = {0.03f, 0.04f, 0.05f, 0.06f, 0.07f};
+        int[] effect1 = {8, 10, 12, 14, 16};
+        public override void OnUpdateStats()
+        {
+            int level;
+            level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
+            IncPercentMovementSpeedMod(owner, this.effect0[level]);
+            IncFlatPhysicalDamageMod(owner, this.effect1[level]);
         }
     }
 }

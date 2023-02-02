@@ -30,14 +30,14 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            float count;
-            bool canSee;
-            int ownerLevel;
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, true))
             {
+                float count;
+                int ownerLevel;
                 count = 0;
                 foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 1400, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectHeroes, default, true))
                 {
+                    bool canSee;
                     canSee = CanSeeTarget(owner, unit);
                     if(canSee)
                     {

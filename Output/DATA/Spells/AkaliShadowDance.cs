@@ -5,32 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class AkaliShadowDance : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateEffect = new[]{ "", },
-            BuffName = "AkaliShadowDance",
-            BuffTextureName = "AkaliShadowDance.dds",
-            PersistsThroughDeath = true,
-        };
-        public override void OnUpdateAmmo()
-        {
-            int count;
-            count = GetBuffCountFromAll(owner, nameof(Buffs.AkaliShadowDance));
-            if(count >= 3)
-            {
-                AddBuff(attacker, owner, new Buffs.AkaliShadowDance(), 4, 1, 25000, BuffAddType.STACKS_AND_RENEWS, BuffType.COUNTER, 0, true, false, false);
-            }
-            else
-            {
-                AddBuff(attacker, owner, new Buffs.AkaliShadowDance(), 4, 1, charVars.DanceTimerCooldown, BuffAddType.STACKS_AND_RENEWS, BuffType.COUNTER, 0, true, false, false);
-            }
-        }
-    }
-}
 namespace Spells
 {
     public class AkaliShadowDance : BBSpellScript
@@ -119,6 +93,32 @@ namespace Spells
             nextBuffVars_dashSpeed = dashSpeed;
             nextBuffVars_DamageVar = this.effect0[level];
             AddBuff((ObjAIBase)target, owner, new Buffs.AkaliShadowDanceKick(nextBuffVars_TargetPos, nextBuffVars_Distance, nextBuffVars_dashSpeed, nextBuffVars_DamageVar), 1, 1, 2, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0.25f, true, false, false);
+        }
+    }
+}
+namespace Buffs
+{
+    public class AkaliShadowDance : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateEffect = new[]{ "", },
+            BuffName = "AkaliShadowDance",
+            BuffTextureName = "AkaliShadowDance.dds",
+            PersistsThroughDeath = true,
+        };
+        public override void OnUpdateAmmo()
+        {
+            int count;
+            count = GetBuffCountFromAll(owner, nameof(Buffs.AkaliShadowDance));
+            if(count >= 3)
+            {
+                AddBuff(attacker, owner, new Buffs.AkaliShadowDance(), 4, 1, 25000, BuffAddType.STACKS_AND_RENEWS, BuffType.COUNTER, 0, true, false, false);
+            }
+            else
+            {
+                AddBuff(attacker, owner, new Buffs.AkaliShadowDance(), 4, 1, charVars.DanceTimerCooldown, BuffAddType.STACKS_AND_RENEWS, BuffType.COUNTER, 0, true, false, false);
+            }
         }
     }
 }

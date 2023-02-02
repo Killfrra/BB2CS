@@ -18,8 +18,6 @@ namespace Buffs
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
             TeamId teamID;
-            ObjAIBase caster; // UNUSED
-            int nextBuffVars_BounceCounter;
             teamID = GetTeamID(owner);
             if(target is ObjAIBase)
             {
@@ -31,12 +29,14 @@ namespace Buffs
                         {
                             if(this.attackCounter == 3)
                             {
+                                ObjAIBase caster; // UNUSED
+                                int nextBuffVars_BounceCounter;
                                 caster = SetBuffCasterUnit();
                                 if(attacker is not Champion)
                                 {
                                     caster = GetPetOwner((Pet)attacker);
                                 }
-                                SpellEffectCreate(out this.particleID, out _, "kennen_btl_beam.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, target, false, attacker, "head", default, target, "root", default, true, false, false, false, false);
+                                SpellEffectCreate(out this.particleID, out _, "kennen_btl_beam.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, target, false, attacker, "head", default, target, "root", default, true, false, false, false, false);
                                 nextBuffVars_BounceCounter = 1;
                                 AddBuff(attacker, target, new Buffs.LightningRodChain(nextBuffVars_BounceCounter), 1, 1, 1.5f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
                                 this.attackCounter = 0;

@@ -12,9 +12,9 @@ namespace Items
         float lastTimeExecuted;
         public override void OnUpdateActions()
         {
-            int count;
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, false))
             {
+                int count;
                 AddBuff((ObjAIBase)owner, owner, new Buffs.LeviathanCheck(), 1, 1, 1.2f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0);
                 count = GetBuffCountFromAll(owner, nameof(Buffs.LeviathanStats));
                 if(count == 20)

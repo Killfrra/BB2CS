@@ -25,19 +25,19 @@ namespace Buffs
         }
         public override void OnSpellCast(string spellName, SpellScriptMetaData spellVars)
         {
-            int level; // UNUSED
-            float attackDamage;
-            float baseAD;
-            float passiveAD;
-            float bonusBaseAD;
             spellName = GetSpellName();
             if(spellName == nameof(Spells.RivenMartyr))
             {
+                int level; // UNUSED
                 level = GetSlotSpellLevel((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 AddBuff((ObjAIBase)owner, owner, new Buffs.RivenMartyr(), 1, 1, 0.25f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
             }
             if(spellName == nameof(Spells.RivenFengShuiEngine))
             {
+                float attackDamage;
+                float baseAD;
+                float passiveAD;
+                float bonusBaseAD;
                 attackDamage = GetTotalAttackDamage(owner);
                 baseAD = GetBaseAttackDamage(owner);
                 attackDamage -= baseAD;
@@ -57,12 +57,6 @@ namespace Buffs
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
             int count;
-            int level;
-            float attackDamage;
-            float baseAD;
-            float passiveAD;
-            float baseDamage;
-            float bonusDamage;
             count = GetBuffCountFromCaster(owner, owner, nameof(Buffs.RivenPassiveAABoost));
             if(count > 0)
             {
@@ -70,6 +64,12 @@ namespace Buffs
                 {
                     if(target is not BaseTurret)
                     {
+                        int level;
+                        float attackDamage;
+                        float baseAD;
+                        float passiveAD;
+                        float baseDamage;
+                        float bonusDamage;
                         level = GetLevel(owner);
                         attackDamage = GetTotalAttackDamage(owner);
                         baseAD = GetBaseAttackDamage(owner);
@@ -100,11 +100,11 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            float attackDamage;
-            float baseAD;
-            float passiveAD;
             if(ExecutePeriodically(10, ref this.lastTimeExecuted, false))
             {
+                float attackDamage;
+                float baseAD;
+                float passiveAD;
                 attackDamage = GetTotalAttackDamage(owner);
                 baseAD = GetBaseAttackDamage(owner);
                 attackDamage -= baseAD;

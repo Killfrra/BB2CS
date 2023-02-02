@@ -12,9 +12,9 @@ namespace Chars
         float lastTimeExecuted;
         public override void OnUpdateActions()
         {
-            float hPPoolMod;
             if(ExecutePeriodically(5, ref this.lastTimeExecuted, true))
             {
+                float hPPoolMod;
                 hPPoolMod = GetFlatHPPoolMod(attacker);
                 hPPoolMod *= 0.15f;
                 SetSpellToolTipVar(hPPoolMod, 1, 1, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (Champion)attacker);
@@ -22,7 +22,6 @@ namespace Chars
         }
         public override void OnActivate()
         {
-            string name;
             AddBuff((ObjAIBase)owner, owner, new Buffs.VolibearPassiveBuff(), 1, 1, 25000, BuffAddType.RENEW_EXISTING, BuffType.AURA, 0, true, false, false);
             AddBuff((ObjAIBase)owner, owner, new Buffs.VolibearPassiveHealCheck(), 1, 1, 25000, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0, true, false, false);
             AddBuff((ObjAIBase)owner, owner, new Buffs.APBonusDamageToTowers(), 1, 1, 25000, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0, true, false, false);
@@ -31,6 +30,7 @@ namespace Chars
             charVars.RegenTooltip = 30;
             foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 25000, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectHeroes, default, true))
             {
+                string name;
                 name = GetUnitSkinName(unit);
                 if(name == "Zilean")
                 {

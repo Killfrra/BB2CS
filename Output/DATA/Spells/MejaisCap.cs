@@ -22,9 +22,9 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            int count;
             if(ExecutePeriodically(0.3f, ref this.lastTimeExecuted, false))
             {
+                int count;
                 if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.MejaisCheck)) == 0)
                 {
                     SpellBuffRemoveCurrent(owner);

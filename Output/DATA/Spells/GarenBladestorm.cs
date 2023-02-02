@@ -5,6 +5,33 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class GarenBladestorm : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = true,
+            NotSingleTargetSpell = true,
+        };
+        int[] effect0 = {25, 45, 65, 85, 105};
+        int[] effect1 = {13, 12, 11, 10, 9};
+        float[] effect2 = {0.5f, 0.5f, 0.5f, 0.5f, 0.5f};
+        public override void SelfExecute()
+        {
+            float nextBuffVars_baseDamage;
+            float nextBuffVars_SpellCooldown;
+            float nextBuffVars_MoveSpeedMod; // UNUSED
+            nextBuffVars_baseDamage = this.effect0[level];
+            nextBuffVars_SpellCooldown = this.effect1[level];
+            SetSpell((ObjAIBase)owner, 2, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, nameof(Spells.GarenBladestormLeave));
+            SpellBuffRemoveType(owner, BuffType.SLOW);
+            AddBuff(attacker, owner, new Buffs.GarenBladestorm(nextBuffVars_SpellCooldown, nextBuffVars_baseDamage), 1, 1, 3, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+            nextBuffVars_MoveSpeedMod = this.effect2[level];
+            SetSlotSpellCooldownTimeVer2(1, 2, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class GarenBladestorm : BBBuffScript
@@ -29,18 +56,18 @@ namespace Buffs
         public override bool OnAllowAdd(BuffType type, string scriptName, int maxStack, float duration)
         {
             bool returnValue = true;
-            float hardnessPercent;
-            float reversalDivisor;
             if(owner.Team != attacker.Team)
             {
                 if(type == BuffType.SLOW)
                 {
+                    float hardnessPercent;
                     hardnessPercent = GetPercentHardnessMod(owner);
                     if(hardnessPercent > 0.5f)
                     {
                     }
                     else
                     {
+                        float reversalDivisor;
                         duration *= 0.5f;
                         reversalDivisor = 1 - hardnessPercent;
                         duration /= reversalDivisor;
@@ -78,25 +105,21 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            float critChance;
-            float critDamage;
-            int level; // UNUSED
-            float totalDamage;
-            float baseDamage;
-            float bonusDamage;
-            float ratioDamage;
-            float preBonusCrit;
-            float damageToDealHero;
-            float critHero;
-            float critMinion;
-            float damageToDeal;
-            TeamId teamID;
-            Particle bSCritPH; // UNUSED
-            Particle samPH; // UNUSED
-            bool canSee;
-            bool isStealthed;
             if(ExecutePeriodically(0.5f, ref this.lastTimeExecuted, true))
             {
+                float critChance;
+                float critDamage;
+                int level; // UNUSED
+                float totalDamage;
+                float baseDamage;
+                float bonusDamage;
+                float ratioDamage;
+                float preBonusCrit;
+                float damageToDealHero;
+                float critHero;
+                float critMinion;
+                float damageToDeal;
+                TeamId teamID;
                 critChance = GetFlatCritChanceMod(owner);
                 critDamage = GetFlatCritDamageMod(owner);
                 critDamage += 2;
@@ -114,82 +137,59 @@ namespace Buffs
                 teamID = GetTeamID(owner);
                 foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 325, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
                 {
+                    Particle bSCritPH; // UNUSED
+                    Particle samPH; // UNUSED
                     if(unit is Champion)
                     {
                         if(RandomChance() < critChance)
                         {
                             ApplyDamage(attacker, unit, critHero, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0, 0, false, false, attacker);
-                            SpellEffectCreate(out bSCritPH, out _, "garen_bladestormCrit_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
+                            SpellEffectCreate(out bSCritPH, out _, "garen_bladestormCrit_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
                         }
                         else
                         {
                             ApplyDamage(attacker, unit, damageToDealHero, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0, 0, false, false, attacker);
-                            SpellEffectCreate(out samPH, out _, "garen_keeper0fPeace_tar_01.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
+                            SpellEffectCreate(out samPH, out _, "garen_keeper0fPeace_tar_01.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
                         }
                     }
                     else
                     {
+                        bool canSee;
                         canSee = CanSeeTarget(owner, unit);
                         if(canSee)
                         {
                             if(RandomChance() < critChance)
                             {
                                 ApplyDamage(attacker, unit, critMinion, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0, 0, false, false, attacker);
-                                SpellEffectCreate(out bSCritPH, out _, "garen_bladestormCrit_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
+                                SpellEffectCreate(out bSCritPH, out _, "garen_bladestormCrit_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
                             }
                             else
                             {
                                 ApplyDamage(attacker, unit, damageToDeal, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0, 0, false, false, attacker);
-                                SpellEffectCreate(out samPH, out _, "garen_keeper0fPeace_tar_01.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, target, default, default, true, false, false, false, false);
+                                SpellEffectCreate(out samPH, out _, "garen_keeper0fPeace_tar_01.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, target, default, default, true, false, false, false, false);
                             }
                         }
                         else
                         {
+                            bool isStealthed;
                             isStealthed = GetStealthed(unit);
                             if(!isStealthed)
                             {
                                 if(RandomChance() < critChance)
                                 {
                                     ApplyDamage(attacker, unit, critMinion, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0, 0, false, false, attacker);
-                                    SpellEffectCreate(out bSCritPH, out _, "garen_bladestormCrit_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
+                                    SpellEffectCreate(out bSCritPH, out _, "garen_bladestormCrit_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
                                 }
                                 else
                                 {
                                     ApplyDamage(attacker, unit, damageToDeal, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0, 0, false, false, attacker);
-                                    SpellEffectCreate(out samPH, out _, "garen_keeper0fPeace_tar_01.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, target, default, default, true, false, false, false, false);
+                                    SpellEffectCreate(out samPH, out _, "garen_keeper0fPeace_tar_01.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, target, default, default, true, false, false, false, false);
                                 }
                             }
                         }
                     }
                 }
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class GarenBladestorm : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = true,
-            NotSingleTargetSpell = true,
-        };
-        int[] effect0 = {25, 45, 65, 85, 105};
-        int[] effect1 = {13, 12, 11, 10, 9};
-        float[] effect2 = {0.5f, 0.5f, 0.5f, 0.5f, 0.5f};
-        public override void SelfExecute()
-        {
-            float nextBuffVars_baseDamage;
-            float nextBuffVars_SpellCooldown;
-            float nextBuffVars_MoveSpeedMod;
-            nextBuffVars_baseDamage = this.effect0[level];
-            nextBuffVars_SpellCooldown = this.effect1[level];
-            SetSpell((ObjAIBase)owner, 2, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, nameof(Spells.GarenBladestormLeave));
-            SpellBuffRemoveType(owner, BuffType.SLOW);
-            AddBuff(attacker, owner, new Buffs.GarenBladestorm(nextBuffVars_SpellCooldown, nextBuffVars_baseDamage), 1, 1, 3, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
-            nextBuffVars_MoveSpeedMod = this.effect2[level];
-            SetSlotSpellCooldownTimeVer2(1, 2, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner, false);
         }
     }
 }

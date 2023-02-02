@@ -5,21 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class Pantheon_HeartseekerChannel : BBBuffScript
-    {
-        Particle particle1;
-        public override void OnActivate()
-        {
-            SpellEffectCreate(out this.particle1, out _, "pantheon_heartseeker_cas2.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "L_BUFFBONE_GLB_HAND_LOC", default, target, default, default, false, default, default, false, true);
-        }
-        public override void OnDeactivate(bool expired)
-        {
-            SpellEffectRemove(this.particle1);
-        }
-    }
-}
 namespace Spells
 {
     public class Pantheon_HeartseekerChannel : BBSpellScript
@@ -41,7 +26,6 @@ namespace Spells
             float bonusDamage;
             float finalDamage;
             bool isStealthed;
-            bool canSee;
             totalDamage = GetTotalAttackDamage(owner);
             baseDamage = GetBaseAttackDamage(owner);
             dmgPerLvl = this.effect0[level];
@@ -63,6 +47,7 @@ namespace Spells
             }
             else
             {
+                bool canSee;
                 canSee = CanSeeTarget(owner, target);
                 if(canSee)
                 {
@@ -73,6 +58,21 @@ namespace Spells
         public override void ChannelingCancelStop()
         {
             SpellBuffClear(owner, nameof(Buffs.Pantheon_HeartseekerChannel));
+        }
+    }
+}
+namespace Buffs
+{
+    public class Pantheon_HeartseekerChannel : BBBuffScript
+    {
+        Particle particle1;
+        public override void OnActivate()
+        {
+            SpellEffectCreate(out this.particle1, out _, "pantheon_heartseeker_cas2.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "L_BUFFBONE_GLB_HAND_LOC", default, target, default, default, false, default, default, false, true);
+        }
+        public override void OnDeactivate(bool expired)
+        {
+            SpellEffectRemove(this.particle1);
         }
     }
 }

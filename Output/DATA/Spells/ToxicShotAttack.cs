@@ -5,20 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class ToxicShotAttack : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateAttachBoneName = new[]{ "", },
-            AutoBuffActivateEffect = new[]{ "", },
-            BuffName = "Toxic Shot",
-            BuffTextureName = "Teemo_PoisonedDart.dds",
-            SpellFXOverrideSkins = new[]{ "AstronautTeemo", },
-        };
-    }
-}
 namespace Spells
 {
     public class ToxicShotAttack : BBSpellScript
@@ -41,5 +27,19 @@ namespace Spells
             attackDamage = GetBaseAttackDamage(owner);
             ApplyDamage(attacker, target, attackDamage, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_ATTACK, 1, 0, 1, false, false, attacker);
         }
+    }
+}
+namespace Buffs
+{
+    public class ToxicShotAttack : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateAttachBoneName = new[]{ "", },
+            AutoBuffActivateEffect = new[]{ "", },
+            BuffName = "Toxic Shot",
+            BuffTextureName = "Teemo_PoisonedDart.dds",
+            SpellFXOverrideSkins = new[]{ "AstronautTeemo", },
+        };
     }
 }

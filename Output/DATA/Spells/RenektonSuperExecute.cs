@@ -27,8 +27,6 @@ namespace Spells
             float currentFury;
             float baseDamage;
             float bonusPercent;
-            float postFury;
-            float furyCost;
             if(hitResult == HitResult.HIT_Critical)
             {
                 hitResult = HitResult.HIT_Normal;
@@ -75,6 +73,8 @@ namespace Spells
             }
             if(furyBonus)
             {
+                float postFury;
+                float furyCost;
                 postFury = GetPAR(owner, PrimaryAbilityResourceType.Other);
                 furyCost = currentFury - postFury;
                 IncPAR(owner, furyCost, PrimaryAbilityResourceType.Other);

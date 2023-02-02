@@ -25,18 +25,18 @@ namespace Chars
         }
         public override void OnNearbyDeath()
         {
-            bool noRender;
-            float hPPre;
-            float healVar;
             if(owner.Team != target.Team)
             {
                 if(target is ObjAIBase)
                 {
                     if(target is not BaseTurret)
                     {
+                        bool noRender;
                         noRender = GetNoRender(target);
                         if(!noRender)
                         {
+                            float hPPre;
+                            float healVar;
                             hPPre = GetMaxHealth(target, PrimaryAbilityResourceType.MANA);
                             healVar = hPPre * charVars.RegenValue;
                             IncHealth(owner, healVar, owner);

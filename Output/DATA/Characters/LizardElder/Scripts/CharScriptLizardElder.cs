@@ -12,7 +12,7 @@ namespace Chars
         public override void OnActivate()
         {
             float nextBuffVars_spawnTime;
-            float nextBuffVars_areaDmgReduction;
+            float nextBuffVars_areaDmgReduction; // UNUSED
             float nextBuffVars_healthPerMinute;
             float nextBuffVars_damagePerMinute;
             float nextBuffVars_goldPerMinute;

@@ -21,12 +21,9 @@ namespace Spells
         public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
         {
             float nextBuffVars_Speed;
-            float nextBuffVars_Gravity;
-            int nextBuffVars_IdealDistance;
-            Vector3 nextBuffVars_Position;
             bool isStealthed;
-            Vector3 bouncePos;
-            bool canSee;
+            float nextBuffVars_Gravity;
+            int nextBuffVars_IdealDistance; // UNUSED
             nextBuffVars_Speed = 150;
             nextBuffVars_Gravity = 45;
             nextBuffVars_IdealDistance = 100;
@@ -34,6 +31,8 @@ namespace Spells
             isStealthed = GetStealthed(target);
             if(owner.Team != target.Team)
             {
+                Vector3 bouncePos;
+                Vector3 nextBuffVars_Position;
                 if(!isStealthed)
                 {
                     BreakSpellShields(target);
@@ -54,6 +53,7 @@ namespace Spells
                     }
                     else
                     {
+                        bool canSee;
                         canSee = CanSeeTarget(owner, target);
                         if(canSee)
                         {

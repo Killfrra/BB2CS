@@ -5,6 +5,27 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class JaxRelentlessAssault : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = true,
+            NotSingleTargetSpell = true,
+        };
+        float[] effect0 = {0.3f, 0.35f, 0.4f};
+        int[] effect1 = {6, 6, 6};
+        public override void SelfExecute()
+        {
+            float nextBuffVars_SpeedBoost; // UNUSED
+            float duration;
+            nextBuffVars_SpeedBoost = this.effect0[level];
+            duration = this.effect1[level];
+            AddBuff(attacker, owner, new Buffs.JaxRelentlessAssaultSpeed(), 1, 1, duration, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class JaxRelentlessAssault : BBBuffScript
@@ -22,11 +43,11 @@ namespace Buffs
         public override void OnUpdateStats()
         {
             int count;
-            int level;
-            float aS;
             count = GetBuffCountFromAll(owner, nameof(Buffs.JaxRelentlessAssaultAS));
             if(count > 0)
             {
+                int level;
+                float aS;
                 level = GetLevel(owner);
                 aS = this.effect0[level];
                 aS *= count;
@@ -49,17 +70,17 @@ namespace Buffs
         }
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            int ult;
-            int count;
             if(hitResult != HitResult.HIT_Dodge)
             {
                 if(hitResult != HitResult.HIT_Miss)
                 {
+                    int ult;
                     DebugSay(owner, "2");
                     AddBuff((ObjAIBase)owner, owner, new Buffs.JaxRelentlessAssaultAS(), charVars.UltStacks, 1, 2.5f, BuffAddType.STACKS_AND_RENEWS, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
                     ult = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                     if(ult > 0)
                     {
+                        int count;
                         if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.JaxRelentlessAssaultAS)) == 0)
                         {
                             AddBuff((ObjAIBase)owner, owner, new Buffs.JaxRelentlessAssaultDebuff(), 2, 2, 25000, BuffAddType.STACKS_AND_RENEWS, BuffType.INTERNAL, 0, true, false, false);
@@ -80,27 +101,6 @@ namespace Buffs
                     }
                 }
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class JaxRelentlessAssault : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = true,
-            NotSingleTargetSpell = true,
-        };
-        float[] effect0 = {0.3f, 0.35f, 0.4f};
-        int[] effect1 = {6, 6, 6};
-        public override void SelfExecute()
-        {
-            float nextBuffVars_SpeedBoost;
-            float duration;
-            nextBuffVars_SpeedBoost = this.effect0[level];
-            duration = this.effect1[level];
-            AddBuff(attacker, owner, new Buffs.JaxRelentlessAssaultSpeed(), 1, 1, duration, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
         }
     }
 }

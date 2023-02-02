@@ -22,7 +22,7 @@ namespace Buffs
         {
             TeamId teamID;
             teamID = GetTeamID(attacker);
-            SpellEffectCreate(out this.asdf1, out _, "Global_Taunt_multi_unit.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "C_BUFFBONE_GLB_HEAD_LOC", default, owner, default, default, true);
+            SpellEffectCreate(out this.asdf1, out _, "Global_Taunt_multi_unit.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "C_BUFFBONE_GLB_HEAD_LOC", default, owner, default, default, true);
         }
         public override void OnDeactivate(bool expired)
         {

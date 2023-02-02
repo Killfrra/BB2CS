@@ -5,45 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class XenZhaoParry : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateAttachBoneName = new[]{ "", },
-            AutoBuffActivateEffect = new[]{ "", },
-            BuffName = "XenZhaoParry",
-            BuffTextureName = "XinZhao_CrescentSweep.dds",
-        };
-        float mRByLevel;
-        Particle mRShield;
-        float totalMR;
-        public XenZhaoParry(float mRByLevel = default, float totalMR = default)
-        {
-            this.mRByLevel = mRByLevel;
-            this.totalMR = totalMR;
-        }
-        public override void OnActivate()
-        {
-            TeamId teamID;
-            int level; // UNUSED
-            teamID = GetTeamID(owner);
-            level = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
-            //RequireVar(this.mRByLevel);
-            IncFlatSpellBlockMod(owner, this.mRByLevel);
-            SpellEffectCreate(out this.mRShield, out _, "xenZiou_SelfShield_01_magic.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false, false, false, false, false);
-        }
-        public override void OnDeactivate(bool expired)
-        {
-            SpellEffectRemove(this.mRShield);
-        }
-        public override void OnUpdateStats()
-        {
-            IncFlatSpellBlockMod(owner, this.totalMR);
-        }
-    }
-}
 namespace Spells
 {
     public class XenZhaoParry : BBSpellScript
@@ -72,6 +33,7 @@ namespace Spells
             float dtDReal;
             TeamId teamID;
             float nextBuffVars_Count;
+            float armorAmount;
             float nextBuffVars_MRByLevel;
             float nextBuffVars_ScalingArmor;
             float nextBuffVars_ScalingMR;
@@ -79,14 +41,6 @@ namespace Spells
             float nextBuffVars_TotalMR;
             float nextBuffVars_CountArmor;
             float nextBuffVars_TotalArmor;
-            float currentHP;
-            float percentDmg;
-            bool isStealthed;
-            Particle bye; // UNUSED
-            Particle gda; // UNUSED
-            Particle asdf; // UNUSED
-            bool canSee;
-            float armorAmount;
             dtD = this.effect0[level];
             percentByLevel = this.effect1[level];
             SpellEffectCreate(out p3, out _, "xenZiou_ult_cas.troy", default, TeamId.TEAM_NEUTRAL, 900, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "BUFFBONE_CSTM_WEAPON_1", castPos, owner, default, default, true, false, false, false, false);
@@ -95,14 +49,20 @@ namespace Spells
             nextBuffVars_Count = 0;
             foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 500, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
             {
+                float currentHP;
+                float percentDmg;
+                bool isStealthed;
+                Particle bye; // UNUSED
+                Particle gda; // UNUSED
+                Particle asdf; // UNUSED
                 BreakSpellShields(unit);
                 currentHP = GetHealth(unit, PrimaryAbilityResourceType.MANA);
                 percentDmg = currentHP * percentByLevel;
                 dtDReal = dtD + percentDmg;
                 isStealthed = GetStealthed(unit);
-                SpellEffectCreate(out bye, out _, "xenZiou_utl_tar_02.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
-                SpellEffectCreate(out gda, out _, "xenZiou_utl_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
-                SpellEffectCreate(out asdf, out _, "xenZiou_utl_tar_03.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
+                SpellEffectCreate(out bye, out _, "xenZiou_utl_tar_02.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
+                SpellEffectCreate(out gda, out _, "xenZiou_utl_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
+                SpellEffectCreate(out asdf, out _, "xenZiou_utl_tar_03.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
                 if(unit is not Champion)
                 {
                     if(dtDReal > 600)
@@ -124,6 +84,7 @@ namespace Spells
                 }
                 else
                 {
+                    bool canSee;
                     canSee = CanSeeTarget(owner, unit);
                     if(canSee)
                     {
@@ -141,6 +102,45 @@ namespace Spells
             nextBuffVars_CountArmor = nextBuffVars_Count * nextBuffVars_ScalingArmor;
             nextBuffVars_TotalArmor = nextBuffVars_CountArmor + armorAmount;
             AddBuff((ObjAIBase)owner, owner, new Buffs.XenZhaoSweepArmor(nextBuffVars_TotalArmor), 1, 1, 6, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+        }
+    }
+}
+namespace Buffs
+{
+    public class XenZhaoParry : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateAttachBoneName = new[]{ "", },
+            AutoBuffActivateEffect = new[]{ "", },
+            BuffName = "XenZhaoParry",
+            BuffTextureName = "XinZhao_CrescentSweep.dds",
+        };
+        float mRByLevel;
+        Particle mRShield;
+        float totalMR;
+        public XenZhaoParry(float mRByLevel = default, float totalMR = default)
+        {
+            this.mRByLevel = mRByLevel;
+            this.totalMR = totalMR;
+        }
+        public override void OnActivate()
+        {
+            TeamId teamID;
+            int level; // UNUSED
+            teamID = GetTeamID(owner);
+            level = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
+            //RequireVar(this.mRByLevel);
+            IncFlatSpellBlockMod(owner, this.mRByLevel);
+            SpellEffectCreate(out this.mRShield, out _, "xenZiou_SelfShield_01_magic.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false, false, false, false, false);
+        }
+        public override void OnDeactivate(bool expired)
+        {
+            SpellEffectRemove(this.mRShield);
+        }
+        public override void OnUpdateStats()
+        {
+            IncFlatSpellBlockMod(owner, this.totalMR);
         }
     }
 }

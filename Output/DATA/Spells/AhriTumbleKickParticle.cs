@@ -16,8 +16,8 @@ namespace Buffs
             Vector3 targetPos; // UNITIALIZED
             Particle pH2; // UNUSED
             teamID = GetTeamID(owner);
-            SpellEffectCreate(out pH, out _, "akali_shadowDance_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, targetPos, owner, default, default, true, false, false, false, false);
-            SpellEffectCreate(out pH2, out _, "irelia_gotasu_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, targetPos, owner, default, default, true, false, false, false, false);
+            SpellEffectCreate(out pH, out _, "akali_shadowDance_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, targetPos, owner, default, default, true, false, false, false, false);
+            SpellEffectCreate(out pH2, out _, "irelia_gotasu_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, targetPos, owner, default, default, true, false, false, false, false);
         }
     }
 }

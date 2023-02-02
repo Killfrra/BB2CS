@@ -67,14 +67,14 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            int count;
-            TeamId teamID; // UNUSED
-            float healAmount;
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, true))
             {
+                int count;
                 count = GetBuffCountFromAll(owner, nameof(Buffs.OdinBombSuppression));
                 if(count == 0)
                 {
+                    TeamId teamID; // UNUSED
+                    float healAmount;
                     teamID = GetTeamID(owner);
                     healAmount = 20000;
                     IncPAR(owner, healAmount, PrimaryAbilityResourceType.MANA);

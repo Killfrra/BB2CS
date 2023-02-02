@@ -66,11 +66,11 @@ namespace Buffs
         }
         public override void OnUpdateStats()
         {
-            int level;
-            float offensiveGain;
             float rageCount;
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, true))
             {
+                int level;
+                float offensiveGain;
                 if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.RenektonInCombat)) == 0)
                 {
                     IncPAR(owner, -2, PrimaryAbilityResourceType.Other);
@@ -101,11 +101,11 @@ namespace Buffs
         }
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            float healthPercent;
             if(target is not BaseTurret)
             {
                 if(target is ObjAIBase)
                 {
+                    float healthPercent;
                     IncPAR(owner, 5, PrimaryAbilityResourceType.Other);
                     healthPercent = GetHealthPercent(owner, PrimaryAbilityResourceType.MANA);
                     if(healthPercent <= charVars.RageThreshold)

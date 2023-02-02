@@ -5,6 +5,37 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class AkaliMota : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            CastingBreaksStealth = true,
+            DoesntBreakShields = false,
+            TriggersSpellCasts = true,
+            IsDamagingSpell = true,
+            NotSingleTargetSpell = false,
+        };
+        int[] effect0 = {45, 70, 95, 120, 145};
+        int[] effect1 = {20, 25, 30, 35, 40};
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            float nextBuffVars_MotaDamage;
+            float nextBuffVars_EnergyReturn;
+            float nextBuffVars_VampPercent; // UNUSED
+            nextBuffVars_MotaDamage = this.effect0[level];
+            nextBuffVars_EnergyReturn = this.effect1[level];
+            AddBuff(attacker, target, new Buffs.AkaliMota(nextBuffVars_MotaDamage, nextBuffVars_EnergyReturn), 1, 1, 6, BuffAddType.RENEW_EXISTING, BuffType.DAMAGE, 0, true, false, false);
+            ApplyDamage(attacker, target, nextBuffVars_MotaDamage, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELL, 1, 0.4f, 1, false, false, attacker);
+            nextBuffVars_VampPercent = charVars.VampPercent;
+            if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.AkaliTwinAP)) > 0)
+            {
+                AddBuff((ObjAIBase)owner, owner, new Buffs.AkaliShadowSwipeHealingParticle(), 1, 1, 0.1f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+            }
+        }
+    }
+}
 namespace Buffs
 {
     public class AkaliMota : BBBuffScript
@@ -50,8 +81,6 @@ namespace Buffs
         public override void OnBeingHit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
             ObjAIBase caster;
-            TeamId teamID;
-            Particle motaExplosion; // UNUSED
             caster = SetBuffCasterUnit();
             if(caster == attacker)
             {
@@ -61,11 +90,13 @@ namespace Buffs
                     {
                         if(this.doOnce)
                         {
+                            TeamId teamID;
+                            Particle motaExplosion; // UNUSED
                             teamID = GetTeamID(attacker);
                             this.doOnce = false;
                             ApplyDamage(attacker, owner, this.motaDamage, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELL, 1, 0.4f, 1, false, false, attacker);
                             IncPAR(attacker, this.energyReturn, PrimaryAbilityResourceType.Energy);
-                            SpellEffectCreate(out motaExplosion, out _, "akali_mark_impact_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, true, false, false, false, false);
+                            SpellEffectCreate(out motaExplosion, out _, "akali_mark_impact_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, true, false, false, false, false);
                             if(GetBuffCountFromCaster(attacker, attacker, nameof(Buffs.AkaliTwinAP)) > 0)
                             {
                                 AddBuff(attacker, attacker, new Buffs.AkaliShadowSwipeHealingParticle(), 1, 1, 0.1f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
@@ -73,37 +104,6 @@ namespace Buffs
                         }
                     }
                 }
-            }
-        }
-    }
-}
-namespace Spells
-{
-    public class AkaliMota : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            CastingBreaksStealth = true,
-            DoesntBreakShields = false,
-            TriggersSpellCasts = true,
-            IsDamagingSpell = true,
-            NotSingleTargetSpell = false,
-        };
-        int[] effect0 = {45, 70, 95, 120, 145};
-        int[] effect1 = {20, 25, 30, 35, 40};
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            float nextBuffVars_MotaDamage;
-            float nextBuffVars_EnergyReturn;
-            float nextBuffVars_VampPercent;
-            nextBuffVars_MotaDamage = this.effect0[level];
-            nextBuffVars_EnergyReturn = this.effect1[level];
-            AddBuff(attacker, target, new Buffs.AkaliMota(nextBuffVars_MotaDamage, nextBuffVars_EnergyReturn), 1, 1, 6, BuffAddType.RENEW_EXISTING, BuffType.DAMAGE, 0, true, false, false);
-            ApplyDamage(attacker, target, nextBuffVars_MotaDamage, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELL, 1, 0.4f, 1, false, false, attacker);
-            nextBuffVars_VampPercent = charVars.VampPercent;
-            if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.AkaliTwinAP)) > 0)
-            {
-                AddBuff((ObjAIBase)owner, owner, new Buffs.AkaliShadowSwipeHealingParticle(), 1, 1, 0.1f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
             }
         }
     }

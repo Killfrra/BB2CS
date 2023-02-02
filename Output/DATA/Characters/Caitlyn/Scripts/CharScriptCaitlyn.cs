@@ -24,13 +24,13 @@ namespace Chars
         }
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            bool isInBrush;
             if(GetBuffCountFromCaster(attacker, attacker, nameof(Buffs.IfHasBuffCheck)) == 0)
             {
                 if(hitResult != HitResult.HIT_Dodge)
                 {
                     if(GetBuffCountFromCaster(attacker, attacker, nameof(Buffs.CaitlynHeadshot)) == 0)
                     {
+                        bool isInBrush;
                         isInBrush = IsInBrush(attacker);
                         if(isInBrush)
                         {
@@ -61,12 +61,12 @@ namespace Chars
         {
             int brushCount;
             bool isInBrush;
-            int count;
             level = GetLevel(owner);
             brushCount = this.effect1[level];
             isInBrush = IsInBrush(attacker);
             if(isInBrush)
             {
+                int count;
                 count = GetBuffCountFromCaster(owner, owner, nameof(Buffs.CaitlynHeadshotCount));
                 if(count >= brushCount)
                 {

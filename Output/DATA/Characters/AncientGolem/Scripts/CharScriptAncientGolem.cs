@@ -14,7 +14,7 @@ namespace Chars
             int nextBuffVars_spawnTime;
             int nextBuffVars_healthPerMinute;
             float nextBuffVars_damagePerMinute;
-            float nextBuffVars_areaDmgReduction;
+            float nextBuffVars_areaDmgReduction; // UNUSED
             float nextBuffVars_goldPerMinute;
             float nextBuffVars_expPerMinute;
             bool nextBuffVars_upgradeTimer;

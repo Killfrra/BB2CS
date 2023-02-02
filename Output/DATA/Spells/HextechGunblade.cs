@@ -5,21 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class HextechGunblade : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            BuffName = "",
-            BuffTextureName = "3146_Hextech_Gunblade.dds",
-        };
-        public override void OnUpdateStats()
-        {
-            IncPercentSpellVampMod(owner, 0.2f);
-        }
-    }
-}
 namespace Spells
 {
     public class HextechGunblade : BBSpellScript
@@ -81,6 +66,21 @@ namespace Spells
             targetPos = GetUnitPosition(target);
             FaceDirection(owner, targetPos);
             SpellCast((ObjAIBase)owner, target, target.Position, target.Position, 7, SpellSlotType.ExtraSlots, 1, true, true, false, false, false, false);
+        }
+    }
+}
+namespace Buffs
+{
+    public class HextechGunblade : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            BuffName = "",
+            BuffTextureName = "3146_Hextech_Gunblade.dds",
+        };
+        public override void OnUpdateStats()
+        {
+            IncPercentSpellVampMod(owner, 0.2f);
         }
     }
 }

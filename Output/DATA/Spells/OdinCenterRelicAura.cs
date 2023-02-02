@@ -50,17 +50,17 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            TeamId teamID;
-            float newDuration;
             if(ExecutePeriodically(0.25f, ref this.lastTimeExecuted, false))
             {
                 foreach(AttackableUnit unit in GetClosestUnitsInArea(owner, owner.Position, 175, SpellDataFlags.AffectHeroes, 1, default, true))
                 {
                     if(!this.killMe)
                     {
+                        TeamId teamID;
                         teamID = GetTeamID(unit);
                         if(teamID == TeamId.TEAM_BLUE)
                         {
+                            float newDuration;
                             newDuration = 60;
                             if(GetBuffCountFromCaster(unit, unit, nameof(Buffs.MonsterBuffs)) > 0)
                             {

@@ -17,20 +17,20 @@ namespace Buffs
         float lastTimeExecuted;
         public override void OnUpdateActions()
         {
-            int level;
-            int count;
-            float baseCooldown;
-            float cooldownMod;
-            float newCooldown;
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, false))
             {
                 if(!owner.IsDead)
                 {
                     if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.HeimerdingerTurretTimer)) == 0)
                     {
+                        int level;
+                        float baseCooldown;
+                        float cooldownMod;
+                        float newCooldown;
                         level = GetSlotSpellLevel((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                         if(level >= 3)
                         {
+                            int count;
                             count = GetBuffCountFromCaster(owner, owner, nameof(Buffs.HeimerdingerTurretReady));
                             if(count < 2)
                             {

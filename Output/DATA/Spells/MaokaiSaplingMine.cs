@@ -56,11 +56,11 @@ namespace Buffs
         public override void OnDeactivate(bool expired)
         {
             TeamId teamID;
-            Particle particle; // UNUSED
             teamID = GetTeamID(attacker);
             if(!this.detonated)
             {
-                SpellEffectCreate(out particle, out _, "maoki_sapling_detonate.troy", default, teamID, 200, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, owner.Position, owner, default, default, true, default, default, false, false);
+                Particle particle; // UNUSED
+                SpellEffectCreate(out particle, out _, "maoki_sapling_detonate.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 200, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, owner.Position, owner, default, default, true, default, default, false, false);
                 foreach(AttackableUnit unit in GetUnitsInArea(attacker, owner.Position, 275, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
                 {
                     BreakSpellShields(unit);
@@ -77,18 +77,17 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            TeamId teamID;
-            AttackableUnit other1;
-            Particle particle; // UNUSED
-            bool canSee;
-            TeamId unitTeam;
             if(ExecutePeriodically(0.25f, ref this.lastTimeExecuted, false))
             {
+                TeamId teamID;
                 teamID = GetTeamID(attacker);
                 if(this.active)
                 {
+                    bool canSee;
                     if(this.sprung)
                     {
+                        AttackableUnit other1;
+                        Particle particle; // UNUSED
                         SetCanMove(owner, true);
                         other1 = this.homingBeacon;
                         this.sprungCount++;
@@ -97,7 +96,7 @@ namespace Buffs
                             if(!this.detonated)
                             {
                                 this.detonated = true;
-                                SpellEffectCreate(out particle, out _, "maoki_sapling_detonate.troy", default, teamID, 200, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, owner.Position, owner, default, default, true, default, default, false, false);
+                                SpellEffectCreate(out particle, out _, "maoki_sapling_detonate.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 200, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, owner.Position, owner, default, default, true, default, default, false, false);
                                 foreach(AttackableUnit unit in GetUnitsInArea(attacker, owner.Position, 275, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
                                 {
                                     BreakSpellShields(unit);
@@ -126,7 +125,7 @@ namespace Buffs
                                     {
                                         SpellBuffRemove(owner, nameof(Buffs.MaokaiSapling2), (ObjAIBase)owner, 0);
                                         this.detonated = true;
-                                        SpellEffectCreate(out particle, out _, "maoki_sapling_detonate.troy", default, teamID, 200, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, owner.Position, owner, default, default, true, default, default, false, false);
+                                        SpellEffectCreate(out particle, out _, "maoki_sapling_detonate.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 200, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, owner.Position, owner, default, default, true, default, default, false, false);
                                         foreach(AttackableUnit unit in GetUnitsInArea(attacker, owner.Position, 275, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
                                         {
                                             BreakSpellShields(unit);
@@ -147,6 +146,7 @@ namespace Buffs
                             {
                                 if(!this.sprung)
                                 {
+                                    TeamId unitTeam;
                                     unitTeam = GetTeamID(unit);
                                     this.perceptionBubble = AddUnitPerceptionBubble(unitTeam, 10, owner, 2.5f, default, owner, false);
                                     this.sprung = true;
@@ -167,8 +167,8 @@ namespace Buffs
                     {
                         this.sprungCount = 0;
                         this.active = true;
-                        SpellEffectCreate(out this.particle, out this.particle2, "maokai_sapling_rdy_indicator_green.troy", "maokai_sapling_rdy_indicator_red.troy", teamID, 0, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, "BUFFBONE_CSTM_STEM_3", default, target, default, default, false, default, default, false, false);
-                        SpellEffectCreate(out this.particle3, out this.particle4, "maokai_sapling_team_id_green.troy", "maokai_sapling_team_id_red.troy", teamID, 0, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, false, default, default, false, false);
+                        SpellEffectCreate(out this.particle, out this.particle2, "maokai_sapling_rdy_indicator_green.troy", "maokai_sapling_rdy_indicator_red.troy", teamID ?? TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, "BUFFBONE_CSTM_STEM_3", default, target, default, default, false, default, default, false, false);
+                        SpellEffectCreate(out this.particle3, out this.particle4, "maokai_sapling_team_id_green.troy", "maokai_sapling_team_id_red.troy", teamID ?? TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, false, default, default, false, false);
                     }
                 }
             }

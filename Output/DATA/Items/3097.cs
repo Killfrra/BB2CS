@@ -12,7 +12,6 @@ namespace Items
         float lastTimeExecuted;
         public override void OnUpdateActions()
         {
-            ObjAIBase caster;
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, false))
             {
                 if(!owner.IsDead)
@@ -35,6 +34,7 @@ namespace Items
                     {
                         foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 1200, SpellDataFlags.AffectFriends | SpellDataFlags.AffectHeroes, default, true))
                         {
+                            ObjAIBase caster;
                             caster = GetPetOwner((Pet)owner);
                             if(unit == owner)
                             {

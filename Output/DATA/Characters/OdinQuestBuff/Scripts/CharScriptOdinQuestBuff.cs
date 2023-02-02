@@ -11,7 +11,6 @@ namespace Chars
     {
         public override void OnActivate()
         {
-            float newDuration;
             SetNoRender(owner, false);
             SetCanMove(owner, false);
             SetGhosted(owner, true);
@@ -20,6 +19,7 @@ namespace Chars
             SetIgnoreCallForHelp(owner, true);
             foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 25000, SpellDataFlags.AffectFriends | SpellDataFlags.AffectHeroes, default, true))
             {
+                float newDuration;
                 newDuration = 50;
                 if(GetBuffCountFromCaster(unit, unit, nameof(Buffs.MonsterBuffs)) > 0)
                 {

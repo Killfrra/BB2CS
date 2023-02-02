@@ -5,6 +5,36 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class CassiopeiaMiasma : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            DoesntBreakShields = true,
+            TriggersSpellCasts = true,
+            IsDamagingSpell = true,
+            NotSingleTargetSpell = true,
+        };
+        int[] effect0 = {25, 35, 45, 55, 65};
+        float[] effect1 = {-0.15f, -0.2f, -0.25f, -0.3f, -0.35f};
+        public override void OnMissileEnd(string spellName, Vector3 missileEndPosition)
+        {
+            TeamId teamID;
+            Minion other3;
+            int nextBuffVars_DamagePerTick;
+            float nextBuffVars_MoveSpeedMod;
+            teamID = GetTeamID(owner);
+            other3 = SpawnMinion("Test", "TestCubeRender", "idle.lua", missileEndPosition, teamID ?? TeamId.TEAM_UNKNOWN, false, true, false, true, true, true, 0, false, true);
+            SetGhosted(other3, true);
+            level = GetCastSpellLevelPlusOne();
+            nextBuffVars_DamagePerTick = this.effect0[level];
+            nextBuffVars_MoveSpeedMod = this.effect1[level];
+            AddBuff(attacker, other3, new Buffs.CassiopeiaMiasma(nextBuffVars_DamagePerTick, nextBuffVars_MoveSpeedMod), 1, 1, 7, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+            AddBuff(attacker, other3, new Buffs.ExpirationTimer(), 1, 1, 9, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class CassiopeiaMiasma : BBBuffScript
@@ -28,8 +58,6 @@ namespace Buffs
         public override void OnActivate()
         {
             TeamId teamOfOwner;
-            float nextBuffVars_DamagePerTick;
-            float nextBuffVars_MoveSpeedMod;
             //RequireVar(this.damagePerTick);
             //RequireVar(this.moveSpeedMod);
             IncPercentBubbleRadiusMod(owner, -0.6f);
@@ -40,10 +68,12 @@ namespace Buffs
             SetNoRender(owner, true);
             this.areaRadius = 185;
             teamOfOwner = GetTeamID(attacker);
-            SpellEffectCreate(out this.particle2, out this.particle, "CassMiasma_tar_green.troy", "CassMiasma_tar_red.troy", teamOfOwner, 10, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, false, false, false, false, false);
+            SpellEffectCreate(out this.particle2, out this.particle, "CassMiasma_tar_green.troy", "CassMiasma_tar_red.troy", teamOfOwner ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, false, false, false, false, false);
             this.bubbleID = AddUnitPerceptionBubble(teamOfOwner, 250, owner, 7, default, default, false);
             foreach(AttackableUnit unit in GetUnitsInArea(attacker, owner.Position, this.areaRadius, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
             {
+                float nextBuffVars_DamagePerTick;
+                float nextBuffVars_MoveSpeedMod;
                 nextBuffVars_DamagePerTick = this.damagePerTick;
                 AddBuff(attacker, unit, new Buffs.CassiopeiaMiasmaPoison(nextBuffVars_DamagePerTick), 1, 1, 2, BuffAddType.RENEW_EXISTING, BuffType.POISON, 1, true, false, false);
                 nextBuffVars_MoveSpeedMod = this.moveSpeedMod;
@@ -63,46 +93,16 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            float nextBuffVars_DamagePerTick;
-            float nextBuffVars_MoveSpeedMod;
             this.areaRadius += 4;
             foreach(AttackableUnit unit in GetUnitsInArea(attacker, owner.Position, this.areaRadius, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
             {
+                float nextBuffVars_DamagePerTick;
+                float nextBuffVars_MoveSpeedMod;
                 nextBuffVars_DamagePerTick = this.damagePerTick;
                 AddBuff(attacker, unit, new Buffs.CassiopeiaMiasmaPoison(nextBuffVars_DamagePerTick), 1, 1, 2, BuffAddType.RENEW_EXISTING, BuffType.POISON, 1, true, false, false);
                 nextBuffVars_MoveSpeedMod = this.moveSpeedMod;
                 AddBuff(attacker, unit, new Buffs.Slow(nextBuffVars_MoveSpeedMod), 1, 1, 2, BuffAddType.STACKS_AND_OVERLAPS, BuffType.SLOW, 0, true, true, false);
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class CassiopeiaMiasma : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            DoesntBreakShields = true,
-            TriggersSpellCasts = true,
-            IsDamagingSpell = true,
-            NotSingleTargetSpell = true,
-        };
-        int[] effect0 = {25, 35, 45, 55, 65};
-        float[] effect1 = {-0.15f, -0.2f, -0.25f, -0.3f, -0.35f};
-        public override void OnMissileEnd(string spellName, Vector3 missileEndPosition)
-        {
-            TeamId teamID;
-            Minion other3;
-            int nextBuffVars_DamagePerTick;
-            float nextBuffVars_MoveSpeedMod;
-            teamID = GetTeamID(owner);
-            other3 = SpawnMinion("Test", "TestCubeRender", "idle.lua", missileEndPosition, teamID, false, true, false, true, true, true, 0, false, true);
-            SetGhosted(other3, true);
-            level = GetCastSpellLevelPlusOne();
-            nextBuffVars_DamagePerTick = this.effect0[level];
-            nextBuffVars_MoveSpeedMod = this.effect1[level];
-            AddBuff(attacker, other3, new Buffs.CassiopeiaMiasma(nextBuffVars_DamagePerTick, nextBuffVars_MoveSpeedMod), 1, 1, 7, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
-            AddBuff(attacker, other3, new Buffs.ExpirationTimer(), 1, 1, 9, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
         }
     }
 }

@@ -5,6 +5,58 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class SwainBeam : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            CastingBreaksStealth = true,
+            DoesntBreakShields = false,
+            TriggersSpellCasts = true,
+            IsDamagingSpell = false,
+            NotSingleTargetSpell = false,
+        };
+        float[] effect0 = {-0.2f, -0.23f, -0.26f, -0.29f, -0.32f};
+        int[] effect1 = {25, 40, 55, 70, 85};
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            Vector3 ravenPosition;
+            TeamId teamID;
+            Minion other3;
+            float nextBuffVars_MoveSpeedMod;
+            float nextBuffVars_AttackSpeedMod;
+            int nextBuffVars_DamagePerHalfSecond;
+            ravenPosition = GetPointByUnitFacingOffset(owner, 100, 0);
+            teamID = GetTeamID(owner);
+            other3 = SpawnMinion("HiddenMinion", "SwainBeam", "idle.lua", ravenPosition, teamID ?? TeamId.TEAM_BLUE, false, true, false, true, true, true, 0, default, false, (Champion)owner);
+            nextBuffVars_MoveSpeedMod = this.effect0[level];
+            nextBuffVars_AttackSpeedMod = 0;
+            nextBuffVars_DamagePerHalfSecond = this.effect1[level];
+            if(target is Champion)
+            {
+                AddBuff((ObjAIBase)owner, target, new Buffs.SwainBeamDamage(nextBuffVars_DamagePerHalfSecond), 1, 1, 3, BuffAddType.REPLACE_EXISTING, BuffType.DAMAGE, 0, true, false);
+                AddBuff((ObjAIBase)owner, owner, new Buffs.SwainBeamSelf(), 1, 1, 3.5f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false);
+                AddBuff(attacker, target, new Buffs.Slow(nextBuffVars_MoveSpeedMod, nextBuffVars_AttackSpeedMod), 100, 1, 3, BuffAddType.STACKS_AND_OVERLAPS, BuffType.SLOW, 0, true, false);
+                AddBuff((ObjAIBase)target, other3, new Buffs.SwainBeam(), 1, 1, 3, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_DEHANCER, 0, true, false);
+            }
+            else
+            {
+                AddBuff((ObjAIBase)owner, owner, new Buffs.SwainBeamSelf(), 1, 1, 3.5f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false);
+                if(GetBuffCountFromCaster(target, default, nameof(Buffs.ResistantSkin)) > 0)
+                {
+                    AddBuff((ObjAIBase)target, owner, new Buffs.SwainBeamDamageMinionNashor(nextBuffVars_DamagePerHalfSecond), 1, 1, 3, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_DEHANCER, 0, true, false);
+                }
+                else
+                {
+                    AddBuff((ObjAIBase)owner, target, new Buffs.SwainBeamDamageMinion(nextBuffVars_DamagePerHalfSecond), 1, 1, 3, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_DEHANCER, 0, true, false);
+                    AddBuff(attacker, target, new Buffs.Slow(nextBuffVars_MoveSpeedMod, nextBuffVars_AttackSpeedMod), 100, 1, 3, BuffAddType.STACKS_AND_OVERLAPS, BuffType.SLOW, 0, true, false);
+                }
+                AddBuff((ObjAIBase)target, other3, new Buffs.SwainBeamMinion(), 1, 1, 3, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_DEHANCER, 0, true, false);
+            }
+        }
+    }
+}
 namespace Buffs
 {
     public class SwainBeam : BBBuffScript
@@ -58,10 +110,10 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            float distance;
             FaceDirection(owner, attacker.Position);
             if(ExecutePeriodically(0.25f, ref this.lastTimeExecuted, false))
             {
+                float distance;
                 distance = DistanceBetweenObjects("Attacker", "Owner");
                 if(distance >= 605)
                 {
@@ -95,58 +147,6 @@ namespace Buffs
                     }
                     SpellBuffRemoveCurrent(owner);
                 }
-            }
-        }
-    }
-}
-namespace Spells
-{
-    public class SwainBeam : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            CastingBreaksStealth = true,
-            DoesntBreakShields = false,
-            TriggersSpellCasts = true,
-            IsDamagingSpell = false,
-            NotSingleTargetSpell = false,
-        };
-        float[] effect0 = {-0.2f, -0.23f, -0.26f, -0.29f, -0.32f};
-        int[] effect1 = {25, 40, 55, 70, 85};
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            Vector3 ravenPosition;
-            TeamId teamID;
-            Minion other3;
-            float nextBuffVars_MoveSpeedMod;
-            float nextBuffVars_AttackSpeedMod;
-            int nextBuffVars_DamagePerHalfSecond;
-            ravenPosition = GetPointByUnitFacingOffset(owner, 100, 0);
-            teamID = GetTeamID(owner);
-            other3 = SpawnMinion("HiddenMinion", "SwainBeam", "idle.lua", ravenPosition, teamID, false, true, false, true, true, true, 0, default, false, (Champion)owner);
-            nextBuffVars_MoveSpeedMod = this.effect0[level];
-            nextBuffVars_AttackSpeedMod = 0;
-            nextBuffVars_DamagePerHalfSecond = this.effect1[level];
-            if(target is Champion)
-            {
-                AddBuff((ObjAIBase)owner, target, new Buffs.SwainBeamDamage(nextBuffVars_DamagePerHalfSecond), 1, 1, 3, BuffAddType.REPLACE_EXISTING, BuffType.DAMAGE, 0, true, false);
-                AddBuff((ObjAIBase)owner, owner, new Buffs.SwainBeamSelf(), 1, 1, 3.5f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false);
-                AddBuff(attacker, target, new Buffs.Slow(nextBuffVars_MoveSpeedMod, nextBuffVars_AttackSpeedMod), 100, 1, 3, BuffAddType.STACKS_AND_OVERLAPS, BuffType.SLOW, 0, true, false);
-                AddBuff((ObjAIBase)target, other3, new Buffs.SwainBeam(), 1, 1, 3, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_DEHANCER, 0, true, false);
-            }
-            else
-            {
-                AddBuff((ObjAIBase)owner, owner, new Buffs.SwainBeamSelf(), 1, 1, 3.5f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false);
-                if(GetBuffCountFromCaster(target, default, nameof(Buffs.ResistantSkin)) > 0)
-                {
-                    AddBuff((ObjAIBase)target, owner, new Buffs.SwainBeamDamageMinionNashor(nextBuffVars_DamagePerHalfSecond), 1, 1, 3, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_DEHANCER, 0, true, false);
-                }
-                else
-                {
-                    AddBuff((ObjAIBase)owner, target, new Buffs.SwainBeamDamageMinion(nextBuffVars_DamagePerHalfSecond), 1, 1, 3, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_DEHANCER, 0, true, false);
-                    AddBuff(attacker, target, new Buffs.Slow(nextBuffVars_MoveSpeedMod, nextBuffVars_AttackSpeedMod), 100, 1, 3, BuffAddType.STACKS_AND_OVERLAPS, BuffType.SLOW, 0, true, false);
-                }
-                AddBuff((ObjAIBase)target, other3, new Buffs.SwainBeamMinion(), 1, 1, 3, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_DEHANCER, 0, true, false);
             }
         }
     }

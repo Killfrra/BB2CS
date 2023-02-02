@@ -32,8 +32,6 @@ namespace Buffs
             float maxHP;
             float bonusDmgFromHP;
             float finalDamage;
-            float curTime;
-            float timeSinceLastHit;
             level = GetLevel(owner);
             shurikenDamage = this.effect0[level];
             maxHP = GetFlatHPPoolMod(owner);
@@ -46,6 +44,8 @@ namespace Buffs
             {
                 if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.ShenWayOfTheNinjaAura)) == 0)
                 {
+                    float curTime;
+                    float timeSinceLastHit;
                     curTime = GetGameTime();
                     timeSinceLastHit = curTime - this.lastHit;
                     if(timeSinceLastHit >= 8)
@@ -73,14 +73,14 @@ namespace Buffs
         }
         public override void OnBeingHit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            float curTime;
-            float timeSinceLastHit;
             if(attacker is Champion)
             {
                 if(hitResult != HitResult.HIT_Miss)
                 {
                     if(hitResult != HitResult.HIT_Dodge)
                     {
+                        float curTime;
+                        float timeSinceLastHit;
                         this.lastHit -= 2;
                         curTime = GetGameTime();
                         timeSinceLastHit = curTime - this.lastHit;

@@ -14,8 +14,6 @@ namespace Spells
         {
             TeamId teamID;
             float baseDamage;
-            Particle a; // UNUSED
-            Vector3 targetPos;
             teamID = GetTeamID(attacker);
             baseDamage = GetBaseAttackDamage(owner);
             ApplyDamage(attacker, target, baseDamage, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_ATTACK, 1, 1, 1, false, false, attacker);
@@ -25,7 +23,9 @@ namespace Spells
             {
                 if(charVars.Count >= 3)
                 {
-                    SpellEffectCreate(out a, out _, "PhoenixBreath_cas.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "goatee", default, target, default, default, true);
+                    Particle a; // UNUSED
+                    Vector3 targetPos;
+                    SpellEffectCreate(out a, out _, "PhoenixBreath_cas.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "goatee", default, target, default, default, true);
                     targetPos = GetPointByUnitFacingOffset(owner, 400, 0);
                     SpellCast((ObjAIBase)owner, default, targetPos, targetPos, 0, SpellSlotType.ExtraSlots, 1, true, true, false, false, false, false);
                     charVars.Count = 0;

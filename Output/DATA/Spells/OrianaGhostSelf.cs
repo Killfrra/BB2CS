@@ -58,10 +58,10 @@ namespace Buffs
         public override void OnUpdateStats()
         {
             int level;
-            float defenseBonus;
             level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             if(level > 0)
             {
+                float defenseBonus;
                 defenseBonus = this.effect0[level];
                 IncFlatArmorMod(owner, defenseBonus);
                 IncFlatSpellBlockMod(owner, defenseBonus);

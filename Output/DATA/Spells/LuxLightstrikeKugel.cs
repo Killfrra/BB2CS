@@ -5,6 +5,27 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class LuxLightstrikeKugel : BBSpellScript
+    {
+        int[] effect0 = {9, 9, 9, 9, 9};
+        public override void OnMissileEnd(string spellName, Vector3 missileEndPosition)
+        {
+            float nextBuffVars_LSCooldown;
+            Vector3 nextBuffVars_Position;
+            level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
+            nextBuffVars_LSCooldown = this.effect0[level];
+            nextBuffVars_Position = missileEndPosition;
+            AddBuff(attacker, attacker, new Buffs.LuxLightstrikeKugel(nextBuffVars_Position, nextBuffVars_LSCooldown), 1, 1, 5, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0.25f, true, false, false);
+        }
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            SealSpellSlot(2, SpellSlotType.SpellSlots, attacker, true, SpellbookType.SPELLBOOK_CHAMPION);
+            SetSlotSpellCooldownTimeVer2(0, 2, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class LuxLightstrikeKugel : BBBuffScript
@@ -38,8 +59,8 @@ namespace Buffs
             SetSpell((ObjAIBase)owner, 2, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, nameof(Spells.LuxLightstrikeToggle));
             teamOfOwner = GetTeamID(owner);
             position = this.position;
-            SpellEffectCreate(out this.particle, out _, "LuxLightstrike_mis.troy", default, teamOfOwner, 400, 0, TeamId.TEAM_UNKNOWN, default, default, false, default, default, position, target, default, default, false, false, false, false, false);
-            SpellEffectCreate(out this.particle1, out this.particle2, "LuxLightstrike_tar_green.troy", "LuxLightstrike_tar_red.troy", teamOfOwner, 400, 0, TeamId.TEAM_UNKNOWN, default, default, false, default, "top", position, target, default, default, false, false, false, false, false);
+            SpellEffectCreate(out this.particle, out _, "LuxLightstrike_mis.troy", default, teamOfOwner ?? TeamId.TEAM_UNKNOWN, 400, 0, TeamId.TEAM_UNKNOWN, default, default, false, default, default, position, target, default, default, false, false, false, false, false);
+            SpellEffectCreate(out this.particle1, out this.particle2, "LuxLightstrike_tar_green.troy", "LuxLightstrike_tar_red.troy", teamOfOwner ?? TeamId.TEAM_UNKNOWN, 400, 0, TeamId.TEAM_UNKNOWN, default, default, false, default, "top", position, target, default, default, false, false, false, false, false);
             SealSpellSlot(2, SpellSlotType.SpellSlots, attacker, false, SpellbookType.SPELLBOOK_CHAMPION);
             this.bubbleID = AddPosPerceptionBubble(teamOfOwner, 650, position, 6, default, false);
         }
@@ -48,7 +69,6 @@ namespace Buffs
             int level;
             float boomDamage;
             Vector3 position;
-            Particle partExplodeHit; // UNUSED
             float cooldownStat;
             float multiplier;
             float newCooldown;
@@ -58,6 +78,7 @@ namespace Buffs
             position = this.position;
             foreach(AttackableUnit unit in GetUnitsInArea(attacker, position, 350, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
             {
+                Particle partExplodeHit; // UNUSED
                 BreakSpellShields(unit);
                 ApplyDamage(attacker, unit, boomDamage, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0.6f, 1, false, false, attacker);
                 SpellEffectCreate(out partExplodeHit, out _, "globalhit_mana.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, false, false, false, false, false);
@@ -97,27 +118,6 @@ namespace Buffs
             {
                 AddBuff((ObjAIBase)owner, unit, new Buffs.Slow(nextBuffVars_MoveSpeedMod), 1, 1, 0.5f, BuffAddType.STACKS_AND_OVERLAPS, BuffType.SLOW, 0, true, false, false);
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class LuxLightstrikeKugel : BBSpellScript
-    {
-        int[] effect0 = {9, 9, 9, 9, 9};
-        public override void OnMissileEnd(string spellName, Vector3 missileEndPosition)
-        {
-            float nextBuffVars_LSCooldown;
-            Vector3 nextBuffVars_Position;
-            level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
-            nextBuffVars_LSCooldown = this.effect0[level];
-            nextBuffVars_Position = missileEndPosition;
-            AddBuff(attacker, attacker, new Buffs.LuxLightstrikeKugel(nextBuffVars_Position, nextBuffVars_LSCooldown), 1, 1, 5, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0.25f, true, false, false);
-        }
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            SealSpellSlot(2, SpellSlotType.SpellSlots, attacker, true, SpellbookType.SPELLBOOK_CHAMPION);
-            SetSlotSpellCooldownTimeVer2(0, 2, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner, false);
         }
     }
 }

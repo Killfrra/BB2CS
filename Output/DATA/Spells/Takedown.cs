@@ -5,6 +5,25 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class Takedown : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = true,
+            NotSingleTargetSpell = true,
+        };
+        int[] effect0 = {5, 5, 5, 5, 5};
+        public override void SelfExecute()
+        {
+            int nextBuffVars_SpellCooldown;
+            nextBuffVars_SpellCooldown = this.effect0[level];
+            AddBuff((ObjAIBase)owner, owner, new Buffs.Takedown(nextBuffVars_SpellCooldown), 1, 1, 10, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false);
+            SetSlotSpellCooldownTime((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, 0);
+        }
+    }
+}
 namespace Buffs
 {
     public class Takedown : BBBuffScript
@@ -43,25 +62,6 @@ namespace Buffs
             SetDodgePiercing(owner, false);
             RemoveOverrideAutoAttack(owner, true);
             SealSpellSlot(0, SpellSlotType.SpellSlots, (ObjAIBase)owner, false, SpellbookType.SPELLBOOK_CHAMPION);
-        }
-    }
-}
-namespace Spells
-{
-    public class Takedown : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = true,
-            NotSingleTargetSpell = true,
-        };
-        int[] effect0 = {5, 5, 5, 5, 5};
-        public override void SelfExecute()
-        {
-            int nextBuffVars_SpellCooldown;
-            nextBuffVars_SpellCooldown = this.effect0[level];
-            AddBuff((ObjAIBase)owner, owner, new Buffs.Takedown(nextBuffVars_SpellCooldown), 1, 1, 10, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false);
-            SetSlotSpellCooldownTime((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, 0);
         }
     }
 }

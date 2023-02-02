@@ -34,12 +34,6 @@ namespace Buffs
         }
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            Particle particle; // UNUSED
-            TeamId teamID;
-            int level;
-            float time;
-            float nextBuffVars_MoveSpeedMod;
-            float nextBuffVars_MissChance;
             if(target is ObjAIBase)
             {
                 if(target is BaseTurret)
@@ -47,6 +41,10 @@ namespace Buffs
                 }
                 else
                 {
+                    Particle particle; // UNUSED
+                    TeamId teamID;
+                    int level;
+                    float time;
                     if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.FromBehind)) > 0)
                     {
                         damageAmount *= 1.2f;
@@ -64,7 +62,7 @@ namespace Buffs
                         }
                     }
                     teamID = GetTeamID(owner);
-                    attacker = GetChampionBySkinName("Shaco", teamID);
+                    attacker = GetChampionBySkinName("Shaco", teamID ?? TeamId.TEAM_UNKNOWN);
                     level = GetSlotSpellLevel(attacker, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                     time = GetSlotSpellCooldownTime(attacker, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                     if(level >= 1)
@@ -75,6 +73,8 @@ namespace Buffs
                             {
                                 if(hitResult != HitResult.HIT_Miss)
                                 {
+                                    float nextBuffVars_MoveSpeedMod;
+                                    float nextBuffVars_MissChance;
                                     nextBuffVars_MoveSpeedMod = this.effect0[level];
                                     nextBuffVars_MissChance = this.effect1[level];
                                     AddBuff(attacker, target, new Buffs.TwoShivPoison(nextBuffVars_MoveSpeedMod, nextBuffVars_MissChance), 1, 1, 2, BuffAddType.RENEW_EXISTING, BuffType.SLOW, 0, true, false, false);

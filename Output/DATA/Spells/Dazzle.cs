@@ -31,7 +31,6 @@ namespace Spells
             float castRange;
             float fullDamageRange;
             float varyingRange;
-            float multiplier;
             ownerPos = GetUnitPosition(owner);
             targetPos = GetUnitPosition(target);
             distance = DistanceBetweenPoints(ownerPos, targetPos);
@@ -46,6 +45,7 @@ namespace Spells
             varyingRange = castRange - fullDamageRange;
             if(distance < castRange)
             {
+                float multiplier;
                 distance -= fullDamageRange;
                 multiplier = distance / varyingRange;
                 multiplier = 1 - multiplier;

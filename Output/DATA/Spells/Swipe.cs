@@ -19,9 +19,9 @@ namespace Spells
         };
         public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
         {
-            Particle hitEffect; // UNUSED
             if(IsInFront(owner, target))
             {
+                Particle hitEffect; // UNUSED
                 SpellEffectCreate(out hitEffect, out _, "nidalee_cougar_swipe_tar.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, false, false, false, false, false);
                 ApplyDamage(attacker, target, charVars.SwipeDamage, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0.4f, 1, false, false, attacker);
             }

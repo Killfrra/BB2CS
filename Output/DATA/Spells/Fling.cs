@@ -5,6 +5,34 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class Fling : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = true,
+            IsDamagingSpell = true,
+            NotSingleTargetSpell = false,
+            PhysicalDamageRatio = 1f,
+            SpellDamageRatio = 1f,
+        };
+        int[] effect0 = {100, 150, 200, 250, 300};
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            Vector3 targetPos;
+            Vector3 landPos;
+            float distance;
+            float delayTimer;
+            targetPos = GetUnitPosition(target);
+            landPos = GetPointByUnitFacingOffset(owner, 420, 180);
+            distance = DistanceBetweenPoints(targetPos, landPos);
+            delayTimer = distance / 1160;
+            ApplyDamage(attacker, target, this.effect0[level], DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELL, 1, 1, 1, false, false, attacker);
+            AddBuff(attacker, target, new Buffs.Fling(), 1, 1, delayTimer, BuffAddType.REPLACE_EXISTING, BuffType.STUN, 0, true, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class Fling : BBBuffScript
@@ -33,41 +61,13 @@ namespace Buffs
             SetCanAttack(owner, true);
             SetCanCast(owner, true);
             SetCanMove(owner, true);
-            SpellEffectCreate(out arrr, out _, "fling_land.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "root", default, target, default, default, true);
+            SpellEffectCreate(out arrr, out _, "fling_land.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "root", default, target, default, default, true);
         }
         public override void OnUpdateStats()
         {
             SetCanAttack(owner, false);
             SetCanMove(owner, false);
             SetCanCast(owner, false);
-        }
-    }
-}
-namespace Spells
-{
-    public class Fling : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = true,
-            IsDamagingSpell = true,
-            NotSingleTargetSpell = false,
-            PhysicalDamageRatio = 1f,
-            SpellDamageRatio = 1f,
-        };
-        int[] effect0 = {100, 150, 200, 250, 300};
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            Vector3 targetPos;
-            Vector3 landPos;
-            float distance;
-            float delayTimer;
-            targetPos = GetUnitPosition(target);
-            landPos = GetPointByUnitFacingOffset(owner, 420, 180);
-            distance = DistanceBetweenPoints(targetPos, landPos);
-            delayTimer = distance / 1160;
-            ApplyDamage(attacker, target, this.effect0[level], DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELL, 1, 1, 1, false, false, attacker);
-            AddBuff(attacker, target, new Buffs.Fling(), 1, 1, delayTimer, BuffAddType.REPLACE_EXISTING, BuffType.STUN, 0, true, false);
         }
     }
 }

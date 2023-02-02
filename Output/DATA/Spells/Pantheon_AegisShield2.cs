@@ -19,10 +19,10 @@ namespace Buffs
         bool executeOnce;
         public override void OnActivate()
         {
-            bool isMoving;
             //RequireVar(this.executeOnce);
             if(!this.executeOnce)
             {
+                bool isMoving;
                 isMoving = IsMoving(owner);
                 if(isMoving)
                 {
@@ -40,9 +40,9 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            bool isMoving;
             if(!this.executeOnce)
             {
+                bool isMoving;
                 isMoving = IsMoving(owner);
                 if(isMoving)
                 {

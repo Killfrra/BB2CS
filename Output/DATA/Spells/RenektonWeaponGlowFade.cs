@@ -23,7 +23,7 @@ namespace Buffs
             TeamId ownerVar;
             Particle a; // UNUSED
             ownerVar = GetTeamID(owner);
-            SpellEffectCreate(out a, out _, "Renekton_Weapon_CoolOff.troy", default, ownerVar, 10, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, "head", default, owner, default, default, true);
+            SpellEffectCreate(out a, out _, "Renekton_Weapon_CoolOff.troy", default, ownerVar ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, "head", default, owner, default, default, true);
         }
     }
 }

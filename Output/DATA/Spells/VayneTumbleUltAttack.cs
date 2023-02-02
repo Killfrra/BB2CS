@@ -16,8 +16,6 @@ namespace Spells
             float scalingDamage;
             float baseAttackDamage;
             float damageVar;
-            float critDamage;
-            Particle hi; // UNUSED
             critChance = GetFlatCritChanceMod(attacker);
             level = GetSlotSpellLevel((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             scalingDamage = this.effect0[level];
@@ -33,6 +31,7 @@ namespace Spells
                 {
                     if(RandomChance() < critChance)
                     {
+                        float critDamage;
                         hitResult = HitResult.HIT_Critical;
                         critDamage = GetFlatCritDamageMod(attacker);
                         critDamage += 2;
@@ -59,6 +58,7 @@ namespace Spells
                 }
                 else
                 {
+                    Particle hi; // UNUSED
                     SpellEffectCreate(out hi, out _, "vayne_Q_tar.troy", default, TeamId.TEAM_NEUTRAL, 200, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, owner.Position, target, default, default, true, default, default, false, false);
                     SpellBuffRemove(owner, nameof(Buffs.VayneTumbleBonus), (ObjAIBase)owner, 0);
                     SpellBuffRemove(owner, nameof(Buffs.VayneTumbleFade), (ObjAIBase)owner, 0);

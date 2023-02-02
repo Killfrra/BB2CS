@@ -22,7 +22,7 @@ namespace Spells
             float damageAmount;
             teamOfOwner = GetTeamID(attacker);
             targetPos = GetUnitPosition(target);
-            other3 = SpawnMinion("SpellBook1", "SpellBook1", "idle.lua", targetPos, teamOfOwner, false, true, false, true, true, true, 0, default, true, (Champion)attacker);
+            other3 = SpawnMinion("SpellBook1", "SpellBook1", "idle.lua", targetPos, teamOfOwner ?? TeamId.TEAM_CASTER, false, true, false, true, true, true, 0, default, true, (Champion)attacker);
             AddBuff(attacker, other3, new Buffs.BrandScorchGround(), 1, 1, 5, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
             damageAmount = GetTotalAttackDamage(owner);
             ApplyDamage(attacker, target, damageAmount, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_ATTACK, 1, 0, 0, false, false, attacker);

@@ -38,10 +38,10 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            int level;
-            float currentDamage;
             if(ExecutePeriodically(10, ref this.lastTimeExecuted, true))
             {
+                int level;
+                float currentDamage;
                 level = GetLevel(owner);
                 currentDamage = this.effect0[level];
                 if(currentDamage > this.damageVar)

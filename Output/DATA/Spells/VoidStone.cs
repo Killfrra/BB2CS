@@ -23,11 +23,11 @@ namespace Buffs
         }
         public override void OnPreDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
         {
-            float attackSpeedBoost; // UNUSED
             if(damageType == DamageType.DAMAGE_TYPE_MAGICAL)
             {
                 if(damageAmount > 0)
                 {
+                    float attackSpeedBoost; // UNUSED
                     attackSpeedBoost = damageAmount * 0.0015f;
                     damageAmount *= charVars.MagicAbsorb;
                     AddBuff((ObjAIBase)owner, owner, new Buffs.VoidStoneAttackSpeedBoost(), 1, 1, 4, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);

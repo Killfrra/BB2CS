@@ -33,8 +33,8 @@ namespace Buffs
             }
             IncHealth(owner, healAmount, owner);
             teamID = GetTeamID(owner);
-            SpellEffectCreate(out asdf, out _, "Odin_HealthPackHeal.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "root", default, owner, default, default, false, false, false, false, false);
-            SpellEffectCreate(out asdf, out _, "Summoner_Mana.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "root", default, owner, default, default, false, false, false, false, false);
+            SpellEffectCreate(out asdf, out _, "Odin_HealthPackHeal.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "root", default, owner, default, default, false, false, false, false, false);
+            SpellEffectCreate(out asdf, out _, "Summoner_Mana.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "root", default, owner, default, default, false, false, false, false, false);
             SpellBuffClear(owner, nameof(Buffs.OdinShieldRelicBuffHeal));
         }
     }

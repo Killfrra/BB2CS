@@ -18,7 +18,7 @@ namespace Buffs
         {
             TeamId teamID;
             teamID = GetTeamID(owner);
-            SpellEffectCreate(out this.dragonStrikeSound, out _, "JarvanDemacianStandard_flag_hit.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, true);
+            SpellEffectCreate(out this.dragonStrikeSound, out _, "JarvanDemacianStandard_flag_hit.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, true);
         }
         public override void OnDeactivate(bool expired)
         {

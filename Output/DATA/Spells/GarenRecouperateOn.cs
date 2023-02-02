@@ -21,10 +21,10 @@ namespace Buffs
         float lastTimeExecuted;
         public override void OnUpdateActions()
         {
-            float maxHealth; // UNUSED
-            float curHealth; // UNUSED
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, false))
             {
+                float maxHealth; // UNUSED
+                float curHealth; // UNUSED
                 maxHealth = GetMaxHealth(owner, PrimaryAbilityResourceType.MANA);
                 curHealth = GetHealth(owner, PrimaryAbilityResourceType.MANA);
                 if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.GarenRecoupDebuff)) == 0)

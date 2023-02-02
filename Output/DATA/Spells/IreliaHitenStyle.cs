@@ -5,6 +5,25 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class IreliaHitenStyle : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = true,
+            NotSingleTargetSpell = false,
+        };
+        public override void SelfExecute()
+        {
+            SpellBuffRemove(owner, nameof(Buffs.IreliaHitenStyle), (ObjAIBase)owner);
+        }
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            AddBuff(attacker, owner, new Buffs.IreliaHitenStyleCharged(), 1, 1, 6, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class IreliaHitenStyle : BBBuffScript
@@ -30,8 +49,8 @@ namespace Buffs
             OverrideAnimation("Idle1", "Idle1b", owner);
             OverrideAnimation("Run", "Runb", owner);
             ireliaTeamID = GetTeamID(owner);
-            SpellEffectCreate(out this.ireliaHitenStyle1, out _, "irelia_hitenStyle_passive.troy", default, ireliaTeamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "BUFFBONE_GLB_WEAPON_1", default, owner, default, default, false);
-            SpellEffectCreate(out this.ireliaHitenStyle2, out _, "irelia_hitenStlye_passive_glow.troy", default, ireliaTeamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "BUFFBONE_GLB_WEAPON_1", default, owner, default, default, false);
+            SpellEffectCreate(out this.ireliaHitenStyle1, out _, "irelia_hitenStyle_passive.troy", default, ireliaTeamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "BUFFBONE_GLB_WEAPON_1", default, owner, default, default, false);
+            SpellEffectCreate(out this.ireliaHitenStyle2, out _, "irelia_hitenStlye_passive_glow.troy", default, ireliaTeamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "BUFFBONE_GLB_WEAPON_1", default, owner, default, default, false);
         }
         public override void OnDeactivate(bool expired)
         {
@@ -45,25 +64,6 @@ namespace Buffs
             level = GetSlotSpellLevel((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             healthRestoration = this.effect0[level];
             IncHealth(owner, healthRestoration, owner);
-        }
-    }
-}
-namespace Spells
-{
-    public class IreliaHitenStyle : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = true,
-            NotSingleTargetSpell = false,
-        };
-        public override void SelfExecute()
-        {
-            SpellBuffRemove(owner, nameof(Buffs.IreliaHitenStyle), (ObjAIBase)owner);
-        }
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            AddBuff(attacker, owner, new Buffs.IreliaHitenStyleCharged(), 1, 1, 6, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false);
         }
     }
 }

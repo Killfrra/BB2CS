@@ -5,27 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class LeblancChaosOrb : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            BuffName = "LeblancMarkOfSilence",
-            BuffTextureName = "LeblancMarkOfSilence.dds",
-            NonDispellable = true,
-        };
-        Particle b;
-        public override void OnActivate()
-        {
-            SpellEffectCreate(out this.b, out _, "leBlanc_displace_AOE_tar.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false);
-        }
-        public override void OnDeactivate(bool expired)
-        {
-            SpellEffectRemove(this.b);
-        }
-    }
-}
 namespace Spells
 {
     public class LeblancChaosOrb : BBSpellScript
@@ -75,6 +54,27 @@ namespace Spells
                 }
             }
             ApplyDamage(attacker, target, this.effect4[level], DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELL, 1, 0.6f, 1, false, false, attacker);
+        }
+    }
+}
+namespace Buffs
+{
+    public class LeblancChaosOrb : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            BuffName = "LeblancMarkOfSilence",
+            BuffTextureName = "LeblancMarkOfSilence.dds",
+            NonDispellable = true,
+        };
+        Particle b;
+        public override void OnActivate()
+        {
+            SpellEffectCreate(out this.b, out _, "leBlanc_displace_AOE_tar.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false);
+        }
+        public override void OnDeactivate(bool expired)
+        {
+            SpellEffectRemove(this.b);
         }
     }
 }

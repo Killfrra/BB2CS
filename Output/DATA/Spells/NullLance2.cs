@@ -28,16 +28,12 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            float spellCD1;
-            float spellCD1a;
-            float spellCD2;
-            float spellCD2a;
-            float spellCD3;
-            float spellCD3a;
             if(ExecutePeriodically(0.4f, ref this.lastTimeExecuted, false))
             {
                 if(this.passthrough == 0)
                 {
+                    float spellCD1;
+                    float spellCD1a;
                     spellCD1 = GetSlotSpellCooldownTime((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                     spellCD1a = spellCD1 * this.spellSlowPercent;
                     SetSlotSpellCooldownTime((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, spellCD1a);
@@ -45,6 +41,8 @@ namespace Buffs
                 }
                 if(this.passthrough == 1)
                 {
+                    float spellCD2;
+                    float spellCD2a;
                     spellCD2 = GetSlotSpellCooldownTime((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                     spellCD2a = spellCD2 * this.spellSlowPercent;
                     SetSlotSpellCooldownTime((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, spellCD2a);
@@ -52,6 +50,8 @@ namespace Buffs
                 }
                 if(this.passthrough == 2)
                 {
+                    float spellCD3;
+                    float spellCD3a;
                     spellCD3 = GetSlotSpellCooldownTime((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                     spellCD3a = spellCD3 * this.spellSlowPercent;
                     SetSlotSpellCooldownTime((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, spellCD3a);

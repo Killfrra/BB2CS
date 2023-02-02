@@ -18,11 +18,11 @@ namespace Spells
         int[] effect0 = {80, 120, 160, 0, 0};
         public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
         {
-            float healthPercent;
-            float bonusRatio;
-            float multiplier;
             if(GetBuffCountFromCaster(target, owner, nameof(Buffs.RivenLightsaberMissileDebuff)) == 0)
             {
+                float healthPercent;
+                float bonusRatio;
+                float multiplier;
                 AddBuff(attacker, target, new Buffs.RivenLightsaberMissileDebuff(), 1, 1, 1, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
                 BreakSpellShields(target);
                 healthPercent = GetHealthPercent(target, PrimaryAbilityResourceType.MANA);

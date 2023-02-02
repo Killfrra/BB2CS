@@ -5,30 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class SonaAriaofPerseverance : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateAttachBoneName = new[]{ "", },
-            BuffName = "",
-            BuffTextureName = "Sona_AriaofPerseveranceGold.dds",
-            PersistsThroughDeath = true,
-            SpellFXOverrideSkins = new[]{ "GuqinSona", },
-            SpellToggleSlot = 4,
-        };
-        public override void OnActivate()
-        {
-            SpellBuffRemove(owner, nameof(Buffs.SonaHymnofValor), (ObjAIBase)owner, 0);
-            SpellBuffRemove(owner, nameof(Buffs.SonaSongofDiscord), (ObjAIBase)owner, 0);
-            if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.SonaPowerChord)) == 0)
-            {
-                OverrideAutoAttack(3, SpellSlotType.ExtraSlots, owner, 1, false);
-            }
-        }
-    }
-}
 namespace Spells
 {
     public class SonaAriaofPerseverance : BBSpellScript
@@ -51,8 +27,6 @@ namespace Spells
             TeamId casterID; // UNUSED
             string jumpTarget;
             float jumpTargetHealth_;
-            float unitHealth_;
-            string other1;
             float aPMod;
             Particle self; // UNUSED
             AddBuff((ObjAIBase)owner, owner, new Buffs.SonaAriaofPerseverance(), 1, 1, 25000, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0, true, false, false);
@@ -79,6 +53,7 @@ namespace Spells
             jumpTargetHealth_ = 1;
             foreach(AttackableUnit unit in GetRandomUnitsInArea((ObjAIBase)owner, owner.Position, 1000, SpellDataFlags.AffectFriends | SpellDataFlags.AffectHeroes | SpellDataFlags.NotAffectSelf, 999, default, true))
             {
+                float unitHealth_;
                 if(jumpTarget == NoValidTarget)
                 {
                     jumpTarget = unit;
@@ -92,6 +67,7 @@ namespace Spells
             }
             if(jumpTarget != NoValidTarget)
             {
+                string other1;
                 other1 = jumpTarget;
                 foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 1200, SpellDataFlags.AffectFriends | SpellDataFlags.AffectHeroes | SpellDataFlags.NotAffectSelf, default, true))
                 {
@@ -110,6 +86,30 @@ namespace Spells
             PlayAnimation("Spell2", 1, owner, false, true, true);
             nextBuffVars_DefenseBonus = this.effect1[level];
             AddBuff(attacker, attacker, new Buffs.SonaAriaShield(nextBuffVars_DefenseBonus), 1, 1, 3, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+        }
+    }
+}
+namespace Buffs
+{
+    public class SonaAriaofPerseverance : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateAttachBoneName = new[]{ "", },
+            BuffName = "",
+            BuffTextureName = "Sona_AriaofPerseveranceGold.dds",
+            PersistsThroughDeath = true,
+            SpellFXOverrideSkins = new[]{ "GuqinSona", },
+            SpellToggleSlot = 4,
+        };
+        public override void OnActivate()
+        {
+            SpellBuffRemove(owner, nameof(Buffs.SonaHymnofValor), (ObjAIBase)owner, 0);
+            SpellBuffRemove(owner, nameof(Buffs.SonaSongofDiscord), (ObjAIBase)owner, 0);
+            if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.SonaPowerChord)) == 0)
+            {
+                OverrideAutoAttack(3, SpellSlotType.ExtraSlots, owner, 1, false);
+            }
         }
     }
 }

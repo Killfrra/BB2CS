@@ -19,7 +19,7 @@ namespace Buffs
         {
             TeamId teamID;
             teamID = GetTeamID(owner);
-            SpellEffectCreate(out this.particle, out _, "Xerath_beam_cas.troy", default, teamID, 550, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "top", default, target, default, default, true, false, false, false, false);
+            SpellEffectCreate(out this.particle, out _, "Xerath_beam_cas.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 550, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "top", default, target, default, default, true, false, false, false, false);
             SetNoRender(owner, true);
             SetInvulnerable(owner, true);
             SetGhosted(owner, true);

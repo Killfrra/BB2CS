@@ -12,11 +12,10 @@ namespace Items
         float lastTimeExecuted;
         public override void OnUpdateActions()
         {
-            int nextBuffVars_AP_Buff;
-            float nextBuffVars_SpellVamp_Buff;
-            ObjAIBase caster;
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, false))
             {
+                int nextBuffVars_AP_Buff;
+                float nextBuffVars_SpellVamp_Buff;
                 nextBuffVars_AP_Buff = 30;
                 nextBuffVars_SpellVamp_Buff = 0.25f;
                 if(owner is Champion)
@@ -42,6 +41,7 @@ namespace Items
                     {
                         foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 1200, SpellDataFlags.AffectFriends | SpellDataFlags.AffectHeroes, default, true))
                         {
+                            ObjAIBase caster;
                             caster = GetPetOwner((Pet)owner);
                             if(unit == owner)
                             {

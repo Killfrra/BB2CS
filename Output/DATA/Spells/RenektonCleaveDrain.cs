@@ -27,10 +27,10 @@ namespace Buffs
         }
         public override void OnPreDealDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
         {
-            float drainHealth;
-            float drainCandidate;
             if(damageType == DamageType.DAMAGE_TYPE_PHYSICAL)
             {
+                float drainHealth;
+                float drainCandidate;
                 drainHealth = damageAmount * this.drainPercent;
                 if(target is Champion)
                 {

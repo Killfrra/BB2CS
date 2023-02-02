@@ -59,7 +59,7 @@ namespace Buffs
             TeamId teamID;
             Champion caster;
             teamID = GetTeamID(owner);
-            caster = GetChampionBySkinName("MonkeyKing", teamID);
+            caster = GetChampionBySkinName("MonkeyKing", teamID ?? TeamId.TEAM_UNKNOWN);
             ApplyDamage(caster, target, damageAmount, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0, 0, false, false, caster);
             damageAmount *= 0;
         }

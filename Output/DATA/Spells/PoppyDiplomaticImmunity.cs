@@ -5,6 +5,27 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class PoppyDiplomaticImmunity : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            CastingBreaksStealth = true,
+            DoesntBreakShields = false,
+            TriggersSpellCasts = true,
+            IsDamagingSpell = true,
+            NotSingleTargetSpell = true,
+        };
+        int[] effect0 = {6, 7, 8};
+        int[] effect1 = {6, 7, 8};
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            AddBuff((ObjAIBase)owner, target, new Buffs.PoppyDITarget(), 1, 1, this.effect0[level], BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_DEHANCER, 0, true, false);
+            AddBuff((ObjAIBase)owner, owner, new Buffs.PoppyDITargetDmg(), 1, 1, this.effect1[level], BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class PoppyDiplomaticImmunity : BBBuffScript
@@ -96,27 +117,6 @@ namespace Buffs
             {
                 damageAmount -= damageAmount;
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class PoppyDiplomaticImmunity : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            CastingBreaksStealth = true,
-            DoesntBreakShields = false,
-            TriggersSpellCasts = true,
-            IsDamagingSpell = true,
-            NotSingleTargetSpell = true,
-        };
-        int[] effect0 = {6, 7, 8};
-        int[] effect1 = {6, 7, 8};
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            AddBuff((ObjAIBase)owner, target, new Buffs.PoppyDITarget(), 1, 1, this.effect0[level], BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_DEHANCER, 0, true, false);
-            AddBuff((ObjAIBase)owner, owner, new Buffs.PoppyDITargetDmg(), 1, 1, this.effect1[level], BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false);
         }
     }
 }

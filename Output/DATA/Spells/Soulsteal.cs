@@ -20,10 +20,10 @@ namespace Buffs
         }
         public override void OnKill()
         {
-            Particle ar; // UNUSED
-            float tempMana;
             if(target is Champion)
             {
+                Particle ar; // UNUSED
+                float tempMana;
                 charVars.MagicDamageMod += 10;
                 charVars.MagicDamageMod = Math.Min(charVars.MagicDamageMod, 70);
                 SpellEffectCreate(out ar, out _, "MejaisSoulstealer_itm.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false);
@@ -33,9 +33,9 @@ namespace Buffs
         }
         public override void OnAssist()
         {
-            Particle ar; // UNUSED
             if(target is Champion)
             {
+                Particle ar; // UNUSED
                 charVars.MagicDamageMod += 5;
                 charVars.MagicDamageMod = Math.Min(charVars.MagicDamageMod, 70);
                 SpellEffectCreate(out ar, out _, "MejaisSoulstealer_itm.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false);

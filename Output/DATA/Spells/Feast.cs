@@ -5,6 +5,60 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class Feast : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = true,
+            IsDamagingSpell = true,
+            NotSingleTargetSpell = false,
+        };
+        int[] effect0 = {0, 0, 0};
+        int[] effect1 = {300, 475, 650};
+        int[] effect2 = {1000, 1000, 1000};
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            int count; // UNUSED
+            int healthPerStack; // UNUSED
+            float feastBase;
+            float abilityPower;
+            float halfAbilityPower;
+            float feastHealth;
+            float targetHealth;
+            count = GetBuffCountFromCaster(owner, owner, nameof(Buffs.Feast));
+            healthPerStack = this.effect0[level];
+            if(target is Champion)
+            {
+                feastBase = this.effect1[level];
+            }
+            else
+            {
+                feastBase = this.effect2[level];
+            }
+            abilityPower = GetFlatMagicDamageMod(owner);
+            halfAbilityPower = abilityPower * 0.7f;
+            feastHealth = halfAbilityPower + feastBase;
+            targetHealth = GetHealth(target, PrimaryAbilityResourceType.MANA);
+            if(feastHealth >= targetHealth)
+            {
+                Particle smokeBomb; // UNUSED
+                ApplyDamage(attacker, target, targetHealth, DamageType.DAMAGE_TYPE_TRUE, DamageSource.DAMAGE_SOURCE_DEFAULT, 1, 0, 0, false, false, attacker);
+                SpellEffectCreate(out smokeBomb, out _, "chogath_feast_sign.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, false, false, false, false, false);
+                if(target.IsDead)
+                {
+                    AddBuff((ObjAIBase)owner, owner, new Buffs.Feast(), 6, 1, 30000, BuffAddType.STACKS_AND_RENEWS, BuffType.AURA, 0, true, false, false);
+                    AddBuff((ObjAIBase)owner, owner, new Buffs.Feast_internal(), 1, 1, 30000, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+                }
+            }
+            else
+            {
+                ApplyDamage(attacker, target, feastHealth, DamageType.DAMAGE_TYPE_TRUE, DamageSource.DAMAGE_SOURCE_SPELL, 1, 0, 1, false, false, attacker);
+            }
+        }
+    }
+}
 namespace Buffs
 {
     public class Feast : BBBuffScript
@@ -80,60 +134,6 @@ namespace Buffs
             healthPerStack = this.effect2[level];
             bonusHealth = healthPerStack * count;
             SetBuffToolTipVar(1, bonusHealth);
-        }
-    }
-}
-namespace Spells
-{
-    public class Feast : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = true,
-            IsDamagingSpell = true,
-            NotSingleTargetSpell = false,
-        };
-        int[] effect0 = {0, 0, 0};
-        int[] effect1 = {300, 475, 650};
-        int[] effect2 = {1000, 1000, 1000};
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            int count; // UNUSED
-            int healthPerStack; // UNUSED
-            float feastBase;
-            float abilityPower;
-            float halfAbilityPower;
-            float feastHealth;
-            float targetHealth;
-            Particle smokeBomb; // UNUSED
-            count = GetBuffCountFromCaster(owner, owner, nameof(Buffs.Feast));
-            healthPerStack = this.effect0[level];
-            if(target is Champion)
-            {
-                feastBase = this.effect1[level];
-            }
-            else
-            {
-                feastBase = this.effect2[level];
-            }
-            abilityPower = GetFlatMagicDamageMod(owner);
-            halfAbilityPower = abilityPower * 0.7f;
-            feastHealth = halfAbilityPower + feastBase;
-            targetHealth = GetHealth(target, PrimaryAbilityResourceType.MANA);
-            if(feastHealth >= targetHealth)
-            {
-                ApplyDamage(attacker, target, targetHealth, DamageType.DAMAGE_TYPE_TRUE, DamageSource.DAMAGE_SOURCE_DEFAULT, 1, 0, 0, false, false, attacker);
-                SpellEffectCreate(out smokeBomb, out _, "chogath_feast_sign.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, false, false, false, false, false);
-                if(target.IsDead)
-                {
-                    AddBuff((ObjAIBase)owner, owner, new Buffs.Feast(), 6, 1, 30000, BuffAddType.STACKS_AND_RENEWS, BuffType.AURA, 0, true, false, false);
-                    AddBuff((ObjAIBase)owner, owner, new Buffs.Feast_internal(), 1, 1, 30000, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0, true, false, false);
-                }
-            }
-            else
-            {
-                ApplyDamage(attacker, target, feastHealth, DamageType.DAMAGE_TYPE_TRUE, DamageSource.DAMAGE_SOURCE_SPELL, 1, 0, 1, false, false, attacker);
-            }
         }
     }
 }

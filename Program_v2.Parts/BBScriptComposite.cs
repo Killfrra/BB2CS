@@ -43,12 +43,12 @@ public class BBScriptComposite
         var output = "";
         if(CharScript.Functions.Count > 0 || CharScript.Used)
             output += CharScript.ToCSharp("Chars", name) + "\n";
+        if(SpellScript.Functions.Count > 0 || SpellScript.Used)
+            output += SpellScript.ToCSharp("Spells", name) + "\n";
         if(ItemScript.Functions.Count > 0 || ItemScript.Used)
             output += ItemScript.ToCSharp("Items", name) + "\n";
         if(BuffScript.Functions.Count > 0 || BuffScript.Used)
             output += BuffScript.ToCSharp("Buffs", name) + "\n";
-        if(SpellScript.Functions.Count > 0 || SpellScript.Used)
-            output += SpellScript.ToCSharp("Spells", name);
         return output.TrimEnd();
     }
 }

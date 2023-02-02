@@ -30,10 +30,10 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            float temp1;
-            float percentDamage;
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, true))
             {
+                float temp1;
+                float percentDamage;
                 temp1 = GetMaxHealth(owner, PrimaryAbilityResourceType.MANA);
                 percentDamage = temp1 * this.lifeLossPercent;
                 ApplyDamage(attacker, owner, percentDamage, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_PERIODIC, 1, 0, default, false, false);

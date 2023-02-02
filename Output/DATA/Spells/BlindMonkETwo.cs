@@ -5,29 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class BlindMonkETwo : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateAttachBoneName = new[]{ "L_Hand", "R_Hand", },
-            AutoBuffActivateEffect = new[]{ "pirate_attack_buf_01.troy", "pirate_attack_buf_01.troy", },
-            BuffName = "RaiseMorale",
-            BuffTextureName = "Pirate_RaiseMorale.dds",
-            NonDispellable = true,
-            PersistsThroughDeath = true,
-        };
-        public override void OnActivate()
-        {
-            PlayAnimation("Spell2b", 0, owner, false, false, false);
-        }
-        public override void OnDeactivate(bool expired)
-        {
-            UnlockAnimation(owner, true);
-        }
-    }
-}
 namespace Spells
 {
     public class BlindMonkETwo : BBSpellScript
@@ -64,6 +41,29 @@ namespace Spells
                 SpellBuffRemove(owner, nameof(Buffs.BlindMonkEManager), (ObjAIBase)owner);
             }
             AddBuff(attacker, attacker, new Buffs.BlindMonkETwo(), 1, 1, 0.5f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+        }
+    }
+}
+namespace Buffs
+{
+    public class BlindMonkETwo : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateAttachBoneName = new[]{ "L_Hand", "R_Hand", },
+            AutoBuffActivateEffect = new[]{ "pirate_attack_buf_01.troy", "pirate_attack_buf_01.troy", },
+            BuffName = "RaiseMorale",
+            BuffTextureName = "Pirate_RaiseMorale.dds",
+            NonDispellable = true,
+            PersistsThroughDeath = true,
+        };
+        public override void OnActivate()
+        {
+            PlayAnimation("Spell2b", 0, owner, false, false, false);
+        }
+        public override void OnDeactivate(bool expired)
+        {
+            UnlockAnimation(owner, true);
         }
     }
 }

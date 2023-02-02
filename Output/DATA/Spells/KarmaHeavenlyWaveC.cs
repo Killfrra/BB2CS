@@ -20,20 +20,17 @@ namespace Spells
         public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
         {
             TeamId teamID;
-            float regen;
-            float karmaAP;
-            float aPToAdd;
-            float maxHealth;
-            float curHealth;
-            float missHealth;
-            float healthToRestore;
-            float baseHealthRestore;
-            Particle br; // UNUSED
-            Particle ar; // UNUSED
-            Particle hitEffet; // UNUSED
             teamID = GetTeamID(owner);
             if(target.Team == attacker.Team)
             {
+                float regen;
+                float karmaAP;
+                float aPToAdd;
+                float maxHealth;
+                float curHealth;
+                float missHealth;
+                float healthToRestore;
+                float baseHealthRestore;
                 ApplyAssistMarker(attacker, target, 10);
                 regen = 0.05f;
                 karmaAP = GetFlatMagicDamageMod(owner);
@@ -48,16 +45,19 @@ namespace Spells
                 IncHealth(target, healthToRestore, owner);
                 if(target == attacker)
                 {
+                    Particle br; // UNUSED
                     SpellEffectCreate(out br, out _, "karma_heavenlyWave_self_heal.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false);
                 }
                 else
                 {
-                    SpellEffectCreate(out ar, out _, "karma_heavenlyWave_ally_heal.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false);
+                    Particle ar; // UNUSED
+                    SpellEffectCreate(out ar, out _, "karma_heavenlyWave_ally_heal.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false);
                 }
             }
             else
             {
-                SpellEffectCreate(out hitEffet, out _, "karma_heavenlyWave_unit_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false);
+                Particle hitEffet; // UNUSED
+                SpellEffectCreate(out hitEffet, out _, "karma_heavenlyWave_unit_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false);
                 ApplyDamage(attacker, target, this.effect1[level], DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0.6f, 1, false, false, attacker);
             }
         }

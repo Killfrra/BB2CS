@@ -18,11 +18,11 @@ namespace Buffs
         };
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            float damagePercent;
             if(hitResult != HitResult.HIT_Dodge)
             {
                 if(hitResult != HitResult.HIT_Miss)
                 {
+                    float damagePercent;
                     damagePercent = 0.075f * damageAmount;
                     IncPAR(owner, damagePercent);
                 }

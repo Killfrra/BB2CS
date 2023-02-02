@@ -21,15 +21,15 @@ namespace Buffs
         float[] effect0 = {0.03f, 0.03f, 0.03f, 0.06f, 0.06f, 0.06f, 0.09f, 0.09f, 0.09f, 0.12f, 0.12f, 0.12f, 0.15f, 0.15f, 0.15f, 0.18f, 0.18f, 0.18f};
         public override void OnUpdateActions()
         {
-            int level;
-            float currentCrit;
-            float tooltipCritChance;
             if(ExecutePeriodically(10, ref this.lastTimeExecuted, true))
             {
+                int level;
+                float currentCrit;
                 level = GetLevel(owner);
                 currentCrit = this.effect0[level];
                 if(currentCrit > this.lastCrit)
                 {
+                    float tooltipCritChance;
                     tooltipCritChance = 100 * currentCrit;
                     this.lastCrit = currentCrit;
                     SetBuffToolTipVar(1, tooltipCritChance);

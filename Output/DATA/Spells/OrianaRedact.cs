@@ -5,48 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class OrianaRedact : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            BuffName = "Malady",
-            BuffTextureName = "3114_Malady.dds",
-            SpellVOOverrideSkins = new[]{ "BroOlaf", },
-        };
-        bool hit; // UNUSED
-        public override void OnActivate()
-        {
-            SealSpellSlot(3, SpellSlotType.SpellSlots, (ObjAIBase)owner, true, SpellbookType.SPELLBOOK_CHAMPION);
-            SealSpellSlot(0, SpellSlotType.SpellSlots, (ObjAIBase)owner, true, SpellbookType.SPELLBOOK_CHAMPION);
-            SealSpellSlot(2, SpellSlotType.SpellSlots, (ObjAIBase)owner, true, SpellbookType.SPELLBOOK_CHAMPION);
-            SealSpellSlot(1, SpellSlotType.SpellSlots, (ObjAIBase)owner, true, SpellbookType.SPELLBOOK_CHAMPION);
-            this.hit = false;
-        }
-        public override void OnDeactivate(bool expired)
-        {
-            SealSpellSlot(3, SpellSlotType.SpellSlots, (ObjAIBase)owner, false, SpellbookType.SPELLBOOK_CHAMPION);
-            SealSpellSlot(0, SpellSlotType.SpellSlots, (ObjAIBase)owner, false, SpellbookType.SPELLBOOK_CHAMPION);
-            SealSpellSlot(2, SpellSlotType.SpellSlots, (ObjAIBase)owner, false, SpellbookType.SPELLBOOK_CHAMPION);
-            SealSpellSlot(1, SpellSlotType.SpellSlots, (ObjAIBase)owner, false, SpellbookType.SPELLBOOK_CHAMPION);
-            DestroyMissile(charVars.MissileID);
-        }
-        public override void OnUpdateActions()
-        {
-            SealSpellSlot(3, SpellSlotType.SpellSlots, (ObjAIBase)owner, true, SpellbookType.SPELLBOOK_CHAMPION);
-            SealSpellSlot(1, SpellSlotType.SpellSlots, (ObjAIBase)owner, true, SpellbookType.SPELLBOOK_CHAMPION);
-            SealSpellSlot(2, SpellSlotType.SpellSlots, (ObjAIBase)owner, true, SpellbookType.SPELLBOOK_CHAMPION);
-            SealSpellSlot(0, SpellSlotType.SpellSlots, (ObjAIBase)owner, true, SpellbookType.SPELLBOOK_CHAMPION);
-        }
-        public override void OnLaunchMissile(SpellMissile missileId)
-        {
-            SpellMissile missileId; // UNITIALIZED
-            charVars.MissileID = missileId;
-            charVars.GhostAlive = true;
-        }
-    }
-}
 namespace Spells
 {
     public class OrianaRedact : BBSpellScript
@@ -65,10 +23,6 @@ namespace Spells
         {
             bool correctSpell;
             float duration;
-            bool found;
-            TeamId teamID;
-            Particle temp; // UNUSED
-            AttackableUnit caster; // UNITIALIZED
             correctSpell = false;
             duration = GetBuffRemainingDuration(owner, nameof(Buffs.OrianaRedact));
             if(spellName == nameof(Spells.OrianaRedact))
@@ -87,6 +41,7 @@ namespace Spells
             }
             if(duration >= 0.01f)
             {
+                bool found;
                 found = false;
                 foreach(AttackableUnit unit in GetClosestUnitsInArea(owner, missileEndPosition, 25000, SpellDataFlags.AffectFriends | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes | SpellDataFlags.AffectUntargetable, 1, nameof(Buffs.OrianaGhost), true))
                 {
@@ -98,10 +53,13 @@ namespace Spells
                 }
                 if(!found)
                 {
+                    TeamId teamID;
+                    Particle temp; // UNUSED
+                    AttackableUnit caster; // UNITIALIZED
                     teamID = GetTeamID(owner);
-                    SpellEffectCreate(out temp, out _, "Orianna_Ball_Flash.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, "root", missileEndPosition, owner, default, default, false, false, false, false, false);
+                    SpellEffectCreate(out temp, out _, "Orianna_Ball_Flash.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, "root", missileEndPosition, owner, default, default, false, false, false, false, false);
                     AddBuff((ObjAIBase)owner, owner, new Buffs.OrianaGhostSelf(), 1, 1, 25000, BuffAddType.RENEW_EXISTING, BuffType.AURA, 0, true, false, false);
-                    SpellEffectCreate(out temp, out _, "Orianna_Ball_Flash_Reverse.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, caster, false, owner, "SpinnigBottomRidge", default, owner, default, default, false, false, false, false, false);
+                    SpellEffectCreate(out temp, out _, "Orianna_Ball_Flash_Reverse.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, caster, false, owner, "SpinnigBottomRidge", default, owner, default, default, false, false, false, false, false);
                 }
             }
             DestroyMissile(charVars.MissileID);
@@ -156,6 +114,48 @@ namespace Spells
                     DestroyMissile(missileNetworkID);
                 }
             }
+        }
+    }
+}
+namespace Buffs
+{
+    public class OrianaRedact : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            BuffName = "Malady",
+            BuffTextureName = "3114_Malady.dds",
+            SpellVOOverrideSkins = new[]{ "BroOlaf", },
+        };
+        bool hit; // UNUSED
+        public override void OnActivate()
+        {
+            SealSpellSlot(3, SpellSlotType.SpellSlots, (ObjAIBase)owner, true, SpellbookType.SPELLBOOK_CHAMPION);
+            SealSpellSlot(0, SpellSlotType.SpellSlots, (ObjAIBase)owner, true, SpellbookType.SPELLBOOK_CHAMPION);
+            SealSpellSlot(2, SpellSlotType.SpellSlots, (ObjAIBase)owner, true, SpellbookType.SPELLBOOK_CHAMPION);
+            SealSpellSlot(1, SpellSlotType.SpellSlots, (ObjAIBase)owner, true, SpellbookType.SPELLBOOK_CHAMPION);
+            this.hit = false;
+        }
+        public override void OnDeactivate(bool expired)
+        {
+            SealSpellSlot(3, SpellSlotType.SpellSlots, (ObjAIBase)owner, false, SpellbookType.SPELLBOOK_CHAMPION);
+            SealSpellSlot(0, SpellSlotType.SpellSlots, (ObjAIBase)owner, false, SpellbookType.SPELLBOOK_CHAMPION);
+            SealSpellSlot(2, SpellSlotType.SpellSlots, (ObjAIBase)owner, false, SpellbookType.SPELLBOOK_CHAMPION);
+            SealSpellSlot(1, SpellSlotType.SpellSlots, (ObjAIBase)owner, false, SpellbookType.SPELLBOOK_CHAMPION);
+            DestroyMissile(charVars.MissileID);
+        }
+        public override void OnUpdateActions()
+        {
+            SealSpellSlot(3, SpellSlotType.SpellSlots, (ObjAIBase)owner, true, SpellbookType.SPELLBOOK_CHAMPION);
+            SealSpellSlot(1, SpellSlotType.SpellSlots, (ObjAIBase)owner, true, SpellbookType.SPELLBOOK_CHAMPION);
+            SealSpellSlot(2, SpellSlotType.SpellSlots, (ObjAIBase)owner, true, SpellbookType.SPELLBOOK_CHAMPION);
+            SealSpellSlot(0, SpellSlotType.SpellSlots, (ObjAIBase)owner, true, SpellbookType.SPELLBOOK_CHAMPION);
+        }
+        public override void OnLaunchMissile(SpellMissile missileId)
+        {
+            SpellMissile missileId; // UNITIALIZED
+            charVars.MissileID = missileId;
+            charVars.GhostAlive = true;
         }
     }
 }

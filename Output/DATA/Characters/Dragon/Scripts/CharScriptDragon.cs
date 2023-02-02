@@ -11,12 +11,12 @@ namespace Chars
     {
         public override void OnUpdateStats()
         {
-            int nextBuffVars_HPPerLevel;
             if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.HPByPlayerLevel)) > 0)
             {
             }
             else
             {
+                int nextBuffVars_HPPerLevel;
                 nextBuffVars_HPPerLevel = 220;
                 AddBuff((ObjAIBase)owner, owner, new Buffs.HPByPlayerLevel(nextBuffVars_HPPerLevel), 1, 1, 25000, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
             }

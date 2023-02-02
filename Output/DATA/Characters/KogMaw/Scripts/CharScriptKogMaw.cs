@@ -12,13 +12,12 @@ namespace Chars
         float lastTime2Executed;
         public override void OnUpdateActions()
         {
-            float totalDamage;
-            float baseDamage;
-            float bonusDamage;
-            float spell3Display;
-            float cooldown;
             if(ExecutePeriodically(1, ref this.lastTime2Executed, true))
             {
+                float totalDamage;
+                float baseDamage;
+                float bonusDamage;
+                float spell3Display;
                 level = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 totalDamage = GetTotalAttackDamage(owner);
                 baseDamage = GetBaseAttackDamage(owner);
@@ -39,6 +38,7 @@ namespace Chars
             level = GetSlotSpellLevel((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             if(level > 0)
             {
+                float cooldown;
                 cooldown = GetSlotSpellCooldownTime((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 if(cooldown <= 0)
                 {

@@ -5,6 +5,26 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class AlZaharMaleficVisions : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            DoesntBreakShields = false,
+        };
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            if(GetBuffCountFromCaster(attacker, attacker, nameof(Buffs.IfHasBuffCheck)) == 0)
+            {
+                AddBuff(attacker, attacker, new Buffs.AlZaharVoidlingCount(), 3, 1, 25000, BuffAddType.STACKS_AND_RENEWS, BuffType.COMBAT_ENCHANCER, 0, true, false);
+            }
+            BreakSpellShields(target);
+            AddBuff(attacker, target, new Buffs.AlZaharRecentVis(), 1, 1, 4, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false);
+            AddBuff(attacker, target, new Buffs.AlZaharMaleficVisions(), 1, 1, 4, BuffAddType.REPLACE_EXISTING, BuffType.DAMAGE, 0, true, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class AlZaharMaleficVisions : BBBuffScript
@@ -59,7 +79,7 @@ namespace Buffs
         {
             int level;
             float manaRestore;
-            attacker = GetChampionBySkinName("Malzahar", this.teamID);
+            attacker = GetChampionBySkinName("Malzahar", this.teamID ?? TeamId.TEAM_UNKNOWN);
             level = GetSlotSpellLevel(attacker, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             manaRestore = this.effect1[level];
             IncPAR(attacker, manaRestore, PrimaryAbilityResourceType.MANA);
@@ -69,26 +89,6 @@ namespace Buffs
                 AddBuff(attacker, unit, new Buffs.AlZaharRecentVis(), 1, 1, 4, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false);
                 AddBuff(attacker, unit, new Buffs.AlZaharMaleficVisions(), 1, 1, 4, BuffAddType.REPLACE_EXISTING, BuffType.DAMAGE, 0, true, false);
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class AlZaharMaleficVisions : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            DoesntBreakShields = false,
-        };
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            if(GetBuffCountFromCaster(attacker, attacker, nameof(Buffs.IfHasBuffCheck)) == 0)
-            {
-                AddBuff(attacker, attacker, new Buffs.AlZaharVoidlingCount(), 3, 1, 25000, BuffAddType.STACKS_AND_RENEWS, BuffType.COMBAT_ENCHANCER, 0, true, false);
-            }
-            BreakSpellShields(target);
-            AddBuff(attacker, target, new Buffs.AlZaharRecentVis(), 1, 1, 4, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false);
-            AddBuff(attacker, target, new Buffs.AlZaharMaleficVisions(), 1, 1, 4, BuffAddType.REPLACE_EXISTING, BuffType.DAMAGE, 0, true, false);
         }
     }
 }

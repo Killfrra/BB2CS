@@ -5,6 +5,43 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class UrgotTerrorCapacitorActive2 : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            ChainMissileParameters = new()
+            {
+                CanHitCaster = 0,
+                CanHitEnemies = 1,
+                CanHitFriends = 0,
+                CanHitSameTarget = 0,
+                CanHitSameTargetConsecutively = 0,
+                MaximumHits = new[]{ 4, 4, 4, 4, 4, },
+            },
+            TriggersSpellCasts = true,
+            IsDamagingSpell = false,
+            NotSingleTargetSpell = true,
+        };
+        int[] effect0 = {80, 140, 200, 260, 320};
+        public override void SelfExecute()
+        {
+            float shieldAmount;
+            float abilityPower;
+            float bonusShield;
+            float shield;
+            float nextBuffVars_Shield;
+            level = GetSlotSpellLevel((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
+            shieldAmount = this.effect0[level];
+            abilityPower = GetFlatMagicDamageMod(owner);
+            bonusShield = abilityPower * 0.8f;
+            shield = shieldAmount + bonusShield;
+            nextBuffVars_Shield = shield;
+            AddBuff(attacker, attacker, new Buffs.UrgotTerrorCapacitorActive2(nextBuffVars_Shield), 1, 1, 7, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class UrgotTerrorCapacitorActive2 : BBBuffScript
@@ -49,8 +86,6 @@ namespace Buffs
         }
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            int level;
-            float nextBuffVars_MoveSpeedMod;
             if(target is ObjAIBase)
             {
                 if(target is not BaseTurret)
@@ -59,6 +94,8 @@ namespace Buffs
                     {
                         if(hitResult != HitResult.HIT_Miss)
                         {
+                            int level;
+                            float nextBuffVars_MoveSpeedMod; // UNUSED
                             level = GetSlotSpellLevel(attacker, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                             nextBuffVars_MoveSpeedMod = this.effect1[level];
                             AddBuff(attacker, target, new Buffs.UrgotSlow(), 1, 1, 1.5f, BuffAddType.RENEW_EXISTING, BuffType.SLOW, 0, true, false, false);
@@ -85,43 +122,6 @@ namespace Buffs
                 SpellBuffRemoveCurrent(owner);
             }
             SetBuffToolTipVar(1, this.shield);
-        }
-    }
-}
-namespace Spells
-{
-    public class UrgotTerrorCapacitorActive2 : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            ChainMissileParameters = new()
-            {
-                CanHitCaster = 0,
-                CanHitEnemies = 1,
-                CanHitFriends = 0,
-                CanHitSameTarget = 0,
-                CanHitSameTargetConsecutively = 0,
-                MaximumHits = new[]{ 4, 4, 4, 4, 4, },
-            },
-            TriggersSpellCasts = true,
-            IsDamagingSpell = false,
-            NotSingleTargetSpell = true,
-        };
-        int[] effect0 = {80, 140, 200, 260, 320};
-        public override void SelfExecute()
-        {
-            float shieldAmount;
-            float abilityPower;
-            float bonusShield;
-            float shield;
-            float nextBuffVars_Shield;
-            level = GetSlotSpellLevel((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
-            shieldAmount = this.effect0[level];
-            abilityPower = GetFlatMagicDamageMod(owner);
-            bonusShield = abilityPower * 0.8f;
-            shield = shieldAmount + bonusShield;
-            nextBuffVars_Shield = shield;
-            AddBuff(attacker, attacker, new Buffs.UrgotTerrorCapacitorActive2(nextBuffVars_Shield), 1, 1, 7, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
         }
     }
 }

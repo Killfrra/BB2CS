@@ -5,6 +5,28 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class JudicatorRighteousFury : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            CastingBreaksStealth = true,
+            DoesntBreakShields = true,
+            TriggersSpellCasts = true,
+            IsDamagingSpell = true,
+            NotSingleTargetSpell = true,
+        };
+        int[] effect0 = {400, 400, 400, 400, 400};
+        public override void SelfExecute()
+        {
+            float nextBuffVars_AttackRangeIncrease;
+            nextBuffVars_AttackRangeIncrease = this.effect0[level];
+            AddBuff(attacker, owner, new Buffs.JudicatorRighteousFury(nextBuffVars_AttackRangeIncrease), 1, 1, 10, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+            AddBuff((ObjAIBase)owner, owner, new Buffs.KayleRighteousFuryAnim(), 1, 1, 1, BuffAddType.STACKS_AND_RENEWS, BuffType.INTERNAL, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class JudicatorRighteousFury : BBBuffScript
@@ -37,28 +59,6 @@ namespace Buffs
         public override void OnUpdateStats()
         {
             IncFlatAttackRangeMod(owner, this.attackRangeIncrease);
-        }
-    }
-}
-namespace Spells
-{
-    public class JudicatorRighteousFury : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            CastingBreaksStealth = true,
-            DoesntBreakShields = true,
-            TriggersSpellCasts = true,
-            IsDamagingSpell = true,
-            NotSingleTargetSpell = true,
-        };
-        int[] effect0 = {400, 400, 400, 400, 400};
-        public override void SelfExecute()
-        {
-            float nextBuffVars_AttackRangeIncrease;
-            nextBuffVars_AttackRangeIncrease = this.effect0[level];
-            AddBuff(attacker, owner, new Buffs.JudicatorRighteousFury(nextBuffVars_AttackRangeIncrease), 1, 1, 10, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
-            AddBuff((ObjAIBase)owner, owner, new Buffs.KayleRighteousFuryAnim(), 1, 1, 1, BuffAddType.STACKS_AND_RENEWS, BuffType.INTERNAL, 0, true, false, false);
         }
     }
 }

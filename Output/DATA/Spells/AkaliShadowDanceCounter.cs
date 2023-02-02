@@ -16,11 +16,11 @@ namespace Buffs
         };
         public override void OnUpdateActions()
         {
-            int count;
             if(!owner.IsDead)
             {
                 if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.AkaliShadowDanceTimer)) == 0)
                 {
+                    int count;
                     count = GetBuffCountFromCaster(owner, owner, nameof(Buffs.AkaliShadowDance));
                     if(count != 3)
                     {
@@ -31,9 +31,9 @@ namespace Buffs
         }
         public override void OnKill()
         {
-            int count;
             if(target is Champion)
             {
+                int count;
                 AddBuff((ObjAIBase)owner, owner, new Buffs.AkaliShadowDance(), 3, 1, 25000, BuffAddType.STACKS_AND_RENEWS, BuffType.AURA, 0, true, false);
                 count = GetBuffCountFromCaster(owner, owner, nameof(Buffs.AkaliShadowDance));
                 if(count == 3)

@@ -5,6 +5,28 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class TrundlePain : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            DoesntBreakShields = false,
+        };
+        int[] effect0 = {100, 175, 250};
+        float[] effect1 = {0.15f, 0.2f, 0.25f};
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            float nextBuffVars_DamageDealt;
+            float nextBuffVars_Survivability;
+            BreakSpellShields(target);
+            nextBuffVars_DamageDealt = this.effect0[level];
+            nextBuffVars_Survivability = this.effect1[level];
+            AddBuff(attacker, target, new Buffs.TrundlePain(nextBuffVars_DamageDealt), 1, 1, 6, BuffAddType.REPLACE_EXISTING, BuffType.DAMAGE, 0, true, false, false);
+            AddBuff(attacker, target, new Buffs.TrundlePainShred(nextBuffVars_Survivability), 1, 1, 6, BuffAddType.REPLACE_EXISTING, BuffType.SHRED, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class TrundlePain : BBBuffScript
@@ -49,28 +71,6 @@ namespace Buffs
                 ApplyDamage(attacker, owner, this.damageSecond, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELLPERSIST, 1, 0, 1, false, false, attacker);
                 IncHealth(attacker, this.damageSecond, attacker);
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class TrundlePain : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            DoesntBreakShields = false,
-        };
-        int[] effect0 = {100, 175, 250};
-        float[] effect1 = {0.15f, 0.2f, 0.25f};
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            float nextBuffVars_DamageDealt;
-            float nextBuffVars_Survivability;
-            BreakSpellShields(target);
-            nextBuffVars_DamageDealt = this.effect0[level];
-            nextBuffVars_Survivability = this.effect1[level];
-            AddBuff(attacker, target, new Buffs.TrundlePain(nextBuffVars_DamageDealt), 1, 1, 6, BuffAddType.REPLACE_EXISTING, BuffType.DAMAGE, 0, true, false, false);
-            AddBuff(attacker, target, new Buffs.TrundlePainShred(nextBuffVars_Survivability), 1, 1, 6, BuffAddType.REPLACE_EXISTING, BuffType.SHRED, 0, true, false, false);
         }
     }
 }

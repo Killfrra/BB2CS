@@ -28,7 +28,7 @@ namespace Buffs
             SealSpellSlot(2, SpellSlotType.SpellSlots, (ObjAIBase)owner, true, SpellbookType.SPELLBOOK_CHAMPION);
             this.hit = false;
             teamID = GetTeamID(owner);
-            other3 = SpawnMinion("HiddenMinion", "TestCube", "idle.lua", this.targetPos, teamID, false, true, false, true, true, true, 0, default, true, (Champion)owner);
+            other3 = SpawnMinion("HiddenMinion", "TestCube", "idle.lua", this.targetPos, teamID ?? TeamId.TEAM_BLUE, false, true, false, true, true, true, 0, default, true, (Champion)owner);
             AddBuff((ObjAIBase)owner, other3, new Buffs.OrianaGhost(), 1, 1, 25000, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
             AddBuff((ObjAIBase)owner, other3, new Buffs.OrianaGhostMinion(), 1, 1, 25000, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
             SpellEffectCreate(out this.temp, out _, "UrgotHeatseekingIndicator.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, this.targetPos, target, default, default, false, default, default, false);
@@ -36,8 +36,6 @@ namespace Buffs
         public override void OnDeactivate(bool expired)
         {
             bool found;
-            Vector3 enemyPos;
-            int level;
             found = false;
             foreach(AttackableUnit other2 in GetClosestUnitsInArea(owner, this.targetPos, 25000, SpellDataFlags.AffectFriends | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, 1, nameof(Buffs.OrianaGhost), true))
             {
@@ -45,6 +43,8 @@ namespace Buffs
             }
             foreach(AttackableUnit unit in GetClosestUnitsInArea(owner, this.targetPos, 375, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectHeroes, 1, default, true))
             {
+                Vector3 enemyPos;
+                int level;
                 foreach(AttackableUnit other2 in GetClosestUnitsInArea(owner, this.targetPos, 25000, SpellDataFlags.AffectFriends | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, 1, nameof(Buffs.OrianaGhost), true))
                 {
                     SpellBuffClear(other2, nameof(Buffs.OrianaGhost));

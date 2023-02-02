@@ -5,6 +5,56 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class IreliaTranscendentBlades : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            CastingBreaksStealth = true,
+            DoesntBreakShields = true,
+            TriggersSpellCasts = true,
+            IsDamagingSpell = true,
+            NotSingleTargetSpell = true,
+        };
+        int[] effect0 = {60, 50, 40, 0, 0};
+        int[] effect1 = {10, 10, 10};
+        public override void SelfExecute()
+        {
+            if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.IreliaTranscendentBladesSpell)) > 0)
+            {
+                Vector3 targetPos;
+                Vector3 ownerPos;
+                float distance; // UNUSED
+                int count;
+                level = GetCastSpellLevelPlusOne();
+                targetPos = GetCastSpellTargetPos();
+                ownerPos = GetUnitPosition(owner);
+                distance = DistanceBetweenPoints(ownerPos, targetPos);
+                count = GetBuffCountFromAll(owner, nameof(Buffs.IreliaTranscendentBladesSpell));
+                SpellCast((ObjAIBase)owner, default, targetPos, targetPos, 0, SpellSlotType.ExtraSlots, level, true, true, false, false, false, false);
+                SetSlotSpellCooldownTime((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, 0.5f);
+                SpellBuffRemove(owner, nameof(Buffs.IreliaTranscendentBladesSpell), (ObjAIBase)owner);
+                if(count <= 1)
+                {
+                    SpellBuffRemove(owner, nameof(Buffs.IreliaTranscendentBlades), (ObjAIBase)owner);
+                }
+            }
+            else
+            {
+                float nextBuffVars_NewCd;
+                float nextBuffVars_Blades;
+                nextBuffVars_NewCd = this.effect0[level];
+                nextBuffVars_Blades = 4;
+                AddBuff((ObjAIBase)owner, owner, new Buffs.IreliaTranscendentBlades(nextBuffVars_Blades, nextBuffVars_NewCd), 1, 1, this.effect1[level], BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+                AddBuff((ObjAIBase)owner, owner, new Buffs.IreliaTranscendentBladesSpell(), 4, 4, 10, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+                AddBuff((ObjAIBase)owner, owner, new Buffs.UnlockAnimation(), 1, 1, 0.5f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+                PlayAnimation("Spell4", 1.5f, owner, false, true, true);
+                SetSlotSpellCooldownTime((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, 0.25f);
+            }
+        }
+    }
+}
 namespace Buffs
 {
     public class IreliaTranscendentBlades : BBBuffScript
@@ -38,11 +88,11 @@ namespace Buffs
             SetPARCostInc((ObjAIBase)owner, 3, SpellSlotType.SpellSlots, -100, PrimaryAbilityResourceType.MANA);
             SpellBuffRemove(owner, nameof(Buffs.IreliaIdleParticle), (ObjAIBase)owner);
             ireliaTeamID = GetTeamID(owner);
-            SpellEffectCreate(out this.ultMagicParticle, out _, "irelia_ult_magic_resist.troy", default, ireliaTeamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false, default, default, false);
-            SpellEffectCreate(out this.particle1, out _, "Irelia_ult_dagger_active_04.troy", default, ireliaTeamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "BUFFBONE_CSTM_DAGGER1", default, target, default, default, false, default, default, false);
-            SpellEffectCreate(out this.particle2, out _, "Irelia_ult_dagger_active_04.troy", default, ireliaTeamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "BUFFBONE_CSTM_DAGGER2", default, target, default, default, false, default, default, false);
-            SpellEffectCreate(out this.particle3, out _, "Irelia_ult_dagger_active_04.troy", default, ireliaTeamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "BUFFBONE_CSTM_DAGGER4", default, target, default, default, false, default, default, false);
-            SpellEffectCreate(out this.particle4, out _, "Irelia_ult_dagger_active_04.troy", default, ireliaTeamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "BUFFBONE_CSTM_DAGGER5", default, target, default, default, false, default, default, false);
+            SpellEffectCreate(out this.ultMagicParticle, out _, "irelia_ult_magic_resist.troy", default, ireliaTeamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false, default, default, false);
+            SpellEffectCreate(out this.particle1, out _, "Irelia_ult_dagger_active_04.troy", default, ireliaTeamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "BUFFBONE_CSTM_DAGGER1", default, target, default, default, false, default, default, false);
+            SpellEffectCreate(out this.particle2, out _, "Irelia_ult_dagger_active_04.troy", default, ireliaTeamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "BUFFBONE_CSTM_DAGGER2", default, target, default, default, false, default, default, false);
+            SpellEffectCreate(out this.particle3, out _, "Irelia_ult_dagger_active_04.troy", default, ireliaTeamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "BUFFBONE_CSTM_DAGGER4", default, target, default, default, false, default, default, false);
+            SpellEffectCreate(out this.particle4, out _, "Irelia_ult_dagger_active_04.troy", default, ireliaTeamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "BUFFBONE_CSTM_DAGGER5", default, target, default, default, false, default, default, false);
         }
         public override void OnDeactivate(bool expired)
         {
@@ -82,10 +132,10 @@ namespace Buffs
         }
         public override void OnSpellCast(string spellName, SpellScriptMetaData spellVars)
         {
-            int count;
             spellName = GetSpellName();
             if(spellName == nameof(Spells.IreliaTranscendentBlades))
             {
+                int count;
                 this.blades += -1;
                 count = GetBuffCountFromAll(owner, nameof(Buffs.IreliaTranscendentBladesSpell));
                 if(count == 4)
@@ -104,56 +154,6 @@ namespace Buffs
                 {
                     SpellEffectRemove(this.particle1);
                 }
-            }
-        }
-    }
-}
-namespace Spells
-{
-    public class IreliaTranscendentBlades : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            CastingBreaksStealth = true,
-            DoesntBreakShields = true,
-            TriggersSpellCasts = true,
-            IsDamagingSpell = true,
-            NotSingleTargetSpell = true,
-        };
-        int[] effect0 = {60, 50, 40, 0, 0};
-        int[] effect1 = {10, 10, 10};
-        public override void SelfExecute()
-        {
-            Vector3 targetPos;
-            Vector3 ownerPos;
-            float distance; // UNUSED
-            int count;
-            float nextBuffVars_NewCd;
-            float nextBuffVars_Blades;
-            if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.IreliaTranscendentBladesSpell)) > 0)
-            {
-                level = GetCastSpellLevelPlusOne();
-                targetPos = GetCastSpellTargetPos();
-                ownerPos = GetUnitPosition(owner);
-                distance = DistanceBetweenPoints(ownerPos, targetPos);
-                count = GetBuffCountFromAll(owner, nameof(Buffs.IreliaTranscendentBladesSpell));
-                SpellCast((ObjAIBase)owner, default, targetPos, targetPos, 0, SpellSlotType.ExtraSlots, level, true, true, false, false, false, false);
-                SetSlotSpellCooldownTime((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, 0.5f);
-                SpellBuffRemove(owner, nameof(Buffs.IreliaTranscendentBladesSpell), (ObjAIBase)owner);
-                if(count <= 1)
-                {
-                    SpellBuffRemove(owner, nameof(Buffs.IreliaTranscendentBlades), (ObjAIBase)owner);
-                }
-            }
-            else
-            {
-                nextBuffVars_NewCd = this.effect0[level];
-                nextBuffVars_Blades = 4;
-                AddBuff((ObjAIBase)owner, owner, new Buffs.IreliaTranscendentBlades(nextBuffVars_Blades, nextBuffVars_NewCd), 1, 1, this.effect1[level], BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0, true, false, false);
-                AddBuff((ObjAIBase)owner, owner, new Buffs.IreliaTranscendentBladesSpell(), 4, 4, 10, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
-                AddBuff((ObjAIBase)owner, owner, new Buffs.UnlockAnimation(), 1, 1, 0.5f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
-                PlayAnimation("Spell4", 1.5f, owner, false, true, true);
-                SetSlotSpellCooldownTime((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, 0.25f);
             }
         }
     }

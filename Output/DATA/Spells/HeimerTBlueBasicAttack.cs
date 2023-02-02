@@ -14,10 +14,8 @@ namespace Spells
         {
             TeamId teamID;
             float dmg;
-            float nextBuffVars_MovementSpeedMod;
-            float nextBuffVars_AttackSpeedMod;
             teamID = GetTeamID(owner);
-            attacker = GetChampionBySkinName("Heimerdinger", teamID);
+            attacker = GetChampionBySkinName("Heimerdinger", teamID ?? TeamId.TEAM_UNKNOWN);
             dmg = GetTotalAttackDamage(owner);
             if(target is BaseTurret)
             {
@@ -28,6 +26,8 @@ namespace Spells
             {
                 if(target is not BaseTurret)
                 {
+                    float nextBuffVars_MovementSpeedMod;
+                    float nextBuffVars_AttackSpeedMod;
                     level = GetSlotSpellLevel(attacker, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                     nextBuffVars_MovementSpeedMod = this.effect0[level];
                     nextBuffVars_AttackSpeedMod = 0;

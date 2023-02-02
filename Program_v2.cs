@@ -205,6 +205,8 @@ public class Program_v2
             foreach(var (key, count) in unused)
                 Console.WriteLine($"{count.ToString().PadLeft(3, '0')} {key}");
 
+            //return;
+
             File.WriteAllText(cacheFile, JsonConvert.SerializeObject(scripts, Formatting.Indented), Encoding.UTF8);
         }
 
@@ -294,7 +296,10 @@ public class Program_v2
             //cs = Regex.Replace(cs, @"\b(Vector3)\? (\w+) = null", "$1 $2 = Vector3.Zero");
             //cs = Regex.Replace(cs, @"\b(TeamId|Vector3)\?", "$1");
             //cs = Regex.Replace(cs, @" \?\? TeamId\.TEAM_UNKNOWN", "");
-            cs = Regex.Replace(cs, @" \?\? TeamId\.\w+", "");
+            
+            //cs = Regex.Replace(cs, @" \?\? TeamId\.\w+", "");
+            cs = Regex.Replace(cs, @" \?\? TeamId\.TEAM_UNKNOWN\w+", "");
+            
             cs = Regex.Replace(cs, @" = default;", ";");
             cs = Regex.Replace(cs, @"^ *//object (nextBuffVars|_);\n", "", RegexOptions.Multiline);
             //cs = Regex.Replace(cs, @"//(?!RequireVar)", "");
@@ -316,7 +321,9 @@ public class Program_v2
             var outDirPath = Path.GetDirectoryName(outFilePath);
             if(outDirPath != null)
                 Directory.CreateDirectory(outDirPath);
-            var cs = scripts!.HeaderToCSharp() + content;
+            var cs = "";
+            cs += scripts!.HeaderToCSharp();
+            cs += content;
             ApplyRegexes(ref cs);
             File.WriteAllText(outFilePath, cs, Encoding.UTF8);
         }

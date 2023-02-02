@@ -22,24 +22,17 @@ namespace Spells
             Vector3 ownerPos;
             float castRange;
             float distance;
-            bool nextBuffVars_GhostAlive;
-            Vector3 nextBuffVars_TargetPos;
-            Vector3 nextBuffVars_CastPos;
-            float nextBuffVars_TotalDamage;
+            bool nextBuffVars_GhostAlive; // UNUSED
             bool deployed;
             bool shiftWithoutMissile;
             Vector3 castPos;
-            TeamId teamID;
-            Minion other3;
-            Particle temp; // UNUSED
-            float baseDamage;
-            float aP;
-            float bonusDamage;
-            float totalDamage;
             Vector3 leftPoint;
             Vector3 rightPoint;
             float leftDistance;
             float rightDistance;
+            Vector3 nextBuffVars_TargetPos; // UNUSED
+            Vector3 nextBuffVars_CastPos; // UNUSED
+            float nextBuffVars_TotalDamage;
             SpellBuffClear(owner, nameof(Buffs.OrianaGhostSelf));
             SetSpellOffsetTarget(3, SpellSlotType.SpellSlots, nameof(Spells.JunkName), SpellbookType.SPELLBOOK_CHAMPION, owner, owner);
             SetSpellOffsetTarget(1, SpellSlotType.SpellSlots, nameof(Spells.JunkName), SpellbookType.SPELLBOOK_CHAMPION, owner, owner);
@@ -132,12 +125,19 @@ namespace Spells
             }
             if(shiftWithoutMissile)
             {
+                TeamId teamID;
+                Minion other3;
+                Particle temp; // UNUSED
                 teamID = GetTeamID(owner);
-                other3 = SpawnMinion("TheDoomBall", "OriannaBall", "idle.lua", targetPos, teamID, false, true, false, true, true, true, 0, default, true, (Champion)owner);
+                other3 = SpawnMinion("TheDoomBall", "OriannaBall", "idle.lua", targetPos, teamID ?? TeamId.TEAM_BLUE, false, true, false, true, true, true, 0, default, true, (Champion)owner);
                 level = GetSlotSpellLevel((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
-                SpellEffectCreate(out temp, out _, "Oriana_Izuna_nova.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, targetPos, default, default, targetPos, true, default, default, false, false);
+                SpellEffectCreate(out temp, out _, "Oriana_Izuna_nova.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, targetPos, default, default, targetPos, true, default, default, false, false);
                 foreach(AttackableUnit unit in GetUnitsInArea(attacker, other3.Position, 175, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, false))
                 {
+                    float baseDamage;
+                    float aP;
+                    float bonusDamage;
+                    float totalDamage;
                     baseDamage = this.effect0[level];
                     aP = GetFlatMagicDamageMod(owner);
                     bonusDamage = aP * 0.6f;

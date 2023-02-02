@@ -5,6 +5,31 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class LeonaShieldOfDaybreak : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = true,
+            NotSingleTargetSpell = true,
+        };
+        int[] effect0 = {12, 11, 10, 9, 8};
+        int[] effect1 = {1, 1, 1, 1, 1};
+        int[] effect2 = {35, 55, 75, 95, 115};
+        public override void SelfExecute()
+        {
+            int nextBuffVars_SpellCooldown;
+            int nextBuffVars_SilenceDuration; // UNUSED
+            int nextBuffVars_BonusDamage; // UNUSED
+            SetSlotSpellCooldownTimeVer2(0, 0, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner, false);
+            nextBuffVars_SpellCooldown = this.effect0[level];
+            nextBuffVars_SilenceDuration = this.effect1[level];
+            nextBuffVars_BonusDamage = this.effect2[level];
+            AddBuff((ObjAIBase)owner, owner, new Buffs.LeonaShieldOfDaybreak(nextBuffVars_SpellCooldown), 1, 1, 6, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class LeonaShieldOfDaybreak : BBBuffScript
@@ -27,7 +52,7 @@ namespace Buffs
         {
             TeamId teamID;
             teamID = GetTeamID(owner);
-            SpellEffectCreate(out this.temp, out _, "Leona_ShieldOfDaybreak_cas.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "BUFFBONE_CSTM_SHIELD_TOP", default, owner, default, default, true, default, default, false, false);
+            SpellEffectCreate(out this.temp, out _, "Leona_ShieldOfDaybreak_cas.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "BUFFBONE_CSTM_SHIELD_TOP", default, owner, default, default, true, default, default, false, false);
             //RequireVar(this.spellCooldown);
             //RequireVar(this.bonusDamage);
             //RequireVar(this.silenceDuration);
@@ -61,31 +86,6 @@ namespace Buffs
             SkipNextAutoAttack(owner);
             SpellCast((ObjAIBase)owner, target, default, default, 0, SpellSlotType.ExtraSlots, level, false, false, false, false, false, false);
             SpellBuffRemove(owner, nameof(Buffs.LeonaShieldOfDaybreak), (ObjAIBase)owner, 0);
-        }
-    }
-}
-namespace Spells
-{
-    public class LeonaShieldOfDaybreak : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = true,
-            NotSingleTargetSpell = true,
-        };
-        int[] effect0 = {12, 11, 10, 9, 8};
-        int[] effect1 = {1, 1, 1, 1, 1};
-        int[] effect2 = {35, 55, 75, 95, 115};
-        public override void SelfExecute()
-        {
-            int nextBuffVars_SpellCooldown;
-            int nextBuffVars_SilenceDuration;
-            int nextBuffVars_BonusDamage;
-            SetSlotSpellCooldownTimeVer2(0, 0, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner, false);
-            nextBuffVars_SpellCooldown = this.effect0[level];
-            nextBuffVars_SilenceDuration = this.effect1[level];
-            nextBuffVars_BonusDamage = this.effect2[level];
-            AddBuff((ObjAIBase)owner, owner, new Buffs.LeonaShieldOfDaybreak(nextBuffVars_SpellCooldown), 1, 1, 6, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
         }
     }
 }

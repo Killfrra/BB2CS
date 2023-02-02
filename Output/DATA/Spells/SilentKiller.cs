@@ -18,9 +18,9 @@ namespace Buffs
         };
         public override void OnKill()
         {
-            int level;
             if(target is Champion)
             {
+                int level;
                 level = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 if(level >= 1)
                 {
@@ -31,9 +31,9 @@ namespace Buffs
         }
         public override void OnAssist()
         {
-            int level;
             if(target is Champion)
             {
+                int level;
                 level = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 if(level >= 1)
                 {

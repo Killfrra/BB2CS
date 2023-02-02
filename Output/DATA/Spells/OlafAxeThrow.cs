@@ -5,6 +5,32 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class OlafAxeThrow : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            CastingBreaksStealth = true,
+            DoesntBreakShields = true,
+            TriggersSpellCasts = true,
+            IsDamagingSpell = true,
+            NotSingleTargetSpell = true,
+        };
+        float[] effect0 = {-0.24f, -0.28f, -0.32f, -0.36f, -0.4f};
+        int[] effect1 = {0, 0, 0, 0, 0};
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            float nextBuffVars_MovementSpeedMod;
+            float nextBuffVars_AttackSpeedMod;
+            nextBuffVars_MovementSpeedMod = this.effect0[level];
+            nextBuffVars_AttackSpeedMod = this.effect1[level];
+            BreakSpellShields(target);
+            AddBuff((ObjAIBase)owner, target, new Buffs.OlafSlow(nextBuffVars_MovementSpeedMod, nextBuffVars_AttackSpeedMod), 100, 1, 2.5f, BuffAddType.STACKS_AND_OVERLAPS, BuffType.SLOW, 0, true, false, false);
+            AddBuff(attacker, target, new Buffs.OlafAxeThrowDamage(), 1, 1, 0.25f, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class OlafAxeThrow : BBBuffScript
@@ -39,11 +65,11 @@ namespace Buffs
             float cooldownMult;
             float durationVar;
             float nextBuffVars_MovementSpeedMod;
-            int nextBuffVars_AttackSpeedMod;
             int level;
+            int nextBuffVars_AttackSpeedMod;
             teamID = GetTeamID(owner);
             targetPos = this.targetPos;
-            other3 = SpawnMinion("HiddenMinion", "OlafAxe", "idle.lua", targetPos, teamID, false, true, false, true, true, true, 0, default, false, (Champion)owner);
+            other3 = SpawnMinion("HiddenMinion", "OlafAxe", "idle.lua", targetPos, teamID ?? TeamId.TEAM_BLUE, false, true, false, true, true, true, 0, default, false, (Champion)owner);
             facingPos = this.facingPos;
             FaceDirection(other3, facingPos);
             cooldownPerc = GetPercentCooldownMod(owner);
@@ -60,32 +86,6 @@ namespace Buffs
                 AddBuff(attacker, unit, new Buffs.OlafSlow(nextBuffVars_MovementSpeedMod, nextBuffVars_AttackSpeedMod), 100, 1, 2.5f, BuffAddType.STACKS_AND_OVERLAPS, BuffType.SLOW, 0, true, false, false);
                 AddBuff(attacker, unit, new Buffs.OlafAxeThrowDamage(), 1, 1, 0.25f, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0, true, false, false);
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class OlafAxeThrow : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            CastingBreaksStealth = true,
-            DoesntBreakShields = true,
-            TriggersSpellCasts = true,
-            IsDamagingSpell = true,
-            NotSingleTargetSpell = true,
-        };
-        float[] effect0 = {-0.24f, -0.28f, -0.32f, -0.36f, -0.4f};
-        int[] effect1 = {0, 0, 0, 0, 0};
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            float nextBuffVars_MovementSpeedMod;
-            float nextBuffVars_AttackSpeedMod;
-            nextBuffVars_MovementSpeedMod = this.effect0[level];
-            nextBuffVars_AttackSpeedMod = this.effect1[level];
-            BreakSpellShields(target);
-            AddBuff((ObjAIBase)owner, target, new Buffs.OlafSlow(nextBuffVars_MovementSpeedMod, nextBuffVars_AttackSpeedMod), 100, 1, 2.5f, BuffAddType.STACKS_AND_OVERLAPS, BuffType.SLOW, 0, true, false, false);
-            AddBuff(attacker, target, new Buffs.OlafAxeThrowDamage(), 1, 1, 0.25f, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0, true, false, false);
         }
     }
 }

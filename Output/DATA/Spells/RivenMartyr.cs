@@ -5,6 +5,19 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class RivenMartyr : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            AutoCooldownByLevel = new[]{ 22f, 18f, 14f, 10f, 6f, },
+            DoesntBreakShields = false,
+            TriggersSpellCasts = true,
+            NotSingleTargetSpell = false,
+        };
+    }
+}
 namespace Buffs
 {
     public class RivenMartyr : BBBuffScript
@@ -57,18 +70,5 @@ namespace Buffs
         {
             SpellEffectRemove(this.temp);
         }
-    }
-}
-namespace Spells
-{
-    public class RivenMartyr : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            AutoCooldownByLevel = new[]{ 22f, 18f, 14f, 10f, 6f, },
-            DoesntBreakShields = false,
-            TriggersSpellCasts = true,
-            NotSingleTargetSpell = false,
-        };
     }
 }

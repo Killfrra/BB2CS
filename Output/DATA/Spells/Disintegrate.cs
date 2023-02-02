@@ -5,35 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class Disintegrate : BBBuffScript
-    {
-        float manaCost;
-        public Disintegrate(float manaCost = default)
-        {
-            this.manaCost = manaCost;
-        }
-        public override void OnActivate()
-        {
-            //RequireVar(this.manaCost);
-        }
-        public override void OnUpdateActions()
-        {
-            SpellBuffRemoveCurrent(owner);
-        }
-        public override void OnDeath()
-        {
-            if(attacker.IsDead)
-            {
-            }
-            else
-            {
-                IncPAR(attacker, this.manaCost, PrimaryAbilityResourceType.MANA);
-            }
-        }
-    }
-}
 namespace Spells
 {
     public class Disintegrate : BBSpellScript
@@ -71,13 +42,42 @@ namespace Spells
             annieSkinID = GetSkinID(owner);
             if(annieSkinID == 5)
             {
-                SpellEffectCreate(out a, out _, "DisintegrateHit_tar_frost.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false, false);
-                SpellEffectCreate(out b, out _, "Disintegrate_hit_frost.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false, false);
+                SpellEffectCreate(out a, out _, "DisintegrateHit_tar_frost.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false, false);
+                SpellEffectCreate(out b, out _, "Disintegrate_hit_frost.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false, false);
             }
             else
             {
-                SpellEffectCreate(out a, out _, "DisintegrateHit_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false, false);
-                SpellEffectCreate(out b, out _, "Disintegrate_hit.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false, false);
+                SpellEffectCreate(out a, out _, "DisintegrateHit_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false, false);
+                SpellEffectCreate(out b, out _, "Disintegrate_hit.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false, false);
+            }
+        }
+    }
+}
+namespace Buffs
+{
+    public class Disintegrate : BBBuffScript
+    {
+        float manaCost;
+        public Disintegrate(float manaCost = default)
+        {
+            this.manaCost = manaCost;
+        }
+        public override void OnActivate()
+        {
+            //RequireVar(this.manaCost);
+        }
+        public override void OnUpdateActions()
+        {
+            SpellBuffRemoveCurrent(owner);
+        }
+        public override void OnDeath()
+        {
+            if(attacker.IsDead)
+            {
+            }
+            else
+            {
+                IncPAR(attacker, this.manaCost, PrimaryAbilityResourceType.MANA);
             }
         }
     }

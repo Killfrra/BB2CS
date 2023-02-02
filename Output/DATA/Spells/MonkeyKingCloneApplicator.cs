@@ -11,14 +11,14 @@ namespace Buffs
     {
         public override void OnDeactivate(bool expired)
         {
-            Vector3 pos1;
-            int level; // UNUSED
-            Pet other1;
-            Particle fadeParticle; // UNUSED
             if(GetBuffCountFromCaster(owner, default, nameof(Buffs.MonkeyKingCloneFull)) == 0)
             {
                 if(!owner.IsDead)
                 {
+                    Vector3 pos1;
+                    int level; // UNUSED
+                    Pet other1;
+                    Particle fadeParticle; // UNUSED
                     pos1 = GetPointByUnitFacingOffset(owner, 100, 0);
                     level = 1;
                     other1 = CloneUnitPet(owner, nameof(Buffs.MonkeyKingClone), 25000, pos1, 0, 0, false);

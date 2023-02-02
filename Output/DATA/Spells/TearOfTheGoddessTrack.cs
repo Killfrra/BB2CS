@@ -31,7 +31,6 @@ namespace Buffs
         }
         public override void OnSpellCast(string spellName, SpellScriptMetaData spellVars)
         {
-            Particle killMe_; // UNUSED
             if(spellVars.DoesntTriggerSpellCasts)
             {
             }
@@ -39,6 +38,7 @@ namespace Buffs
             {
                 if(this.cooldownResevoir > 0)
                 {
+                    Particle killMe_; // UNUSED
                     SpellEffectCreate(out killMe_, out _, "TearoftheGoddess_itm.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false);
                     charVars.TearBonusMana += 4;
                     charVars.TearBonusMana = Math.Min(charVars.TearBonusMana, 1000);

@@ -15,8 +15,8 @@ namespace Spells
             float bonusDamage;
             float totalDamage;
             float nextBuffVars_TotalDamage;
-            float nextBuffVars_MoveSpeedMod;
             float attackDamage;
+            float nextBuffVars_MoveSpeedMod;
             levelDamage = GetLevel(owner);
             bonusDamage = levelDamage * 9;
             totalDamage = bonusDamage + 14;

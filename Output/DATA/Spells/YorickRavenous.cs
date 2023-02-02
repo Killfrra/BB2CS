@@ -18,7 +18,6 @@ namespace Spells
         public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
         {
             float nextBuffVars_DrainPercent;
-            bool nextBuffVars_DrainedBool;
             float distance;
             Vector3 targetPos;
             float baseDamage;
@@ -27,6 +26,7 @@ namespace Spells
             TeamId teamID;
             Particle lifestealEffect; // UNUSED
             Particle hitEffect; // UNUSED
+            bool nextBuffVars_DrainedBool;
             if(GetBuffCountFromCaster(owner, default, nameof(Buffs.YorickSummonRavenous)) > 0)
             {
                 SpellBuffClear(owner, nameof(Buffs.YorickSummonRavenous));
@@ -45,8 +45,8 @@ namespace Spells
             damageToDeal = baseDamage + bonusAD;
             ApplyDamage(attacker, target, damageToDeal, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELL, 1, 0, 0, false, false, attacker);
             teamID = GetTeamID(owner);
-            SpellEffectCreate(out lifestealEffect, out _, "yorick_ravenousGhoul_activeHeal.troy", default, teamID, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, default, default, false, false);
-            SpellEffectCreate(out hitEffect, out _, "yorick_ravenousGhoul_cas_tar.troy", default, teamID, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false, false);
+            SpellEffectCreate(out lifestealEffect, out _, "yorick_ravenousGhoul_activeHeal.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, default, default, false, false);
+            SpellEffectCreate(out hitEffect, out _, "yorick_ravenousGhoul_cas_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false, false);
         }
     }
 }

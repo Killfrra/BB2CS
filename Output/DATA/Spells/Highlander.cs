@@ -5,6 +5,30 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class Highlander : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            AutoCooldownByLevel = new[]{ 75f, 75f, 75f, 18f, 14f, },
+            TriggersSpellCasts = true,
+            NotSingleTargetSpell = true,
+        };
+        float[] effect0 = {0.4f, 0.6f, 0.8f};
+        int[] effect1 = {6, 9, 12};
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            float nextBuffVars_MoveSpeedMod;
+            float nextBuffVars_AttackSpeedMod;
+            SpellBuffRemoveType(owner, BuffType.SLOW);
+            SpellBuffRemoveType(owner, BuffType.SNARE);
+            nextBuffVars_MoveSpeedMod = 0.4f;
+            nextBuffVars_AttackSpeedMod = this.effect0[level];
+            AddBuff(attacker, target, new Buffs.Highlander(nextBuffVars_AttackSpeedMod, nextBuffVars_MoveSpeedMod), 1, 1, this.effect1[level], BuffAddType.RENEW_EXISTING, BuffType.HASTE, 0, true, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class Highlander : BBBuffScript
@@ -68,20 +92,20 @@ namespace Buffs
         public override void OnAssist()
         {
             object level; // UNITIALIZED
-            float alphaStrikeCD;
-            float wujuStyleCD;
-            float highlanderCD;
-            float meditateCD;
-            float aSCDLeft;
-            float medCDLeft;
-            float wujuCDLeft;
-            float highCDLeft;
-            float aSCDFinal;
-            float medCDFinal;
-            float wujuCDFinal;
-            float highCDFinal;
             if(target is Champion)
             {
+                float alphaStrikeCD;
+                float wujuStyleCD;
+                float highlanderCD;
+                float meditateCD;
+                float aSCDLeft;
+                float medCDLeft;
+                float wujuCDLeft;
+                float highCDLeft;
+                float aSCDFinal;
+                float medCDFinal;
+                float wujuCDFinal;
+                float highCDFinal;
                 alphaStrikeCD = this.effect0[level];
                 wujuStyleCD = 12.5f;
                 highlanderCD = 37.5f;
@@ -100,30 +124,6 @@ namespace Buffs
                 SetSlotSpellCooldownTime((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, highCDFinal);
                 SpellEffectCreate(out _, out _, "DeathsCaress_nova.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false);
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class Highlander : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            AutoCooldownByLevel = new[]{ 75f, 75f, 75f, 18f, 14f, },
-            TriggersSpellCasts = true,
-            NotSingleTargetSpell = true,
-        };
-        float[] effect0 = {0.4f, 0.6f, 0.8f};
-        int[] effect1 = {6, 9, 12};
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            float nextBuffVars_MoveSpeedMod;
-            float nextBuffVars_AttackSpeedMod;
-            SpellBuffRemoveType(owner, BuffType.SLOW);
-            SpellBuffRemoveType(owner, BuffType.SNARE);
-            nextBuffVars_MoveSpeedMod = 0.4f;
-            nextBuffVars_AttackSpeedMod = this.effect0[level];
-            AddBuff(attacker, target, new Buffs.Highlander(nextBuffVars_AttackSpeedMod, nextBuffVars_MoveSpeedMod), 1, 1, this.effect1[level], BuffAddType.RENEW_EXISTING, BuffType.HASTE, 0, true, false);
         }
     }
 }

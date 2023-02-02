@@ -44,7 +44,6 @@ namespace Buffs
             float itemCD1; // UNUSED
             int level;
             float cost0;
-            float cost3;
             this.cOTGFound = false;
             itemCD1 = GetSlotSpellCooldownTime((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.InventorySlots);
             SetCanAttack(owner, false);
@@ -108,6 +107,7 @@ namespace Buffs
             level = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             if(level != 0)
             {
+                float cost3;
                 cost3 = this.effect2[level];
                 SetPARCostInc((ObjAIBase)owner, 3, SpellSlotType.SpellSlots, cost3, PrimaryAbilityResourceType.MANA);
             }

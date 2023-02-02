@@ -22,7 +22,7 @@ namespace Buffs
             Vector3 position;
             attacker = SetBuffCasterUnit();
             teamID = GetTeamID(attacker);
-            SpellEffectCreate(out targetParticle, out _, "UnstoppableForce_stun.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, true);
+            SpellEffectCreate(out targetParticle, out _, "UnstoppableForce_stun.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, true);
             position = GetRandomPointInAreaUnit(owner, 125, 75);
             Move(owner, position, 100, 20, 0, ForceMovementType.FURTHEST_WITHIN_RANGE, ForceMovementOrdersType.CANCEL_ORDER, 100);
             SetStunned(owner, true);

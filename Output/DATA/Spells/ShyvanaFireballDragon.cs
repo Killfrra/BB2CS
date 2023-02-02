@@ -22,7 +22,7 @@ namespace Spells
             Particle a; // UNUSED
             float spellBaseDamage;
             teamID = GetTeamID(owner);
-            SpellEffectCreate(out a, out _, "shyvana_flameBreath_dragon_burn.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, false, false, false, false);
+            SpellEffectCreate(out a, out _, "shyvana_flameBreath_dragon_burn.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, false, false, false, false);
             spellBaseDamage = this.effect0[level];
             AddBuff(attacker, target, new Buffs.ShyvanaFireballParticle(), 1, 1, 1, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
             ApplyDamage(attacker, target, spellBaseDamage, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELL, 1, 0.5f, 0, false, false, attacker);

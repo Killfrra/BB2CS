@@ -5,6 +5,30 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class DesperatePower : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            CastingBreaksStealth = true,
+            DoesntBreakShields = true,
+            TriggersSpellCasts = true,
+            IsDamagingSpell = false,
+            NotSingleTargetSpell = true,
+        };
+        float[] effect0 = {0.15f, 0.2f, 0.25f};
+        int[] effect1 = {5, 6, 7};
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            float nextBuffVars_Vamp;
+            int nextBuffVars_Level;
+            nextBuffVars_Vamp = this.effect0[level];
+            nextBuffVars_Level = level;
+            AddBuff(attacker, target, new Buffs.DesperatePower(nextBuffVars_Vamp, nextBuffVars_Level), 1, 1, this.effect1[level], BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class DesperatePower : BBBuffScript
@@ -33,7 +57,7 @@ namespace Buffs
             level = this.level;
             IncPercentSpellVampMod(owner, this.vamp);
             teamID = GetTeamID(owner);
-            SpellEffectCreate(out this.asdf, out _, "ManaLeach_tar2.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false, default, default, false);
+            SpellEffectCreate(out this.asdf, out _, "ManaLeach_tar2.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false, default, default, false);
         }
         public override void OnDeactivate(bool expired)
         {
@@ -44,30 +68,6 @@ namespace Buffs
         public override void OnUpdateStats()
         {
             IncPercentSpellVampMod(owner, this.vamp);
-        }
-    }
-}
-namespace Spells
-{
-    public class DesperatePower : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            CastingBreaksStealth = true,
-            DoesntBreakShields = true,
-            TriggersSpellCasts = true,
-            IsDamagingSpell = false,
-            NotSingleTargetSpell = true,
-        };
-        float[] effect0 = {0.15f, 0.2f, 0.25f};
-        int[] effect1 = {5, 6, 7};
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            float nextBuffVars_Vamp;
-            int nextBuffVars_Level;
-            nextBuffVars_Vamp = this.effect0[level];
-            nextBuffVars_Level = level;
-            AddBuff(attacker, target, new Buffs.DesperatePower(nextBuffVars_Vamp, nextBuffVars_Level), 1, 1, this.effect1[level], BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
         }
     }
 }

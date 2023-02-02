@@ -5,17 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class ViktorPowerTransfer : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            NonDispellable = true,
-            PersistsThroughDeath = true,
-        };
-    }
-}
 namespace Spells
 {
     public class ViktorPowerTransfer : BBSpellScript
@@ -56,5 +45,16 @@ namespace Spells
             targetPos = GetUnitPosition(target);
             SpellCast((ObjAIBase)owner, owner, default, default, 2, SpellSlotType.ExtraSlots, 1, true, true, false, false, false, true, targetPos);
         }
+    }
+}
+namespace Buffs
+{
+    public class ViktorPowerTransfer : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            NonDispellable = true,
+            PersistsThroughDeath = true,
+        };
     }
 }

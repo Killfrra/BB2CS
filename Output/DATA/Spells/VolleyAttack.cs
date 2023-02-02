@@ -5,12 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class VolleyAttack : BBBuffScript
-    {
-    }
-}
 namespace Spells
 {
     public class VolleyAttack : BBSpellScript
@@ -31,15 +25,14 @@ namespace Spells
         public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
         {
             int count;
-            bool isStealthed;
-            Particle part; // UNUSED
-            float nextBuffVars_MovementSpeedMod;
-            float baseDamage;
-            float bonusDamage;
-            bool canSee;
             count = GetBuffCountFromCaster(target, target, nameof(Buffs.VolleyAttack));
             if(count == 0)
             {
+                bool isStealthed;
+                Particle part; // UNUSED
+                float nextBuffVars_MovementSpeedMod;
+                float baseDamage;
+                float bonusDamage;
                 isStealthed = GetStealthed(target);
                 if(!isStealthed)
                 {
@@ -81,6 +74,7 @@ namespace Spells
                     }
                     else
                     {
+                        bool canSee;
                         canSee = CanSeeTarget(owner, target);
                         if(canSee)
                         {
@@ -104,5 +98,11 @@ namespace Spells
                 }
             }
         }
+    }
+}
+namespace Buffs
+{
+    public class VolleyAttack : BBBuffScript
+    {
     }
 }

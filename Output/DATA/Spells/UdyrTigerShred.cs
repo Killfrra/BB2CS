@@ -16,8 +16,8 @@ namespace Buffs
         {
             TeamId teamID;
             teamID = GetTeamID(owner);
-            SpellEffectCreate(out this.lhand, out _, "Udyr_Tiger_buf.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "L_Finger", default, owner, default, default, true, default, default, false, false);
-            SpellEffectCreate(out this.rhand, out _, "Udyr_Tiger_buf_R.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "R_Finger", default, owner, default, default, true, default, default, false, false);
+            SpellEffectCreate(out this.lhand, out _, "Udyr_Tiger_buf.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "L_Finger", default, owner, default, default, true, default, default, false, false);
+            SpellEffectCreate(out this.rhand, out _, "Udyr_Tiger_buf_R.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "R_Finger", default, owner, default, default, true, default, default, false, false);
         }
         public override void OnDeactivate(bool expired)
         {
@@ -26,16 +26,16 @@ namespace Buffs
         }
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            TeamId teamID; // UNUSED
-            int level;
-            float baseDamage;
-            float tAD;
-            float dotDamage;
-            float nextBuffVars_DotDamage;
             if(target is ObjAIBase)
             {
                 if(target is not BaseTurret)
                 {
+                    TeamId teamID; // UNUSED
+                    int level;
+                    float baseDamage;
+                    float tAD;
+                    float dotDamage;
+                    float nextBuffVars_DotDamage;
                     teamID = GetTeamID(owner);
                     level = GetSlotSpellLevel((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                     baseDamage = this.effect0[level];

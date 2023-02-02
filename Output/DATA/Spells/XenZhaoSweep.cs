@@ -5,6 +5,59 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class XenZhaoSweep : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            CastingBreaksStealth = true,
+            DoesntBreakShields = true,
+            TriggersSpellCasts = true,
+            IsDamagingSpell = true,
+            NotSingleTargetSpell = true,
+        };
+        Particle targetParticle; // UNUSED
+        int[] effect0 = {70, 110, 150, 190, 230};
+        int[] effect1 = {80, 120, 160, 200, 240};
+        public override bool CanCast()
+        {
+            bool returnValue = true;
+            bool canMove;
+            bool canCast;
+            canMove = GetCanMove(owner);
+            canCast = GetCanCast(owner);
+            if(!canMove)
+            {
+                returnValue = false;
+            }
+            if(!canCast)
+            {
+                returnValue = false;
+            }
+            return returnValue;
+        }
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            Vector3 targetPos;
+            Vector3 ownerPos;
+            float distance;
+            float nextBuffVars_DamageDealt;
+            Vector3 nextBuffVars_TargetPos;
+            float nextBuffVars_Distance;
+            int nextBuffVars_BonusDamage; // UNUSED
+            SpellEffectCreate(out this.targetParticle, out _, "xenZiou_AudaciousCharge_tar_unit_instant.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, false, false, false, false, false);
+            targetPos = GetUnitPosition(target);
+            ownerPos = GetUnitPosition(owner);
+            distance = DistanceBetweenPoints(ownerPos, targetPos);
+            nextBuffVars_DamageDealt = this.effect0[level];
+            nextBuffVars_TargetPos = targetPos;
+            nextBuffVars_Distance = distance;
+            nextBuffVars_BonusDamage = this.effect1[level];
+            AddBuff((ObjAIBase)target, attacker, new Buffs.XenZhaoSweep(nextBuffVars_DamageDealt, nextBuffVars_TargetPos, nextBuffVars_Distance), 1, 1, 2, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class XenZhaoSweep : BBBuffScript
@@ -69,59 +122,6 @@ namespace Buffs
             {
                 IssueOrder(owner, OrderType.AttackTo, default, caster);
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class XenZhaoSweep : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            CastingBreaksStealth = true,
-            DoesntBreakShields = true,
-            TriggersSpellCasts = true,
-            IsDamagingSpell = true,
-            NotSingleTargetSpell = true,
-        };
-        Particle targetParticle; // UNUSED
-        int[] effect0 = {70, 110, 150, 190, 230};
-        int[] effect1 = {80, 120, 160, 200, 240};
-        public override bool CanCast()
-        {
-            bool returnValue = true;
-            bool canMove;
-            bool canCast;
-            canMove = GetCanMove(owner);
-            canCast = GetCanCast(owner);
-            if(!canMove)
-            {
-                returnValue = false;
-            }
-            if(!canCast)
-            {
-                returnValue = false;
-            }
-            return returnValue;
-        }
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            Vector3 targetPos;
-            Vector3 ownerPos;
-            float distance;
-            float nextBuffVars_DamageDealt;
-            Vector3 nextBuffVars_TargetPos;
-            float nextBuffVars_Distance;
-            int nextBuffVars_BonusDamage;
-            SpellEffectCreate(out this.targetParticle, out _, "xenZiou_AudaciousCharge_tar_unit_instant.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, false, false, false, false, false);
-            targetPos = GetUnitPosition(target);
-            ownerPos = GetUnitPosition(owner);
-            distance = DistanceBetweenPoints(ownerPos, targetPos);
-            nextBuffVars_DamageDealt = this.effect0[level];
-            nextBuffVars_TargetPos = targetPos;
-            nextBuffVars_Distance = distance;
-            nextBuffVars_BonusDamage = this.effect1[level];
-            AddBuff((ObjAIBase)target, attacker, new Buffs.XenZhaoSweep(nextBuffVars_DamageDealt, nextBuffVars_TargetPos, nextBuffVars_Distance), 1, 1, 2, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
         }
     }
 }

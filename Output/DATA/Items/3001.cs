@@ -12,11 +12,11 @@ namespace Items
         float lastTimeExecuted;
         public override void OnUpdateStats()
         {
-            int nextBuffVars_MagicResistanceMod;
             if(ExecutePeriodically(0.9f, ref this.lastTimeExecuted, false))
             {
                 if(!owner.IsDead)
                 {
+                    int nextBuffVars_MagicResistanceMod;
                     nextBuffVars_MagicResistanceMod = -20;
                     AddBuff((ObjAIBase)owner, owner, new Buffs.AbyssalScepterAuraSelf(), 1, 1, 1, BuffAddType.RENEW_EXISTING, BuffType.AURA, 0, true, false, false);
                     foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 1000, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, nameof(Buffs.AbyssalScepterAura), false))

@@ -37,22 +37,22 @@ namespace Buffs
         }
         public override void OnTakeDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
         {
-            ObjAIBase caster;
-            TeamId teamIDAttacker;
-            TeamId teamIDCaster;
-            int level;
-            float sunlightDamage;
-            bool sunglasses;
-            Particle motaExplosion; // UNUSED
             if(attacker is Champion)
             {
+                ObjAIBase caster;
                 caster = SetBuffCasterUnit();
                 if(caster != attacker)
                 {
+                    TeamId teamIDAttacker;
+                    TeamId teamIDCaster;
                     teamIDAttacker = GetTeamID(attacker);
                     teamIDCaster = GetTeamID(caster);
                     if(teamIDAttacker == teamIDCaster)
                     {
+                        int level;
+                        float sunlightDamage;
+                        bool sunglasses;
+                        Particle motaExplosion; // UNUSED
                         level = GetLevel(caster);
                         sunlightDamage = this.effect0[level];
                         sunglasses = TestUnitAttributeFlag(owner, ExtraAttributeFlag.HAS_SUNGLASSES);
@@ -62,7 +62,7 @@ namespace Buffs
                         }
                         this.attacker1 = attacker;
                         this.teamIDAttacker = teamIDAttacker;
-                        SpellEffectCreate(out motaExplosion, out _, "LeonaPassive_tar.troy", default, teamIDAttacker, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false, false);
+                        SpellEffectCreate(out motaExplosion, out _, "LeonaPassive_tar.troy", default, teamIDAttacker ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false, false);
                         SpellBuffClear(owner, nameof(Buffs.LeonaSunlight));
                         ApplyDamage(attacker, owner, sunlightDamage, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_PROC, 1, 0, 0, false, false, attacker);
                         SpellBuffRemoveCurrent(owner);

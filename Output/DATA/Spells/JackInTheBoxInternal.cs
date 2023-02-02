@@ -28,13 +28,13 @@ namespace Buffs
         {
             TeamId teamID;
             Vector3 targetPos;
-            int nextBuffVars_BonusHealth;
-            float nextBuffVars_FearDuration;
+            int nextBuffVars_BonusHealth; // UNUSED
             Minion other3;
+            float nextBuffVars_FearDuration;
             teamID = GetTeamID(owner);
             targetPos = this.targetPos;
             nextBuffVars_BonusHealth = this.bonusHealth;
-            other3 = SpawnMinion("Jack In The Box", "ShacoBox", "turret.lua", targetPos, teamID, false, false, true, false, false, false, 0, false, false, (Champion)attacker);
+            other3 = SpawnMinion("Jack In The Box", "ShacoBox", "turret.lua", targetPos, teamID ?? TeamId.TEAM_CASTER, false, false, true, false, false, false, 0, false, false, (Champion)attacker);
             nextBuffVars_FearDuration = this.fearDuration;
             AddBuff(attacker, other3, new Buffs.JackInTheBox(nextBuffVars_FearDuration), 1, 1, 60, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
         }

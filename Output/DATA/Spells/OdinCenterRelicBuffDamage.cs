@@ -56,7 +56,6 @@ namespace Buffs
             TeamId teamID;
             float currentTime;
             float timeDiff;
-            float distance;
             teamID = GetTeamID(owner);
             currentTime = GetGameTime();
             timeDiff = currentTime - this.prevSpellTrigger;
@@ -74,10 +73,11 @@ namespace Buffs
                                 {
                                     if(damageSource != default)
                                     {
+                                        float distance;
                                         distance = DistanceBetweenObjects("Owner", "Target");
                                         if(distance <= 1600)
                                         {
-                                            SpellEffectCreate(out this.particleID, out _, "Odin_CenterbuffBeam.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, target, false, attacker, "head", default, target, "root", default, true, false, false, false, false);
+                                            SpellEffectCreate(out this.particleID, out _, "Odin_CenterbuffBeam.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, target, false, attacker, "head", default, target, "root", default, true, false, false, false, false);
                                             this.prevSpellTrigger = currentTime;
                                             ApplyDamage((ObjAIBase)owner, target, this.totalDamage, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_PROC, 1, 0, 0, false, false, attacker);
                                         }

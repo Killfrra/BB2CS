@@ -17,9 +17,9 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            bool brushCheck;
             if(ExecutePeriodically(3, ref this.lastTimeExecuted, false))
             {
+                bool brushCheck;
                 brushCheck = IsInBrush(owner);
                 if(brushCheck)
                 {

@@ -20,19 +20,19 @@ namespace Buffs
         public override void OnUpdateActions()
         {
             float _0_5; // UNITIALIZED
-            int count;
-            int count2;
-            int count3;
             if(ExecutePeriodically(0, ref this.lastTimeExecuted, false, _0_5))
             {
                 foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 250, SpellDataFlags.AffectHeroes, default, true))
                 {
+                    int count;
                     count = GetBuffCountFromAll(unit, nameof(Buffs.OdinPortalMoveCheck));
                     if(count == 0)
                     {
+                        int count2;
                         count2 = GetBuffCountFromAll(unit, nameof(Buffs.OdinPortalChannel));
                         if(count2 == 0)
                         {
+                            int count3;
                             count3 = GetBuffCountFromAll(unit, nameof(Buffs.OdinPortalTeleport));
                             if(count3 == 0)
                             {

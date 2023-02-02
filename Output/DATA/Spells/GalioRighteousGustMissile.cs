@@ -5,6 +5,33 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class GalioRighteousGustMissile : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = true,
+            IsDamagingSpell = true,
+            NotSingleTargetSpell = false,
+        };
+        float[] effect0 = {0.2f, 0.28f, 0.36f, 0.44f, 0.52f};
+        public override void OnMissileUpdate(SpellMissile missileNetworkID, Vector3 missilePosition)
+        {
+            TeamId teamID;
+            Vector3 targetPos;
+            float nextBuffVars_MoveSpeedMod;
+            Minion other3;
+            teamID = GetTeamID(owner);
+            level = GetCastSpellLevelPlusOne();
+            targetPos = GetCastSpellTargetPos();
+            nextBuffVars_MoveSpeedMod = this.effect0[level];
+            other3 = SpawnMinion("RighteousGust", "TestCube", "idle.lua", missilePosition, teamID ?? TeamId.TEAM_UNKNOWN, false, false, false, false, false, true, 100, false, true);
+            FaceDirection(other3, targetPos);
+            AddBuff((ObjAIBase)owner, other3, new Buffs.GalioRighteousGustMissile(nextBuffVars_MoveSpeedMod), 1, 1, 5, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class GalioRighteousGustMissile : BBBuffScript
@@ -38,7 +65,7 @@ namespace Buffs
             moveSpeedMod = this.moveSpeedMod;
             teamID = GetTeamID(owner);
             orientationPoint = GetPointByUnitFacingOffset(owner, 10000, 0);
-            SpellEffectCreate(out this.windVFXAlly, out this.windVFXEnemy, "galio_windTunnel_rune.troy", "galio_windTunnel_rune_team_red.troy", teamID, 240, 0, TeamId.TEAM_UNKNOWN, default, default, false, default, "head", owner.Position, owner, default, default, false, default, default, false, false, orientationPoint);
+            SpellEffectCreate(out this.windVFXAlly, out this.windVFXEnemy, "galio_windTunnel_rune.troy", "galio_windTunnel_rune_team_red.troy", teamID ?? TeamId.TEAM_UNKNOWN, 240, 0, TeamId.TEAM_UNKNOWN, default, default, false, default, "head", owner.Position, owner, default, default, false, default, default, false, false, orientationPoint);
             this.level = GetSlotSpellLevel(attacker, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.ExtraSlots);
         }
         public override void OnDeactivate(bool expired)
@@ -62,7 +89,7 @@ namespace Buffs
             Champion other1;
             nextBuffVars_MoveSpeedMod = this.moveSpeedMod;
             teamID = GetTeamID(owner);
-            other1 = GetChampionBySkinName("Galio", teamID);
+            other1 = GetChampionBySkinName("Galio", teamID ?? TeamId.TEAM_UNKNOWN);
             if(ExecutePeriodically(0.25f, ref this.lastTimeExecuted, true))
             {
                 foreach(AttackableUnit unit in GetUnitsInArea(attacker, owner.Position, 175, SpellDataFlags.AffectFriends | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, nameof(Buffs.GalioRighteousGustMissile), false))
@@ -88,33 +115,6 @@ namespace Buffs
                     }
                 }
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class GalioRighteousGustMissile : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = true,
-            IsDamagingSpell = true,
-            NotSingleTargetSpell = false,
-        };
-        float[] effect0 = {0.2f, 0.28f, 0.36f, 0.44f, 0.52f};
-        public override void OnMissileUpdate(SpellMissile missileNetworkID, Vector3 missilePosition)
-        {
-            TeamId teamID;
-            Vector3 targetPos;
-            float nextBuffVars_MoveSpeedMod;
-            Minion other3;
-            teamID = GetTeamID(owner);
-            level = GetCastSpellLevelPlusOne();
-            targetPos = GetCastSpellTargetPos();
-            nextBuffVars_MoveSpeedMod = this.effect0[level];
-            other3 = SpawnMinion("RighteousGust", "TestCube", "idle.lua", missilePosition, teamID, false, false, false, false, false, true, 100, false, true);
-            FaceDirection(other3, targetPos);
-            AddBuff((ObjAIBase)owner, other3, new Buffs.GalioRighteousGustMissile(nextBuffVars_MoveSpeedMod), 1, 1, 5, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0, true, false, false);
         }
     }
 }

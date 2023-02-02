@@ -20,7 +20,7 @@ namespace Buffs
         public override void OnKill()
         {
             int level;
-            float nextBuffVars_BaseManaRegen;
+            float nextBuffVars_BaseManaRegen; // UNUSED
             level = GetLevel(owner);
             nextBuffVars_BaseManaRegen = this.effect0[level];
             AddBuff((ObjAIBase)owner, owner, new Buffs.SwainDampeningFieldMana(), 1, 1, 5, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false);

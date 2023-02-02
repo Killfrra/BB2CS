@@ -5,21 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class RumbleOverheatAttack : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            SpellFXOverrideSkins = new[]{ "GangsterTwitch", "PunkTwitch", },
-        };
-        int punchdmg; // UNUSED
-        public override void OnActivate()
-        {
-            this.punchdmg = 0;
-        }
-    }
-}
 namespace Spells
 {
     public class RumbleOverheatAttack : BBSpellScript
@@ -44,6 +29,21 @@ namespace Spells
                     }
                 }
             }
+        }
+    }
+}
+namespace Buffs
+{
+    public class RumbleOverheatAttack : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            SpellFXOverrideSkins = new[]{ "GangsterTwitch", "PunkTwitch", },
+        };
+        int punchdmg; // UNUSED
+        public override void OnActivate()
+        {
+            this.punchdmg = 0;
         }
     }
 }

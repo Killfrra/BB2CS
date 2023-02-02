@@ -5,6 +5,30 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class FrostShot : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = false,
+            NotSingleTargetSpell = true,
+        };
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.FrostShot)) > 0)
+            {
+                SpellBuffRemove(owner, nameof(Buffs.FrostShot), (ObjAIBase)owner, 0);
+            }
+            else
+            {
+                float nextBuffVars_ManaCostPerAttack;
+                nextBuffVars_ManaCostPerAttack = 8;
+                AddBuff(attacker, target, new Buffs.FrostShot(nextBuffVars_ManaCostPerAttack), 1, 1, 25000, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+            }
+        }
+    }
+}
 namespace Buffs
 {
     public class FrostShot : BBBuffScript
@@ -34,7 +58,6 @@ namespace Buffs
         public override void OnLaunchMissile(SpellMissile missileId)
         {
             float temp;
-            float manaToInc;
             temp = GetPAR(owner, PrimaryAbilityResourceType.MANA);
             if(target is ObjAIBase)
             {
@@ -45,6 +68,7 @@ namespace Buffs
                 {
                     if(temp >= this.manaCostPerAttack)
                     {
+                        float manaToInc;
                         manaToInc = this.manaCostPerAttack * -1;
                         IncPAR(owner, manaToInc, PrimaryAbilityResourceType.MANA);
                     }
@@ -53,30 +77,6 @@ namespace Buffs
                         SpellBuffRemoveCurrent(owner);
                     }
                 }
-            }
-        }
-    }
-}
-namespace Spells
-{
-    public class FrostShot : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = false,
-            NotSingleTargetSpell = true,
-        };
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            float nextBuffVars_ManaCostPerAttack;
-            if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.FrostShot)) > 0)
-            {
-                SpellBuffRemove(owner, nameof(Buffs.FrostShot), (ObjAIBase)owner, 0);
-            }
-            else
-            {
-                nextBuffVars_ManaCostPerAttack = 8;
-                AddBuff(attacker, target, new Buffs.FrostShot(nextBuffVars_ManaCostPerAttack), 1, 1, 25000, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
             }
         }
     }

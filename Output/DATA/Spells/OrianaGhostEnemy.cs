@@ -35,9 +35,6 @@ namespace Buffs
         {
             AttackableUnit caster;
             bool dropBall;
-            TeamId teamID;
-            Vector3 targetPos;
-            Minion other3;
             if(caster != owner)
             {
                 SpellEffectRemove(this.temp);
@@ -53,10 +50,13 @@ namespace Buffs
             }
             if(dropBall)
             {
+                TeamId teamID;
+                Vector3 targetPos;
+                Minion other3;
                 caster = this.caster;
                 teamID = GetTeamID(caster);
                 targetPos = GetUnitPosition(owner);
-                other3 = SpawnMinion("HiddenMinion", "TestCube", "idle.lua", targetPos, teamID, false, true, false, true, true, true, 0, default, true, (Champion)caster);
+                other3 = SpawnMinion("HiddenMinion", "TestCube", "idle.lua", targetPos, teamID ?? TeamId.TEAM_BLUE, false, true, false, true, true, true, 0, default, true, (Champion)caster);
                 AddBuff(attacker, other3, new Buffs.OrianaGhost(), 1, 1, 25000, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
                 AddBuff(attacker, other3, new Buffs.OrianaGhostMinion(), 1, 1, 25000, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
             }
@@ -64,11 +64,10 @@ namespace Buffs
         public override void OnUpdateActions()
         {
             float distance;
-            Vector3 castPos;
-            bool noRender;
             distance = DistanceBetweenObjects("Attacker", "Owner");
             if(distance > 1250)
             {
+                Vector3 castPos;
                 this.pickUp = true;
                 SpellBuffClear(owner, nameof(Buffs.OrianaGhostEnemy));
                 castPos = GetUnitPosition(owner);
@@ -77,6 +76,7 @@ namespace Buffs
             }
             else
             {
+                bool noRender;
                 noRender = GetNoRender(owner);
                 if(owner is Champion)
                 {

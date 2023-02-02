@@ -19,7 +19,6 @@ namespace Chars
         }
         public override void OnPreDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
         {
-            float distance;
             if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.WrathTimer)) == 0)
             {
                 if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.SweepTimer)) == 0)
@@ -30,6 +29,7 @@ namespace Chars
                         {
                             if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.ActionTimer)) == 0)
                             {
+                                float distance;
                                 distance = DistanceBetweenObjects("Attacker", "Owner");
                                 if(distance <= 950)
                                 {

@@ -30,7 +30,7 @@ namespace Buffs
             teamID = GetTeamID(owner);
             //RequireVar(this.healthPlusAbility);
             ApplyAssistMarker(attacker, owner, 10);
-            SpellEffectCreate(out _, out _, "LifeAura.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false, false, false, false, false);
+            SpellEffectCreate(out _, out _, "LifeAura.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false, false, false, false, false);
             currentCooldown = GetSlotSpellCooldownTime((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_SUMMONER, SpellSlotType.SpellSlots);
             currentCooldown2 = GetSlotSpellCooldownTime((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_SUMMONER, SpellSlotType.SpellSlots);
             if(currentCooldown <= 6)

@@ -11,13 +11,13 @@ namespace Chars
     {
         public override void OnUpdateStats()
         {
-            float nextBuffVars_HPPerLevel;
             if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.DragonApplicator)) == 0)
             {
                 AddBuff((ObjAIBase)owner, owner, new Buffs.DragonApplicator(), 1, 1, 25000, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 100000, true, false, false);
             }
             if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.HPByPlayerLevel)) == 0)
             {
+                float nextBuffVars_HPPerLevel;
                 nextBuffVars_HPPerLevel = 200;
                 AddBuff((ObjAIBase)owner, owner, new Buffs.HPByPlayerLevel(nextBuffVars_HPPerLevel), 1, 1, 25000, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
             }

@@ -17,14 +17,14 @@ namespace Buffs
         float lastTimeExecuted;
         public override void OnUpdateActions()
         {
-            float healthPercent;
-            float maxHealth;
-            float healthToInc;
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, false))
             {
+                float healthPercent;
                 healthPercent = GetHealthPercent(owner, PrimaryAbilityResourceType.MANA);
                 if(healthPercent <= 1)
                 {
+                    float maxHealth;
+                    float healthToInc;
                     maxHealth = GetMaxHealth(owner, PrimaryAbilityResourceType.MANA);
                     healthToInc = maxHealth * 0.0035f;
                     IncHealth(owner, healthToInc, owner);

@@ -28,9 +28,6 @@ namespace Buffs
         }
         public override void OnUpdateStats()
         {
-            Vector3 targetPos;
-            Vector3 ownerPos;
-            float dist;
             IncFlatArmorMod(owner, this.armorReduction);
             if(GetBuffCountFromCaster(attacker, attacker, nameof(Buffs.SpiritFireAoE)) == 0)
             {
@@ -38,6 +35,9 @@ namespace Buffs
             }
             else
             {
+                Vector3 targetPos;
+                Vector3 ownerPos;
+                float dist;
                 targetPos = this.targetPos;
                 ownerPos = GetUnitPosition(owner);
                 dist = DistanceBetweenPoints(targetPos, ownerPos);

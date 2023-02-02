@@ -43,8 +43,8 @@ namespace Buffs
             //RequireVar(this.targetPos);
             targetPos = this.targetPos;
             teamOfOwner = GetTeamID(owner);
-            SpellEffectCreate(out this.c, out _, "nassus_spiritFire_afterburn.troy", default, teamOfOwner, 200, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, targetPos, owner, default, default, false, false, false, false, false);
-            SpellEffectCreate(out this.boom2, out this.boom, "nassus_spiritFire_tar_green.troy", "nassus_spiritFire_tar_red.troy", teamOfOwner, 200, 0, TeamId.TEAM_UNKNOWN, default, default, false, default, default, targetPos, target, default, default, false, false, false, false, false);
+            SpellEffectCreate(out this.c, out _, "nassus_spiritFire_afterburn.troy", default, teamOfOwner ?? TeamId.TEAM_UNKNOWN, 200, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, targetPos, owner, default, default, false, false, false, false, false);
+            SpellEffectCreate(out this.boom2, out this.boom, "nassus_spiritFire_tar_green.troy", "nassus_spiritFire_tar_red.troy", teamOfOwner ?? TeamId.TEAM_UNKNOWN, 200, 0, TeamId.TEAM_UNKNOWN, default, default, false, default, default, targetPos, target, default, default, false, false, false, false, false);
             nextBuffVars_TargetPos = targetPos;
             nextBuffVars_ArmorReduction = this.armorReduction;
             foreach(AttackableUnit unit in GetUnitsInArea(attacker, targetPos, 400, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, false))
@@ -63,19 +63,19 @@ namespace Buffs
         public override void OnUpdateActions()
         {
             Vector3 targetPos;
-            Vector3 nextBuffVars_TargetPos;
-            float nextBuffVars_ArmorReduction;
-            float totalDamage;
             targetPos = this.targetPos;
             if(this.count < 5)
             {
                 if(ExecutePeriodically(0.9f, ref this.lastTimeExecuted, false))
                 {
+                    Vector3 nextBuffVars_TargetPos;
+                    float nextBuffVars_ArmorReduction;
                     this.count++;
                     nextBuffVars_TargetPos = targetPos;
                     nextBuffVars_ArmorReduction = this.armorReduction;
                     foreach(AttackableUnit unit in GetUnitsInArea(attacker, targetPos, 400, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, false))
                     {
+                        float totalDamage;
                         totalDamage = this.damage / 5;
                         ApplyDamage(attacker, unit, totalDamage, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0.12f, 0, false, false, attacker);
                         AddBuff(attacker, unit, new Buffs.SpiritFireArmorReduction(nextBuffVars_TargetPos, nextBuffVars_ArmorReduction), 1, 1, 25000, BuffAddType.RENEW_EXISTING, BuffType.SHRED, 0, true, false, false);

@@ -15,13 +15,6 @@ namespace Chars
         int[] effect2 = {40, 42, 45, 47, 50, 52, 55, 57, 60, 62, 65, 67, 70, 72, 75, 77, 80, 82};
         public override void OnUpdateActions()
         {
-            int count;
-            float cooldown;
-            float healthPerStack;
-            float feastBase;
-            float bonusFeastHealth;
-            float feastHealth;
-            float targetHealth;
             level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             if(level >= 1)
             {
@@ -29,15 +22,22 @@ namespace Chars
             }
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, false))
             {
+                int count;
                 count = GetBuffCountFromCaster(owner, owner, nameof(Buffs.Feast));
                 level = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 if(level >= 1)
                 {
+                    float cooldown;
                     cooldown = GetSlotSpellCooldownTime((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                     if(cooldown <= 0)
                     {
                         foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 1500, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectHeroes))
                         {
+                            float healthPerStack;
+                            float feastBase;
+                            float bonusFeastHealth;
+                            float feastHealth;
+                            float targetHealth;
                             count = GetBuffCountFromCaster(owner, owner, nameof(Buffs.Feast));
                             healthPerStack = this.effect0[level];
                             feastBase = this.effect1[level];
@@ -59,10 +59,10 @@ namespace Chars
         }
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            Vector3 missileEndPosition;
             level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             if(level >= 1)
             {
+                Vector3 missileEndPosition;
                 missileEndPosition = GetPointByUnitFacingOffset(owner, 550, 0);
                 SpellCast((ObjAIBase)owner, target, missileEndPosition, default, 0, SpellSlotType.ExtraSlots, level, true, true, false);
             }

@@ -5,28 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class RivenTriCleave : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            BuffName = "RivenTriCleaveBuff",
-            BuffTextureName = "RivenBrokenWings.dds",
-            SpellToggleSlot = 1,
-        };
-        public override void OnActivate()
-        {
-            int count;
-            count = GetBuffCountFromCaster(owner, owner, nameof(Buffs.RivenTriCleave));
-            SetBuffToolTipVar(1, count);
-        }
-        public override void OnDeactivate(bool expired)
-        {
-            SpellBuffClear(owner, nameof(Buffs.RivenTriCleaveCooldown));
-        }
-    }
-}
 namespace Spells
 {
     public class RivenTriCleave : BBSpellScript
@@ -45,11 +23,6 @@ namespace Spells
             Vector3 targetPos;
             int count;
             int nextBuffVars_Count;
-            Vector3 nextBuffVars_TargetPos;
-            float cDReduction;
-            float baseCD;
-            float lowerCD;
-            float newCD;
             float distance;
             float maxRange;
             Vector3 pos;
@@ -57,11 +30,10 @@ namespace Spells
             bool lockOn;
             bool canSee;
             AttackableUnit other1;
-            bool isMoving;
-            Vector3 leadPos;
             Vector3 checkPos;
             bool canMove;
             bool pathable;
+            Vector3 nextBuffVars_TargetPos; // UNUSED
             SpellBuffClear(owner, nameof(Buffs.RivenTriCleaveUnlock));
             CancelAutoAttack(owner, true);
             targetPos = GetCastSpellTargetPos();
@@ -69,6 +41,10 @@ namespace Spells
             AddBuff((ObjAIBase)owner, owner, new Buffs.RivenTriCleave(), 3, 1, 3.75f, BuffAddType.STACKS_AND_RENEWS, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
             if(count == 0)
             {
+                float cDReduction;
+                float baseCD;
+                float lowerCD;
+                float newCD;
                 cDReduction = GetPercentCooldownMod(owner);
                 level = GetSlotSpellLevel((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 baseCD = this.effect0[level];
@@ -112,6 +88,7 @@ namespace Spells
             }
             if(lockOn)
             {
+                bool isMoving;
                 FaceDirection(owner, other1.Position);
                 distance = DistanceBetweenObjects("Owner", "Other1");
                 isMoving = IsMoving(other1);
@@ -121,6 +98,7 @@ namespace Spells
                 }
                 else
                 {
+                    Vector3 leadPos;
                     leadPos = GetPointByUnitFacingOffset(other1, 125, 0);
                     FaceDirection(owner, leadPos);
                     distance = DistanceBetweenObjectAndPoint(owner, leadPos);
@@ -186,6 +164,28 @@ namespace Spells
                 SpellBuffClear(owner, nameof(Buffs.RivenTriCleave));
             }
             AddBuff((ObjAIBase)owner, owner, new Buffs.RivenSword(), 1, 1, 1.5f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+        }
+    }
+}
+namespace Buffs
+{
+    public class RivenTriCleave : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            BuffName = "RivenTriCleaveBuff",
+            BuffTextureName = "RivenBrokenWings.dds",
+            SpellToggleSlot = 1,
+        };
+        public override void OnActivate()
+        {
+            int count;
+            count = GetBuffCountFromCaster(owner, owner, nameof(Buffs.RivenTriCleave));
+            SetBuffToolTipVar(1, count);
+        }
+        public override void OnDeactivate(bool expired)
+        {
+            SpellBuffClear(owner, nameof(Buffs.RivenTriCleaveCooldown));
         }
     }
 }

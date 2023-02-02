@@ -62,9 +62,9 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            float maxHealth;
             if(ExecutePeriodically(0.9f, ref this.lastTimeExecuted, false))
             {
+                float maxHealth;
                 maxHealth = GetMaxHealth(owner, PrimaryAbilityResourceType.MANA);
                 maxHealth *= 0.2f;
                 ApplyDamage((ObjAIBase)owner, owner, maxHealth, DamageType.DAMAGE_TYPE_TRUE, DamageSource.DAMAGE_SOURCE_INTERNALRAW, 1, 0, 0, false, false, (ObjAIBase)owner);
@@ -87,9 +87,9 @@ namespace Buffs
         public override float OnHeal(float health)
         {
             float returnValue = 0;
-            float effectiveHeal;
             if(health >= 0)
             {
+                float effectiveHeal;
                 effectiveHeal = health * 0;
                 returnValue = effectiveHeal;
             }

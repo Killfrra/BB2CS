@@ -19,11 +19,11 @@ namespace Buffs
             SetForceRenderParticles(attacker, true);
             if(teamOfOwner == TeamId.TEAM_BLUE)
             {
-                SpellEffectCreate(out this.particleID, out this.particleID2, "XerathR_beam_warning_green.troy", "XerathR_beam_warning_red.troy", teamOfOwner, 550, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "bottom", default, attacker, "bottom", default, true, false, false, false, false);
+                SpellEffectCreate(out this.particleID, out this.particleID2, "XerathR_beam_warning_green.troy", "XerathR_beam_warning_red.troy", teamOfOwner ?? TeamId.TEAM_UNKNOWN, 550, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "bottom", default, attacker, "bottom", default, true, false, false, false, false);
             }
             else
             {
-                SpellEffectCreate(out this.particleID, out this.particleID2, "XerathR_beam_warning_green.troy", "XerathR_beam_warning_red.troy", teamOfOwner, 550, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "bottom", default, attacker, "bottom", default, true, false, false, false, false);
+                SpellEffectCreate(out this.particleID, out this.particleID2, "XerathR_beam_warning_green.troy", "XerathR_beam_warning_red.troy", teamOfOwner ?? TeamId.TEAM_UNKNOWN, 550, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "bottom", default, attacker, "bottom", default, true, false, false, false, false);
             }
         }
     }

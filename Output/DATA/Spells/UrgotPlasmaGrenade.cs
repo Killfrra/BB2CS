@@ -25,7 +25,7 @@ namespace Spells
             {
                 targetPos = GetPointByUnitFacingOffset(owner, 950, 0);
             }
-            other2 = SpawnMinion("k", "TestCubeRender", "idle.lua", targetPos, teamID, true, true, false, true, true, true, 0, default, true, (Champion)attacker);
+            other2 = SpawnMinion("k", "TestCubeRender", "idle.lua", targetPos, teamID ?? TeamId.TEAM_NEUTRAL, true, true, false, true, true, true, 0, default, true, (Champion)attacker);
             SpellCast((ObjAIBase)owner, other2, targetPos, targetPos, 2, SpellSlotType.ExtraSlots, level, false, false, false, false, false, false);
             AddBuff(attacker, other2, new Buffs.ExpirationTimer(), 1, 1, 1.5f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false);
         }

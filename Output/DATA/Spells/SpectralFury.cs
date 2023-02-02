@@ -27,7 +27,6 @@ namespace Buffs
         }
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            float spectralDuration;
             if(charVars.SpectralCount >= 2)
             {
             }
@@ -35,6 +34,7 @@ namespace Buffs
             {
                 if(GetBuffCountFromCaster(owner, default, nameof(Buffs.JudicatorRighteousFury)) == 0)
                 {
+                    float spectralDuration;
                     spectralDuration = GetBuffRemainingDuration(owner, nameof(Buffs.SpectralFury));
                     AddBuff(attacker, owner, new Buffs.SpectralFury(), 1, 1, 2 + spectralDuration, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false);
                     charVars.SpectralCount++;

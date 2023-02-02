@@ -5,6 +5,35 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class FizzTempestTrap : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            CastingBreaksStealth = true,
+            DoesntBreakShields = true,
+            TriggersSpellCasts = true,
+            IsDamagingSpell = false,
+            NotSingleTargetSpell = true,
+        };
+        int[] effect0 = {2, 2, 2, 2, 2};
+        public override void SelfExecute()
+        {
+            Vector3 targetPos;
+            TeamId teamID;
+            Minion other3;
+            int maxStacks;
+            targetPos = GetCastSpellTargetPos();
+            teamID = GetTeamID(owner);
+            other3 = SpawnMinion("Bantam Trap", "CaitlynTrap", "idle.lua", targetPos, teamID ?? TeamId.TEAM_UNKNOWN, false, true, false, true, true, false, 0, false, false, (Champion)owner);
+            PlayAnimation("Spell1", 1, other3, false, false, true);
+            AddBuff(attacker, other3, new Buffs.FizzTempestTrap(), 1, 1, 30, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+            maxStacks = this.effect0[level];
+            AddBuff(other3, owner, new Buffs.FizzTempestTrapCount(), maxStacks, 1, 30, BuffAddType.STACKS_AND_OVERLAPS, BuffType.INTERNAL, 0, false, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class FizzTempestTrap : BBBuffScript
@@ -62,27 +91,27 @@ namespace Buffs
         public override void OnUpdateActions()
         {
             TeamId teamID1; // UNUSED
-            bool moving;
-            TeamId teamID2; // UNUSED
-            TeamId teamID;
-            Particle particle; // UNUSED
-            Particle asdadsfa; // UNUSED
-            int level;
-            Vector3 landPos;
-            int dmg; // UNUSED
             teamID1 = GetTeamID(attacker);
             if(this.active)
             {
                 foreach(AttackableUnit unit in GetClosestUnitsInArea(attacker, owner.Position, 100, SpellDataFlags.AffectFriends | SpellDataFlags.AffectHeroes, 1, nameof(Buffs.MarknFranzFranzTrapNoFling), false))
                 {
+                    bool moving;
                     moving = IsMoving(unit);
                     if(moving)
                     {
+                        TeamId teamID2; // UNUSED
+                        TeamId teamID;
+                        Particle particle; // UNUSED
+                        Particle asdadsfa; // UNUSED
+                        int level;
+                        Vector3 landPos;
+                        int dmg; // UNUSED
                         teamID2 = GetTeamID(unit);
                         BreakSpellShields(unit);
                         teamID = GetTeamID(attacker);
-                        SpellEffectCreate(out particle, out _, "caitlyn_yordleTrap_trigger_02.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, owner.Position, owner, default, default, true, false, false, false, false);
-                        SpellEffectCreate(out asdadsfa, out _, "caitlyn_yordleTrap_trigger_sound.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, false, false, false, false);
+                        SpellEffectCreate(out particle, out _, "caitlyn_yordleTrap_trigger_02.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, owner.Position, owner, default, default, true, false, false, false, false);
+                        SpellEffectCreate(out asdadsfa, out _, "caitlyn_yordleTrap_trigger_sound.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, false, false, false, false);
                         level = GetSlotSpellLevel(attacker, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                         landPos = GetPointByUnitFacingOffset(owner, 620, 0);
                         ApplyAssistMarker(attacker, unit, 10);
@@ -111,35 +140,6 @@ namespace Buffs
                     }
                 }
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class FizzTempestTrap : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            CastingBreaksStealth = true,
-            DoesntBreakShields = true,
-            TriggersSpellCasts = true,
-            IsDamagingSpell = false,
-            NotSingleTargetSpell = true,
-        };
-        int[] effect0 = {2, 2, 2, 2, 2};
-        public override void SelfExecute()
-        {
-            Vector3 targetPos;
-            TeamId teamID;
-            Minion other3;
-            int maxStacks;
-            targetPos = GetCastSpellTargetPos();
-            teamID = GetTeamID(owner);
-            other3 = SpawnMinion("Bantam Trap", "CaitlynTrap", "idle.lua", targetPos, teamID, false, true, false, true, true, false, 0, false, false, (Champion)owner);
-            PlayAnimation("Spell1", 1, other3, false, false, true);
-            AddBuff(attacker, other3, new Buffs.FizzTempestTrap(), 1, 1, 30, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
-            maxStacks = this.effect0[level];
-            AddBuff(other3, owner, new Buffs.FizzTempestTrapCount(), maxStacks, 1, 30, BuffAddType.STACKS_AND_OVERLAPS, BuffType.INTERNAL, 0, false, false, false);
         }
     }
 }

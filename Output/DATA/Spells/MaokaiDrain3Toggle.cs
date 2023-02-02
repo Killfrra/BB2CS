@@ -5,18 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class MaokaiDrain3Toggle : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            BuffName = "GlacialStorm",
-            BuffTextureName = "Cryophoenix_GlacialStorm.dds",
-            SpellToggleSlot = 4,
-        };
-    }
-}
 namespace Spells
 {
     public class MaokaiDrain3Toggle : BBSpellScript
@@ -33,5 +21,17 @@ namespace Spells
         {
             SpellBuffRemove(owner, nameof(Buffs.MaokaiDrain3), (ObjAIBase)owner);
         }
+    }
+}
+namespace Buffs
+{
+    public class MaokaiDrain3Toggle : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            BuffName = "GlacialStorm",
+            BuffTextureName = "Cryophoenix_GlacialStorm.dds",
+            SpellToggleSlot = 4,
+        };
     }
 }

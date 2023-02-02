@@ -11,10 +11,10 @@ namespace Chars
     {
         public override void OnUpdateActions()
         {
-            float cooldown;
             level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             if(level > 0)
             {
+                float cooldown;
                 cooldown = GetSlotSpellCooldownTime((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 if(cooldown <= 0)
                 {
@@ -30,9 +30,9 @@ namespace Chars
         }
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            int dSCount;
             if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.DoubleStrikeIcon)) == 0)
             {
+                int dSCount;
                 AddBuff(attacker, attacker, new Buffs.DoubleStrike(), 7, 1, 25000, BuffAddType.STACKS_AND_RENEWS, BuffType.COMBAT_ENCHANCER, 0, true, false);
                 dSCount = GetBuffCountFromCaster(owner, owner, nameof(Buffs.DoubleStrike));
                 if(dSCount >= 7)

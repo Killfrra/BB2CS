@@ -5,6 +5,28 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class EmpowerTwo : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = true,
+            NotSingleTargetSpell = true,
+        };
+        int[] effect0 = {9, 8, 7, 6, 5};
+        int[] effect1 = {60, 95, 130, 165, 200};
+        public override void SelfExecute()
+        {
+            int nextBuffVars_SpellCooldown;
+            float nextBuffVars_BonusDamage;
+            nextBuffVars_SpellCooldown = this.effect0[level];
+            nextBuffVars_BonusDamage = this.effect1[level];
+            AddBuff((ObjAIBase)owner, owner, new Buffs.EmpowerTwo(nextBuffVars_SpellCooldown, nextBuffVars_BonusDamage), 1, 1, 10, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+            SetSlotSpellCooldownTime((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, 0);
+        }
+    }
+}
 namespace Buffs
 {
     public class EmpowerTwo : BBBuffScript
@@ -28,8 +50,8 @@ namespace Buffs
         {
             TeamId teamID;
             teamID = GetTeamID(owner);
-            SpellEffectCreate(out this.particle, out _, "armsmaster_empower_self_01.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "R_hand", default, owner, "weapon", default, false, false, false, false, false);
-            SpellEffectCreate(out this.particle, out _, "armsmaster_empower_buf.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "R_hand", default, owner, default, default, false, false, false, false, false);
+            SpellEffectCreate(out this.particle, out _, "armsmaster_empower_self_01.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "R_hand", default, owner, "weapon", default, false, false, false, false, false);
+            SpellEffectCreate(out this.particle, out _, "armsmaster_empower_buf.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "R_hand", default, owner, default, default, false, false, false, false, false);
             //RequireVar(this.spellCooldown);
             //RequireVar(this.bonusDamage);
             SealSpellSlot(1, SpellSlotType.SpellSlots, (ObjAIBase)owner, true, SpellbookType.SPELLBOOK_CHAMPION);
@@ -53,10 +75,6 @@ namespace Buffs
         }
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            TeamId teamID;
-            float attackDamage;
-            float physicalBonus;
-            float aOEDmg;
             if(target is ObjAIBase)
             {
                 if(target is BaseTurret)
@@ -64,41 +82,23 @@ namespace Buffs
                 }
                 else
                 {
+                    TeamId teamID;
+                    float attackDamage;
+                    float physicalBonus;
+                    float aOEDmg;
                     teamID = GetTeamID(owner);
                     SpellEffectRemove(this.particle);
                     attackDamage = GetFlatPhysicalDamageMod(owner);
                     physicalBonus = attackDamage * 0.4f;
                     aOEDmg = physicalBonus + this.bonusDamage;
-                    SpellEffectCreate(out this.particle, out _, "EmpowerTwoHit_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, default, false, target, default, default, target, default, default, true, false, false, false, false);
+                    SpellEffectCreate(out this.particle, out _, "EmpowerTwoHit_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, default, false, target, default, default, target, default, default, true, false, false, false, false);
                     BreakSpellShields(target);
                     ApplyDamage(attacker, target, aOEDmg, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELL, 1, 0.4f, 1, false, false, attacker);
-                    SpellEffectCreate(out this.particle, out _, "EmpowerTwoHit_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, default, false, target, default, default, target, default, default, true, false, false, false, false);
+                    SpellEffectCreate(out this.particle, out _, "EmpowerTwoHit_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, default, false, target, default, default, target, default, default, true, false, false, false, false);
                     SpellBuffRemove(owner, nameof(Buffs.EmpowerTwo), (ObjAIBase)owner, 0);
                     SetDodgePiercing(owner, false);
                 }
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class EmpowerTwo : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = true,
-            NotSingleTargetSpell = true,
-        };
-        int[] effect0 = {9, 8, 7, 6, 5};
-        int[] effect1 = {60, 95, 130, 165, 200};
-        public override void SelfExecute()
-        {
-            int nextBuffVars_SpellCooldown;
-            float nextBuffVars_BonusDamage;
-            nextBuffVars_SpellCooldown = this.effect0[level];
-            nextBuffVars_BonusDamage = this.effect1[level];
-            AddBuff((ObjAIBase)owner, owner, new Buffs.EmpowerTwo(nextBuffVars_SpellCooldown, nextBuffVars_BonusDamage), 1, 1, 10, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
-            SetSlotSpellCooldownTime((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, 0);
         }
     }
 }

@@ -18,13 +18,13 @@ namespace Buffs
         };
         public override void OnPreDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
         {
-            float healthCurrent;
-            float damageSoftCap;
-            float damageManipulator;
             if(damageType != DamageType.DAMAGE_TYPE_TRUE)
             {
                 if(attacker is not BaseTurret)
                 {
+                    float healthCurrent;
+                    float damageSoftCap;
+                    float damageManipulator;
                     healthCurrent = GetHealth(owner, PrimaryAbilityResourceType.MANA);
                     damageSoftCap = 0.1f * healthCurrent;
                     damageManipulator = damageAmount;

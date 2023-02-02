@@ -5,6 +5,24 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class KogMawCausticSpittle : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = true,
+            IsDamagingSpell = true,
+            NotSingleTargetSpell = false,
+        };
+        int[] effect0 = {60, 110, 160, 210, 260};
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            ApplyDamage(attacker, target, this.effect0[level], DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_DEFAULT, 1, 0.7f, 1, false, false, attacker);
+            AddBuff(attacker, target, new Buffs.KogMawCausticSpittleCharged(), 1, 1, 4, BuffAddType.REPLACE_EXISTING, BuffType.SHRED, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class KogMawCausticSpittle : BBBuffScript
@@ -33,32 +51,14 @@ namespace Buffs
         }
         public override void OnLevelUpSpell(int slot)
         {
-            int level;
-            float spittleAttackSpeed;
             if(slot == 0)
             {
+                int level;
+                float spittleAttackSpeed;
                 level = GetSlotSpellLevel((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 spittleAttackSpeed = this.effect1[level];
                 SetBuffToolTipVar(1, spittleAttackSpeed);
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class KogMawCausticSpittle : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = true,
-            IsDamagingSpell = true,
-            NotSingleTargetSpell = false,
-        };
-        int[] effect0 = {60, 110, 160, 210, 260};
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            ApplyDamage(attacker, target, this.effect0[level], DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_DEFAULT, 1, 0.7f, 1, false, false, attacker);
-            AddBuff(attacker, target, new Buffs.KogMawCausticSpittleCharged(), 1, 1, 4, BuffAddType.REPLACE_EXISTING, BuffType.SHRED, 0, true, false, false);
         }
     }
 }

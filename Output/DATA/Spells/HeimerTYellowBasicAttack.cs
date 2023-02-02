@@ -14,7 +14,7 @@ namespace Spells
             TeamId teamID;
             float dmg;
             teamID = GetTeamID(owner);
-            attacker = GetChampionBySkinName("Heimerdinger", teamID);
+            attacker = GetChampionBySkinName("Heimerdinger", teamID ?? TeamId.TEAM_UNKNOWN);
             dmg = GetTotalAttackDamage(owner);
             if(target is BaseTurret)
             {

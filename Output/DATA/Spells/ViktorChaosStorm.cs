@@ -47,7 +47,6 @@ namespace Spells
             float aPPreMod;
             float aPPostMod;
             float finalDamage;
-            Particle hi; // UNUSED
             spellTargetPos = GetCastSpellTargetPos();
             level = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             baseDamage = this.effect2[level];
@@ -59,6 +58,7 @@ namespace Spells
             ApplySilence(owner, target, 0.5f);
             foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 2000, SpellDataFlags.AffectFriends | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes | SpellDataFlags.AffectUntargetable, nameof(Buffs.ViktorChaosStormAOE), true))
             {
+                Particle hi; // UNUSED
                 SpellEffectCreate(out hi, out _, "Viktor_ChaosStorm_hit.troy", default, TeamId.TEAM_NEUTRAL, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, "Head", default, target, "Spine", default, true, false, false, false, false);
             }
         }

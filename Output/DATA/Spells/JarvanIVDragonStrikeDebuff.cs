@@ -28,7 +28,7 @@ namespace Buffs
             //RequireVar(this.armorDebuff);
             IncPercentArmorMod(owner, this.armorDebuff);
             SpellEffectCreate(out this.particle1, out _, "JarvanDragonStrike_debuff.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false, false, false, false, false);
-            SpellEffectCreate(out this.hitParticle, out _, "JarvanDragonStrike_hit.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, false, false, false, false);
+            SpellEffectCreate(out this.hitParticle, out _, "JarvanDragonStrike_hit.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, false, false, false, false);
         }
         public override void OnDeactivate(bool expired)
         {

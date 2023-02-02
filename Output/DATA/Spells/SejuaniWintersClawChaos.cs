@@ -35,11 +35,11 @@ namespace Buffs
         public override void OnDeactivate(bool expired)
         {
             AttackableUnit caster; // UNITIALIZED
-            float duration;
-            float nextBuffVars_MovementSpeedMod;
             SpellEffectRemove(this.overhead);
             if(GetBuffCountFromCaster(owner, caster, nameof(Buffs.SejuaniFrostTracker)) > 0)
             {
+                float duration;
+                float nextBuffVars_MovementSpeedMod;
                 duration = GetBuffRemainingDuration(owner, nameof(Buffs.SejuaniFrostTracker));
                 SpellBuffRemove(owner, nameof(Buffs.SejuaniFrostTracker), attacker, 0);
                 nextBuffVars_MovementSpeedMod = -0.1f;

@@ -26,12 +26,6 @@ namespace Spells
             Vector3 nextBuffVars_TargetPos;
             float nextBuffVars_Distance;
             float nextBuffVars_dashSpeed;
-            Vector3 ownerPos;
-            Particle p3; // UNUSED
-            Vector3 targetPos;
-            float moveSpeed;
-            float dashSpeed;
-            float distance;
             shieldAbsorb = this.effect0[level];
             bonusAP = GetFlatMagicDamageMod(owner);
             bonusAP80 = bonusAP * 0.8f;
@@ -39,6 +33,12 @@ namespace Spells
             nextBuffVars_ShieldAbsorb = shieldAbsorb;
             if(target != attacker)
             {
+                Vector3 ownerPos;
+                Particle p3; // UNUSED
+                Vector3 targetPos;
+                float moveSpeed;
+                float dashSpeed;
+                float distance;
                 ownerPos = GetUnitPosition(owner);
                 SpellEffectCreate(out p3, out _, "blindMonk_W_cas_01.troy", default, TeamId.TEAM_NEUTRAL, 900, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, ownerPos, target, default, default, true, default, default, false, false);
                 targetPos = GetUnitPosition(target);

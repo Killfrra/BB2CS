@@ -22,7 +22,7 @@ namespace Spells
         int[] effect0 = {15, 30, 45, 60, 75};
         public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
         {
-            int nextBuffVars_Level;
+            int nextBuffVars_Level; // UNUSED
             float damage;
             float aP;
             level = GetSlotSpellLevel((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);

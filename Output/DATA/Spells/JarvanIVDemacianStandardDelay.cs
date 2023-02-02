@@ -26,7 +26,7 @@ namespace Buffs
             //RequireVar(this.damageToDeal);
             //RequireVar(this.level);
             teamID = GetTeamID(attacker);
-            SpellEffectCreate(out this.particle, out this.particle1, "JarvanDemacianStandard_tar_green.troy", "JarvanDemacianStandard_tar_red.troy", teamID, 200, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, true, default, default, false, false);
+            SpellEffectCreate(out this.particle, out this.particle1, "JarvanDemacianStandard_tar_green.troy", "JarvanDemacianStandard_tar_red.troy", teamID ?? TeamId.TEAM_UNKNOWN, 200, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, true, default, default, false, false);
             SetNoRender(owner, true);
             SetForceRenderParticles(owner, true);
             SetGhosted(owner, true);
@@ -63,7 +63,7 @@ namespace Buffs
                 ApplyDamage(attacker, unit, this.damageToDeal, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0, 0, true, true, attacker);
             }
             ownerPos = GetUnitPosition(owner);
-            other3 = SpawnMinion("Beacon", "JarvanIVStandard", "idle.lua", ownerPos, teamID, true, true, false, false, true, true, 0, false, false, (Champion)attacker);
+            other3 = SpawnMinion("Beacon", "JarvanIVStandard", "idle.lua", ownerPos, teamID ?? TeamId.TEAM_UNKNOWN, true, true, false, false, true, true, 0, false, false, (Champion)attacker);
             nextBuffVars_ArmorMod = this.effect0[level];
             nextBuffVars_AttackSpeedMod = this.effect1[level];
             AddBuff(attacker, other3, new Buffs.JarvanIVDemacianStandard(nextBuffVars_ArmorMod, nextBuffVars_AttackSpeedMod), 1, 1, 8, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, true);

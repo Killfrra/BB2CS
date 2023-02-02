@@ -13,11 +13,11 @@ namespace Chars
         float[] effect0 = {1.08f, 1.11f, 1.14f, 1.17f, 1.2f};
         public override void OnUpdateActions()
         {
-            float cooldownStat;
-            float multiplier;
-            float newCooldown;
             if(ExecutePeriodically(0.5f, ref this.lastTimeExecuted, true))
             {
+                float cooldownStat;
+                float multiplier;
+                float newCooldown;
                 cooldownStat = GetPercentCooldownMod(owner);
                 multiplier = 1 + cooldownStat;
                 newCooldown = multiplier * 1;
@@ -36,12 +36,12 @@ namespace Chars
         }
         public override void OnPreDealDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
         {
-            float damagePercent;
             if(GetBuffCountFromCaster(target, owner, nameof(Buffs.SwainTorment)) > 0)
             {
                 level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 if(level > 0)
                 {
+                    float damagePercent;
                     damagePercent = this.effect0[level];
                     damageAmount *= damagePercent;
                 }

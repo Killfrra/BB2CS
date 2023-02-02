@@ -20,13 +20,13 @@ namespace Buffs
         Particle confetti;
         public override void OnActivate()
         {
-            TeamId teamID; // UNUSED
-            int fiddlesticksSkinID;
             SetFeared(owner, true);
             SetCanCast(owner, false);
             ApplyAssistMarker(attacker, owner, 10);
             if(GetBuffCountFromCaster(target, attacker, nameof(Buffs.Fear)) > 0)
             {
+                TeamId teamID; // UNUSED
+                int fiddlesticksSkinID;
                 teamID = GetTeamID(attacker);
                 fiddlesticksSkinID = GetSkinID(attacker);
                 if(fiddlesticksSkinID == 6)

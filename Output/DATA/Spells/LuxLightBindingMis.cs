@@ -5,32 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class LuxLightBindingMis : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateAttachBoneName = new[]{ "", },
-            AutoBuffActivateEffect = new[]{ "LuxLightBinding_tar.troy", },
-            BuffName = "LuxLightBindingMis",
-            BuffTextureName = "LuxCrashingBlitz2.dds",
-        };
-        public override void OnActivate()
-        {
-            SetCanMove(owner, false);
-            ApplyAssistMarker(attacker, owner, 10);
-        }
-        public override void OnDeactivate(bool expired)
-        {
-            SetCanMove(owner, true);
-        }
-        public override void OnUpdateStats()
-        {
-            SetCanMove(owner, false);
-        }
-    }
-}
 namespace Spells
 {
     public class LuxLightBindingMis : BBSpellScript
@@ -135,6 +109,32 @@ namespace Spells
                     }
                 }
             }
+        }
+    }
+}
+namespace Buffs
+{
+    public class LuxLightBindingMis : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateAttachBoneName = new[]{ "", },
+            AutoBuffActivateEffect = new[]{ "LuxLightBinding_tar.troy", },
+            BuffName = "LuxLightBindingMis",
+            BuffTextureName = "LuxCrashingBlitz2.dds",
+        };
+        public override void OnActivate()
+        {
+            SetCanMove(owner, false);
+            ApplyAssistMarker(attacker, owner, 10);
+        }
+        public override void OnDeactivate(bool expired)
+        {
+            SetCanMove(owner, true);
+        }
+        public override void OnUpdateStats()
+        {
+            SetCanMove(owner, false);
         }
     }
 }

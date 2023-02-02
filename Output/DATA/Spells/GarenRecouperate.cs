@@ -77,16 +77,16 @@ namespace Buffs
         {
             int level;
             int hPRegen; // UNUSED
-            float healthPercent;
-            float maxHealth;
-            float healthToInc;
             level = GetLevel(owner);
             hPRegen = this.effect0[level];
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, false))
             {
+                float healthPercent;
                 healthPercent = GetHealthPercent(owner, PrimaryAbilityResourceType.MANA);
                 if(healthPercent < 1)
                 {
+                    float maxHealth;
+                    float healthToInc;
                     maxHealth = GetMaxHealth(target, PrimaryAbilityResourceType.MANA);
                     healthToInc = maxHealth * 0.005f;
                     IncHealth(owner, healthToInc, owner);

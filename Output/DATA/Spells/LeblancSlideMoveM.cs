@@ -35,7 +35,6 @@ namespace Buffs
         {
             Vector3 ownerPos; // UNUSED
             float distance;
-            Vector3 castPosition; // UNUSED
             TeamId casterID; // UNITIALIZED
             //RequireVar(this.aEDamage);
             //RequireVar(this.silenceDuration);
@@ -45,12 +44,13 @@ namespace Buffs
             distance = DistanceBetweenObjectAndPoint(owner, this.castPosition);
             if(distance < 10)
             {
+                Vector3 castPosition; // UNUSED
                 castPosition = this.castPosition;
                 castPosition = GetPointByUnitFacingOffset(owner, 10, 0);
             }
             Move(owner, this.castPosition, 1600, 0, 0, ForceMovementType.FURTHEST_WITHIN_RANGE, ForceMovementOrdersType.CANCEL_ORDER, this.distance, ForceMovementOrdersFacing.FACE_MOVEMENT_DIRECTION);
             PlayAnimation("Spell2", 0, owner, true, false, true);
-            SpellEffectCreate(out this.b, out _, "Leblanc_displacement_blink_target_ult.troy", default, casterID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false, false, false, false, false);
+            SpellEffectCreate(out this.b, out _, "Leblanc_displacement_blink_target_ult.troy", default, casterID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false, false, false, false, false);
             SpellEffectCreate(out this.distortionFx, out _, "LeBlanc_Displacement_mis.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false, false, false, false, false);
         }
         public override void OnDeactivate(bool expired)
@@ -70,15 +70,15 @@ namespace Buffs
             Vector3 currentPosition; // UNUSED
             int level;
             TeamId casterID;
-            Particle aoehit; // UNUSED
             currentPosition = GetUnitPosition(owner);
             SpellEffectCreate(out this.partname, out _, "leBlanc_slide_impact_self_ult.troy", default, TeamId.TEAM_NEUTRAL, 900, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, owner.Position, target, default, default, true, false, false, false, false);
             level = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             casterID = GetTeamID(owner);
             foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 300, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
             {
+                Particle aoehit; // UNUSED
                 BreakSpellShields(unit);
-                SpellEffectCreate(out aoehit, out _, "leBlanc_slide_impact_unit_tar.troy", default, casterID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
+                SpellEffectCreate(out aoehit, out _, "leBlanc_slide_impact_unit_tar.troy", default, casterID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
                 if(level == 1)
                 {
                     ApplyDamage((ObjAIBase)owner, unit, this.aEDamage, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0.66f, 1, false, false, (ObjAIBase)owner);

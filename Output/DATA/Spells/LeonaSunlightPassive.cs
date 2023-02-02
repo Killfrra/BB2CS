@@ -27,10 +27,10 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            int level;
-            float sunlightDamage;
             if(ExecutePeriodically(10, ref this.lastTimeExecuted, true))
             {
+                int level;
+                float sunlightDamage;
                 level = GetLevel(owner);
                 sunlightDamage = this.effect0[level];
                 if(sunlightDamage > this.lastSunlightDamage)

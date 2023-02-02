@@ -12,10 +12,10 @@ namespace Buffs
         public override void OnSpellCast(string spellName, SpellScriptMetaData spellVars)
         {
             string name;
-            ObjAIBase caster;
             name = GetSpellName();
             if(name == nameof(Spells.TeleportCancel))
             {
+                ObjAIBase caster;
                 caster = SetBuffCasterUnit();
                 if(caster is BaseTurret)
                 {

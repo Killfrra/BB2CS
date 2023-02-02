@@ -5,25 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class DeathfireGrasp : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            BuffName = "Deathfire Grasp",
-            BuffTextureName = "055_Borses_Staff_of_Apocalypse.tga",
-        };
-        public override void OnActivate()
-        {
-            IncPermanentPercentCooldownMod(owner, -0.15f);
-        }
-        public override void OnDeactivate(bool expired)
-        {
-            IncPermanentPercentCooldownMod(owner, 0.15f);
-        }
-    }
-}
 namespace Spells
 {
     public class DeathfireGrasp : BBSpellScript
@@ -76,6 +57,25 @@ namespace Spells
             {
                 SetSlotSpellCooldownTimeVer2(60, 5, SpellSlotType.InventorySlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner);
             }
+        }
+    }
+}
+namespace Buffs
+{
+    public class DeathfireGrasp : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            BuffName = "Deathfire Grasp",
+            BuffTextureName = "055_Borses_Staff_of_Apocalypse.tga",
+        };
+        public override void OnActivate()
+        {
+            IncPermanentPercentCooldownMod(owner, -0.15f);
+        }
+        public override void OnDeactivate(bool expired)
+        {
+            IncPermanentPercentCooldownMod(owner, 0.15f);
         }
     }
 }

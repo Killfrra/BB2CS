@@ -5,6 +5,43 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class SkarnerImpale : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            CastingBreaksStealth = true,
+            DoesntBreakShields = false,
+            TriggersSpellCasts = true,
+            IsDamagingSpell = true,
+            NotSingleTargetSpell = false,
+        };
+        int[] effect0 = {100, 150, 200, 0, 0};
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            float suppressionDuration;
+            AttackableUnit nextBuffVars_Victim; // UNUSED
+            float damagePerTick;
+            float hP;
+            suppressionDuration = 1.75f;
+            nextBuffVars_Victim = target;
+            AddBuff(attacker, target, new Buffs.SkarnerImpale(), 1, 1, suppressionDuration, BuffAddType.REPLACE_EXISTING, BuffType.SUPPRESSION, 0, true, false, false);
+            AddBuff((ObjAIBase)target, owner, new Buffs.SkarnerImpaleBuff(), 1, 1, suppressionDuration, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+            damagePerTick = this.effect0[level];
+            ApplyDamage(attacker, target, damagePerTick, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELL, 1, 0.5f, 0, false, false, attacker);
+            hP = GetHealth(target, PrimaryAbilityResourceType.MANA);
+            if(hP > 0)
+            {
+                Vector3 pos;
+                IssueOrder(owner, OrderType.Hold, default, owner);
+                pos = GetPointByUnitFacingOffset(owner, 100, 180);
+                FaceDirection(owner, pos);
+                PlayAnimation("Spell4_Idleback", 0, owner, false, false, false);
+            }
+        }
+    }
+}
 namespace Buffs
 {
     public class SkarnerImpale : BBBuffScript
@@ -68,10 +105,7 @@ namespace Buffs
             string flashCheck;
             float damagePerTick;
             float duration;
-            TeamId teamID;
-            Particle motaExplosion; // UNUSED
             float hP;
-            Vector3 pos;
             SpellEffectRemove(this.chainPartID);
             SpellEffectRemove(this.cParticle);
             SpellEffectRemove(this.zParticle);
@@ -117,15 +151,18 @@ namespace Buffs
             duration = GetBuffRemainingDuration(owner, nameof(Buffs.SkarnerImpale));
             if(duration <= 0)
             {
+                TeamId teamID;
+                Particle motaExplosion; // UNUSED
                 ApplyDamage(attacker, owner, damagePerTick, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELL, 1, 0.5f, 0, false, false, attacker);
                 teamID = GetTeamID(attacker);
-                SpellEffectCreate(out motaExplosion, out _, "skarner_ult_tar_03.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, attacker, false, owner, default, default, owner, default, default, true, false, false, false, false);
+                SpellEffectCreate(out motaExplosion, out _, "skarner_ult_tar_03.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, attacker, false, owner, default, default, owner, default, default, true, false, false, false, false);
             }
             RemovePerceptionBubble(this.victimBubble);
             SpellBuffClear(attacker, nameof(Buffs.SkarnerImpaleBuff));
             hP = GetHealth(owner, PrimaryAbilityResourceType.MANA);
             if(hP > 0)
             {
+                Vector3 pos;
                 pos = GetPointByUnitFacingOffset(attacker, 100, 180);
                 FaceDirection(attacker, pos);
                 PlayAnimation("Run", 0, attacker, false, false, false);
@@ -143,7 +180,6 @@ namespace Buffs
             float distance;
             float mS;
             float damageTime; // UNITIALIZED
-            TeamId teamID; // UNUSED
             string flashCheck;
             PauseAnimation(owner, true);
             pos = GetPointByUnitFacingOffset(attacker, -75, 0);
@@ -152,6 +188,7 @@ namespace Buffs
             Move(owner, pos, mS, 0, 0, ForceMovementType.FURTHEST_WITHIN_RANGE, ForceMovementOrdersType.CANCEL_ORDER, 0, ForceMovementOrdersFacing.KEEP_CURRENT_FACING);
             if(ExecutePeriodically(0.5f, ref this.lastTimeExecuted, true, damageTime))
             {
+                TeamId teamID; // UNUSED
                 teamID = GetTeamID(attacker);
                 if(this.numHitsRemaining <= 0)
                 {
@@ -171,43 +208,6 @@ namespace Buffs
             if(flashCheck == nameof(Spells.SummonerFlash))
             {
                 SealSpellSlot(1, SpellSlotType.SpellSlots, attacker, true, SpellbookType.SPELLBOOK_SUMMONER);
-            }
-        }
-    }
-}
-namespace Spells
-{
-    public class SkarnerImpale : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            CastingBreaksStealth = true,
-            DoesntBreakShields = false,
-            TriggersSpellCasts = true,
-            IsDamagingSpell = true,
-            NotSingleTargetSpell = false,
-        };
-        int[] effect0 = {100, 150, 200, 0, 0};
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            float suppressionDuration;
-            AttackableUnit nextBuffVars_Victim;
-            float damagePerTick;
-            float hP;
-            Vector3 pos;
-            suppressionDuration = 1.75f;
-            nextBuffVars_Victim = target;
-            AddBuff(attacker, target, new Buffs.SkarnerImpale(), 1, 1, suppressionDuration, BuffAddType.REPLACE_EXISTING, BuffType.SUPPRESSION, 0, true, false, false);
-            AddBuff((ObjAIBase)target, owner, new Buffs.SkarnerImpaleBuff(), 1, 1, suppressionDuration, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
-            damagePerTick = this.effect0[level];
-            ApplyDamage(attacker, target, damagePerTick, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELL, 1, 0.5f, 0, false, false, attacker);
-            hP = GetHealth(target, PrimaryAbilityResourceType.MANA);
-            if(hP > 0)
-            {
-                IssueOrder(owner, OrderType.Hold, default, owner);
-                pos = GetPointByUnitFacingOffset(owner, 100, 180);
-                FaceDirection(owner, pos);
-                PlayAnimation("Spell4_Idleback", 0, owner, false, false, false);
             }
         }
     }

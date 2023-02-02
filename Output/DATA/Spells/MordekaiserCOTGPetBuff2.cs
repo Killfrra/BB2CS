@@ -27,7 +27,7 @@ namespace Buffs
             float nextBuffVars_PetAP;
             teamID = GetTeamID(attacker);
             SpellEffectCreate(out this.particle, out _, "mordekeiser_cotg_skin.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, false, false, false, false, false);
-            SpellEffectCreate(out this.particle2, out _, "mordekaiser_cotg_ring.troy", default, teamID, 500, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, false, false, false, false, false);
+            SpellEffectCreate(out this.particle2, out _, "mordekaiser_cotg_ring.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 500, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, false, false, false, false, false);
             SpellBuffRemoveType(owner, BuffType.COMBAT_ENCHANCER);
             SpellBuffRemoveType(owner, BuffType.COMBAT_DEHANCER);
             SpellBuffRemoveType(owner, BuffType.STUN);

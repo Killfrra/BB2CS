@@ -11,9 +11,9 @@ namespace Spells
     {
         public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
         {
-            int nextBuffVars_OrbofDeceptionIsActive;
             if(target != attacker)
             {
+                int nextBuffVars_OrbofDeceptionIsActive;
                 nextBuffVars_OrbofDeceptionIsActive = charVars.OrbofDeceptionIsActive;
                 AddBuff(attacker, target, new Buffs.AhriOrbDamageSilence(nextBuffVars_OrbofDeceptionIsActive), 1, 1, 2, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0, true, false, false);
             }

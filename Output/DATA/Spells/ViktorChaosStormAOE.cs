@@ -30,7 +30,7 @@ namespace Buffs
             TeamId ownerTeam;
             caster = SetBuffCasterUnit();
             ownerTeam = GetTeamID(owner);
-            SpellEffectCreate(out this.b, out this.c, "Viktor_ChaosStorm_green.troy", "Viktor_ChaosStorm_red.troy", ownerTeam, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, false, false, false, false);
+            SpellEffectCreate(out this.b, out this.c, "Viktor_ChaosStorm_green.troy", "Viktor_ChaosStorm_red.troy", ownerTeam ?? TeamId.TEAM_NEUTRAL, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, false, false, false, false);
             this.soundClear = true;
             this.cDMOD = GetPercentCooldownMod(attacker);
         }
@@ -79,10 +79,6 @@ namespace Buffs
             float maxSpeed;
             float minSpeed;
             float speedVariation;
-            float offsetValue;
-            float percOverMinDist;
-            float speedToReduce;
-            float adjustedSpeed;
             caster = SetBuffCasterUnit();
             grandDistance = DistanceBetweenObjects("Owner", "Caster");
             minDistanceCheck = 350;
@@ -103,6 +99,10 @@ namespace Buffs
             }
             else
             {
+                float offsetValue;
+                float percOverMinDist;
+                float speedToReduce;
+                float adjustedSpeed;
                 offsetValue = grandDistance - minDistanceCheck;
                 percOverMinDist = offsetValue / distanceVariation;
                 speedToReduce = percOverMinDist * speedVariation;
@@ -120,8 +120,6 @@ namespace Buffs
             float aPPreMod;
             float aPPostMod;
             float finalDamage;
-            Particle hi; // UNUSED
-            float distance;
             caster = SetBuffCasterUnit();
             level = GetSlotSpellLevel(attacker, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             damageAmount = this.effect0[level];
@@ -133,6 +131,7 @@ namespace Buffs
             {
                 foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 350, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
                 {
+                    Particle hi; // UNUSED
                     BreakSpellShields(unit);
                     ApplyDamage(attacker, unit, finalDamage, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0, 0, false, false, attacker);
                     SpellEffectCreate(out this.particleID, out _, "Viktor_ChaosStorm_beam.troy", default, TeamId.TEAM_NEUTRAL, 10, 0, TeamId.TEAM_UNKNOWN, default, unit, false, owner, "head", default, unit, "spine", default, true, false, false, false, false);
@@ -150,6 +149,7 @@ namespace Buffs
             }
             foreach(AttackableUnit unit in GetClosestUnitsInArea(owner, owner.Position, 2500, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, 1, default, true))
             {
+                float distance;
                 distance = DistanceBetweenObjects("Owner", "Unit");
                 if(!this.soundClear)
                 {

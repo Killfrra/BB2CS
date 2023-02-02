@@ -5,6 +5,29 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class BlindMonkETwoMissile : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = true,
+            IsDamagingSpell = true,
+            NotSingleTargetSpell = false,
+            PhysicalDamageRatio = 1f,
+            SpellDamageRatio = 1f,
+        };
+        float[] effect0 = {-0.3f, -0.375f, -0.45f, -0.525f, -0.6f};
+        int[] effect1 = {4, 4, 4, 4, 4};
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            float nextBuffVars_PercentReduction;
+            level = GetSlotSpellLevel(attacker, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
+            nextBuffVars_PercentReduction = this.effect0[level];
+            AddBuff(attacker, target, new Buffs.BlindMonkETwoMissile(nextBuffVars_PercentReduction), 1, 1, this.effect1[level], BuffAddType.REPLACE_EXISTING, BuffType.SLOW, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class BlindMonkETwoMissile : BBBuffScript
@@ -52,29 +75,6 @@ namespace Buffs
             }
             IncPercentMultiplicativeMovementSpeedMod(owner, this.percentReduction);
             IncPercentMultiplicativeAttackSpeedMod(owner, this.percentReduction);
-        }
-    }
-}
-namespace Spells
-{
-    public class BlindMonkETwoMissile : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = true,
-            IsDamagingSpell = true,
-            NotSingleTargetSpell = false,
-            PhysicalDamageRatio = 1f,
-            SpellDamageRatio = 1f,
-        };
-        float[] effect0 = {-0.3f, -0.375f, -0.45f, -0.525f, -0.6f};
-        int[] effect1 = {4, 4, 4, 4, 4};
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            float nextBuffVars_PercentReduction;
-            level = GetSlotSpellLevel(attacker, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
-            nextBuffVars_PercentReduction = this.effect0[level];
-            AddBuff(attacker, target, new Buffs.BlindMonkETwoMissile(nextBuffVars_PercentReduction), 1, 1, this.effect1[level], BuffAddType.REPLACE_EXISTING, BuffType.SLOW, 0, true, false, false);
         }
     }
 }

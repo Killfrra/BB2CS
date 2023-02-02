@@ -5,31 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class ShenShadowStep : BBBuffScript
-    {
-        bool hasDealtDamage;
-        public override void OnActivate()
-        {
-            this.hasDealtDamage = false;
-        }
-        public override void OnUpdateActions()
-        {
-            float distance;
-            if(!this.hasDealtDamage)
-            {
-                distance = DistanceBetweenObjects("Owner", "Attacker");
-                if(distance <= 500)
-                {
-                    this.hasDealtDamage = true;
-                    SpellCast((ObjAIBase)owner, attacker, attacker.Position, attacker.Position, 0, SpellSlotType.ExtraSlots, 1, true, false, false);
-                    SpellBuffRemoveCurrent(owner);
-                }
-            }
-        }
-    }
-}
 namespace Spells
 {
     public class ShenShadowStep : BBSpellScript
@@ -83,6 +58,31 @@ namespace Spells
                 speedVar = 900;
             }
             Move(attacker, target.Position, speedVar, gravityVar, 100, ForceMovementType.FURTHEST_WITHIN_RANGE);
+        }
+    }
+}
+namespace Buffs
+{
+    public class ShenShadowStep : BBBuffScript
+    {
+        bool hasDealtDamage;
+        public override void OnActivate()
+        {
+            this.hasDealtDamage = false;
+        }
+        public override void OnUpdateActions()
+        {
+            if(!this.hasDealtDamage)
+            {
+                float distance;
+                distance = DistanceBetweenObjects("Owner", "Attacker");
+                if(distance <= 500)
+                {
+                    this.hasDealtDamage = true;
+                    SpellCast((ObjAIBase)owner, attacker, attacker.Position, attacker.Position, 0, SpellSlotType.ExtraSlots, 1, true, false, false);
+                    SpellBuffRemoveCurrent(owner);
+                }
+            }
         }
     }
 }

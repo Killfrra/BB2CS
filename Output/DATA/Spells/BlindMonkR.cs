@@ -34,16 +34,16 @@ namespace Spells
         }
         public override void SelfExecute()
         {
-            Vector3 targetPos;
-            TeamId teamID;
-            Minion other2;
-            Vector3 teleportPos;
-            Vector3 ownerPos;
             foreach(AttackableUnit unit in GetClosestUnitsInArea(owner, owner.Position, 400, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectHeroes, 1, nameof(Buffs.BlindMonkRMarker), true))
             {
+                Vector3 targetPos;
+                TeamId teamID;
+                Minion other2;
+                Vector3 teleportPos;
+                Vector3 ownerPos;
                 targetPos = GetCastSpellTargetPos();
                 teamID = GetTeamID(owner);
-                other2 = SpawnMinion("TestMinion", "TestCubeRender", "idle.lua", targetPos, teamID, false, true, false, false, false, true, 0, default, true);
+                other2 = SpawnMinion("TestMinion", "TestCubeRender", "idle.lua", targetPos, teamID ?? TeamId.TEAM_UNKNOWN, false, true, false, false, false, true, 0, default, true);
                 AddBuff(other2, other2, new Buffs.BlindMonkRNewMinion(), 1, 1, 2, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
                 FaceDirection(unit, targetPos);
                 teleportPos = GetPointByUnitFacingOffset(unit, 100, 180);

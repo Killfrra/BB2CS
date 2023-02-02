@@ -5,6 +5,24 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class UndyingRage : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            AutoCooldownByLevel = new[]{ 110f, 100f, 90f, },
+            TriggersSpellCasts = true,
+            NotSingleTargetSpell = true,
+        };
+        int[] effect0 = {50, 75, 100};
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            AddBuff(attacker, target, new Buffs.UndyingRage(), 1, 1, 5, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+            IncPAR(owner, this.effect0[level], PrimaryAbilityResourceType.Other);
+        }
+    }
+}
 namespace Buffs
 {
     public class UndyingRage : BBBuffScript
@@ -31,13 +49,13 @@ namespace Buffs
         public override void OnDeactivate(bool expired)
         {
             float healthPercent;
-            float health;
-            float maxHealth;
-            float healthFactor;
-            float healthToInc;
             healthPercent = GetHealthPercent(owner, PrimaryAbilityResourceType.MANA);
             if(healthPercent <= 0.03f)
             {
+                float health;
+                float maxHealth;
+                float healthFactor;
+                float healthToInc;
                 health = GetHealth(owner, PrimaryAbilityResourceType.MANA);
                 maxHealth = GetMaxHealth(owner, PrimaryAbilityResourceType.MANA);
                 healthFactor = maxHealth * 0.03f;
@@ -57,24 +75,6 @@ namespace Buffs
                 damageAmount = curHealth - 1;
                 Say(owner, "game_lua_UndyingRage");
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class UndyingRage : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            AutoCooldownByLevel = new[]{ 110f, 100f, 90f, },
-            TriggersSpellCasts = true,
-            NotSingleTargetSpell = true,
-        };
-        int[] effect0 = {50, 75, 100};
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            AddBuff(attacker, target, new Buffs.UndyingRage(), 1, 1, 5, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
-            IncPAR(owner, this.effect0[level], PrimaryAbilityResourceType.Other);
         }
     }
 }

@@ -26,7 +26,6 @@ namespace Buffs
         }
         public override void OnUpdateStats()
         {
-            float dist;
             IncFlatSpellBlockMod(owner, this.magicResistanceMod);
             if(attacker.IsDead)
             {
@@ -34,6 +33,7 @@ namespace Buffs
             }
             else
             {
+                float dist;
                 dist = DistanceBetweenObjects("Attacker", "Owner");
                 if(dist >= 1000)
                 {

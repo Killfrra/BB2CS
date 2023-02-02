@@ -21,12 +21,12 @@ namespace Buffs
         Particle particle1;
         public override void OnActivate()
         {
-            TeamId teamID;
             this.particleAlive = false;
             if(!owner.IsDead)
             {
+                TeamId teamID;
                 teamID = GetTeamID(owner);
-                SpellEffectCreate(out this.particle1, out _, "Ahri_Passive.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "BUFFBONE_GLB_WEAPON_1", default, owner, default, default, false, false, false, false, false);
+                SpellEffectCreate(out this.particle1, out _, "Ahri_Passive.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "BUFFBONE_GLB_WEAPON_1", default, owner, default, default, false, false, false, false, false);
                 this.particleAlive = true;
             }
         }

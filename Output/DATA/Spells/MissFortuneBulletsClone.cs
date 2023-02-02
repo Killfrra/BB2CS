@@ -23,23 +23,23 @@ namespace Spells
         public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
         {
             int count;
-            int count1;
-            TeamId teamID;
-            float baseDamage;
-            float totalDamage;
-            float baseAtkDmg;
-            float bonusDamage;
-            float aPPreMod;
-            float aPPostMod;
-            float aDAPBonus;
-            float finalDamage;
-            Particle asdf; // UNUSED
             count = GetBuffCountFromAll(target, nameof(Buffs.MissfortuneBulletHolder));
             if(count <= 7)
             {
+                int count1;
                 count1 = GetBuffCountFromAll(target, nameof(Buffs.MissFortunePlaceholder));
                 if(count1 < 1)
                 {
+                    TeamId teamID;
+                    float baseDamage;
+                    float totalDamage;
+                    float baseAtkDmg;
+                    float bonusDamage;
+                    float aPPreMod;
+                    float aPPostMod;
+                    float aDAPBonus;
+                    float finalDamage;
+                    Particle asdf; // UNUSED
                     teamID = GetTeamID(owner);
                     AddBuff(attacker, target, new Buffs.MissFortunePlaceholder(), 2, 1, 0.05f, BuffAddType.STACKS_AND_RENEWS, BuffType.INTERNAL, 0, true, false, false);
                     AddBuff(attacker, target, new Buffs.MissfortuneBulletHolder(), 9, 1, 6, BuffAddType.STACKS_AND_RENEWS, BuffType.INTERNAL, 0, true, false, false);
@@ -53,7 +53,7 @@ namespace Spells
                     aDAPBonus = bonusDamage + aPPostMod;
                     finalDamage = baseDamage + aDAPBonus;
                     ApplyDamage((ObjAIBase)owner, target, finalDamage, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0, 1, false, false, attacker);
-                    SpellEffectCreate(out asdf, out _, "missFortune_bulletTime_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, false, false, false, false);
+                    SpellEffectCreate(out asdf, out _, "missFortune_bulletTime_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, false, false, false, false);
                 }
             }
         }

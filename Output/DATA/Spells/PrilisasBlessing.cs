@@ -5,16 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class PrilisasBlessing : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            PersistsThroughDeath = true,
-        };
-    }
-}
 namespace Spells
 {
     public class PrilisasBlessing : BBSpellScript
@@ -68,5 +58,15 @@ namespace Spells
                 SetSlotSpellCooldownTimeVer2(60, 5, SpellSlotType.InventorySlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner, false);
             }
         }
+    }
+}
+namespace Buffs
+{
+    public class PrilisasBlessing : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            PersistsThroughDeath = true,
+        };
     }
 }

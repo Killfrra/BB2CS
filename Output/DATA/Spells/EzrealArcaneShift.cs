@@ -29,8 +29,6 @@ namespace Spells
             Particle ar1; // UNUSED
             TeamId casterID;
             bool fired;
-            bool isStealthed;
-            bool canSee;
             ownerSkinID = GetSkinID(owner);
             castPos = GetCastSpellTargetPos();
             ownerPos = GetUnitPosition(owner);
@@ -75,6 +73,8 @@ namespace Spells
             {
                 if(!fired)
                 {
+                    bool isStealthed;
+                    bool canSee;
                     isStealthed = GetStealthed(unit);
                     canSee = CanSeeTarget(owner, unit);
                     if(!isStealthed)

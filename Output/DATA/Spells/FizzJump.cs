@@ -5,99 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class FizzJump : BBBuffScript
-    {
-        Particle a; // UNUSED
-        Fade temp;
-        int[] effect0 = {16, 14, 12, 10, 8};
-        public override void OnActivate()
-        {
-            TeamId teamID;
-            teamID = GetTeamID(owner);
-            //RequireVar(this.damage);
-            SpellEffectCreate(out this.a, out _, "Fizz_Jump_cas.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "root", default, owner, default, default, true, false, false, false, false);
-            SpellEffectCreate(out this.a, out _, "Fizz_Jump_WeaponGlow.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "BUFFBONE_CSTM_WEAPON_1", default, owner, default, default, true, false, false, false, false);
-            DestroyMissileForTarget(owner);
-            SetGhosted(owner, true);
-            SetTargetable(owner, false);
-            SetCanAttack(owner, false);
-            SetCallForHelpSuppresser(owner, true);
-            SetCanMove(owner, false);
-            SetCanAttack(owner, false);
-            DestroyMissileForTarget(owner);
-            SealSpellSlot(0, SpellSlotType.SpellSlots, (ObjAIBase)owner, true, SpellbookType.SPELLBOOK_CHAMPION);
-            SealSpellSlot(3, SpellSlotType.SpellSlots, (ObjAIBase)owner, true, SpellbookType.SPELLBOOK_CHAMPION);
-            this.temp = PushCharacterFade(owner, 0.7f, 0.05f);
-        }
-        public override void OnDeactivate(bool expired)
-        {
-            if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.FizzJumpTwo)) == 0)
-            {
-                AddBuff((ObjAIBase)owner, owner, new Buffs.FizzJumpDelay(), 1, 1, 0.2f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
-                SealSpellSlot(0, SpellSlotType.SpellSlots, (ObjAIBase)owner, false, SpellbookType.SPELLBOOK_CHAMPION);
-            }
-            PopCharacterFade(owner, this.temp);
-        }
-        public override void OnMoveEnd()
-        {
-            SpellBuffClear(owner, nameof(Buffs.FizzJump));
-            SpellBuffClear(owner, nameof(Buffs.FizzJumpBuffer));
-            SpellBuffClear(owner, nameof(Buffs.FizzJumpBuffered));
-        }
-        public override void OnMoveSuccess()
-        {
-            TeamId teamID;
-            Particle temp; // UNUSED
-            int level;
-            Vector3 targetPos;
-            teamID = GetTeamID(owner);
-            DestroyMissileForTarget(owner);
-            SpellEffectCreate(out temp, out _, "fizz_playfultrickster_idle_sound.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "root", owner.Position, owner, default, default, true, false, false, false, false);
-            if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.FizzJumpBuffered)) > 0)
-            {
-                UnlockAnimation(owner, true);
-                SealSpellSlot(0, SpellSlotType.SpellSlots, (ObjAIBase)owner, false, SpellbookType.SPELLBOOK_CHAMPION);
-                StopMove(owner);
-                StopMoveBlock(owner);
-                SpellBuffClear(owner, nameof(Buffs.FizzJumpBuffer));
-                level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
-                targetPos = charVars.JumpBuffer;
-                AddBuff((ObjAIBase)owner, owner, new Buffs.FizzJumpBuffered(), 1, 1, 0.01f, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0, true, false, false);
-                SpellCast((ObjAIBase)owner, default, targetPos, targetPos, 3, SpellSlotType.ExtraSlots, level, false, true, false, false, false, false);
-            }
-        }
-        public override void OnMoveFailure()
-        {
-            float cDReduction;
-            int level;
-            float baseCD;
-            float lowerCD;
-            float newCD;
-            SpellBuffClear(owner, nameof(Buffs.FizzJumpBuffer));
-            SpellBuffClear(owner, nameof(Buffs.FizzJumpBuffered));
-            SetSpell((ObjAIBase)owner, 2, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, nameof(Spells.FizzJump));
-            cDReduction = GetPercentCooldownMod(owner);
-            level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
-            baseCD = this.effect0[level];
-            lowerCD = baseCD * cDReduction;
-            newCD = baseCD + lowerCD;
-            SetSlotSpellCooldownTimeVer2(newCD, 2, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner, false);
-            SetTargetable(owner, true);
-            SetGhosted(owner, false);
-            SetCanAttack(owner, true);
-            SetCanAttack(owner, true);
-            SetCanMove(owner, true);
-            SetSilenced(owner, false);
-            SetForceRenderParticles(owner, false);
-            SetCallForHelpSuppresser(owner, false);
-            SetInvulnerable(owner, false);
-            SealSpellSlot(3, SpellSlotType.SpellSlots, (ObjAIBase)owner, false, SpellbookType.SPELLBOOK_CHAMPION);
-            UnlockAnimation(owner, true);
-        }
-    }
-}
 namespace Spells
 {
     public class FizzJump : BBSpellScript
@@ -134,7 +41,7 @@ namespace Spells
             float distance;
             float gravityVar;
             float speedVar;
-            int nextBuffVars_Damage;
+            int nextBuffVars_Damage; // UNUSED
             targetPos = GetCastSpellTargetPos();
             ownerPos = GetUnitPosition(owner);
             distance = DistanceBetweenPoints(ownerPos, targetPos);
@@ -180,6 +87,99 @@ namespace Spells
             nextBuffVars_Damage = this.effect0[level];
             AddBuff(attacker, attacker, new Buffs.FizzJump(), 1, 1, 2, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
             AddBuff((ObjAIBase)owner, owner, new Buffs.FizzJumpBuffer(), 1, 1, 1, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+        }
+    }
+}
+namespace Buffs
+{
+    public class FizzJump : BBBuffScript
+    {
+        Particle a; // UNUSED
+        Fade temp;
+        int[] effect0 = {16, 14, 12, 10, 8};
+        public override void OnActivate()
+        {
+            TeamId teamID;
+            teamID = GetTeamID(owner);
+            //RequireVar(this.damage);
+            SpellEffectCreate(out this.a, out _, "Fizz_Jump_cas.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "root", default, owner, default, default, true, false, false, false, false);
+            SpellEffectCreate(out this.a, out _, "Fizz_Jump_WeaponGlow.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "BUFFBONE_CSTM_WEAPON_1", default, owner, default, default, true, false, false, false, false);
+            DestroyMissileForTarget(owner);
+            SetGhosted(owner, true);
+            SetTargetable(owner, false);
+            SetCanAttack(owner, false);
+            SetCallForHelpSuppresser(owner, true);
+            SetCanMove(owner, false);
+            SetCanAttack(owner, false);
+            DestroyMissileForTarget(owner);
+            SealSpellSlot(0, SpellSlotType.SpellSlots, (ObjAIBase)owner, true, SpellbookType.SPELLBOOK_CHAMPION);
+            SealSpellSlot(3, SpellSlotType.SpellSlots, (ObjAIBase)owner, true, SpellbookType.SPELLBOOK_CHAMPION);
+            this.temp = PushCharacterFade(owner, 0.7f, 0.05f);
+        }
+        public override void OnDeactivate(bool expired)
+        {
+            if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.FizzJumpTwo)) == 0)
+            {
+                AddBuff((ObjAIBase)owner, owner, new Buffs.FizzJumpDelay(), 1, 1, 0.2f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+                SealSpellSlot(0, SpellSlotType.SpellSlots, (ObjAIBase)owner, false, SpellbookType.SPELLBOOK_CHAMPION);
+            }
+            PopCharacterFade(owner, this.temp);
+        }
+        public override void OnMoveEnd()
+        {
+            SpellBuffClear(owner, nameof(Buffs.FizzJump));
+            SpellBuffClear(owner, nameof(Buffs.FizzJumpBuffer));
+            SpellBuffClear(owner, nameof(Buffs.FizzJumpBuffered));
+        }
+        public override void OnMoveSuccess()
+        {
+            TeamId teamID;
+            Particle temp; // UNUSED
+            teamID = GetTeamID(owner);
+            DestroyMissileForTarget(owner);
+            SpellEffectCreate(out temp, out _, "fizz_playfultrickster_idle_sound.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "root", owner.Position, owner, default, default, true, false, false, false, false);
+            if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.FizzJumpBuffered)) > 0)
+            {
+                int level;
+                Vector3 targetPos;
+                UnlockAnimation(owner, true);
+                SealSpellSlot(0, SpellSlotType.SpellSlots, (ObjAIBase)owner, false, SpellbookType.SPELLBOOK_CHAMPION);
+                StopMove(owner);
+                StopMoveBlock(owner);
+                SpellBuffClear(owner, nameof(Buffs.FizzJumpBuffer));
+                level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
+                targetPos = charVars.JumpBuffer;
+                AddBuff((ObjAIBase)owner, owner, new Buffs.FizzJumpBuffered(), 1, 1, 0.01f, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+                SpellCast((ObjAIBase)owner, default, targetPos, targetPos, 3, SpellSlotType.ExtraSlots, level, false, true, false, false, false, false);
+            }
+        }
+        public override void OnMoveFailure()
+        {
+            float cDReduction;
+            int level;
+            float baseCD;
+            float lowerCD;
+            float newCD;
+            SpellBuffClear(owner, nameof(Buffs.FizzJumpBuffer));
+            SpellBuffClear(owner, nameof(Buffs.FizzJumpBuffered));
+            SetSpell((ObjAIBase)owner, 2, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, nameof(Spells.FizzJump));
+            cDReduction = GetPercentCooldownMod(owner);
+            level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
+            baseCD = this.effect0[level];
+            lowerCD = baseCD * cDReduction;
+            newCD = baseCD + lowerCD;
+            SetSlotSpellCooldownTimeVer2(newCD, 2, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner, false);
+            SetTargetable(owner, true);
+            SetGhosted(owner, false);
+            SetCanAttack(owner, true);
+            SetCanAttack(owner, true);
+            SetCanMove(owner, true);
+            SetSilenced(owner, false);
+            SetForceRenderParticles(owner, false);
+            SetCallForHelpSuppresser(owner, false);
+            SetInvulnerable(owner, false);
+            SealSpellSlot(3, SpellSlotType.SpellSlots, (ObjAIBase)owner, false, SpellbookType.SPELLBOOK_CHAMPION);
+            UnlockAnimation(owner, true);
         }
     }
 }

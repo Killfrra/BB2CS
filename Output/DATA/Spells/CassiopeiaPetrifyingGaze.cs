@@ -5,6 +5,28 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class CassiopeiaPetrifyingGaze : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            CastingBreaksStealth = true,
+            DoesntBreakShields = true,
+            TriggersSpellCasts = true,
+            IsDamagingSpell = true,
+            NotSingleTargetSpell = true,
+            PhysicalDamageRatio = 1f,
+            SpellDamageRatio = 1f,
+        };
+        public override void SelfExecute()
+        {
+            Vector3 targetPos;
+            targetPos = GetCastSpellTargetPos();
+            SpellCast((ObjAIBase)owner, default, targetPos, targetPos, 0, SpellSlotType.ExtraSlots, level, false, true, false, false, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class CassiopeiaPetrifyingGaze : BBBuffScript
@@ -37,28 +59,6 @@ namespace Buffs
         public override void OnUpdateStats()
         {
             SetStunned(owner, true);
-        }
-    }
-}
-namespace Spells
-{
-    public class CassiopeiaPetrifyingGaze : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            CastingBreaksStealth = true,
-            DoesntBreakShields = true,
-            TriggersSpellCasts = true,
-            IsDamagingSpell = true,
-            NotSingleTargetSpell = true,
-            PhysicalDamageRatio = 1f,
-            SpellDamageRatio = 1f,
-        };
-        public override void SelfExecute()
-        {
-            Vector3 targetPos;
-            targetPos = GetCastSpellTargetPos();
-            SpellCast((ObjAIBase)owner, default, targetPos, targetPos, 0, SpellSlotType.ExtraSlots, level, false, true, false, false, false, false);
         }
     }
 }

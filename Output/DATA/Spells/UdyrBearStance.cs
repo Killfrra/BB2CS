@@ -5,35 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class UdyrBearStance : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateAttachBoneName = new[]{ "R_hand", "L_hand", },
-            AutoBuffActivateEffect = new[]{ "Global_DmgHands_buf.troy", "Global_DmgHands_buf.troy", },
-            BuffName = "UdyrBearStance",
-            BuffTextureName = "Udyr_BearStance.dds",
-            PersistsThroughDeath = true,
-            SpellToggleSlot = 3,
-        };
-        int casterID; // UNUSED
-        public override void OnActivate()
-        {
-            this.casterID = PushCharacterData("Udyr", owner, false);
-            OverrideAutoAttack(3, SpellSlotType.ExtraSlots, owner, 1, true);
-            OverrideAnimation("Run", "Run2", owner);
-            OverrideAnimation("Idle1", "Idle2", owner);
-        }
-        public override void OnDeactivate(bool expired)
-        {
-            RemoveOverrideAutoAttack(owner, true);
-            ClearOverrideAnimation("Run", owner);
-            ClearOverrideAnimation("Idle1", owner);
-        }
-    }
-}
 namespace Spells
 {
     public class UdyrBearStance : BBSpellScript
@@ -83,6 +54,35 @@ namespace Spells
             }
             AddBuff((ObjAIBase)owner, owner, new Buffs.UdyrBearStance(), 1, 1, 25000, BuffAddType.RENEW_EXISTING, BuffType.AURA, 0, true, false);
             AddBuff((ObjAIBase)owner, owner, new Buffs.UdyrBearActivation(), 1, 1, this.effect0[level], BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false);
+        }
+    }
+}
+namespace Buffs
+{
+    public class UdyrBearStance : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateAttachBoneName = new[]{ "R_hand", "L_hand", },
+            AutoBuffActivateEffect = new[]{ "Global_DmgHands_buf.troy", "Global_DmgHands_buf.troy", },
+            BuffName = "UdyrBearStance",
+            BuffTextureName = "Udyr_BearStance.dds",
+            PersistsThroughDeath = true,
+            SpellToggleSlot = 3,
+        };
+        int casterID; // UNUSED
+        public override void OnActivate()
+        {
+            this.casterID = PushCharacterData("Udyr", owner, false);
+            OverrideAutoAttack(3, SpellSlotType.ExtraSlots, owner, 1, true);
+            OverrideAnimation("Run", "Run2", owner);
+            OverrideAnimation("Idle1", "Idle2", owner);
+        }
+        public override void OnDeactivate(bool expired)
+        {
+            RemoveOverrideAutoAttack(owner, true);
+            ClearOverrideAnimation("Run", owner);
+            ClearOverrideAnimation("Idle1", owner);
         }
     }
 }

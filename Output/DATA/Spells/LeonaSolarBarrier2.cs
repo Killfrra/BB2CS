@@ -30,7 +30,7 @@ namespace Buffs
             //RequireVar(this.defenseBonus);
             IncFlatArmorMod(owner, this.defenseBonus);
             IncFlatSpellBlockMod(owner, this.defenseBonus);
-            SpellEffectCreate(out this.particle, out _, "Leona_SolarBarrier2_buf.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, default, default, false, false);
+            SpellEffectCreate(out this.particle, out _, "Leona_SolarBarrier2_buf.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, default, default, false, false);
             OverrideAnimation("Idle1", "Spell2_idle", owner);
             OverrideAnimation("Idle2", "Spell2_idle", owner);
             OverrideAnimation("Idle3", "Spell2_idle", owner);

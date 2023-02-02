@@ -39,40 +39,40 @@ namespace Buffs
             rumbleSkinID = GetSkinID(attacker);
             if(teamOfOwner == TeamId.TEAM_BLUE)
             {
-                SpellEffectCreate(out this.particle, out _, "rumble_ult_impact.troy", default, teamOfOwner, 10, 0, TeamId.TEAM_UNKNOWN, default, default, true, default, default, missilePosition, target, default, default, true, default, default, false, false);
+                SpellEffectCreate(out this.particle, out _, "rumble_ult_impact.troy", default, teamOfOwner ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, default, true, default, default, missilePosition, target, default, default, true, default, default, false, false);
                 if(rumbleSkinID == 2)
                 {
-                    SpellEffectCreate(out this.particle2, out _, "rumble_ult_impact_burn_cannon_ball_team_ID_green.troy", default, teamOfOwner, 10, 0, TeamId.TEAM_BLUE, default, default, true, default, default, missilePosition, target, default, default, false, default, default, false, false);
-                    SpellEffectCreate(out this.particle3, out _, "rumble_ult_impact_burn_cannon_ball_team_ID_red.troy", default, teamOfOwner, 10, 0, TeamId.TEAM_PURPLE, default, default, true, default, default, missilePosition, target, default, default, false, default, default, false, false);
+                    SpellEffectCreate(out this.particle2, out _, "rumble_ult_impact_burn_cannon_ball_team_ID_green.troy", default, teamOfOwner ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_BLUE, default, default, true, default, default, missilePosition, target, default, default, false, default, default, false, false);
+                    SpellEffectCreate(out this.particle3, out _, "rumble_ult_impact_burn_cannon_ball_team_ID_red.troy", default, teamOfOwner ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_PURPLE, default, default, true, default, default, missilePosition, target, default, default, false, default, default, false, false);
                 }
                 else if(rumbleSkinID == 1)
                 {
-                    SpellEffectCreate(out this.particle2, out _, "rumble_ult_impact_burn_pineapple_team_ID_green.troy", default, teamOfOwner, 10, 0, TeamId.TEAM_BLUE, default, default, true, default, default, missilePosition, target, default, default, false, default, default, false, false);
-                    SpellEffectCreate(out this.particle3, out _, "rumble_ult_impact_burn_pineapple_team_ID_red.troy", default, teamOfOwner, 10, 0, TeamId.TEAM_PURPLE, default, default, true, default, default, missilePosition, target, default, default, false, default, default, false, false);
+                    SpellEffectCreate(out this.particle2, out _, "rumble_ult_impact_burn_pineapple_team_ID_green.troy", default, teamOfOwner ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_BLUE, default, default, true, default, default, missilePosition, target, default, default, false, default, default, false, false);
+                    SpellEffectCreate(out this.particle3, out _, "rumble_ult_impact_burn_pineapple_team_ID_red.troy", default, teamOfOwner ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_PURPLE, default, default, true, default, default, missilePosition, target, default, default, false, default, default, false, false);
                 }
                 else
                 {
-                    SpellEffectCreate(out this.particle2, out _, "rumble_ult_impact_burn_teamID_green.troy", default, teamOfOwner, 10, 0, TeamId.TEAM_BLUE, default, default, true, default, default, missilePosition, target, default, default, false, default, default, false, false);
-                    SpellEffectCreate(out this.particle3, out _, "rumble_ult_impact_burn_teamID_red.troy", default, teamOfOwner, 10, 0, TeamId.TEAM_PURPLE, default, default, true, default, default, missilePosition, target, default, default, false, default, default, false, false);
+                    SpellEffectCreate(out this.particle2, out _, "rumble_ult_impact_burn_teamID_green.troy", default, teamOfOwner ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_BLUE, default, default, true, default, default, missilePosition, target, default, default, false, default, default, false, false);
+                    SpellEffectCreate(out this.particle3, out _, "rumble_ult_impact_burn_teamID_red.troy", default, teamOfOwner ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_PURPLE, default, default, true, default, default, missilePosition, target, default, default, false, default, default, false, false);
                 }
             }
             else
             {
-                SpellEffectCreate(out this.particle, out _, "rumble_ult_impact.troy", default, teamOfOwner, 10, 0, TeamId.TEAM_UNKNOWN, default, default, true, default, default, missilePosition, target, default, default, true, default, default, false, false);
+                SpellEffectCreate(out this.particle, out _, "rumble_ult_impact.troy", default, teamOfOwner ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, default, true, default, default, missilePosition, target, default, default, true, default, default, false, false);
                 if(rumbleSkinID == 2)
                 {
-                    SpellEffectCreate(out this.particle2, out _, "rumble_ult_impact_burn_cannon_ball_team_ID_red.troy", default, teamOfOwner, 10, 0, TeamId.TEAM_BLUE, default, default, true, default, default, missilePosition, target, default, default, false, default, default, false, false);
-                    SpellEffectCreate(out this.particle3, out _, "rumble_ult_impact_burn_cannon_ball_team_ID_green.troy", default, teamOfOwner, 10, 0, TeamId.TEAM_PURPLE, default, default, true, default, default, missilePosition, target, default, default, false, default, default, false, false);
+                    SpellEffectCreate(out this.particle2, out _, "rumble_ult_impact_burn_cannon_ball_team_ID_red.troy", default, teamOfOwner ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_BLUE, default, default, true, default, default, missilePosition, target, default, default, false, default, default, false, false);
+                    SpellEffectCreate(out this.particle3, out _, "rumble_ult_impact_burn_cannon_ball_team_ID_green.troy", default, teamOfOwner ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_PURPLE, default, default, true, default, default, missilePosition, target, default, default, false, default, default, false, false);
                 }
                 else if(rumbleSkinID == 1)
                 {
-                    SpellEffectCreate(out this.particle2, out _, "rumble_ult_impact_burn_pineapple_team_ID_red.troy", default, teamOfOwner, 10, 0, TeamId.TEAM_BLUE, default, default, true, default, default, missilePosition, target, default, default, false, default, default, false, false);
-                    SpellEffectCreate(out this.particle3, out _, "rumble_ult_impact_burn_pineapple_team_ID_green.troy", default, teamOfOwner, 10, 0, TeamId.TEAM_PURPLE, default, default, true, default, default, missilePosition, target, default, default, false, default, default, false, false);
+                    SpellEffectCreate(out this.particle2, out _, "rumble_ult_impact_burn_pineapple_team_ID_red.troy", default, teamOfOwner ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_BLUE, default, default, true, default, default, missilePosition, target, default, default, false, default, default, false, false);
+                    SpellEffectCreate(out this.particle3, out _, "rumble_ult_impact_burn_pineapple_team_ID_green.troy", default, teamOfOwner ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_PURPLE, default, default, true, default, default, missilePosition, target, default, default, false, default, default, false, false);
                 }
                 else
                 {
-                    SpellEffectCreate(out this.particle2, out _, "rumble_ult_impact_burn_teamID_red.troy", default, teamOfOwner, 10, 0, TeamId.TEAM_BLUE, default, default, true, default, default, missilePosition, target, default, default, false, default, default, false, false);
-                    SpellEffectCreate(out this.particle3, out _, "rumble_ult_impact_burn_teamID_green.troy", default, teamOfOwner, 10, 0, TeamId.TEAM_PURPLE, default, default, true, default, default, missilePosition, target, default, default, false, default, default, false, false);
+                    SpellEffectCreate(out this.particle2, out _, "rumble_ult_impact_burn_teamID_red.troy", default, teamOfOwner ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_BLUE, default, default, true, default, default, missilePosition, target, default, default, false, default, default, false, false);
+                    SpellEffectCreate(out this.particle3, out _, "rumble_ult_impact_burn_teamID_green.troy", default, teamOfOwner ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_PURPLE, default, default, true, default, default, missilePosition, target, default, default, false, default, default, false, false);
                 }
             }
         }
@@ -84,13 +84,13 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            Vector3 missilePosition;
-            TeamId teamOfOwner;
             if(ExecutePeriodically(0.5f, ref this.lastTimeExecuted, true))
             {
+                Vector3 missilePosition;
                 missilePosition = this.missilePosition;
                 foreach(AttackableUnit unit in GetUnitsInArea(attacker, missilePosition, 205, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
                 {
+                    TeamId teamOfOwner;
                     AddBuff(attacker, unit, new Buffs.RumbleCarpetBombSlow(), 1, 1, 1, BuffAddType.RENEW_EXISTING, BuffType.SLOW, 0, true, false, false);
                     teamOfOwner = GetTeamID(attacker);
                     if(teamOfOwner == TeamId.TEAM_BLUE)

@@ -5,6 +5,35 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class Rupture : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            DoesntBreakShields = true,
+            TriggersSpellCasts = true,
+            IsDamagingSpell = true,
+            NotSingleTargetSpell = true,
+        };
+        int[] effect0 = {80, 135, 190, 245, 305};
+        float[] effect1 = {-0.6f, -0.6f, -0.6f, -0.6f, -0.6f};
+        public override void SelfExecute()
+        {
+            Vector3 targetPos;
+            TeamId teamOfOwner;
+            Minion other3;
+            float nextBuffVars_DamageAmount;
+            float nextBuffVars_MoveSpeedMod;
+            targetPos = GetCastSpellTargetPos();
+            teamOfOwner = GetTeamID(owner);
+            other3 = SpawnMinion("HiddenMinion", "TestCube", "idle.lua", targetPos, teamOfOwner ?? TeamId.TEAM_CASTER, false, true, false, true, true, true, 0, false, true, (Champion)owner);
+            nextBuffVars_DamageAmount = this.effect0[level];
+            nextBuffVars_MoveSpeedMod = this.effect1[level];
+            AddBuff(attacker, other3, new Buffs.Rupture(nextBuffVars_DamageAmount, nextBuffVars_MoveSpeedMod), 1, 1, 0.75f, BuffAddType.REPLACE_EXISTING, BuffType.DAMAGE, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class Rupture : BBBuffScript
@@ -82,35 +111,6 @@ namespace Buffs
             }
             SetTargetable(owner, true);
             ApplyDamage((ObjAIBase)owner, owner, 1000, DamageType.DAMAGE_TYPE_TRUE, DamageSource.DAMAGE_SOURCE_INTERNALRAW, 1, 1, 1, false, false, attacker);
-        }
-    }
-}
-namespace Spells
-{
-    public class Rupture : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            DoesntBreakShields = true,
-            TriggersSpellCasts = true,
-            IsDamagingSpell = true,
-            NotSingleTargetSpell = true,
-        };
-        int[] effect0 = {80, 135, 190, 245, 305};
-        float[] effect1 = {-0.6f, -0.6f, -0.6f, -0.6f, -0.6f};
-        public override void SelfExecute()
-        {
-            Vector3 targetPos;
-            TeamId teamOfOwner;
-            Minion other3;
-            float nextBuffVars_DamageAmount;
-            float nextBuffVars_MoveSpeedMod;
-            targetPos = GetCastSpellTargetPos();
-            teamOfOwner = GetTeamID(owner);
-            other3 = SpawnMinion("HiddenMinion", "TestCube", "idle.lua", targetPos, teamOfOwner, false, true, false, true, true, true, 0, false, true, (Champion)owner);
-            nextBuffVars_DamageAmount = this.effect0[level];
-            nextBuffVars_MoveSpeedMod = this.effect1[level];
-            AddBuff(attacker, other3, new Buffs.Rupture(nextBuffVars_DamageAmount, nextBuffVars_MoveSpeedMod), 1, 1, 0.75f, BuffAddType.REPLACE_EXISTING, BuffType.DAMAGE, 0, true, false, false);
         }
     }
 }

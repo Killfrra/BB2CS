@@ -5,54 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class OdinEntropicClaymore : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            BuffName = "OdinEntropicClaymore",
-            BuffTextureName = "3184_FrozenWarhammer.dds",
-        };
-        Particle buffParticle;
-        public override void OnActivate()
-        {
-            SpellEffectCreate(out this.buffParticle, out _, "NeutralMonster_buf_red_offense.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false, false, false, false, false);
-        }
-        public override void OnDeactivate(bool expired)
-        {
-            SpellEffectRemove(this.buffParticle);
-        }
-        public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
-        {
-            float nextBuffVars_TickDamage;
-            float nextBuffVars_attackSpeedMod;
-            if(hitResult != HitResult.HIT_Dodge)
-            {
-                if(hitResult != HitResult.HIT_Miss)
-                {
-                    if(owner is Champion)
-                    {
-                        if(target is ObjAIBase)
-                        {
-                            if(target is BaseTurret)
-                            {
-                            }
-                            else
-                            {
-                                nextBuffVars_TickDamage = 40;
-                                nextBuffVars_attackSpeedMod = 0;
-                                AddBuff(attacker, target, new Buffs.EntropyBurning(nextBuffVars_TickDamage, nextBuffVars_attackSpeedMod), 1, 1, 2.5f, BuffAddType.RENEW_EXISTING, BuffType.DAMAGE, 1, true, false, false);
-                                AddBuff((ObjAIBase)target, target, new Buffs.Internal_30Slow(), 1, 1, 2.5f, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0, true, false, false);
-                                AddBuff((ObjAIBase)owner, target, new Buffs.ItemSlow(), 1, 1, 2.5f, BuffAddType.RENEW_EXISTING, BuffType.SLOW, 0, true, false, false);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
 namespace Spells
 {
     public class OdinEntropicClaymore : BBSpellScript
@@ -97,6 +49,54 @@ namespace Spells
             if(name5 == nameof(Spells.OdinEntropicClaymore))
             {
                 SetSlotSpellCooldownTimeVer2(60, 5, SpellSlotType.InventorySlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner, false);
+            }
+        }
+    }
+}
+namespace Buffs
+{
+    public class OdinEntropicClaymore : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            BuffName = "OdinEntropicClaymore",
+            BuffTextureName = "3184_FrozenWarhammer.dds",
+        };
+        Particle buffParticle;
+        public override void OnActivate()
+        {
+            SpellEffectCreate(out this.buffParticle, out _, "NeutralMonster_buf_red_offense.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false, false, false, false, false);
+        }
+        public override void OnDeactivate(bool expired)
+        {
+            SpellEffectRemove(this.buffParticle);
+        }
+        public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
+        {
+            if(hitResult != HitResult.HIT_Dodge)
+            {
+                if(hitResult != HitResult.HIT_Miss)
+                {
+                    if(owner is Champion)
+                    {
+                        if(target is ObjAIBase)
+                        {
+                            if(target is BaseTurret)
+                            {
+                            }
+                            else
+                            {
+                                float nextBuffVars_TickDamage;
+                                float nextBuffVars_attackSpeedMod;
+                                nextBuffVars_TickDamage = 40;
+                                nextBuffVars_attackSpeedMod = 0;
+                                AddBuff(attacker, target, new Buffs.EntropyBurning(nextBuffVars_TickDamage, nextBuffVars_attackSpeedMod), 1, 1, 2.5f, BuffAddType.RENEW_EXISTING, BuffType.DAMAGE, 1, true, false, false);
+                                AddBuff((ObjAIBase)target, target, new Buffs.Internal_30Slow(), 1, 1, 2.5f, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+                                AddBuff((ObjAIBase)owner, target, new Buffs.ItemSlow(), 1, 1, 2.5f, BuffAddType.RENEW_EXISTING, BuffType.SLOW, 0, true, false, false);
+                            }
+                        }
+                    }
+                }
             }
         }
     }

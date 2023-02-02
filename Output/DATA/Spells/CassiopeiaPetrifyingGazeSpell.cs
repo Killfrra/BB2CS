@@ -24,8 +24,6 @@ namespace Spells
         public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
         {
             TeamId teamID;
-            float nextBuffVars_MoveSpeedMod;
-            Particle particle2; // UNUSED
             BreakSpellShields(target);
             teamID = GetTeamID(target);
             if(IsInFront(target, attacker))
@@ -34,9 +32,11 @@ namespace Spells
             }
             else
             {
+                float nextBuffVars_MoveSpeedMod;
+                Particle particle2; // UNUSED
                 nextBuffVars_MoveSpeedMod = this.effect0[level];
                 AddBuff(attacker, target, new Buffs.Slow(nextBuffVars_MoveSpeedMod), 1, 1, 2, BuffAddType.STACKS_AND_OVERLAPS, BuffType.SLOW, 0, true, true, false);
-                SpellEffectCreate(out particle2, out _, "CassPetrifyMiss_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, target, false, target, "root", default, target, default, default, true, default, default, false);
+                SpellEffectCreate(out particle2, out _, "CassPetrifyMiss_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, target, false, target, "root", default, target, default, default, true, default, default, false);
             }
             ApplyDamage(attacker, target, this.effect1[level], DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0.6f, 1, false, false, attacker);
         }

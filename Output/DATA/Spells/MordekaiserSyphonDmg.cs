@@ -23,11 +23,11 @@ namespace Buffs
         }
         public override void OnPreDealDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
         {
-            int level;
-            float percentLeech;
-            float shieldAmount;
             if(this.count == 0)
             {
+                int level;
+                float percentLeech;
+                float shieldAmount;
                 level = GetLevel(owner);
                 if(target is Champion)
                 {

@@ -15,11 +15,7 @@ namespace Spells
             float critChance;
             float bonusDamage;
             float baseAttackDamage;
-            float critDamage;
             float damageVar;
-            TeamId teamID;
-            Particle kennenss; // UNUSED
-            Vector3 nextBuffVars_BouncePos;
             critChance = GetFlatCritChanceMod(attacker);
             level = GetSlotSpellLevel((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             bonusDamage = this.effect0[level];
@@ -30,6 +26,7 @@ namespace Spells
                 {
                     if(RandomChance() < critChance)
                     {
+                        float critDamage;
                         hitResult = HitResult.HIT_Critical;
                         critDamage = GetFlatCritDamageMod(attacker);
                         critDamage += 2;
@@ -56,9 +53,12 @@ namespace Spells
             {
                 if(target is not BaseTurret)
                 {
+                    TeamId teamID;
+                    Particle kennenss; // UNUSED
+                    Vector3 nextBuffVars_BouncePos;
                     BreakSpellShields(target);
                     teamID = GetTeamID(attacker);
-                    SpellEffectCreate(out kennenss, out _, "Volibear_Q_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, attacker, false, target, "C_BUFFBONE_GLB_CENTER_LOC", default, target, default, default, true, false, false, false, false);
+                    SpellEffectCreate(out kennenss, out _, "Volibear_Q_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, attacker, false, target, "C_BUFFBONE_GLB_CENTER_LOC", default, target, default, default, true, false, false, false, false);
                     nextBuffVars_BouncePos = charVars.BouncePos;
                     AddBuff(attacker, target, new Buffs.VolibearQExtra(nextBuffVars_BouncePos), 1, 1, 0.5f, BuffAddType.REPLACE_EXISTING, BuffType.STUN, 0, true, false, true);
                 }

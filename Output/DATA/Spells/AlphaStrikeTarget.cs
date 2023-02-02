@@ -39,7 +39,6 @@ namespace Buffs
         public override void OnDeactivate(bool expired)
         {
             Particle a; // UNUSED
-            float bonusDamage;
             SpellEffectCreate(out a, out _, "AlphaStrike_Slash.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false);
             if(owner is Champion)
             {
@@ -49,6 +48,7 @@ namespace Buffs
             {
                 if(RandomChance() < this.chanceToKill)
                 {
+                    float bonusDamage;
                     bonusDamage = this.baseDamage + 400;
                     ApplyDamage(attacker, owner, bonusDamage, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 1, default, false, false);
                 }

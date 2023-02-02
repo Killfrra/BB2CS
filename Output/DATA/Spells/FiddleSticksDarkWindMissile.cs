@@ -5,17 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class FiddleSticksDarkWindMissile : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            PersistsThroughDeath = true,
-            SpellFXOverrideSkins = new[]{ "SurprisePartyFiddlesticks", },
-        };
-    }
-}
 namespace Spells
 {
     public class FiddleSticksDarkWindMissile : BBSpellScript
@@ -37,9 +26,6 @@ namespace Spells
             bool doOnce;
             float baseDamage;
             int count;
-            bool isStealthed;
-            Vector3 attackerPos; // UNUSED
-            bool canSee;
             TeamId teamID;
             int fiddlesticksSkinID;
             level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
@@ -54,6 +40,8 @@ namespace Spells
                     {
                         if(unit != target)
                         {
+                            bool isStealthed;
+                            Vector3 attackerPos; // UNUSED
                             isStealthed = GetStealthed(unit);
                             if(!isStealthed)
                             {
@@ -64,6 +52,7 @@ namespace Spells
                             }
                             else
                             {
+                                bool canSee;
                                 canSee = CanSeeTarget(attacker, unit);
                                 if(canSee)
                                 {
@@ -84,12 +73,23 @@ namespace Spells
             fiddlesticksSkinID = GetSkinID(attacker);
             if(fiddlesticksSkinID == 6)
             {
-                SpellEffectCreate(out this.a, out _, "Party_DarkWind_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, false, false, false, false);
+                SpellEffectCreate(out this.a, out _, "Party_DarkWind_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, false, false, false, false);
             }
             else
             {
-                SpellEffectCreate(out this.a, out _, "DarkWind_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, false, false, false, false);
+                SpellEffectCreate(out this.a, out _, "DarkWind_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, false, false, false, false);
             }
         }
+    }
+}
+namespace Buffs
+{
+    public class FiddleSticksDarkWindMissile : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            PersistsThroughDeath = true,
+            SpellFXOverrideSkins = new[]{ "SurprisePartyFiddlesticks", },
+        };
     }
 }

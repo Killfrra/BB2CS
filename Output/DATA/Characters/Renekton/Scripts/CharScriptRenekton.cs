@@ -24,16 +24,16 @@ namespace Chars
         int[] effect6 = {15, 45, 75, 105, 135};
         public override void OnUpdateActions()
         {
-            float baseDamage;
-            float renektonBonusAD;
-            float renekthonTooltip1;
-            float renekthonTooltip1b;
-            float renekthonTooltip3;
-            float renekthonTooltip4;
-            float renekthonTooltip2;
-            float renekthonTooltip5;
             if(ExecutePeriodically(1, ref this.lastTime2Executed, true))
             {
+                float baseDamage;
+                float renektonBonusAD;
+                float renekthonTooltip1;
+                float renekthonTooltip1b;
+                float renekthonTooltip3;
+                float renekthonTooltip4;
+                float renekthonTooltip2;
+                float renekthonTooltip5;
                 baseDamage = GetBaseAttackDamage(owner);
                 this.renekthonDamage = GetTotalAttackDamage(owner);
                 renektonBonusAD = this.renekthonDamage - baseDamage;

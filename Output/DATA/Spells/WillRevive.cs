@@ -66,9 +66,9 @@ namespace Buffs
         }
         public override void OnPreDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
         {
-            float curHealth;
             if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.HasBeenRevived)) == 0)
             {
+                float curHealth;
                 curHealth = GetHealth(owner, PrimaryAbilityResourceType.MANA);
                 if(curHealth <= damageAmount)
                 {

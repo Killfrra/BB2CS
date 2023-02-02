@@ -34,12 +34,12 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            int count;
-            float damageToDeal;
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, false))
             {
                 if(GetBuffCountFromCaster(owner, attacker, nameof(Buffs.DeadlyVenom)) > 0)
                 {
+                    int count;
+                    float damageToDeal;
                     count = GetBuffCountFromAll(owner, nameof(Buffs.DeadlyVenom));
                     damageToDeal = this.damageAmount * count;
                     ApplyDamage(attacker, owner, damageToDeal, DamageType.DAMAGE_TYPE_TRUE, DamageSource.DAMAGE_SOURCE_PERIODIC, 1, 0, 0, false, false, attacker);
@@ -52,9 +52,9 @@ namespace Buffs
         }
         public override void OnBeingHit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            int count;
             if(GetBuffCountFromCaster(attacker, attacker, nameof(Buffs.DeadlyVenom_marker)) > 0)
             {
+                int count;
                 count = GetBuffCountFromAll(owner, nameof(Buffs.DeadlyVenom));
                 if(count == 2)
                 {

@@ -21,10 +21,10 @@ namespace Spells
         {
             bool returnValue = true;
             bool temp;
-            bool result;
             temp = false;
             foreach(AttackableUnit unit in GetRandomUnitsInArea((ObjAIBase)owner, owner.Position, 1000, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, 3, default, true))
             {
+                bool result;
                 result = CanSeeTarget(owner, unit);
                 if(result)
                 {

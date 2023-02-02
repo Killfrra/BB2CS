@@ -34,9 +34,9 @@ namespace Buffs
         }
         public override void OnDeactivate(bool expired)
         {
-            Particle ar; // UNUSED
             if(!this.willRemove)
             {
+                Particle ar; // UNUSED
                 SpellEffectCreate(out ar, out _, "OrianaProtectShield.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false, default, default, false, false);
             }
             if(this.damageBlock > 0)
@@ -46,7 +46,6 @@ namespace Buffs
         }
         public override void OnPreDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
         {
-            TeamId teamID; // UNUSED
             this.oldArmorAmount = this.damageBlock;
             if(this.damageBlock >= damageAmount)
             {
@@ -57,6 +56,7 @@ namespace Buffs
             }
             else
             {
+                TeamId teamID; // UNUSED
                 teamID = GetTeamID(owner);
                 damageAmount -= this.damageBlock;
                 this.damageBlock = 0;

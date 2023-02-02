@@ -23,7 +23,6 @@ namespace Buffs
         }
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            int count;
             if(hitResult != HitResult.HIT_Miss)
             {
                 if(hitResult != HitResult.HIT_Dodge)
@@ -32,6 +31,7 @@ namespace Buffs
                     {
                         if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.Pantheon_AegisShield)) == 0)
                         {
+                            int count;
                             AddBuff((ObjAIBase)owner, owner, new Buffs.Pantheon_Aegis_Counter(), 5, 1, 25000, BuffAddType.STACKS_AND_OVERLAPS, BuffType.AURA, 0, false, false, false);
                             count = GetBuffCountFromAll(owner, nameof(Buffs.Pantheon_Aegis_Counter));
                             if(count >= 4)

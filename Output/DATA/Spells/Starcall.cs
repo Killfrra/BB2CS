@@ -5,30 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class Starcall : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            BuffName = "Starcall",
-            BuffTextureName = "Soraka_Starcall.dds",
-        };
-        float resistanceMod;
-        public Starcall(float resistanceMod = default)
-        {
-            this.resistanceMod = resistanceMod;
-        }
-        public override void OnActivate()
-        {
-            //RequireVar(this.resistanceMod);
-        }
-        public override void OnUpdateStats()
-        {
-            IncFlatSpellBlockMod(owner, this.resistanceMod);
-        }
-    }
-}
 namespace Spells
 {
     public class Starcall : BBSpellScript
@@ -69,6 +45,30 @@ namespace Spells
             nextBuffVars_DamageToDeal = this.effect0[level];
             nextBuffVars_StarcallShred = this.effect1[level];
             AddBuff(attacker, target, new Buffs.StarcallDamage(nextBuffVars_DamageToDeal, nextBuffVars_StarcallShred), 1, 1, 0.4f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+        }
+    }
+}
+namespace Buffs
+{
+    public class Starcall : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            BuffName = "Starcall",
+            BuffTextureName = "Soraka_Starcall.dds",
+        };
+        float resistanceMod;
+        public Starcall(float resistanceMod = default)
+        {
+            this.resistanceMod = resistanceMod;
+        }
+        public override void OnActivate()
+        {
+            //RequireVar(this.resistanceMod);
+        }
+        public override void OnUpdateStats()
+        {
+            IncFlatSpellBlockMod(owner, this.resistanceMod);
         }
     }
 }

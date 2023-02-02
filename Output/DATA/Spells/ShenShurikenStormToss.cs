@@ -25,7 +25,7 @@ namespace Spells
             TeamId teamOfOwner;
             float damageToDeal;
             teamOfOwner = GetTeamID(owner);
-            attacker = GetChampionBySkinName("Shen", teamOfOwner);
+            attacker = GetChampionBySkinName("Shen", teamOfOwner ?? TeamId.TEAM_UNKNOWN);
             level = GetLevel(attacker);
             damageToDeal = this.effect0[level];
             ApplyDamage(attacker, target, damageToDeal, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0.25f, 0, false, false);

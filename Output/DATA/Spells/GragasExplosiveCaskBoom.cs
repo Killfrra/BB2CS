@@ -20,13 +20,6 @@ namespace Spells
             TeamId teamofOwner;
             int gragasSkinID;
             Particle particle; // UNUSED
-            Vector3 center;
-            int nextBuffVars_Speed;
-            int nextBuffVars_Gravity;
-            Vector3 nextBuffVars_Center;
-            int nextBuffVars_Distance;
-            int nextBuffVars_IdealDistance;
-            Particle arr; // UNUSED
             teamofOwner = GetTeamID(owner);
             level = GetSlotSpellLevel(attacker, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             gragasSkinID = GetSkinID(attacker);
@@ -54,6 +47,13 @@ namespace Spells
             }
             foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, target.Position, 430, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
             {
+                Vector3 center;
+                int nextBuffVars_Speed;
+                Particle arr; // UNUSED
+                int nextBuffVars_Gravity;
+                Vector3 nextBuffVars_Center;
+                int nextBuffVars_Distance;
+                int nextBuffVars_IdealDistance; // UNUSED
                 BreakSpellShields(unit);
                 center = GetCastSpellTargetPos();
                 nextBuffVars_Speed = 900;

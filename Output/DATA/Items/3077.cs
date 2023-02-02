@@ -11,11 +11,11 @@ namespace Items
     {
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            float tempTable1_ThirdDA;
             if(target is ObjAIBase)
             {
                 if(target is not BaseTurret)
                 {
+                    float tempTable1_ThirdDA;
                     SpellEffectCreate(out _, out _, "TiamatMelee_itm.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, false);
                     if(IsRanged(owner))
                     {

@@ -48,13 +48,13 @@ namespace Buffs
         }
         public override void OnPreDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
         {
-            Particle a; // UNUSED
-            Particle b; // UNUSED
             this.oldArmorAmount = this.shieldHealth;
             if(damageAmount > 0)
             {
                 if(damageType == DamageType.DAMAGE_TYPE_MAGICAL)
                 {
+                    Particle a; // UNUSED
+                    Particle b; // UNUSED
                     SpellEffectCreate(out a, out _, "hexTech_dmg_shield_onHit_01.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false);
                     SpellEffectCreate(out b, out _, "hexTech_dmg_shield_onHit_02.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false);
                     if(this.shieldHealth >= damageAmount)

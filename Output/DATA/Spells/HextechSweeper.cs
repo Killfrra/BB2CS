@@ -5,24 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class HextechSweeper : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            BuffTextureName = "055_Borses_Staff_of_Apocalypse.tga",
-        };
-        public override void OnActivate()
-        {
-            IncPermanentPercentCooldownMod(owner, -0.1f);
-        }
-        public override void OnDeactivate(bool expired)
-        {
-            IncPermanentPercentCooldownMod(owner, 0.1f);
-        }
-    }
-}
 namespace Spells
 {
     public class HextechSweeper : BBSpellScript
@@ -83,6 +65,24 @@ namespace Spells
             targetPos = GetCastSpellTargetPos();
             nextBuffVars_TargetPos = targetPos;
             AddBuff(attacker, attacker, new Buffs.HextechSweeperArea(nextBuffVars_TargetPos), 1, 1, 6, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+        }
+    }
+}
+namespace Buffs
+{
+    public class HextechSweeper : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            BuffTextureName = "055_Borses_Staff_of_Apocalypse.tga",
+        };
+        public override void OnActivate()
+        {
+            IncPermanentPercentCooldownMod(owner, -0.1f);
+        }
+        public override void OnDeactivate(bool expired)
+        {
+            IncPermanentPercentCooldownMod(owner, 0.1f);
         }
     }
 }

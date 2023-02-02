@@ -31,15 +31,14 @@ namespace Buffs
         }
         public override void OnPreDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
         {
-            float drainAmount;
-            ObjAIBase caster;
-            float damageAbsorbed;
-            float nextBuffVars_DrainAmount;
-            Vector3 targetPos;
             if(damageType != DamageType.DAMAGE_TYPE_TRUE)
             {
                 if(attacker is not BaseTurret)
                 {
+                    float drainAmount;
+                    ObjAIBase caster;
+                    float damageAbsorbed;
+                    float nextBuffVars_DrainAmount;
                     drainAmount = damageAmount;
                     caster = SetBuffCasterUnit();
                     damageAmount *= this.defenseBonus;
@@ -49,6 +48,7 @@ namespace Buffs
                     AddBuff(attacker, caster, new Buffs.MaokaiDrain3Tally(nextBuffVars_DrainAmount), 1, 1, 25000, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
                     if(GetBuffCountFromCaster(caster, caster, nameof(Buffs.MaokaiDrain3Toggle)) == 0)
                     {
+                        Vector3 targetPos;
                         targetPos = this.targetPos;
                         AddBuff(caster, caster, new Buffs.MaokaiDrain3Toggle(), 1, 1, 0.5f, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0, true, false, false);
                         SpellEffectCreate(out this.particle4, out _, "maoki_torrent_damage_pulse.troy", default, TeamId.TEAM_NEUTRAL, 10, 0, TeamId.TEAM_UNKNOWN, default, default, false, default, default, targetPos, target, default, default, true, default, default, false);

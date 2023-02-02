@@ -19,17 +19,16 @@ namespace Buffs
         {
             Vector3 targetPos;
             int level;
-            Vector3 unitPos;
-            float distance;
-            float percentDamage;
-            float percentNotDamage;
-            float nextBuffVars_MoveSpeedMod;
-            Particle a; // UNUSED
             targetPos = charVars.TargetPos;
             level = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             this.damageRank = this.effect0[level];
             foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)target, targetPos, 700, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
             {
+                Vector3 unitPos;
+                float distance;
+                float percentDamage;
+                float nextBuffVars_MoveSpeedMod;
+                Particle a; // UNUSED
                 unitPos = GetUnitPosition(unit);
                 distance = DistanceBetweenPoints(targetPos, unitPos);
                 if(distance <= 250)
@@ -38,6 +37,7 @@ namespace Buffs
                 }
                 else
                 {
+                    float percentNotDamage;
                     percentNotDamage = distance - 200;
                     percentNotDamage = distance / 500;
                     percentDamage = 1 - percentNotDamage;

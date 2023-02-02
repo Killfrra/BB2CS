@@ -5,16 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class InfernalGuardian : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            IsPetDurationBuff = true,
-        };
-    }
-}
 namespace Spells
 {
     public class InfernalGuardian : BBSpellScript
@@ -42,13 +32,13 @@ namespace Spells
             Particle a; // UNUSED
             Pet other1;
             int nextBuffVars_ArmorAmount;
-            int nextBuffVars_MRAmount;
-            int nextBuffVars_HealthAmount;
-            float nextBuffVars_FinalDamage;
             float damageAmount;
             float aPPreMod;
             float aPPostMod;
             int count;
+            int nextBuffVars_MRAmount;
+            int nextBuffVars_HealthAmount;
+            float nextBuffVars_FinalDamage;
             targetPos = GetCastSpellTargetPos();
             teamID = GetTeamID(owner);
             annieSkinID = GetSkinID(owner);
@@ -101,5 +91,15 @@ namespace Spells
             }
             ApplyDamage(attacker, target, this.effect6[level], DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0.7f, 0, false, false, attacker);
         }
+    }
+}
+namespace Buffs
+{
+    public class InfernalGuardian : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            IsPetDurationBuff = true,
+        };
     }
 }

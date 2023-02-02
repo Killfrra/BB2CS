@@ -5,6 +5,29 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class BloodScent : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            AutoCooldownByLevel = new[]{ 45f, 40f, 35f, 30f, 25f, },
+            TriggersSpellCasts = true,
+            NotSingleTargetSpell = true,
+        };
+        public override void SelfExecute()
+        {
+            if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.BloodScent_internal)) > 0)
+            {
+                SpellBuffRemove(owner, nameof(Buffs.BloodScent_internal), (ObjAIBase)owner, 0);
+            }
+            else
+            {
+                AddBuff((ObjAIBase)owner, owner, new Buffs.BloodScent_internal(), 1, 1, 25000, BuffAddType.RENEW_EXISTING, BuffType.AURA, 0, true, false, false);
+            }
+        }
+    }
+}
 namespace Buffs
 {
     public class BloodScent : BBBuffScript
@@ -33,10 +56,10 @@ namespace Buffs
             int ownerSkinID;
             teamID = GetTeamID(owner);
             //RequireVar(this.moveSpeedBuff);
-            SpellEffectCreate(out this.part1, out _, "wolfman_bloodscent_activate_speed.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false, false, false, false, false);
-            SpellEffectCreate(out this.part3, out _, "wolfman_bloodscent_activate_blood_buff.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "R_hand", default, owner, default, default, false, false, false, false, false);
-            SpellEffectCreate(out this.part2, out _, "wolfman_bloodscent_activate_blood_buff.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "L_hand", default, owner, default, default, false, false, false, false, false);
-            SpellEffectCreate(out this.part4, out _, "wolfman_bloodscent_activate_blood_buff_02.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "head", default, owner, default, default, false, false, false, false, false);
+            SpellEffectCreate(out this.part1, out _, "wolfman_bloodscent_activate_speed.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false, false, false, false, false);
+            SpellEffectCreate(out this.part3, out _, "wolfman_bloodscent_activate_blood_buff.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "R_hand", default, owner, default, default, false, false, false, false, false);
+            SpellEffectCreate(out this.part2, out _, "wolfman_bloodscent_activate_blood_buff.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "L_hand", default, owner, default, default, false, false, false, false, false);
+            SpellEffectCreate(out this.part4, out _, "wolfman_bloodscent_activate_blood_buff_02.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "head", default, owner, default, default, false, false, false, false, false);
             ownerSkinID = GetSkinID(owner);
             if(ownerSkinID == 7)
             {
@@ -63,34 +86,11 @@ namespace Buffs
         }
         public override void OnLevelUpSpell(int slot)
         {
-            int level;
             if(slot == 2)
             {
+                int level;
                 level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 this.moveSpeedBuff = this.effect0[level];
-            }
-        }
-    }
-}
-namespace Spells
-{
-    public class BloodScent : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            AutoCooldownByLevel = new[]{ 45f, 40f, 35f, 30f, 25f, },
-            TriggersSpellCasts = true,
-            NotSingleTargetSpell = true,
-        };
-        public override void SelfExecute()
-        {
-            if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.BloodScent_internal)) > 0)
-            {
-                SpellBuffRemove(owner, nameof(Buffs.BloodScent_internal), (ObjAIBase)owner, 0);
-            }
-            else
-            {
-                AddBuff((ObjAIBase)owner, owner, new Buffs.BloodScent_internal(), 1, 1, 25000, BuffAddType.RENEW_EXISTING, BuffType.AURA, 0, true, false, false);
             }
         }
     }

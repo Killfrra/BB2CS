@@ -17,13 +17,13 @@ namespace Buffs
         }
         public override void OnPreDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
         {
-            ObjAIBase caster;
             if(this.activations == 1)
             {
                 if(damageAmount > 0)
                 {
                     if(damageAmount <= 10)
                     {
+                        ObjAIBase caster;
                         damageAmount = this.tickDamage;
                         this.activations = 0;
                         caster = SetBuffCasterUnit();

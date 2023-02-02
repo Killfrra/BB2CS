@@ -16,11 +16,11 @@ namespace Buffs
         };
         public override void OnUpdateActions()
         {
-            int count;
             if(!owner.IsDead)
             {
                 if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.CorkiMissileBarrageTimer)) == 0)
                 {
+                    int count;
                     count = GetBuffCountFromCaster(owner, owner, nameof(Buffs.MissileBarrage));
                     if(count != 7)
                     {

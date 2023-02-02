@@ -56,12 +56,12 @@ namespace Spells
             float dashSpeed;
             float distance;
             Vector3 nextBuffVars_TargetPos;
-            float nextBuffVars_Distance;
-            float nextBuffVars_dashSpeed;
-            float nextBuffVars_DamageVar;
             float baseDamage;
             float bonusAD;
             float damageVar;
+            float nextBuffVars_Distance; // UNUSED
+            float nextBuffVars_dashSpeed;
+            float nextBuffVars_DamageVar;
             teamID = GetTeamID(owner);
             if(teamID == TeamId.TEAM_BLUE)
             {
@@ -71,7 +71,7 @@ namespace Spells
                     {
                         SpellBuffRemove(unit, nameof(Buffs.BlindMonkQOne), (ObjAIBase)owner, 0);
                         ownerPos = GetUnitPosition(owner);
-                        SpellEffectCreate(out p3, out _, "blindMonk_Q_resonatingStrike_02.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, ownerPos, target, default, default, true, false, false, false, false);
+                        SpellEffectCreate(out p3, out _, "blindMonk_Q_resonatingStrike_02.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, ownerPos, target, default, default, true, false, false, false, false);
                         targetPos = GetUnitPosition(unit);
                         moveSpeed = GetMovementSpeed(owner);
                         dashSpeed = moveSpeed + 1350;
@@ -97,7 +97,7 @@ namespace Spells
                     {
                         SpellBuffRemove(unit, nameof(Buffs.BlindMonkQOneChaos), (ObjAIBase)owner, 0);
                         ownerPos = GetUnitPosition(owner);
-                        SpellEffectCreate(out p3, out _, "blindMonk_Q_resonatingStrike_02.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, ownerPos, target, default, default, true, false, false, false, false);
+                        SpellEffectCreate(out p3, out _, "blindMonk_Q_resonatingStrike_02.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, ownerPos, target, default, default, true, false, false, false, false);
                         targetPos = GetUnitPosition(unit);
                         moveSpeed = GetMovementSpeed(owner);
                         dashSpeed = moveSpeed + 1350;

@@ -5,32 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class AstralBlessing : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateEffect = new[]{ "soraka_astralBless_buf.troy", },
-            BuffName = "Astral Blessing",
-            BuffTextureName = "Soraka_Bless.dds",
-        };
-        float astralArmor;
-        public AstralBlessing(float astralArmor = default)
-        {
-            this.astralArmor = astralArmor;
-        }
-        public override void OnActivate()
-        {
-            ApplyAssistMarker(attacker, owner, 10);
-            //RequireVar(this.astralArmor);
-        }
-        public override void OnUpdateStats()
-        {
-            IncFlatArmorMod(owner, this.astralArmor);
-        }
-    }
-}
 namespace Spells
 {
     public class AstralBlessing : BBSpellScript
@@ -55,6 +29,32 @@ namespace Spells
             healthToRestore += healingBonus;
             AddBuff(attacker, target, new Buffs.AstralBlessing(nextBuffVars_AstralArmor), 1, 1, 5, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
             IncHealth(target, healthToRestore, owner);
+        }
+    }
+}
+namespace Buffs
+{
+    public class AstralBlessing : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateEffect = new[]{ "soraka_astralBless_buf.troy", },
+            BuffName = "Astral Blessing",
+            BuffTextureName = "Soraka_Bless.dds",
+        };
+        float astralArmor;
+        public AstralBlessing(float astralArmor = default)
+        {
+            this.astralArmor = astralArmor;
+        }
+        public override void OnActivate()
+        {
+            ApplyAssistMarker(attacker, owner, 10);
+            //RequireVar(this.astralArmor);
+        }
+        public override void OnUpdateStats()
+        {
+            IncFlatArmorMod(owner, this.astralArmor);
         }
     }
 }

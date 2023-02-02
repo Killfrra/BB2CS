@@ -23,10 +23,10 @@ namespace Buffs
         }
         public override void OnSpellCast(string spellName, SpellScriptMetaData spellVars)
         {
-            ObjAIBase caster;
             spellName = GetSpellName();
             if(spellName == nameof(Spells.SowTheWind))
             {
+                ObjAIBase caster;
                 caster = SetBuffCasterUnit();
                 SpellBuffRemove(caster, nameof(Buffs.SowTheWind), (ObjAIBase)owner);
                 SpellBuffRemove(owner, nameof(Buffs.SowTheWindCastMarker), caster);

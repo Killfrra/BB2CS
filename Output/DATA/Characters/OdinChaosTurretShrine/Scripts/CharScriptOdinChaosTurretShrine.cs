@@ -12,10 +12,10 @@ namespace Chars
         public override void OnPreDealDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
         {
             int count;
-            float multiplier;
             count = GetBuffCountFromAll(target, nameof(Buffs.OdinTurretDamage));
             if(count > 0)
             {
+                float multiplier;
                 multiplier = count * 0.4f;
                 multiplier++;
                 damageAmount *= multiplier;
@@ -25,13 +25,13 @@ namespace Chars
         public override void OnActivate()
         {
             float nextBuffVars_BonusHealth;
-            float nextBuffVars_BubbleSize;
             float range; // UNUSED
             Vector3 ownerPosition;
             TeamId myTeam;
             Region perceptionBubble; // UNUSED
             TeamId enemyTeam;
             Region perceptionBubble2; // UNUSED
+            float nextBuffVars_BubbleSize;
             AddBuff((ObjAIBase)owner, owner, new Buffs.TurretBonus(), 1, 1, 25000, BuffAddType.RENEW_EXISTING, BuffType.AURA, 60, true, false, false);
             nextBuffVars_BonusHealth = 0;
             nextBuffVars_BubbleSize = 1600;

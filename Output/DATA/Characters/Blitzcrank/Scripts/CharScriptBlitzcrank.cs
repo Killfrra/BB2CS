@@ -12,13 +12,12 @@ namespace Chars
         float lastTime2Executed;
         public override void OnUpdateActions()
         {
-            float cooldown;
-            float blitzAP;
             level = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             if(!owner.IsDead)
             {
                 if(level > 0)
                 {
+                    float cooldown;
                     cooldown = GetSlotSpellCooldownTime((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                     if(cooldown <= 0)
                     {
@@ -34,6 +33,7 @@ namespace Chars
             }
             if(ExecutePeriodically(1, ref this.lastTime2Executed, true))
             {
+                float blitzAP;
                 blitzAP = GetFlatMagicDamageMod(owner);
                 SetSpellToolTipVar(blitzAP, 1, 3, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (Champion)owner);
             }

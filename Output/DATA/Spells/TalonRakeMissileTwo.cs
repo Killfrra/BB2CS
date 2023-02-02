@@ -5,12 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class TalonRakeMissileTwo : BBBuffScript
-    {
-    }
-}
 namespace Spells
 {
     public class TalonRakeMissileTwo : BBSpellScript
@@ -34,13 +28,6 @@ namespace Spells
             int count;
             TeamId ownerTeam;
             TeamId targetTeam;
-            bool isStealthed;
-            Particle part; // UNUSED
-            float nextBuffVars_MoveSpeedMod;
-            float baseDamage;
-            float totalAD;
-            float bonusDamage;
-            bool canSee;
             count = GetBuffCountFromCaster(target, target, nameof(Buffs.TalonRakeMissileTwo));
             ownerTeam = GetTeamID(owner);
             targetTeam = GetTeamID(target);
@@ -48,10 +35,16 @@ namespace Spells
             {
                 if(count == 0)
                 {
+                    bool isStealthed;
+                    Particle part; // UNUSED
+                    float nextBuffVars_MoveSpeedMod;
+                    float baseDamage;
+                    float totalAD;
+                    float bonusDamage;
                     isStealthed = GetStealthed(target);
                     if(!isStealthed)
                     {
-                        SpellEffectCreate(out part, out _, "talon_w_tar.troy", default, ownerTeam, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, target.Position, target, default, default, true, false, false, false, false);
+                        SpellEffectCreate(out part, out _, "talon_w_tar.troy", default, ownerTeam ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, target.Position, target, default, default, true, false, false, false, false);
                         AddBuff((ObjAIBase)target, target, new Buffs.TalonRakeMissileTwo(), 1, 1, 1, BuffAddType.STACKS_AND_RENEWS, BuffType.INTERNAL, 0, true, false, false);
                         BreakSpellShields(target);
                         baseDamage = GetBaseAttackDamage(owner);
@@ -70,7 +63,7 @@ namespace Spells
                     {
                         if(target is Champion)
                         {
-                            SpellEffectCreate(out part, out _, "talon_w_tar.troy", default, ownerTeam, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, target.Position, target, default, default, true, false, false, false, false);
+                            SpellEffectCreate(out part, out _, "talon_w_tar.troy", default, ownerTeam ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, target.Position, target, default, default, true, false, false, false, false);
                             AddBuff((ObjAIBase)target, target, new Buffs.TalonRakeMissileTwo(), 1, 1, 1, BuffAddType.STACKS_AND_RENEWS, BuffType.INTERNAL, 0, true, false, false);
                             BreakSpellShields(target);
                             baseDamage = GetBaseAttackDamage(owner);
@@ -87,10 +80,11 @@ namespace Spells
                         }
                         else
                         {
+                            bool canSee;
                             canSee = CanSeeTarget(owner, target);
                             if(canSee)
                             {
-                                SpellEffectCreate(out part, out _, "talon_w_tar.troy", default, ownerTeam, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, target.Position, target, default, default, true, false, false, false, false);
+                                SpellEffectCreate(out part, out _, "talon_w_tar.troy", default, ownerTeam ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, target.Position, target, default, default, true, false, false, false, false);
                                 AddBuff((ObjAIBase)target, target, new Buffs.TalonRakeMissileTwo(), 1, 1, 1, BuffAddType.STACKS_AND_RENEWS, BuffType.INTERNAL, 0, true, false, false);
                                 BreakSpellShields(target);
                                 baseDamage = GetBaseAttackDamage(owner);
@@ -114,5 +108,11 @@ namespace Spells
                 DestroyMissile(missileNetworkID);
             }
         }
+    }
+}
+namespace Buffs
+{
+    public class TalonRakeMissileTwo : BBBuffScript
+    {
     }
 }

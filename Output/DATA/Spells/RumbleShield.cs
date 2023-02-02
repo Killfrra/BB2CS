@@ -5,66 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class RumbleShield : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateAttachBoneName = new[]{ "robot_root", },
-            AutoBuffActivateEffect = new[]{ "rumble_shield_01.troy", },
-            BuffName = "RumbleShield",
-            BuffTextureName = "Rumble_Scrap Shield.dds",
-            OnPreDamagePriority = 3,
-        };
-        float damageBlock;
-        bool willRemove;
-        float oldArmorAmount;
-        public RumbleShield(float damageBlock = default, bool willRemove = default)
-        {
-            this.damageBlock = damageBlock;
-            this.willRemove = willRemove;
-        }
-        public override void OnActivate()
-        {
-            //RequireVar(this.damageBlock);
-            PlayAnimation("Spell2", 0, owner, false, false, false);
-            IncreaseShield(owner, this.damageBlock, true, true);
-        }
-        public override void OnDeactivate(bool expired)
-        {
-            Particle ar; // UNUSED
-            if(!this.willRemove)
-            {
-                SpellEffectCreate(out ar, out _, "shen_Feint_self_deactivate.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false, default, default, false);
-            }
-            if(this.damageBlock > 0)
-            {
-                RemoveShield(owner, this.damageBlock, true, true);
-            }
-        }
-        public override void OnPreDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
-        {
-            TeamId teamID; // UNUSED
-            this.oldArmorAmount = this.damageBlock;
-            if(this.damageBlock >= damageAmount)
-            {
-                this.damageBlock -= damageAmount;
-                damageAmount = 0;
-                this.oldArmorAmount -= this.damageBlock;
-                ReduceShield(owner, this.oldArmorAmount, true, true);
-            }
-            else
-            {
-                teamID = GetTeamID(owner);
-                damageAmount -= this.damageBlock;
-                this.damageBlock = 0;
-                ReduceShield(owner, this.oldArmorAmount, true, true);
-                SpellBuffRemoveCurrent(owner);
-            }
-        }
-    }
-}
 namespace Spells
 {
     public class RumbleShield : BBSpellScript
@@ -85,12 +25,12 @@ namespace Spells
         {
             float par;
             float nextBuffVars_DamageBlock;
-            float nextBuffVars_SpeedBoost;
             float baseDamageBlock;
             float abilityPower;
             float bonusHealth;
             float damageBlock;
             float baseHeatCost;
+            float nextBuffVars_SpeedBoost;
             par = GetPAR(target, PrimaryAbilityResourceType.Other);
             if(par >= 80)
             {
@@ -120,6 +60,66 @@ namespace Spells
             baseHeatCost = this.effect3[level];
             AddBuff(attacker, target, new Buffs.RumbleShieldBuff(nextBuffVars_SpeedBoost), 1, 1, 1, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
             IncPAR(owner, baseHeatCost, PrimaryAbilityResourceType.Other);
+        }
+    }
+}
+namespace Buffs
+{
+    public class RumbleShield : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateAttachBoneName = new[]{ "robot_root", },
+            AutoBuffActivateEffect = new[]{ "rumble_shield_01.troy", },
+            BuffName = "RumbleShield",
+            BuffTextureName = "Rumble_Scrap Shield.dds",
+            OnPreDamagePriority = 3,
+        };
+        float damageBlock;
+        bool willRemove;
+        float oldArmorAmount;
+        public RumbleShield(float damageBlock = default, bool willRemove = default)
+        {
+            this.damageBlock = damageBlock;
+            this.willRemove = willRemove;
+        }
+        public override void OnActivate()
+        {
+            //RequireVar(this.damageBlock);
+            PlayAnimation("Spell2", 0, owner, false, false, false);
+            IncreaseShield(owner, this.damageBlock, true, true);
+        }
+        public override void OnDeactivate(bool expired)
+        {
+            if(!this.willRemove)
+            {
+                Particle ar; // UNUSED
+                SpellEffectCreate(out ar, out _, "shen_Feint_self_deactivate.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false, default, default, false);
+            }
+            if(this.damageBlock > 0)
+            {
+                RemoveShield(owner, this.damageBlock, true, true);
+            }
+        }
+        public override void OnPreDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
+        {
+            this.oldArmorAmount = this.damageBlock;
+            if(this.damageBlock >= damageAmount)
+            {
+                this.damageBlock -= damageAmount;
+                damageAmount = 0;
+                this.oldArmorAmount -= this.damageBlock;
+                ReduceShield(owner, this.oldArmorAmount, true, true);
+            }
+            else
+            {
+                TeamId teamID; // UNUSED
+                teamID = GetTeamID(owner);
+                damageAmount -= this.damageBlock;
+                this.damageBlock = 0;
+                ReduceShield(owner, this.oldArmorAmount, true, true);
+                SpellBuffRemoveCurrent(owner);
+            }
         }
     }
 }

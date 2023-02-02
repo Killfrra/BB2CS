@@ -5,6 +5,48 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class HowlingGale : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = true,
+            NotSingleTargetSpell = true,
+        };
+        public override void SelfExecute()
+        {
+            int count;
+            SetSlotSpellCooldownTime((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, 0);
+            count = GetBuffCountFromAll(owner, nameof(Buffs.HowlingGale));
+            if(count >= 1)
+            {
+                SpellBuffRemove(owner, nameof(Buffs.HowlingGale), (ObjAIBase)owner, 0);
+            }
+            else
+            {
+                Vector3 targetPos;
+                Vector3 castPos;
+                Vector3 facePos;
+                Vector3 nextBuffVars_CastPos;
+                Vector3 nextBuffVars_FacePos;
+                int nextBuffVars_LifeTime;
+                int nextBuffVars_Level;
+                PlayAnimation("Spell1", 0, owner, false, false, false);
+                targetPos = GetCastSpellTargetPos();
+                FaceDirection(owner, targetPos);
+                castPos = GetPointByUnitFacingOffset(owner, 100, 0);
+                facePos = GetPointByUnitFacingOffset(owner, 200, 0);
+                nextBuffVars_CastPos = castPos;
+                nextBuffVars_FacePos = facePos;
+                nextBuffVars_LifeTime = 0;
+                nextBuffVars_Level = level;
+                AddBuff((ObjAIBase)owner, owner, new Buffs.HowlingGale(nextBuffVars_FacePos, nextBuffVars_LifeTime, nextBuffVars_Level, nextBuffVars_CastPos), 1, 1, 3, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+                SetTargetingType(0, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, TargetingType.Self, owner);
+            }
+        }
+    }
+}
 namespace Buffs
 {
     public class HowlingGale : BBBuffScript
@@ -55,18 +97,18 @@ namespace Buffs
             Vector3 unitPos2;
             Vector3 facePos;
             float aPMod;
-            int nextBuffVars_Speed;
-            int nextBuffVars_Gravity;
-            int nextBuffVars_IdealDistance;
+            int nextBuffVars_Speed; // UNUSED
             float cooldownStat;
             float cooldownMod;
             int level;
             float cooldown;
+            int nextBuffVars_Gravity; // UNUSED
+            int nextBuffVars_IdealDistance; // UNUSED
             SetTargetingType(0, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, TargetingType.Location, owner);
             SpellEffectRemove(this.particle);
             teamID = GetTeamID(owner);
             castPos = this.castPos;
-            other1 = SpawnMinion("TestCube", "TestCubeRender", "idle.lua", this.castPos, teamID, false, true, false, true, false, true, 0, false, true, (Champion)owner);
+            other1 = SpawnMinion("TestCube", "TestCubeRender", "idle.lua", this.castPos, teamID ?? TeamId.TEAM_CASTER, false, true, false, true, false, true, 0, false, true, (Champion)owner);
             unitPos2 = GetUnitPosition(other1);
             facePos = this.facePos;
             FaceDirection(other1, facePos);
@@ -103,48 +145,6 @@ namespace Buffs
         public override void OnUpdateStats()
         {
             this.lifeTime = lifeTime;
-        }
-    }
-}
-namespace Spells
-{
-    public class HowlingGale : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = true,
-            NotSingleTargetSpell = true,
-        };
-        public override void SelfExecute()
-        {
-            int count;
-            Vector3 targetPos;
-            Vector3 castPos;
-            Vector3 facePos;
-            Vector3 nextBuffVars_CastPos;
-            Vector3 nextBuffVars_FacePos;
-            int nextBuffVars_LifeTime;
-            int nextBuffVars_Level;
-            SetSlotSpellCooldownTime((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, 0);
-            count = GetBuffCountFromAll(owner, nameof(Buffs.HowlingGale));
-            if(count >= 1)
-            {
-                SpellBuffRemove(owner, nameof(Buffs.HowlingGale), (ObjAIBase)owner, 0);
-            }
-            else
-            {
-                PlayAnimation("Spell1", 0, owner, false, false, false);
-                targetPos = GetCastSpellTargetPos();
-                FaceDirection(owner, targetPos);
-                castPos = GetPointByUnitFacingOffset(owner, 100, 0);
-                facePos = GetPointByUnitFacingOffset(owner, 200, 0);
-                nextBuffVars_CastPos = castPos;
-                nextBuffVars_FacePos = facePos;
-                nextBuffVars_LifeTime = 0;
-                nextBuffVars_Level = level;
-                AddBuff((ObjAIBase)owner, owner, new Buffs.HowlingGale(nextBuffVars_FacePos, nextBuffVars_LifeTime, nextBuffVars_Level, nextBuffVars_CastPos), 1, 1, 3, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
-                SetTargetingType(0, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, TargetingType.Self, owner);
-            }
         }
     }
 }

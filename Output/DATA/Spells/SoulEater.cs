@@ -25,10 +25,10 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            int level;
-            float currentLifesteal;
             if(ExecutePeriodically(10, ref this.lastTimeExecuted, true))
             {
+                int level;
+                float currentLifesteal;
                 level = GetLevel(owner);
                 currentLifesteal = this.effect0[level];
                 if(currentLifesteal > this.lastLifesteal)

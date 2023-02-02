@@ -5,25 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class ShurelyasCrest : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            BuffName = "Spirit Visage",
-            BuffTextureName = "3065_Spirit_Visage.dds",
-        };
-        public override void OnActivate()
-        {
-            IncPermanentPercentCooldownMod(owner, -0.15f);
-        }
-        public override void OnDeactivate(bool expired)
-        {
-            IncPermanentPercentCooldownMod(owner, 0.15f);
-        }
-    }
-}
 namespace Spells
 {
     public class ShurelyasCrest : BBSpellScript
@@ -85,6 +66,25 @@ namespace Spells
             {
                 SetSlotSpellCooldownTimeVer2(60, 5, SpellSlotType.InventorySlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner, false);
             }
+        }
+    }
+}
+namespace Buffs
+{
+    public class ShurelyasCrest : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            BuffName = "Spirit Visage",
+            BuffTextureName = "3065_Spirit_Visage.dds",
+        };
+        public override void OnActivate()
+        {
+            IncPermanentPercentCooldownMod(owner, -0.15f);
+        }
+        public override void OnDeactivate(bool expired)
+        {
+            IncPermanentPercentCooldownMod(owner, 0.15f);
         }
     }
 }

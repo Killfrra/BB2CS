@@ -27,9 +27,6 @@ namespace Spells
             TeamId teamID;
             bool doOnce;
             float damageToDeal;
-            bool isStealthed;
-            Vector3 attackerPos;
-            bool canSee;
             int fiddlesticksSkinID;
             SpellBuffClear(owner, nameof(Buffs.FiddleSticksDarkWindMissile));
             teamID = GetTeamID(attacker);
@@ -42,6 +39,8 @@ namespace Spells
                 {
                     if(!doOnce)
                     {
+                        bool isStealthed;
+                        Vector3 attackerPos;
                         isStealthed = GetStealthed(unit);
                         if(!isStealthed)
                         {
@@ -52,6 +51,7 @@ namespace Spells
                         }
                         else
                         {
+                            bool canSee;
                             canSee = CanSeeTarget(attacker, unit);
                             if(canSee)
                             {
@@ -71,11 +71,11 @@ namespace Spells
             fiddlesticksSkinID = GetSkinID(attacker);
             if(fiddlesticksSkinID == 6)
             {
-                SpellEffectCreate(out this.a, out _, "Party_DarkWind_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, false, false, false, false);
+                SpellEffectCreate(out this.a, out _, "Party_DarkWind_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, false, false, false, false);
             }
             else
             {
-                SpellEffectCreate(out this.a, out _, "DarkWind_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, false, false, false, false);
+                SpellEffectCreate(out this.a, out _, "DarkWind_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, false, false, false, false);
             }
         }
     }

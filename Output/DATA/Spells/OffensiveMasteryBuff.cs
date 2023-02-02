@@ -29,7 +29,6 @@ namespace Buffs
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
             int level;
-            float damageBonus;
             level = this.level;
             if(target is ObjAIBase)
             {
@@ -43,6 +42,7 @@ namespace Buffs
                     }
                     else
                     {
+                        float damageBonus;
                         damageBonus = this.effect0[level];
                         damageAmount += damageBonus;
                     }

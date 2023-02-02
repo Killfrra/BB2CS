@@ -5,6 +5,23 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class CurseoftheSadMummy : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = true,
+            NotSingleTargetSpell = true,
+        };
+        int[] effect0 = {150, 250, 350};
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            ApplyDamage(attacker, target, this.effect0[level], DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 1, 1, false, false, attacker);
+            AddBuff(attacker, target, new Buffs.CurseoftheSadMummy(), 1, 1, 2, BuffAddType.REPLACE_EXISTING, BuffType.CHARM, 0, true, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class CurseoftheSadMummy : BBBuffScript
@@ -31,23 +48,6 @@ namespace Buffs
         {
             SetCanAttack(owner, false);
             SetCanMove(owner, false);
-        }
-    }
-}
-namespace Spells
-{
-    public class CurseoftheSadMummy : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = true,
-            NotSingleTargetSpell = true,
-        };
-        int[] effect0 = {150, 250, 350};
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            ApplyDamage(attacker, target, this.effect0[level], DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 1, 1, false, false, attacker);
-            AddBuff(attacker, target, new Buffs.CurseoftheSadMummy(), 1, 1, 2, BuffAddType.REPLACE_EXISTING, BuffType.CHARM, 0, true, false);
         }
     }
 }

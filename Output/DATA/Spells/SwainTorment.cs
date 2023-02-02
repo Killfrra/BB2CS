@@ -5,6 +5,29 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class SwainTorment : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            DoesntBreakShields = false,
+            TriggersSpellCasts = true,
+            IsDamagingSpell = true,
+            NotSingleTargetSpell = true,
+        };
+        float[] effect0 = {18.75f, 28.75f, 38.75f, 48.75f, 58.75f};
+        float[] effect1 = {1.08f, 1.11f, 1.14f, 1.17f, 1.2f};
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            float nextBuffVars_DoTDamage;
+            float nextBuffVars_SwainMultiplier; // UNUSED
+            nextBuffVars_DoTDamage = this.effect0[level];
+            nextBuffVars_SwainMultiplier = this.effect1[level];
+            AddBuff(attacker, target, new Buffs.SwainTorment(nextBuffVars_DoTDamage), 1, 1, 4, BuffAddType.REPLACE_EXISTING, BuffType.DAMAGE, 0, true, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class SwainTorment : BBBuffScript
@@ -48,29 +71,6 @@ namespace Buffs
             {
                 ApplyDamage(attacker, owner, this.doTDamage, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELLPERSIST, 1, 0.2f, 1, false, false, attacker);
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class SwainTorment : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            DoesntBreakShields = false,
-            TriggersSpellCasts = true,
-            IsDamagingSpell = true,
-            NotSingleTargetSpell = true,
-        };
-        float[] effect0 = {18.75f, 28.75f, 38.75f, 48.75f, 58.75f};
-        float[] effect1 = {1.08f, 1.11f, 1.14f, 1.17f, 1.2f};
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            float nextBuffVars_DoTDamage;
-            float nextBuffVars_SwainMultiplier;
-            nextBuffVars_DoTDamage = this.effect0[level];
-            nextBuffVars_SwainMultiplier = this.effect1[level];
-            AddBuff(attacker, target, new Buffs.SwainTorment(nextBuffVars_DoTDamage), 1, 1, 4, BuffAddType.REPLACE_EXISTING, BuffType.DAMAGE, 0, true, false);
         }
     }
 }

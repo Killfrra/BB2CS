@@ -43,7 +43,7 @@ namespace Buffs
             }
             this.seaHorseID = PushCharacterData("AniviaEgg", owner, false);
             IncHealth(owner, 10000, owner);
-            SpellEffectCreate(out this.eggTimer, out _, "EggTimer.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, default, default, false, false);
+            SpellEffectCreate(out this.eggTimer, out _, "EggTimer.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, default, default, false, false);
             SetCanAttack(owner, false);
             SetCanCast(owner, false);
             SetCanMove(owner, false);
@@ -75,7 +75,6 @@ namespace Buffs
         public override void OnDeactivate(bool expired)
         {
             TeamId teamID;
-            Particle particle; // UNUSED
             teamID = GetTeamID(owner);
             AddBuff((ObjAIBase)owner, owner, new Buffs.RebirthCooldown(), 1, 1, 240, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
             SetCanAttack(owner, true);
@@ -83,7 +82,8 @@ namespace Buffs
             SetCanMove(owner, true);
             if(!owner.IsDead)
             {
-                SpellEffectCreate(out particle, out _, "Rebirth_cas.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, true, default, default, false, false);
+                Particle particle; // UNUSED
+                SpellEffectCreate(out particle, out _, "Rebirth_cas.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, true, default, default, false, false);
             }
             SpellEffectRemove(this.eggTimer);
             PopAllCharacterData(owner);

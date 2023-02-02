@@ -5,6 +5,29 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class VolibearQ : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = true,
+            NotSingleTargetSpell = true,
+        };
+        int[] effect0 = {12, 11, 10, 9, 8};
+        float[] effect1 = {0.45f, 0.45f, 0.45f, 0.45f, 0.45f};
+        public override void SelfExecute()
+        {
+            int nextBuffVars_SpellCooldown;
+            float nextBuffVars_SpeedMod;
+            nextBuffVars_SpellCooldown = this.effect0[level];
+            AddBuff((ObjAIBase)owner, owner, new Buffs.VolibearQ(nextBuffVars_SpellCooldown), 1, 1, 4, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+            SetSlotSpellCooldownTimeVer2(0, 0, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner, false);
+            nextBuffVars_SpeedMod = this.effect1[level];
+            AddBuff((ObjAIBase)owner, owner, new Buffs.VolibearQSpeed(nextBuffVars_SpeedMod), 1, 1, 4, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class VolibearQ : BBBuffScript
@@ -77,38 +100,15 @@ namespace Buffs
         }
         public override void OnPreAttack()
         {
-            float offset;
             if(target is ObjAIBase)
             {
                 if(target is not BaseTurret)
                 {
+                    float offset;
                     offset = GetOffsetAngle(target, attacker.Position);
                     charVars.BouncePos = GetPointByUnitFacingOffset(target, 400, offset);
                 }
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class VolibearQ : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = true,
-            NotSingleTargetSpell = true,
-        };
-        int[] effect0 = {12, 11, 10, 9, 8};
-        float[] effect1 = {0.45f, 0.45f, 0.45f, 0.45f, 0.45f};
-        public override void SelfExecute()
-        {
-            int nextBuffVars_SpellCooldown;
-            float nextBuffVars_SpeedMod;
-            nextBuffVars_SpellCooldown = this.effect0[level];
-            AddBuff((ObjAIBase)owner, owner, new Buffs.VolibearQ(nextBuffVars_SpellCooldown), 1, 1, 4, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
-            SetSlotSpellCooldownTimeVer2(0, 0, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner, false);
-            nextBuffVars_SpeedMod = this.effect1[level];
-            AddBuff((ObjAIBase)owner, owner, new Buffs.VolibearQSpeed(nextBuffVars_SpeedMod), 1, 1, 4, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
         }
     }
 }

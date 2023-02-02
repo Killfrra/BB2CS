@@ -13,13 +13,12 @@ namespace Chars
         public override void OnUpdateStats()
         {
             bool hunt;
-            bool visible;
-            float speedBoost;
             hunt = false;
             foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 2000, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectHeroes, default, true))
             {
                 if(IsInFront(owner, unit))
                 {
+                    bool visible;
                     visible = CanSeeTarget(owner, unit);
                     if(visible)
                     {
@@ -34,6 +33,7 @@ namespace Chars
             }
             if(hunt)
             {
+                float speedBoost;
                 speedBoost = 30;
                 if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.VayneInquisition)) > 0)
                 {

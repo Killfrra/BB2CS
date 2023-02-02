@@ -13,10 +13,10 @@ namespace Chars
         float bonusDamage;
         public override void OnUpdateActions()
         {
-            float maxHealth;
-            float healthDamage;
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, true))
             {
+                float maxHealth;
+                float healthDamage;
                 maxHealth = GetMaxHealth(owner, PrimaryAbilityResourceType.MANA);
                 healthDamage = maxHealth * 0.01f;
                 SetSpellToolTipVar(healthDamage, 1, 1, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (Champion)owner);
@@ -24,9 +24,9 @@ namespace Chars
         }
         public override void OnPreDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
         {
-            float currentHealth;
             if(attacker == owner)
             {
+                float currentHealth;
                 currentHealth = GetHealth(owner, PrimaryAbilityResourceType.MANA);
                 if(currentHealth <= damageAmount)
                 {
@@ -36,14 +36,14 @@ namespace Chars
         }
         public override void OnSpellCast(string spellName, SpellScriptMetaData spellVars)
         {
-            Vector3 targetPos;
-            float distance;
-            Vector3 facingPos;
-            Vector3 nextBuffVars_FacingPos;
-            Vector3 nextBuffVars_TargetPos;
             spellName = GetSpellName();
             if(spellName == nameof(Spells.OlafAxeThrow))
             {
+                Vector3 targetPos;
+                float distance;
+                Vector3 facingPos;
+                Vector3 nextBuffVars_FacingPos;
+                Vector3 nextBuffVars_TargetPos;
                 targetPos = GetCastSpellTargetPos();
                 distance = DistanceBetweenObjectAndPoint(owner, targetPos);
                 distance += 50;

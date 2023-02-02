@@ -15,16 +15,16 @@ namespace Chars
         float[] effect1 = {0.01f, 0.0125f, 0.015f, 0.0175f, 0.02f};
         public override void OnUpdateActions()
         {
-            float damagePerTick;
-            float maxHPPercent;
-            float frostBonus;
-            float temp1;
-            float percentDamage;
-            float abilityPowerMod;
-            float abilityPowerBonus;
-            float damagePerTickFrost;
             if(ExecutePeriodically(5, ref this.lastTimeExecuted, true))
             {
+                float damagePerTick;
+                float maxHPPercent;
+                float frostBonus;
+                float temp1;
+                float percentDamage;
+                float abilityPowerMod;
+                float abilityPowerBonus;
+                float damagePerTickFrost;
                 level = GetSlotSpellLevel((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 level = Math.Max(level, 1);
                 damagePerTick = this.effect0[level];
@@ -56,17 +56,17 @@ namespace Chars
         }
         public override void OnSpellCast(string spellName, SpellScriptMetaData spellVars)
         {
-            int slot;
-            TeamId teamID;
-            float duration;
             if(spellVars.DoesntTriggerSpellCasts)
             {
             }
             else
             {
+                int slot;
                 slot = GetSpellSlot();
                 if(slot == 2)
                 {
+                    TeamId teamID;
+                    float duration;
                     teamID = GetTeamID(owner);
                     if(teamID == TeamId.TEAM_BLUE)
                     {

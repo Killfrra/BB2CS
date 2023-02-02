@@ -12,11 +12,11 @@ namespace Spells
         int[] effect0 = {65, 105, 145, 185, 225};
         public override void SelfExecute()
         {
-            int count;
             if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.Pantheon_AegisShield2)) == 0)
             {
                 if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.Pantheon_AegisShield)) == 0)
                 {
+                    int count;
                     AddBuff((ObjAIBase)owner, owner, new Buffs.Pantheon_Aegis_Counter(), 5, 1, 25000, BuffAddType.STACKS_AND_OVERLAPS, BuffType.AURA, 0, false, false, false);
                     count = GetBuffCountFromAll(owner, nameof(Buffs.Pantheon_Aegis_Counter));
                     if(count >= 4)

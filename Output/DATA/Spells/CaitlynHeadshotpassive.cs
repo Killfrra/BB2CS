@@ -26,14 +26,14 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            int level;
-            float buffTooltip;
             if(ExecutePeriodically(10, ref this.lastTimeExecuted, true))
             {
+                int level;
                 level = GetLevel(owner);
                 charVars.TooltipAmount = this.effect0[level];
                 if(charVars.TooltipAmount < this.lastTooltip)
                 {
+                    float buffTooltip;
                     charVars.LastTooltip = charVars.TooltipAmount;
                     buffTooltip = charVars.TooltipAmount + 1;
                     SetBuffToolTipVar(1, buffTooltip);

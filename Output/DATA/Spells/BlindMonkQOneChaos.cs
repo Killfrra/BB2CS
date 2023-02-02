@@ -28,9 +28,9 @@ namespace Buffs
             this.bubbleID = AddUnitPerceptionBubble(teamID, 400, owner, 20, default, default, false);
             this.bubbleID2 = AddUnitPerceptionBubble(teamID, 50, owner, 20, default, default, true);
             ApplyAssistMarker(attacker, owner, 10);
-            SpellEffectCreate(out hit1, out _, "blindMonk_Q_resonatingStrike_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, true, default, default, false);
-            SpellEffectCreate(out blood, out _, "blindMonk_Q_resonatingStrike_tar_blood.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, true, default, default, false);
-            SpellEffectCreate(out this.slow, out _, "blindMonk_Q_tar_indicator.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false, default, default, false);
+            SpellEffectCreate(out hit1, out _, "blindMonk_Q_resonatingStrike_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, true, default, default, false);
+            SpellEffectCreate(out blood, out _, "blindMonk_Q_resonatingStrike_tar_blood.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, true, default, default, false);
+            SpellEffectCreate(out this.slow, out _, "blindMonk_Q_tar_indicator.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false, default, default, false);
         }
         public override void OnDeactivate(bool expired)
         {

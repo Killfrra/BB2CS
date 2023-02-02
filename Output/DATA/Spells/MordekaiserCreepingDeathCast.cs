@@ -27,11 +27,11 @@ namespace Spells
         }
         public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
         {
-            int nextBuffVars_DamagePerTick;
-            float nextBuffVars_DefenseStats;
             AddBuff((ObjAIBase)owner, target, new Buffs.MordekaiserCreepingDeathCheck(), 1, 1, 30, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
             if(target == owner)
             {
+                int nextBuffVars_DamagePerTick;
+                float nextBuffVars_DefenseStats;
                 nextBuffVars_DamagePerTick = this.effect1[level];
                 nextBuffVars_DefenseStats = this.effect2[level];
                 AddBuff((ObjAIBase)owner, target, new Buffs.MordekaiserCreepingDeath(nextBuffVars_DamagePerTick, nextBuffVars_DefenseStats), 1, 1, 6, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);

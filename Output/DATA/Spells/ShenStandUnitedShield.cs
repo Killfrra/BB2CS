@@ -32,7 +32,7 @@ namespace Buffs
             SetBuffToolTipVar(1, this.shieldHealth);
             ApplyAssistMarker(attacker, owner, 10);
             teamID = GetTeamID(owner);
-            SpellEffectCreate(out this.shieldz, out _, "Shen_StandUnited_shield_v2.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false);
+            SpellEffectCreate(out this.shieldz, out _, "Shen_StandUnited_shield_v2.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false);
             IncreaseShield(owner, this.shieldHealth, true, true);
         }
         public override void OnDeactivate(bool expired)

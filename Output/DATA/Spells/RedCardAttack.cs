@@ -27,8 +27,6 @@ namespace Spells
             float bonusDamage;
             float redCardDamage;
             Particle arrm8y; // UNUSED
-            float baseDamage;
-            Vector3 targetPosition; // UNITIALIZED
             float nextBuffVars_MoveSpeedMod;
             teamID = GetTeamID(attacker);
             level = GetSlotSpellLevel((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
@@ -38,7 +36,7 @@ namespace Spells
             if(target is ObjAIBase)
             {
                 ApplyDamage(attacker, target, 0, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_ATTACK, 1, 0, 0, false, false, attacker);
-                SpellEffectCreate(out arrm8y, out _, "PickaCard_red_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false);
+                SpellEffectCreate(out arrm8y, out _, "PickaCard_red_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false);
                 if(target is BaseTurret)
                 {
                     ApplyDamage(attacker, target, redCardDamage, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0.4f, 1, false, false, attacker);
@@ -46,8 +44,10 @@ namespace Spells
             }
             else
             {
+                float baseDamage;
+                Vector3 targetPosition; // UNITIALIZED
                 baseDamage = GetBaseAttackDamage(attacker);
-                SpellEffectCreate(out arrm8y, out _, "PickaCard_red_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, targetPosition, default, default, targetPosition, false, default, default, false);
+                SpellEffectCreate(out arrm8y, out _, "PickaCard_red_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, targetPosition, default, default, targetPosition, false, default, default, false);
                 ApplyDamage(attacker, target, baseDamage, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_ATTACK, 1, 0, 1, false, false, attacker);
             }
             nextBuffVars_MoveSpeedMod = this.effect1[level];

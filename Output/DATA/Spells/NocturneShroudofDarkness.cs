@@ -5,6 +5,25 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class NocturneShroudofDarkness : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = true,
+            NotSingleTargetSpell = true,
+        };
+        bool willRemove; // UNUSED
+        public override void SelfExecute()
+        {
+            this.willRemove = false;
+            AddBuff((ObjAIBase)owner, owner, new Buffs.NocturneShroudofDarkness(), 1, 1, 2, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+            AddBuff((ObjAIBase)owner, owner, new Buffs.UnlockAnimation(), 1, 1, 0.25f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+            PlayAnimation("Spell2", 1, owner, false, true, true);
+        }
+    }
+}
 namespace Buffs
 {
     public class NocturneShroudofDarkness : BBBuffScript
@@ -20,7 +39,6 @@ namespace Buffs
         public override bool OnAllowAdd(BuffType type, string scriptName, int maxStack, float duration)
         {
             bool returnValue = true;
-            Particle ar; // UNUSED
             if(this.willRemove)
             {
                 if(owner.Team != attacker.Team)
@@ -34,6 +52,7 @@ namespace Buffs
             }
             else if(duration == 37037)
             {
+                Particle ar; // UNUSED
                 SpellEffectCreate(out ar, out _, "nocturne_shroud_deactivateTrigger.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false, default, default, false);
                 this.willRemove = true;
                 returnValue = false;
@@ -57,15 +76,15 @@ namespace Buffs
         }
         public override void OnBeingSpellHit(SpellScriptMetaData spellVars)
         {
-            bool isAttack;
-            Particle ar; // UNUSED
             SetTriggerUnit(attacker);
             owner = SetBuffCasterUnit();
             if(owner.Team != attacker.Team)
             {
+                bool isAttack;
                 isAttack = GetIsAttackOverride();
                 if(!isAttack)
                 {
+                    Particle ar; // UNUSED
                     if(!spellVars.DoesntBreakShields)
                     {
                         this.willRemove = true;
@@ -81,25 +100,6 @@ namespace Buffs
                     }
                 }
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class NocturneShroudofDarkness : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = true,
-            NotSingleTargetSpell = true,
-        };
-        bool willRemove; // UNUSED
-        public override void SelfExecute()
-        {
-            this.willRemove = false;
-            AddBuff((ObjAIBase)owner, owner, new Buffs.NocturneShroudofDarkness(), 1, 1, 2, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
-            AddBuff((ObjAIBase)owner, owner, new Buffs.UnlockAnimation(), 1, 1, 0.25f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
-            PlayAnimation("Spell2", 1, owner, false, true, true);
         }
     }
 }

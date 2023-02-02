@@ -20,9 +20,9 @@ namespace Buffs
         float lastTimeExecuted;
         public override void OnUpdateActions()
         {
-            float nextBuffVars_LifeLossPercent;
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, false))
             {
+                float nextBuffVars_LifeLossPercent;
                 nextBuffVars_LifeLossPercent = charVars.LifeLossPercent;
                 if(charVars.LifeLossPercent == charVars.LastLifeLossPercent)
                 {

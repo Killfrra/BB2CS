@@ -5,6 +5,44 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class CaitlynAceintheHole : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            ChannelDuration = 1.25f,
+            DoesntBreakShields = true,
+            TriggersSpellCasts = true,
+            IsDamagingSpell = true,
+            NotSingleTargetSpell = true,
+        };
+        Particle particleID;
+        public override void ChannelingStart()
+        {
+            FaceDirection(owner, target.Position);
+            AddBuff(attacker, target, new Buffs.CaitlynAceintheHole(), 1, 1, 4, BuffAddType.REPLACE_EXISTING, BuffType.AURA, 0, true, false, false);
+            SpellEffectCreate(out this.particleID, out _, "caitlyn_laser_beam_01.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "BUFFBONE_CSTM_WEAPON_5", default, target, "spine", default, false, false, false, false, false);
+        }
+        public override void ChannelingSuccessStop()
+        {
+            bool isStealthed; // UNUSED
+            TeamId team; // UNUSED
+            isStealthed = GetStealthed(target);
+            FaceDirection(owner, target.Position);
+            team = GetTeamID(attacker);
+            SpellCast((ObjAIBase)owner, target, target.Position, target.Position, 0, SpellSlotType.ExtraSlots, level, true, true, false, false, false, false);
+            AddBuff(attacker, attacker, new Buffs.IfHasBuffCheck(), 1, 1, 2.5f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+            SpellEffectRemove(this.particleID);
+        }
+        public override void ChannelingCancelStop()
+        {
+            SetSlotSpellCooldownTime((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, 5);
+            SpellEffectRemove(this.particleID);
+            SpellBuffRemove(target, nameof(Buffs.CaitlynAceintheHole), (ObjAIBase)owner, 0);
+        }
+    }
+}
 namespace Buffs
 {
     public class CaitlynAceintheHole : BBBuffScript
@@ -43,44 +81,6 @@ namespace Buffs
         public override void OnZombie()
         {
             StopChanneling(attacker, ChannelingStopCondition.Cancel, ChannelingStopSource.Die);
-        }
-    }
-}
-namespace Spells
-{
-    public class CaitlynAceintheHole : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            ChannelDuration = 1.25f,
-            DoesntBreakShields = true,
-            TriggersSpellCasts = true,
-            IsDamagingSpell = true,
-            NotSingleTargetSpell = true,
-        };
-        Particle particleID;
-        public override void ChannelingStart()
-        {
-            FaceDirection(owner, target.Position);
-            AddBuff(attacker, target, new Buffs.CaitlynAceintheHole(), 1, 1, 4, BuffAddType.REPLACE_EXISTING, BuffType.AURA, 0, true, false, false);
-            SpellEffectCreate(out this.particleID, out _, "caitlyn_laser_beam_01.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "BUFFBONE_CSTM_WEAPON_5", default, target, "spine", default, false, false, false, false, false);
-        }
-        public override void ChannelingSuccessStop()
-        {
-            bool isStealthed; // UNUSED
-            TeamId team; // UNUSED
-            isStealthed = GetStealthed(target);
-            FaceDirection(owner, target.Position);
-            team = GetTeamID(attacker);
-            SpellCast((ObjAIBase)owner, target, target.Position, target.Position, 0, SpellSlotType.ExtraSlots, level, true, true, false, false, false, false);
-            AddBuff(attacker, attacker, new Buffs.IfHasBuffCheck(), 1, 1, 2.5f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
-            SpellEffectRemove(this.particleID);
-        }
-        public override void ChannelingCancelStop()
-        {
-            SetSlotSpellCooldownTime((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, 5);
-            SpellEffectRemove(this.particleID);
-            SpellBuffRemove(target, nameof(Buffs.CaitlynAceintheHole), (ObjAIBase)owner, 0);
         }
     }
 }

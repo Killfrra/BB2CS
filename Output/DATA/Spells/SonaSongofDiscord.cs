@@ -5,29 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class SonaSongofDiscord : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateAttachBoneName = new[]{ "", },
-            BuffName = "",
-            BuffTextureName = "Sona_SongofDiscordGold.dds",
-            PersistsThroughDeath = true,
-            SpellFXOverrideSkins = new[]{ "GuqinSona", },
-        };
-        public override void OnActivate()
-        {
-            SpellBuffRemove(owner, nameof(Buffs.SonaHymnofValor), (ObjAIBase)owner, 0);
-            SpellBuffRemove(owner, nameof(Buffs.SonaAriaofPerseverance), (ObjAIBase)owner, 0);
-            if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.SonaPowerChord)) == 0)
-            {
-                OverrideAutoAttack(5, SpellSlotType.ExtraSlots, owner, 1, false);
-            }
-        }
-    }
-}
 namespace Spells
 {
     public class SonaSongofDiscord : BBSpellScript
@@ -77,6 +54,29 @@ namespace Spells
             AddBuff((ObjAIBase)owner, owner, new Buffs.SonaSongofDiscordAura(), 1, 1, 2.5f, BuffAddType.RENEW_EXISTING, BuffType.AURA, 0, true, false, false);
             AddBuff((ObjAIBase)owner, owner, new Buffs.UnlockAnimation(), 1, 1, 0.25f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
             PlayAnimation("Spell3", 1, owner, false, true, true);
+        }
+    }
+}
+namespace Buffs
+{
+    public class SonaSongofDiscord : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateAttachBoneName = new[]{ "", },
+            BuffName = "",
+            BuffTextureName = "Sona_SongofDiscordGold.dds",
+            PersistsThroughDeath = true,
+            SpellFXOverrideSkins = new[]{ "GuqinSona", },
+        };
+        public override void OnActivate()
+        {
+            SpellBuffRemove(owner, nameof(Buffs.SonaHymnofValor), (ObjAIBase)owner, 0);
+            SpellBuffRemove(owner, nameof(Buffs.SonaAriaofPerseverance), (ObjAIBase)owner, 0);
+            if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.SonaPowerChord)) == 0)
+            {
+                OverrideAutoAttack(5, SpellSlotType.ExtraSlots, owner, 1, false);
+            }
         }
     }
 }

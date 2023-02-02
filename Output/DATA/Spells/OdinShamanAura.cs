@@ -28,13 +28,13 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            string unitName;
             if(ExecutePeriodically(0.25f, ref this.lastTimeExecuted, true))
             {
                 if(!owner.IsDead)
                 {
                     foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 1000, SpellDataFlags.AffectFriends | SpellDataFlags.AffectMinions | SpellDataFlags.NotAffectSelf, default, true))
                     {
+                        string unitName;
                         unitName = GetUnitSkinName(unit);
                         if(unitName == "Red_Minion_Melee")
                         {

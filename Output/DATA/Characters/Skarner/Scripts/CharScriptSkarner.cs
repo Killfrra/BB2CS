@@ -19,9 +19,6 @@ namespace Chars
         }
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            float cDR;
-            float cooldown;
-            float newCooldown;
             if(hitResult != HitResult.HIT_Dodge)
             {
                 if(hitResult != HitResult.HIT_Miss)
@@ -30,6 +27,9 @@ namespace Chars
                     {
                         if(target is not BaseTurret)
                         {
+                            float cDR;
+                            float cooldown;
+                            float newCooldown;
                             if(target is Champion)
                             {
                                 cDR = 1;

@@ -5,41 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class OdynsVeil : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            BuffName = "OdynsVeil",
-            BuffTextureName = "3180_OdynsVeil.dds",
-            NonDispellable = true,
-            PersistsThroughDeath = true,
-        };
-        float oldStoredAmount; // UNUSED
-        public override void OnActivate()
-        {
-            charVars.StoredDamage = 0;
-            SetBuffToolTipVar(1, charVars.StoredDamage);
-        }
-        public override void OnPreDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
-        {
-            float damageReduction;
-            this.oldStoredAmount = charVars.StoredDamage;
-            if(damageType == DamageType.DAMAGE_TYPE_MAGICAL)
-            {
-                if(damageAmount > 0)
-                {
-                    damageReduction = damageAmount * 0.1f;
-                    damageAmount *= 0.9f;
-                    charVars.StoredDamage += damageReduction;
-                }
-            }
-            charVars.StoredDamage = Math.Min(charVars.StoredDamage, 200);
-            SetBuffToolTipVar(1, charVars.StoredDamage);
-        }
-    }
-}
 namespace Spells
 {
     public class OdynsVeil : BBSpellScript
@@ -95,6 +60,41 @@ namespace Spells
             {
                 SetSlotSpellCooldownTimeVer2(90, 5, SpellSlotType.InventorySlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner, false);
             }
+        }
+    }
+}
+namespace Buffs
+{
+    public class OdynsVeil : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            BuffName = "OdynsVeil",
+            BuffTextureName = "3180_OdynsVeil.dds",
+            NonDispellable = true,
+            PersistsThroughDeath = true,
+        };
+        float oldStoredAmount; // UNUSED
+        public override void OnActivate()
+        {
+            charVars.StoredDamage = 0;
+            SetBuffToolTipVar(1, charVars.StoredDamage);
+        }
+        public override void OnPreDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
+        {
+            this.oldStoredAmount = charVars.StoredDamage;
+            if(damageType == DamageType.DAMAGE_TYPE_MAGICAL)
+            {
+                if(damageAmount > 0)
+                {
+                    float damageReduction;
+                    damageReduction = damageAmount * 0.1f;
+                    damageAmount *= 0.9f;
+                    charVars.StoredDamage += damageReduction;
+                }
+            }
+            charVars.StoredDamage = Math.Min(charVars.StoredDamage, 200);
+            SetBuffToolTipVar(1, charVars.StoredDamage);
         }
     }
 }

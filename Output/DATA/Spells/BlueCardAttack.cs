@@ -22,20 +22,18 @@ namespace Spells
         public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
         {
             TeamId teamID;
-            Particle asdf1; // UNUSED
-            float totalDamage;
-            float bonusDamage;
-            float damageToDeal;
-            float baseDamage;
-            Particle a; // UNUSED
             teamID = GetTeamID(attacker);
             level = GetSlotSpellLevel((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             if(target is ObjAIBase)
             {
+                float totalDamage;
+                float bonusDamage;
+                float damageToDeal;
                 if(!target.IsDead)
                 {
+                    Particle asdf1; // UNUSED
                     BreakSpellShields(target);
-                    SpellEffectCreate(out asdf1, out _, "PickaCard_blue_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true);
+                    SpellEffectCreate(out asdf1, out _, "PickaCard_blue_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true);
                 }
                 totalDamage = GetTotalAttackDamage(owner);
                 bonusDamage = this.effect0[level];
@@ -46,9 +44,11 @@ namespace Spells
             }
             else
             {
+                float baseDamage;
+                Particle a; // UNUSED
                 baseDamage = GetBaseAttackDamage(attacker);
                 ApplyDamage(attacker, target, baseDamage, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_ATTACK, 1, 0, 1, false, false, attacker);
-                SpellEffectCreate(out a, out _, "soraka_infuse_ally_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true);
+                SpellEffectCreate(out a, out _, "soraka_infuse_ally_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true);
             }
         }
     }

@@ -19,19 +19,12 @@ namespace Spells
         {
             float baseDamage;
             int kMSkinID;
-            Particle a; // UNUSED
-            float abilityPower;
-            float maxHealthDamage;
-            float bonusMaxHealthDamage;
-            float totalMaxHealthDamage;
-            float maxHealth;
-            float damageToApply;
-            TeamId teamId;
             level = GetSlotSpellLevel((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             baseDamage = GetBaseAttackDamage(owner);
             kMSkinID = GetSkinID(attacker);
             if(target is ObjAIBase)
             {
+                Particle a; // UNUSED
                 if(kMSkinID == 5)
                 {
                     SpellEffectCreate(out a, out _, "KogMawChineseBasicAttack_tar.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, false, false, false, false);
@@ -50,6 +43,13 @@ namespace Spells
                     {
                         if(hitResult != HitResult.HIT_Miss)
                         {
+                            float abilityPower;
+                            float maxHealthDamage;
+                            float bonusMaxHealthDamage;
+                            float totalMaxHealthDamage;
+                            float maxHealth;
+                            float damageToApply;
+                            TeamId teamId;
                             abilityPower = GetFlatMagicDamageMod(owner);
                             maxHealthDamage = this.effect0[level];
                             bonusMaxHealthDamage = 0.0001f * abilityPower;

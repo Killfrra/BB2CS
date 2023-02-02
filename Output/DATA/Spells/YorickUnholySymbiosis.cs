@@ -19,11 +19,11 @@ namespace Buffs
         float lastTimeExecuted;
         public override void OnUpdateActions()
         {
-            float yorickAP;
-            float aDFromAP;
-            float healthFromAP;
             if(ExecutePeriodically(2, ref this.lastTimeExecuted, true))
             {
+                float yorickAP;
+                float aDFromAP;
+                float healthFromAP;
                 yorickAP = GetFlatMagicDamageMod(owner);
                 aDFromAP = yorickAP * 0.2f;
                 healthFromAP = yorickAP * 0.5f;

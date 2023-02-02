@@ -31,7 +31,6 @@ namespace Spells
             float nextBuffVars_MoveSpeedMod;
             Particle asdf1; // UNUSED
             Particle asdf; // UNUSED
-            bool canSee;
             teamID = GetTeamID(attacker);
             baseDamage = this.effect0[level];
             attackDamage = GetTotalAttackDamage(owner);
@@ -49,8 +48,8 @@ namespace Spells
                     AddBuff(attacker, target, new Buffs.UrgotSlow(), 100, 1, 1.5f, BuffAddType.RENEW_EXISTING, BuffType.SLOW, 0, true, false, false);
                 }
                 DestroyMissile(missileNetworkID);
-                SpellEffectCreate(out asdf1, out _, "BloodSlash.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, "spine", default, target, default, default, true, default, default, false, false);
-                SpellEffectCreate(out asdf, out _, "UrgotHeatSeekingMissile_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false, false);
+                SpellEffectCreate(out asdf1, out _, "BloodSlash.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, "spine", default, target, default, default, true, default, default, false, false);
+                SpellEffectCreate(out asdf, out _, "UrgotHeatSeekingMissile_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false, false);
                 AddBuff((ObjAIBase)owner, target, new Buffs.UrgotEntropyPassive(), 1, 1, 2.5f, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_DEHANCER, 0, true, false, false);
             }
             else
@@ -66,12 +65,13 @@ namespace Spells
                         AddBuff(attacker, target, new Buffs.UrgotSlow(), 100, 1, 1.5f, BuffAddType.RENEW_EXISTING, BuffType.SLOW, 0, true, false, false);
                     }
                     DestroyMissile(missileNetworkID);
-                    SpellEffectCreate(out asdf1, out _, "BloodSlash.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, "spine", default, target, default, default, true, default, default, false, false);
-                    SpellEffectCreate(out asdf, out _, "UrgotHeatSeekingMissile_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false, false);
+                    SpellEffectCreate(out asdf1, out _, "BloodSlash.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, "spine", default, target, default, default, true, default, default, false, false);
+                    SpellEffectCreate(out asdf, out _, "UrgotHeatSeekingMissile_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false, false);
                     AddBuff((ObjAIBase)owner, target, new Buffs.UrgotEntropyPassive(), 1, 1, 2.5f, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_DEHANCER, 0, true, false, false);
                 }
                 else
                 {
+                    bool canSee;
                     canSee = CanSeeTarget(owner, target);
                     if(canSee)
                     {
@@ -84,8 +84,8 @@ namespace Spells
                             AddBuff(attacker, target, new Buffs.Slow(nextBuffVars_MoveSpeedMod), 100, 1, 1.5f, BuffAddType.STACKS_AND_OVERLAPS, BuffType.SLOW, 0, true, false, false);
                         }
                         DestroyMissile(missileNetworkID);
-                        SpellEffectCreate(out asdf1, out _, "BloodSlash.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, "spine", default, target, default, default, true, default, default, false, false);
-                        SpellEffectCreate(out asdf, out _, "UrgotHeatSeekingMissile_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false, false);
+                        SpellEffectCreate(out asdf1, out _, "BloodSlash.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, "spine", default, target, default, default, true, default, default, false, false);
+                        SpellEffectCreate(out asdf, out _, "UrgotHeatSeekingMissile_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false, false);
                         AddBuff((ObjAIBase)owner, target, new Buffs.UrgotEntropyPassive(), 1, 1, 2.5f, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_DEHANCER, 0, true, false, false);
                     }
                 }

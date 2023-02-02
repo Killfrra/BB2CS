@@ -20,9 +20,9 @@ namespace Buffs
         int[] effect0 = {50, 70, 90};
         public override void OnUpdateActions()
         {
-            int level;
             if(ExecutePeriodically(0.5f, ref this.lastTimeExecuted, false))
             {
+                int level;
                 level = GetSlotSpellLevel(attacker, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 this.burnDmg = this.effect0[level];
                 ApplyDamage(attacker, owner, this.burnDmg, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0.1f, 0, false, false, attacker);

@@ -29,7 +29,7 @@ namespace Buffs
             SetCanMove(owner, false);
             ApplyAssistMarker(attacker, owner, 10);
             teamID = GetTeamID(attacker);
-            SpellEffectCreate(out asf, out _, "Powerfist_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "head", default, target, default, default, true);
+            SpellEffectCreate(out asf, out _, "Powerfist_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "head", default, target, default, default, true);
         }
         public override void OnDeactivate(bool expired)
         {

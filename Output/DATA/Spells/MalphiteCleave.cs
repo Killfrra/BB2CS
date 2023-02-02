@@ -20,13 +20,12 @@ namespace Buffs
         float[] effect0 = {0.3f, 0.38f, 0.46f, 0.54f, 0.62f};
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            int level;
-            float cleavePerc;
-            float damageAmount2;
-            Particle a; // UNUSED
-            float distance;
             if(target is not BaseTurret)
             {
+                int level;
+                float cleavePerc;
+                float damageAmount2;
+                Particle a; // UNUSED
                 level = GetSlotSpellLevel((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 cleavePerc = this.effect0[level];
                 damageAmount2 = damageAmount * cleavePerc;
@@ -42,6 +41,7 @@ namespace Buffs
                 {
                     if(unit != target)
                     {
+                        float distance;
                         distance = DistanceBetweenObjects("Attacker", "Unit");
                         if(distance < 200)
                         {

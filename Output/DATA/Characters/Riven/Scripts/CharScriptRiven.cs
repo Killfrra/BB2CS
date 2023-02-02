@@ -12,15 +12,15 @@ namespace Chars
         float lastTimeExecuted;
         public override void OnUpdateActions()
         {
-            float attackDamage;
-            float rAttackGain;
-            float baseAD;
-            float qAttackDamage;
-            float rAttackDamage;
-            float eAttackDamage;
-            float wAttackDamage;
             if(ExecutePeriodically(10, ref this.lastTimeExecuted, true))
             {
+                float attackDamage;
+                float rAttackGain;
+                float baseAD;
+                float qAttackDamage;
+                float rAttackDamage;
+                float eAttackDamage;
+                float wAttackDamage;
                 attackDamage = GetTotalAttackDamage(owner);
                 rAttackGain = 0.2f * attackDamage;
                 SetSpellToolTipVar(rAttackGain, 3, 3, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (Champion)owner);

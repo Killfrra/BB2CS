@@ -5,6 +5,25 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class SiphoningStrikeNew : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = true,
+            NotSingleTargetSpell = true,
+        };
+        int[] effect0 = {8, 7, 6, 5, 4};
+        public override void SelfExecute()
+        {
+            int nextBuffVars_SpellCooldown;
+            nextBuffVars_SpellCooldown = this.effect0[level];
+            AddBuff((ObjAIBase)owner, owner, new Buffs.SiphoningStrikeNew(nextBuffVars_SpellCooldown), 1, 1, 10, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+            SetSlotSpellCooldownTime((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, 0);
+        }
+    }
+}
 namespace Buffs
 {
     public class SiphoningStrikeNew : BBBuffScript
@@ -39,8 +58,6 @@ namespace Buffs
             int level;
             float baseDamage;
             float damageToDeal;
-            TeamId teamID;
-            Particle sdg; // UNUSED
             float spellCooldown;
             float cooldownStat;
             float multiplier;
@@ -56,8 +73,10 @@ namespace Buffs
                 }
                 else
                 {
+                    TeamId teamID;
+                    Particle sdg; // UNUSED
                     teamID = GetTeamID(owner);
-                    SpellEffectCreate(out sdg, out _, "nassus_siphonStrike_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, false, false, false, false);
+                    SpellEffectCreate(out sdg, out _, "nassus_siphonStrike_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, false, false, false, false);
                     AddBuff((ObjAIBase)owner, target, new Buffs.SiphoningStrike(), 1, 1, 1, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
                 }
             }
@@ -86,25 +105,6 @@ namespace Buffs
             SetSlotSpellCooldownTime((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, newCooldown);
             SealSpellSlot(0, SpellSlotType.SpellSlots, (ObjAIBase)owner, false, SpellbookType.SPELLBOOK_CHAMPION);
             SetDodgePiercing(owner, false);
-        }
-    }
-}
-namespace Spells
-{
-    public class SiphoningStrikeNew : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = true,
-            NotSingleTargetSpell = true,
-        };
-        int[] effect0 = {8, 7, 6, 5, 4};
-        public override void SelfExecute()
-        {
-            int nextBuffVars_SpellCooldown;
-            nextBuffVars_SpellCooldown = this.effect0[level];
-            AddBuff((ObjAIBase)owner, owner, new Buffs.SiphoningStrikeNew(nextBuffVars_SpellCooldown), 1, 1, 10, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
-            SetSlotSpellCooldownTime((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, 0);
         }
     }
 }

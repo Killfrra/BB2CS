@@ -5,6 +5,32 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class CannonBarrageBall : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            CastingBreaksStealth = true,
+            TriggersSpellCasts = false,
+            IsDamagingSpell = true,
+            NotSingleTargetSpell = true,
+        };
+        int[] effect0 = {75, 120, 165};
+        public override void SelfExecute()
+        {
+            TeamId teamOfOwner;
+            Vector3 targetPos;
+            Minion other3;
+            float nextBuffVars_DamageAmount;
+            teamOfOwner = GetTeamID(owner);
+            targetPos = GetCastSpellTargetPos();
+            other3 = SpawnMinion("HiddenMinion", "TestCube", "idle.lua", targetPos, teamOfOwner ?? TeamId.TEAM_CASTER, false, true, false, true, true, true, 0, false, true);
+            nextBuffVars_DamageAmount = this.effect0[level];
+            AddBuff(attacker, other3, new Buffs.CannonBarrageBall(nextBuffVars_DamageAmount), 1, 1, 0.5f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class CannonBarrageBall : BBBuffScript
@@ -67,32 +93,6 @@ namespace Buffs
         public override void OnUpdateStats()
         {
             IncPercentBubbleRadiusMod(owner, -0.9f);
-        }
-    }
-}
-namespace Spells
-{
-    public class CannonBarrageBall : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            CastingBreaksStealth = true,
-            TriggersSpellCasts = false,
-            IsDamagingSpell = true,
-            NotSingleTargetSpell = true,
-        };
-        int[] effect0 = {75, 120, 165};
-        public override void SelfExecute()
-        {
-            TeamId teamOfOwner;
-            Vector3 targetPos;
-            Minion other3;
-            float nextBuffVars_DamageAmount;
-            teamOfOwner = GetTeamID(owner);
-            targetPos = GetCastSpellTargetPos();
-            other3 = SpawnMinion("HiddenMinion", "TestCube", "idle.lua", targetPos, teamOfOwner, false, true, false, true, true, true, 0, false, true);
-            nextBuffVars_DamageAmount = this.effect0[level];
-            AddBuff(attacker, other3, new Buffs.CannonBarrageBall(nextBuffVars_DamageAmount), 1, 1, 0.5f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
         }
     }
 }

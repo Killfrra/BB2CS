@@ -14,24 +14,24 @@ namespace Chars
         int[] effect1 = {300, 475, 650};
         public override void OnUpdateActions()
         {
-            int count;
-            float cooldown;
-            float healthPerStack;
-            float feastBase;
-            float bonusFeastHealth;
-            float feastHealth;
-            float targetHealth;
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, false))
             {
+                int count;
                 count = GetBuffCountFromCaster(owner, owner, nameof(Buffs.Feast));
                 level = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 if(level >= 1)
                 {
+                    float cooldown;
                     cooldown = GetSlotSpellCooldownTime((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                     if(cooldown <= 0)
                     {
                         foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 1500, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectHeroes, default, true))
                         {
+                            float healthPerStack;
+                            float feastBase;
+                            float bonusFeastHealth;
+                            float feastHealth;
+                            float targetHealth;
                             count = GetBuffCountFromCaster(owner, owner, nameof(Buffs.Feast));
                             healthPerStack = this.effect0[level];
                             feastBase = this.effect1[level];
@@ -49,9 +49,9 @@ namespace Chars
         }
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            Vector3 castPosition;
             if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.VorpalSpikes)) > 0)
             {
+                Vector3 castPosition;
                 castPosition = GetPointByUnitFacingOffset(owner, 550, 0);
                 level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 SpellCast((ObjAIBase)owner, target, castPosition, default, 0, SpellSlotType.ExtraSlots, level, true, true, false, false, false, false);
@@ -59,9 +59,9 @@ namespace Chars
         }
         public override void OnMiss()
         {
-            Vector3 castPosition;
             if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.VorpalSpikes)) > 0)
             {
+                Vector3 castPosition;
                 castPosition = GetPointByUnitFacingOffset(owner, 550, 0);
                 level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 SpellCast((ObjAIBase)owner, target, castPosition, default, 0, SpellSlotType.ExtraSlots, level, true, true, false, false, false, false);

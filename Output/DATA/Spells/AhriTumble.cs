@@ -5,40 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class AhriTumble : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateEffect = new[]{ "", },
-            BuffName = "AhriTumble",
-            BuffTextureName = "Ahri_SpiritRush.dds",
-            PersistsThroughDeath = true,
-        };
-        float newCd;
-        int[] effect0 = {90, 80, 70, 0, 0};
-        public override void OnDeactivate(bool expired)
-        {
-            int count;
-            int level;
-            float cooldownStat;
-            float multiplier;
-            float newCooldown;
-            count = GetBuffCountFromAll(owner, nameof(Buffs.AhriTumble));
-            if(count == 0)
-            {
-                level = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
-                this.newCd = this.effect0[level];
-                cooldownStat = GetPercentCooldownMod(owner);
-                multiplier = 1 + cooldownStat;
-                newCooldown = multiplier * this.newCd;
-                SetSlotSpellCooldownTimeVer2(newCooldown, 3, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner, true);
-                SetPARCostInc((ObjAIBase)owner, 3, SpellSlotType.SpellSlots, 0, PrimaryAbilityResourceType.MANA);
-            }
-        }
-    }
-}
 namespace Spells
 {
     public class AhriTumble : BBSpellScript
@@ -81,16 +47,14 @@ namespace Spells
         {
             int count;
             Vector3 nextBuffVars_TargetPos;
-            float nextBuffVars_Distance;
-            float nextBuffVars_dashSpeed;
             Particle smokeBomb; // UNUSED
             Vector3 ownerPos; // UNUSED
             Vector3 targetPos;
             float moveSpeed;
             float dashSpeed;
             float distance;
-            Vector3 nearestAvailablePos;
-            float distance2;
+            float nextBuffVars_Distance;
+            float nextBuffVars_dashSpeed;
             count = GetBuffCountFromAll(owner, nameof(Buffs.AhriTumble));
             if(count == 0)
             {
@@ -116,6 +80,8 @@ namespace Spells
             distance = DistanceBetweenObjectAndPoint(owner, targetPos);
             if(distance > 500)
             {
+                Vector3 nearestAvailablePos;
+                float distance2;
                 FaceDirection(owner, targetPos);
                 targetPos = GetPointByUnitFacingOffset(owner, 500, 0);
                 distance = 500;
@@ -131,6 +97,40 @@ namespace Spells
             nextBuffVars_Distance = distance;
             nextBuffVars_dashSpeed = dashSpeed;
             AddBuff((ObjAIBase)owner, owner, new Buffs.AhriTumbleKick(nextBuffVars_TargetPos, nextBuffVars_Distance, nextBuffVars_dashSpeed), 1, 1, 2, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0.25f, true, false, false);
+        }
+    }
+}
+namespace Buffs
+{
+    public class AhriTumble : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateEffect = new[]{ "", },
+            BuffName = "AhriTumble",
+            BuffTextureName = "Ahri_SpiritRush.dds",
+            PersistsThroughDeath = true,
+        };
+        float newCd;
+        int[] effect0 = {90, 80, 70, 0, 0};
+        public override void OnDeactivate(bool expired)
+        {
+            int count;
+            count = GetBuffCountFromAll(owner, nameof(Buffs.AhriTumble));
+            if(count == 0)
+            {
+                int level;
+                float cooldownStat;
+                float multiplier;
+                float newCooldown;
+                level = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
+                this.newCd = this.effect0[level];
+                cooldownStat = GetPercentCooldownMod(owner);
+                multiplier = 1 + cooldownStat;
+                newCooldown = multiplier * this.newCd;
+                SetSlotSpellCooldownTimeVer2(newCooldown, 3, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner, true);
+                SetPARCostInc((ObjAIBase)owner, 3, SpellSlotType.SpellSlots, 0, PrimaryAbilityResourceType.MANA);
+            }
         }
     }
 }

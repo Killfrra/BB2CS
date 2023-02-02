@@ -5,16 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class JarvanIVDragonStrike : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            BuffTextureName = "JarvanIV_DragonStrike.dds",
-        };
-    }
-}
 namespace Spells
 {
     public class JarvanIVDragonStrike : BBSpellScript
@@ -37,9 +27,6 @@ namespace Spells
             float bonusDamage;
             float dtD;
             float nextBuffVars_ArmorDebuff;
-            bool isStealthed;
-            bool canSee;
-            Particle asdf; // UNUSED
             targetPos = GetCastSpellTargetPos();
             FaceDirection(owner, targetPos);
             damagePoint = GetPointByUnitFacingOffset(owner, 425, 0);
@@ -51,6 +38,7 @@ namespace Spells
             nextBuffVars_ArmorDebuff = this.effect1[level];
             foreach(AttackableUnit unit in GetUnitsInRectangle(owner, damagePoint, 68, 360, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes | SpellDataFlags.NotAffectSelf, default, true))
             {
+                bool isStealthed;
                 isStealthed = GetStealthed(unit);
                 if(!isStealthed)
                 {
@@ -68,6 +56,7 @@ namespace Spells
                     }
                     else
                     {
+                        bool canSee;
                         canSee = CanSeeTarget(owner, unit);
                         if(canSee)
                         {
@@ -82,12 +71,23 @@ namespace Spells
             {
                 if(GetBuffCountFromCaster(unit, attacker, nameof(Buffs.JarvanIVDemacianStandard)) > 0)
                 {
+                    Particle asdf; // UNUSED
                     AddBuff((ObjAIBase)unit, owner, new Buffs.JarvanIVDragonStrikePH(), 1, 1, 0.75f, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, true);
                     AddBuff((ObjAIBase)unit, unit, new Buffs.JarvanIVDragonStrikeSound(), 1, 1, 2, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, true);
-                    SpellEffectCreate(out asdf, out _, "caitlyn_peaceMaker_tar_02.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, "spine", default, unit, default, default, true, false, false, false, false);
+                    SpellEffectCreate(out asdf, out _, "caitlyn_peaceMaker_tar_02.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, "spine", default, unit, default, default, true, false, false, false, false);
                 }
             }
             AddBuff((ObjAIBase)owner, owner, new Buffs.JarvanIVDragonStrike(), 1, 1, 0.25f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
         }
+    }
+}
+namespace Buffs
+{
+    public class JarvanIVDragonStrike : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            BuffTextureName = "JarvanIV_DragonStrike.dds",
+        };
     }
 }

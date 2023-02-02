@@ -5,6 +5,40 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class VeigarEventHorizon : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            AutoCooldownByLevel = new[]{ 24f, 22f, 20f, 18f, 16f, },
+            CastingBreaksStealth = true,
+            DoesntBreakShields = true,
+            TriggersSpellCasts = true,
+            IsDamagingSpell = true,
+            NotSingleTargetSpell = true,
+        };
+        float[] effect0 = {1.5f, 1.75f, 2, 2.25f, 2.5f};
+        public override void SelfExecute()
+        {
+            Vector3 targetPos;
+            Vector3 nextBuffVars_TargetPos;
+            TeamId teamOfOwner;
+            Minion other3;
+            float nextBuffVars_StunDuration;
+            targetPos = GetCastSpellTargetPos();
+            nextBuffVars_TargetPos = targetPos;
+            teamOfOwner = GetTeamID(owner);
+            other3 = SpawnMinion("HiddenMinion", "TestCube", "idle.lua", targetPos, teamOfOwner ?? TeamId.TEAM_CASTER, false, true, false, true, true, false, 0, false, true, (Champion)owner);
+            nextBuffVars_StunDuration = this.effect0[level];
+            AddBuff((ObjAIBase)owner, other3, new Buffs.VeigarEventHorizon(nextBuffVars_StunDuration, nextBuffVars_TargetPos), 1, 1, 3, BuffAddType.REPLACE_EXISTING, BuffType.DAMAGE, 0.1f, true, false, false);
+        }
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            ApplyAssistMarker(attacker, target, 10);
+        }
+    }
+}
 namespace Buffs
 {
     public class VeigarEventHorizon : BBBuffScript
@@ -23,8 +57,8 @@ namespace Buffs
             TeamId teamOfOwner;
             Vector3 targetPos;
             float nextBuffVars_StunDuration;
-            Vector3 nextBuffVars_TargetPos;
             int veigarSkinID;
+            Vector3 nextBuffVars_TargetPos;
             //RequireVar(this.stunDuration);
             //RequireVar(this.targetPos);
             SetNoRender(owner, true);
@@ -45,15 +79,15 @@ namespace Buffs
             veigarSkinID = GetSkinID(attacker);
             if(veigarSkinID == 4)
             {
-                SpellEffectCreate(out this.particle2, out this.particle, "permission_desecrate_green_cas_leprechaun.troy", "permission_desecrate_red_cas_leprechaun.troy", teamOfOwner, 900, 0, TeamId.TEAM_BLUE, default, default, false, default, default, targetPos, default, default, this.targetPos, false, false, false, false, false);
+                SpellEffectCreate(out this.particle2, out this.particle, "permission_desecrate_green_cas_leprechaun.troy", "permission_desecrate_red_cas_leprechaun.troy", teamOfOwner ?? TeamId.TEAM_UNKNOWN, 900, 0, TeamId.TEAM_BLUE, default, default, false, default, default, targetPos, default, default, this.targetPos, false, false, false, false, false);
             }
             else if(veigarSkinID == 6)
             {
-                SpellEffectCreate(out this.particle2, out this.particle, "permission_desecrate_green_cas_daper.troy", "permission_desecrate_red_cas_daper.troy", teamOfOwner, 900, 0, TeamId.TEAM_BLUE, default, default, false, default, default, targetPos, default, default, this.targetPos, false, false, false, false, false);
+                SpellEffectCreate(out this.particle2, out this.particle, "permission_desecrate_green_cas_daper.troy", "permission_desecrate_red_cas_daper.troy", teamOfOwner ?? TeamId.TEAM_UNKNOWN, 900, 0, TeamId.TEAM_BLUE, default, default, false, default, default, targetPos, default, default, this.targetPos, false, false, false, false, false);
             }
             else
             {
-                SpellEffectCreate(out this.particle2, out this.particle, "permission_desecrate_green_cas.troy", "permission_desecrate_red_cas.troy", teamOfOwner, 900, 0, TeamId.TEAM_UNKNOWN, default, default, false, default, default, this.targetPos, default, default, this.targetPos, false, false, false, false, false);
+                SpellEffectCreate(out this.particle2, out this.particle, "permission_desecrate_green_cas.troy", "permission_desecrate_red_cas.troy", teamOfOwner ?? TeamId.TEAM_UNKNOWN, 900, 0, TeamId.TEAM_UNKNOWN, default, default, false, default, default, this.targetPos, default, default, this.targetPos, false, false, false, false, false);
             }
         }
         public override void OnDeactivate(bool expired)
@@ -66,9 +100,6 @@ namespace Buffs
         public override void OnUpdateActions()
         {
             Vector3 targetPos;
-            float duration;
-            float nextBuffVars_StunDuration;
-            Vector3 nextBuffVars_TargetPos;
             targetPos = this.targetPos;
             foreach(AttackableUnit unit in GetUnitsInArea(attacker, targetPos, 800, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
             {
@@ -76,6 +107,9 @@ namespace Buffs
                 {
                     if(GetBuffCountFromCaster(unit, attacker, nameof(Buffs.VeigarEventHorizonPrevent)) == 0)
                     {
+                        float duration;
+                        float nextBuffVars_StunDuration;
+                        Vector3 nextBuffVars_TargetPos;
                         duration = 3.05f - lifeTime;
                         nextBuffVars_StunDuration = this.stunDuration;
                         nextBuffVars_TargetPos = this.targetPos;
@@ -83,40 +117,6 @@ namespace Buffs
                     }
                 }
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class VeigarEventHorizon : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            AutoCooldownByLevel = new[]{ 24f, 22f, 20f, 18f, 16f, },
-            CastingBreaksStealth = true,
-            DoesntBreakShields = true,
-            TriggersSpellCasts = true,
-            IsDamagingSpell = true,
-            NotSingleTargetSpell = true,
-        };
-        float[] effect0 = {1.5f, 1.75f, 2, 2.25f, 2.5f};
-        public override void SelfExecute()
-        {
-            Vector3 targetPos;
-            Vector3 nextBuffVars_TargetPos;
-            float nextBuffVars_StunDuration;
-            TeamId teamOfOwner;
-            Minion other3;
-            targetPos = GetCastSpellTargetPos();
-            nextBuffVars_TargetPos = targetPos;
-            teamOfOwner = GetTeamID(owner);
-            other3 = SpawnMinion("HiddenMinion", "TestCube", "idle.lua", targetPos, teamOfOwner, false, true, false, true, true, false, 0, false, true, (Champion)owner);
-            nextBuffVars_StunDuration = this.effect0[level];
-            AddBuff((ObjAIBase)owner, other3, new Buffs.VeigarEventHorizon(nextBuffVars_StunDuration, nextBuffVars_TargetPos), 1, 1, 3, BuffAddType.REPLACE_EXISTING, BuffType.DAMAGE, 0.1f, true, false, false);
-        }
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            ApplyAssistMarker(attacker, target, 10);
         }
     }
 }

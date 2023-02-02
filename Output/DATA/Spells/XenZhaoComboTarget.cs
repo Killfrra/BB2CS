@@ -5,6 +5,16 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class XenZhaoComboTarget : BBSpellScript
+    {
+        public override void SelfExecute()
+        {
+            AddBuff((ObjAIBase)owner, owner, new Buffs.XenZhaoComboTarget(), 1, 1, 5, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class XenZhaoComboTarget : BBBuffScript
@@ -28,16 +38,16 @@ namespace Buffs
         }
         public override void OnDeactivate(bool expired)
         {
-            float cDMod;
-            int level;
-            float cooldownByLevel;
-            float modulatedCD;
-            float trueCD;
             SpellEffectRemove(this.asdf2);
             SpellEffectRemove(this.asdf1);
             SealSpellSlot(0, SpellSlotType.SpellSlots, (ObjAIBase)owner, false, SpellbookType.SPELLBOOK_CHAMPION);
             if(expired)
             {
+                float cDMod;
+                int level;
+                float cooldownByLevel;
+                float modulatedCD;
+                float trueCD;
                 cDMod = GetPercentCooldownMod(owner);
                 level = GetSlotSpellLevel((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 cooldownByLevel = this.effect0[level];
@@ -48,26 +58,16 @@ namespace Buffs
         }
         public override void OnPreAttack()
         {
-            int level;
             if(target is not BaseTurret)
             {
                 if(target is ObjAIBase)
                 {
+                    int level;
                     level = GetSlotSpellLevel((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                     SkipNextAutoAttack(owner);
                     SpellCast((ObjAIBase)owner, target, target.Position, target.Position, 0, SpellSlotType.ExtraSlots, level, false, false, false, false, true, false);
                 }
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class XenZhaoComboTarget : BBSpellScript
-    {
-        public override void SelfExecute()
-        {
-            AddBuff((ObjAIBase)owner, owner, new Buffs.XenZhaoComboTarget(), 1, 1, 5, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
         }
     }
 }

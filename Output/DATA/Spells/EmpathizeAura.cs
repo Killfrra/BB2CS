@@ -34,11 +34,11 @@ namespace Buffs
         {
             int level;
             float newVampPercent;
-            float tooltipAmount;
             level = GetLevel(owner);
             newVampPercent = this.effect0[level];
             if(newVampPercent != this.vampPercent)
             {
+                float tooltipAmount;
                 this.vampPercent = newVampPercent;
                 tooltipAmount = 100 * this.vampPercent;
                 SetBuffToolTipVar(1, tooltipAmount);

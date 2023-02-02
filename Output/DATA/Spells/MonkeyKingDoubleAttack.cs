@@ -5,6 +5,28 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class MonkeyKingDoubleAttack : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            CastingBreaksStealth = false,
+            DoesntBreakShields = true,
+        };
+        Particle battleCries; // UNUSED
+        int[] effect0 = {9, 8, 7, 6, 5};
+        public override void SelfExecute()
+        {
+            int nextBuffVars_SpellCooldown;
+            TeamId teamID; // UNITIALIZED
+            nextBuffVars_SpellCooldown = this.effect0[level];
+            AddBuff((ObjAIBase)owner, owner, new Buffs.MonkeyKingDoubleAttack(nextBuffVars_SpellCooldown), 1, 1, 6, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+            SetSlotSpellCooldownTime((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, 0);
+            SpellEffectCreate(out this.battleCries, out _, "xenZiou_battle_cry_weapon_01.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "weapon_a_bend3", default, owner, "weapon_b_bend3", default, false, default, default, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class MonkeyKingDoubleAttack : BBBuffScript
@@ -60,8 +82,6 @@ namespace Buffs
             float totalAD;
             float bonusADRatio;
             float damageToDeal; // UNUSED
-            Particle a; // UNUSED
-            float nextBuffVars_ArmorDebuff;
             teamID = GetTeamID(owner);
             level = GetSlotSpellLevel((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             bonusDamage = this.effect0[level];
@@ -74,19 +94,21 @@ namespace Buffs
             }
             if(target is ObjAIBase)
             {
+                Particle a; // UNUSED
                 if(target is BaseTurret)
                 {
                     damageToDeal = bonusDamage + damageAmount;
-                    SpellEffectCreate(out a, out _, "monkey_king_crushingBlow_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false, false);
+                    SpellEffectCreate(out a, out _, "monkey_king_crushingBlow_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false, false);
                     SpellBuffRemove(owner, nameof(Buffs.MonkeyKingDoubleAttack), (ObjAIBase)owner, 0);
                 }
                 else
                 {
+                    float nextBuffVars_ArmorDebuff;
                     damageToDeal = bonusDamage + damageAmount;
                     nextBuffVars_ArmorDebuff = this.effect1[level];
                     BreakSpellShields(target);
                     AddBuff(attacker, target, new Buffs.MonkeyKingDoubleAttackDebuff(nextBuffVars_ArmorDebuff), 1, 1, 3, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_DEHANCER, 0, true, false, false);
-                    SpellEffectCreate(out a, out _, "monkey_king_crushingBlow_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false, false);
+                    SpellEffectCreate(out a, out _, "monkey_king_crushingBlow_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false, false);
                     SpellBuffRemove(owner, nameof(Buffs.MonkeyKingDoubleAttack), (ObjAIBase)owner, 0);
                 }
             }
@@ -96,28 +118,6 @@ namespace Buffs
                 SpellBuffRemove(owner, nameof(Buffs.MonkeyKingDoubleAttack), (ObjAIBase)owner, 0);
             }
             damageAmount += bonusDamage;
-        }
-    }
-}
-namespace Spells
-{
-    public class MonkeyKingDoubleAttack : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            CastingBreaksStealth = false,
-            DoesntBreakShields = true,
-        };
-        Particle battleCries; // UNUSED
-        int[] effect0 = {9, 8, 7, 6, 5};
-        public override void SelfExecute()
-        {
-            int nextBuffVars_SpellCooldown;
-            TeamId teamID; // UNITIALIZED
-            nextBuffVars_SpellCooldown = this.effect0[level];
-            AddBuff((ObjAIBase)owner, owner, new Buffs.MonkeyKingDoubleAttack(nextBuffVars_SpellCooldown), 1, 1, 6, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
-            SetSlotSpellCooldownTime((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, 0);
-            SpellEffectCreate(out this.battleCries, out _, "xenZiou_battle_cry_weapon_01.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "weapon_a_bend3", default, owner, "weapon_b_bend3", default, false, default, default, false, false);
         }
     }
 }

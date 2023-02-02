@@ -27,10 +27,10 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            float count;
-            float total;
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, true))
             {
+                float count;
+                float total;
                 count = GetBuffCountFromAll(owner, nameof(Buffs.GravesPassiveGrit));
                 count--;
                 total = count * charVars.ArmorAmount;

@@ -20,14 +20,14 @@ namespace Buffs
         float[] effect0 = {0.8f, 0.85f, 0.9f, 0.95f, 1};
         public override void OnUpdateActions()
         {
-            float totalAttackDamage;
-            int level;
-            float damagePercent;
-            float damageToDisplay;
-            float bonusAD;
-            float bonusAD20;
             if(ExecutePeriodically(5, ref this.lastTimeExecuted, true))
             {
+                float totalAttackDamage;
+                int level;
+                float damagePercent;
+                float damageToDisplay;
+                float bonusAD;
+                float bonusAD20;
                 totalAttackDamage = GetTotalAttackDamage(owner);
                 level = GetSlotSpellLevel((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 if(level > 0)

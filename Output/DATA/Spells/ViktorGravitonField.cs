@@ -5,6 +5,31 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class ViktorGravitonField : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            CastingBreaksStealth = true,
+            DoesntBreakShields = true,
+            TriggersSpellCasts = true,
+            IsDamagingSpell = true,
+            NotSingleTargetSpell = true,
+        };
+        int[] effect0 = {20, 25, 30};
+        public override void SelfExecute()
+        {
+            Vector3 targetPos;
+            Vector3 nextBuffVars_TargetPos;
+            int nextBuffVars_ManaCost; // UNUSED
+            targetPos = GetCastSpellTargetPos();
+            nextBuffVars_TargetPos = targetPos;
+            nextBuffVars_ManaCost = this.effect0[level];
+            AddBuff((ObjAIBase)owner, owner, new Buffs.ViktorGravitonField(nextBuffVars_TargetPos), 1, 1, 4, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class ViktorGravitonField : BBBuffScript
@@ -38,15 +63,15 @@ namespace Buffs
             ownerSkinID = GetSkinID(owner);
             if(ownerSkinID == 1)
             {
-                SpellEffectCreate(out this.particle, out this.particle2, "Viktor_Catalyst_Fullmachine_green.troy", "Viktor_Catalyst_Fullmachine_red.troy", teamOfOwner, 200, 0, TeamId.TEAM_UNKNOWN, default, default, false, default, default, targetPos, target, default, default, false, false, false, false, false);
+                SpellEffectCreate(out this.particle, out this.particle2, "Viktor_Catalyst_Fullmachine_green.troy", "Viktor_Catalyst_Fullmachine_red.troy", teamOfOwner ?? TeamId.TEAM_UNKNOWN, 200, 0, TeamId.TEAM_UNKNOWN, default, default, false, default, default, targetPos, target, default, default, false, false, false, false, false);
             }
             else if(ownerSkinID == 2)
             {
-                SpellEffectCreate(out this.particle, out this.particle2, "Viktor_Catalyst_Prototype_green.troy", "Viktor_Catalyst_Prototype_red.troy", teamOfOwner, 200, 0, TeamId.TEAM_UNKNOWN, default, default, false, default, default, targetPos, target, default, default, false, false, false, false, false);
+                SpellEffectCreate(out this.particle, out this.particle2, "Viktor_Catalyst_Prototype_green.troy", "Viktor_Catalyst_Prototype_red.troy", teamOfOwner ?? TeamId.TEAM_UNKNOWN, 200, 0, TeamId.TEAM_UNKNOWN, default, default, false, default, default, targetPos, target, default, default, false, false, false, false, false);
             }
             else
             {
-                SpellEffectCreate(out this.particle, out this.particle2, "Viktor_Catalyst_green.troy", "Viktor_Catalyst_red.troy", teamOfOwner, 200, 0, TeamId.TEAM_UNKNOWN, default, default, false, default, default, targetPos, target, default, default, false, false, false, false, false);
+                SpellEffectCreate(out this.particle, out this.particle2, "Viktor_Catalyst_green.troy", "Viktor_Catalyst_red.troy", teamOfOwner ?? TeamId.TEAM_UNKNOWN, 200, 0, TeamId.TEAM_UNKNOWN, default, default, false, default, default, targetPos, target, default, default, false, false, false, false, false);
             }
         }
         public override void OnDeactivate(bool expired)
@@ -61,7 +86,7 @@ namespace Buffs
             cooldownStat = GetPercentCooldownMod(owner);
             level = GetSlotSpellLevel((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             ownerTeamID = GetTeamID(owner);
-            SpellEffectCreate(out soundID, out _, "viktor_gravitonfield_deactivate_sound.troy", default, ownerTeamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, this.targetPos, default, default, this.targetPos, true, false, false, false, false);
+            SpellEffectCreate(out soundID, out _, "viktor_gravitonfield_deactivate_sound.troy", default, ownerTeamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, this.targetPos, default, default, this.targetPos, true, false, false, false, false);
             baseCooldown = this.effect0[level];
             multiplier = 1 + cooldownStat;
             newCooldown = baseCooldown * multiplier;
@@ -72,17 +97,17 @@ namespace Buffs
         {
             ObjAIBase caster;
             int level;
-            float curMana; // UNUSED
-            Vector3 targetPos;
-            float nextBuffVars_MovementSpeedMod;
             caster = SetBuffCasterUnit();
             level = GetSlotSpellLevel(caster, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             if(ExecutePeriodically(0.5f, ref this.damageManaTimer, false))
             {
+                float curMana; // UNUSED
+                Vector3 targetPos;
                 curMana = GetPAR(owner, PrimaryAbilityResourceType.MANA);
                 targetPos = this.targetPos;
                 foreach(AttackableUnit unit in GetUnitsInArea(attacker, targetPos, 325, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
                 {
+                    float nextBuffVars_MovementSpeedMod;
                     nextBuffVars_MovementSpeedMod = this.effect1[level];
                     if(GetBuffCountFromCaster(unit, owner, nameof(Buffs.ViktorGravitonFieldStun)) > 0)
                     {
@@ -93,31 +118,6 @@ namespace Buffs
                     }
                 }
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class ViktorGravitonField : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            CastingBreaksStealth = true,
-            DoesntBreakShields = true,
-            TriggersSpellCasts = true,
-            IsDamagingSpell = true,
-            NotSingleTargetSpell = true,
-        };
-        int[] effect0 = {20, 25, 30};
-        public override void SelfExecute()
-        {
-            Vector3 targetPos;
-            Vector3 nextBuffVars_TargetPos;
-            int nextBuffVars_ManaCost;
-            targetPos = GetCastSpellTargetPos();
-            nextBuffVars_TargetPos = targetPos;
-            nextBuffVars_ManaCost = this.effect0[level];
-            AddBuff((ObjAIBase)owner, owner, new Buffs.ViktorGravitonField(nextBuffVars_TargetPos), 1, 1, 4, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
         }
     }
 }

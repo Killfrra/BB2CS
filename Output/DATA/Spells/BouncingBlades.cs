@@ -34,10 +34,6 @@ namespace Spells
             float damageVar;
             float kIDamage;
             int bBCounter;
-            int targetNum; // UNUSED
-            float bBCount;
-            float inverseVar;
-            float percentVar;
             level = GetSlotSpellLevel((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             bBBaseDamage = this.effect0[level];
             totalDamage = GetTotalAttackDamage(owner);
@@ -56,6 +52,7 @@ namespace Spells
             }
             if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.KillerInstinctBuff2)) > 0)
             {
+                int targetNum; // UNUSED
                 AddBuff((ObjAIBase)target, target, new Buffs.Internal_50MS(), 1, 1, 5, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0, true, false, false);
                 AddBuff(attacker, target, new Buffs.GrievousWound(), 1, 1, 5, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_DEHANCER, 0, true, false, false);
                 targetNum = GetCastSpellTargetsHitPlusOne();
@@ -63,6 +60,9 @@ namespace Spells
             }
             else
             {
+                float bBCount;
+                float inverseVar;
+                float percentVar;
                 bBCount = bBCounter - 1;
                 inverseVar = bBCount * 0.1f;
                 percentVar = 1 - inverseVar;

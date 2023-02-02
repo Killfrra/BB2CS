@@ -28,11 +28,11 @@ namespace Chars
         }
         public override void OnBeingHit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            Particle ar; // UNUSED
             if(damageSource == default)
             {
                 if(attacker is BaseTurret)
                 {
+                    Particle ar; // UNUSED
                     damageAmount *= 0.5f;
                     SpellEffectCreate(out ar, out _, "FeelNoPain_eff.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false, false, false, false, false);
                 }

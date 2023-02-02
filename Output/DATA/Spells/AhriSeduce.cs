@@ -5,6 +5,33 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class AhriSeduce : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = true,
+            IsDamagingSpell = true,
+            NotSingleTargetSpell = true,
+        };
+        public override void SelfExecute()
+        {
+            Vector3 targetPos;
+            Vector3 ownerPos;
+            float distance;
+            targetPos = GetCastSpellTargetPos();
+            ownerPos = GetUnitPosition(owner);
+            distance = DistanceBetweenPoints(ownerPos, targetPos);
+            FaceDirection(owner, targetPos);
+            if(distance > 1000)
+            {
+                targetPos = GetPointByUnitFacingOffset(owner, 950, 0);
+            }
+            SpellCast((ObjAIBase)owner, default, targetPos, targetPos, 4, SpellSlotType.ExtraSlots, level, true, true, false, false, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class AhriSeduce : BBBuffScript
@@ -50,33 +77,6 @@ namespace Buffs
             SetCanAttack(owner, false);
             IncPercentMultiplicativeMovementSpeedMod(owner, this.slowPercent);
             IncFlatAttackRangeMod(owner, -600);
-        }
-    }
-}
-namespace Spells
-{
-    public class AhriSeduce : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = true,
-            IsDamagingSpell = true,
-            NotSingleTargetSpell = true,
-        };
-        public override void SelfExecute()
-        {
-            Vector3 targetPos;
-            Vector3 ownerPos;
-            float distance;
-            targetPos = GetCastSpellTargetPos();
-            ownerPos = GetUnitPosition(owner);
-            distance = DistanceBetweenPoints(ownerPos, targetPos);
-            FaceDirection(owner, targetPos);
-            if(distance > 1000)
-            {
-                targetPos = GetPointByUnitFacingOffset(owner, 950, 0);
-            }
-            SpellCast((ObjAIBase)owner, default, targetPos, targetPos, 4, SpellSlotType.ExtraSlots, level, true, true, false, false, false, false);
         }
     }
 }

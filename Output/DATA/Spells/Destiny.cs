@@ -5,29 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class Destiny : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateEffect = new[]{ "DestinyEye.troy", "", },
-            BuffName = "Destiny",
-            BuffTextureName = "Destiny_temp.dds",
-        };
-        Region bubbleID;
-        public override void OnActivate()
-        {
-            TeamId casterID;
-            casterID = GetTeamID(attacker);
-            this.bubbleID = AddUnitPerceptionBubble(casterID, 1000, owner, 40, default, default, true);
-        }
-        public override void OnDeactivate(bool expired)
-        {
-            RemovePerceptionBubble(this.bubbleID);
-        }
-    }
-}
 namespace Spells
 {
     public class Destiny : BBSpellScript
@@ -52,6 +29,29 @@ namespace Spells
             }
             SetSpell((ObjAIBase)owner, 3, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, nameof(Spells.Gate));
             SetSlotSpellCooldownTimeVer2(0.5f, 3, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner, false);
+        }
+    }
+}
+namespace Buffs
+{
+    public class Destiny : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateEffect = new[]{ "DestinyEye.troy", "", },
+            BuffName = "Destiny",
+            BuffTextureName = "Destiny_temp.dds",
+        };
+        Region bubbleID;
+        public override void OnActivate()
+        {
+            TeamId casterID;
+            casterID = GetTeamID(attacker);
+            this.bubbleID = AddUnitPerceptionBubble(casterID, 1000, owner, 40, default, default, true);
+        }
+        public override void OnDeactivate(bool expired)
+        {
+            RemovePerceptionBubble(this.bubbleID);
         }
     }
 }

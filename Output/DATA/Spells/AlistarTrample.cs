@@ -43,17 +43,17 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            int level;
-            float damageByRank;
-            float totalAttackDamage;
-            float baseAttackDamage;
-            float abilityPower;
-            float bonusAttackDamage;
-            float attackDamageToAdd;
-            float abilityPowerToAdd;
-            float damageToDeal;
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, true))
             {
+                int level;
+                float damageByRank;
+                float totalAttackDamage;
+                float baseAttackDamage;
+                float abilityPower;
+                float bonusAttackDamage;
+                float attackDamageToAdd;
+                float abilityPowerToAdd;
+                float damageToDeal;
                 level = GetLevel(owner);
                 damageByRank = this.effect0[level];
                 totalAttackDamage = GetTotalAttackDamage(owner);

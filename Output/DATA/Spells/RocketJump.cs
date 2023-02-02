@@ -5,64 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class RocketJump : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            SpellFXOverrideSkins = new[]{ "RocketTristana", },
-        };
-        float damage;
-        Particle a;
-        public RocketJump(float damage = default)
-        {
-            this.damage = damage;
-        }
-        public override void OnActivate()
-        {
-            TeamId teamID;
-            int ownerSkinID; // UNUSED
-            teamID = GetTeamID(owner);
-            //RequireVar(this.damage);
-            SpellEffectCreate(out this.a, out _, "tristana_rocketJump_cas.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "root", default, owner, default, default, true, false, false, false, false);
-            ownerSkinID = GetSkinID(owner);
-            PlayAnimation("Spell2", 0, owner, false, false, false);
-        }
-        public override void OnDeactivate(bool expired)
-        {
-            SpellEffectRemove(this.a);
-        }
-        public override void OnMoveEnd()
-        {
-            SpellBuffRemoveCurrent(owner);
-        }
-        public override void OnMoveSuccess()
-        {
-            TeamId teamID;
-            int ownerSkinID;
-            Particle asdf; // UNUSED
-            Particle b; // UNUSED
-            teamID = GetTeamID(owner);
-            ownerSkinID = GetSkinID(owner);
-            if(ownerSkinID == 6)
-            {
-                SpellEffectCreate(out asdf, out _, "tristana_rocket_rocketJump_land.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, false, false, false, false);
-            }
-            else
-            {
-                SpellEffectCreate(out asdf, out _, "tristana_rocketJump_land.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, false, false, false, false);
-            }
-            foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 300, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
-            {
-                BreakSpellShields(unit);
-                ApplyDamage((ObjAIBase)owner, unit, this.damage, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0.8f, 1, false, false, attacker);
-                SpellEffectCreate(out b, out _, "tristana_rocketJump_unit_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
-                AddBuff((ObjAIBase)owner, unit, new Buffs.RocketJumpSlow(), 1, 1, 2.5f, BuffAddType.STACKS_AND_OVERLAPS, BuffType.SLOW, 0, true, false, false);
-            }
-        }
-    }
-}
 namespace Spells
 {
     public class RocketJump : BBSpellScript
@@ -149,6 +91,64 @@ namespace Spells
             Move(owner, targetPos, speedVar, gravityVar, 0, ForceMovementType.FURTHEST_WITHIN_RANGE, ForceMovementOrdersType.CANCEL_ORDER, distance, ForceMovementOrdersFacing.FACE_MOVEMENT_DIRECTION);
             nextBuffVars_Damage = this.effect0[level];
             AddBuff(attacker, attacker, new Buffs.RocketJump(nextBuffVars_Damage), 1, 1, 2, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+        }
+    }
+}
+namespace Buffs
+{
+    public class RocketJump : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            SpellFXOverrideSkins = new[]{ "RocketTristana", },
+        };
+        float damage;
+        Particle a;
+        public RocketJump(float damage = default)
+        {
+            this.damage = damage;
+        }
+        public override void OnActivate()
+        {
+            TeamId teamID;
+            int ownerSkinID; // UNUSED
+            teamID = GetTeamID(owner);
+            //RequireVar(this.damage);
+            SpellEffectCreate(out this.a, out _, "tristana_rocketJump_cas.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "root", default, owner, default, default, true, false, false, false, false);
+            ownerSkinID = GetSkinID(owner);
+            PlayAnimation("Spell2", 0, owner, false, false, false);
+        }
+        public override void OnDeactivate(bool expired)
+        {
+            SpellEffectRemove(this.a);
+        }
+        public override void OnMoveEnd()
+        {
+            SpellBuffRemoveCurrent(owner);
+        }
+        public override void OnMoveSuccess()
+        {
+            TeamId teamID;
+            int ownerSkinID;
+            Particle asdf; // UNUSED
+            teamID = GetTeamID(owner);
+            ownerSkinID = GetSkinID(owner);
+            if(ownerSkinID == 6)
+            {
+                SpellEffectCreate(out asdf, out _, "tristana_rocket_rocketJump_land.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, false, false, false, false);
+            }
+            else
+            {
+                SpellEffectCreate(out asdf, out _, "tristana_rocketJump_land.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, false, false, false, false);
+            }
+            foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 300, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
+            {
+                Particle b; // UNUSED
+                BreakSpellShields(unit);
+                ApplyDamage((ObjAIBase)owner, unit, this.damage, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0.8f, 1, false, false, attacker);
+                SpellEffectCreate(out b, out _, "tristana_rocketJump_unit_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
+                AddBuff((ObjAIBase)owner, unit, new Buffs.RocketJumpSlow(), 1, 1, 2.5f, BuffAddType.STACKS_AND_OVERLAPS, BuffType.SLOW, 0, true, false, false);
+            }
         }
     }
 }

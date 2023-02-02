@@ -33,8 +33,6 @@ namespace Spells
             float multipliedAD;
             float baseDamage;
             float damageToDeal;
-            float counter;
-            float damagePercent;
             targetNum = GetCastSpellTargetsHitPlusOne();
             baseAttackDamage = GetBaseAttackDamage(owner);
             bonusAD = GetFlatPhysicalDamageMod(owner);
@@ -49,6 +47,8 @@ namespace Spells
             }
             else
             {
+                float counter;
+                float damagePercent;
                 counter = 1;
                 damagePercent = 1;
                 while(counter < targetNum)

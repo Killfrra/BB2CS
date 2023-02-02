@@ -25,7 +25,7 @@ namespace Spells
             level = GetCastSpellLevelPlusOne();
             teamID = GetTeamID(owner);
             targetPos = GetCastSpellTargetPos();
-            other2 = SpawnMinion("k", "TestCubeRender", "idle.lua", targetPos, teamID, true, true, false, false, true, true, 0, default, true, (Champion)attacker);
+            other2 = SpawnMinion("k", "TestCubeRender", "idle.lua", targetPos, teamID ?? TeamId.TEAM_NEUTRAL, true, true, false, false, true, true, 0, default, true, (Champion)attacker);
             SetNoRender(other2, true);
             if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.UpgradeBuff)) > 0)
             {

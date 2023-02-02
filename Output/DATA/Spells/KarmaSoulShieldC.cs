@@ -5,6 +5,45 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class KarmaSoulShieldC : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = true,
+            IsDamagingSpell = true,
+            NotSingleTargetSpell = false,
+        };
+        int[] effect0 = {80, 120, 160, 200, 240, 280};
+        int[] effect1 = {0, 0, 0, 0, 0, 0};
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            TeamId teamID;
+            float nextBuffVars_TotalArmorAmount;
+            float abilityPower;
+            float armorAmount;
+            float totalArmorAmount;
+            Particle a; // UNUSED
+            teamID = GetTeamID(owner);
+            AddBuff((ObjAIBase)owner, owner, new Buffs.KarmaSoulShieldAnim(), 1, 1, 1, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+            abilityPower = GetFlatMagicDamageMod(attacker);
+            armorAmount = this.effect0[level];
+            abilityPower *= 0.8f;
+            totalArmorAmount = abilityPower + armorAmount;
+            nextBuffVars_TotalArmorAmount = totalArmorAmount;
+            AddBuff(attacker, target, new Buffs.KarmaSoulShieldC(nextBuffVars_TotalArmorAmount), 1, 1, 5, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+            SpellEffectCreate(out a, out _, "karma_soulShield_buf_mantra.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false);
+            foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, target.Position, 500, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
+            {
+                Particle aoehit; // UNUSED
+                BreakSpellShields(unit);
+                SpellEffectCreate(out aoehit, out _, "karma_souldShiled_ult_unit_tar.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, default, default, false);
+                ApplyDamage(attacker, unit, armorAmount + this.effect1[level], DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0.8f, 0, false, false, attacker);
+            }
+        }
+    }
+}
 namespace Buffs
 {
     public class KarmaSoulShieldC : BBBuffScript
@@ -30,8 +69,8 @@ namespace Buffs
             TeamId teamID;
             teamID = GetTeamID(owner);
             //RequireVar(this.totalArmorAmount);
-            SpellEffectCreate(out this.particle, out _, "karma_soulShield_buf.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false, default, default, false);
-            SpellEffectCreate(out this.soundParticle, out _, "KarmaSoulShieldSound.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, default, default, false);
+            SpellEffectCreate(out this.particle, out _, "karma_soulShield_buf.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false, default, default, false);
+            SpellEffectCreate(out this.soundParticle, out _, "KarmaSoulShieldSound.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, default, default, false);
             SetBuffToolTipVar(1, this.totalArmorAmount);
             ApplyAssistMarker(attacker, owner, 10);
             IncreaseShield(owner, this.totalArmorAmount, true, true);
@@ -60,45 +99,6 @@ namespace Buffs
                 this.totalArmorAmount = 0;
                 ReduceShield(owner, this.oldArmorAmount, true, true);
                 SpellBuffRemoveCurrent(owner);
-            }
-        }
-    }
-}
-namespace Spells
-{
-    public class KarmaSoulShieldC : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = true,
-            IsDamagingSpell = true,
-            NotSingleTargetSpell = false,
-        };
-        int[] effect0 = {80, 120, 160, 200, 240, 280};
-        int[] effect1 = {0, 0, 0, 0, 0, 0};
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            TeamId teamID;
-            float nextBuffVars_TotalArmorAmount;
-            float abilityPower;
-            float armorAmount;
-            float totalArmorAmount;
-            Particle a; // UNUSED
-            Particle aoehit; // UNUSED
-            teamID = GetTeamID(owner);
-            AddBuff((ObjAIBase)owner, owner, new Buffs.KarmaSoulShieldAnim(), 1, 1, 1, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
-            abilityPower = GetFlatMagicDamageMod(attacker);
-            armorAmount = this.effect0[level];
-            abilityPower *= 0.8f;
-            totalArmorAmount = abilityPower + armorAmount;
-            nextBuffVars_TotalArmorAmount = totalArmorAmount;
-            AddBuff(attacker, target, new Buffs.KarmaSoulShieldC(nextBuffVars_TotalArmorAmount), 1, 1, 5, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
-            SpellEffectCreate(out a, out _, "karma_soulShield_buf_mantra.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false);
-            foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, target.Position, 500, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
-            {
-                BreakSpellShields(unit);
-                SpellEffectCreate(out aoehit, out _, "karma_souldShiled_ult_unit_tar.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, default, default, false);
-                ApplyDamage(attacker, unit, armorAmount + this.effect1[level], DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0.8f, 0, false, false, attacker);
             }
         }
     }

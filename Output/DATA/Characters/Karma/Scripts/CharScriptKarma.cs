@@ -14,10 +14,10 @@ namespace Chars
         int[] effect1 = {15, 14, 13, 12, 11, 10};
         public override void OnUpdateActions()
         {
-            float mantraTimerCooldown;
-            float cooldownMod;
             if(ExecutePeriodically(1, ref this.lastTime2Executed, true))
             {
+                float mantraTimerCooldown;
+                float cooldownMod;
                 level = GetLevel(owner);
                 mantraTimerCooldown = this.effect0[level];
                 cooldownMod = GetPercentCooldownMod(owner);
@@ -29,10 +29,6 @@ namespace Chars
         public override void OnSpellCast(string spellName, SpellScriptMetaData spellVars)
         {
             int spellSlot;
-            float cooldownStat;
-            float baseCooldown;
-            float multiplier;
-            float newCooldown;
             spellSlot = GetSpellSlot();
             spellName = GetSpellName();
             if(spellSlot == 3)
@@ -42,6 +38,10 @@ namespace Chars
             {
                 if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.KarmaChakra)) > 0)
                 {
+                    float cooldownStat;
+                    float baseCooldown;
+                    float multiplier;
+                    float newCooldown;
                     if(spellName == nameof(Spells.KarmaSoulShieldC))
                     {
                         cooldownStat = GetPercentCooldownMod(owner);

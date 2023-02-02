@@ -27,8 +27,7 @@ namespace Buffs
         }
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            bool spellVars_DoesntTriggerSpellCasts;
-            Particle killMe_; // UNUSED
+            bool spellVars_DoesntTriggerSpellCasts; // UNITIALIZED
             if(spellVars.DoesntTriggerSpellCasts)
             {
             }
@@ -36,6 +35,7 @@ namespace Buffs
             {
                 if(this.cooldownResevoir > 0)
                 {
+                    Particle killMe_; // UNUSED
                     SpellEffectCreate(out killMe_, out _, "TearoftheGoddess_itm.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false);
                     charVars.TearBonusMana++;
                     charVars.TearBonusMana = Math.Min(charVars.TearBonusMana, 1000);

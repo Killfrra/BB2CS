@@ -5,43 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class RanduinsOmen : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            NonDispellable = true,
-            PersistsThroughDeath = true,
-        };
-        public override void OnActivate()
-        {
-            IncPermanentPercentCooldownMod(owner, -0.05f);
-        }
-        public override void OnDeactivate(bool expired)
-        {
-            IncPermanentPercentCooldownMod(owner, 0.05f);
-        }
-        public override void OnBeingHit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
-        {
-            float nextBuffVars_MoveSpeedMod;
-            float nextBuffVars_AttackSpeedMod;
-            if(RandomChance() < 0.2f)
-            {
-                if(attacker is BaseTurret)
-                {
-                }
-                else
-                {
-                    nextBuffVars_MoveSpeedMod = -0.35f;
-                    AddBuff((ObjAIBase)owner, attacker, new Buffs.Slow(nextBuffVars_MoveSpeedMod, nextBuffVars_AttackSpeedMod), 100, 1, 3, BuffAddType.STACKS_AND_OVERLAPS, BuffType.SLOW, 0, true, false, false);
-                    nextBuffVars_AttackSpeedMod = -0.35f;
-                    AddBuff((ObjAIBase)owner, attacker, new Buffs.Cripple(nextBuffVars_AttackSpeedMod), 100, 1, 3, BuffAddType.STACKS_AND_OVERLAPS, BuffType.COMBAT_DEHANCER, 0, true, false, false);
-                }
-            }
-        }
-    }
-}
 namespace Spells
 {
     public class RanduinsOmen : BBSpellScript
@@ -55,7 +18,6 @@ namespace Spells
         {
             Particle a; // UNUSED
             float nextBuffVars_MoveSpeedMod;
-            float nextBuffVars_AttackSpeedMod;
             float castArmor;
             float castMR;
             float defTotal;
@@ -66,6 +28,7 @@ namespace Spells
             string name3;
             string name4;
             string name5;
+            float nextBuffVars_AttackSpeedMod;
             SpellEffectCreate(out a, out _, "RanduinsOmen_cas.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false, default, default, false, false);
             nextBuffVars_MoveSpeedMod = -0.35f;
             nextBuffVars_AttackSpeedMod = -0.35f;
@@ -110,6 +73,43 @@ namespace Spells
             if(name5 == nameof(Spells.RanduinsOmen))
             {
                 SetSlotSpellCooldownTimeVer2(60, 5, SpellSlotType.InventorySlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner, false);
+            }
+        }
+    }
+}
+namespace Buffs
+{
+    public class RanduinsOmen : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            NonDispellable = true,
+            PersistsThroughDeath = true,
+        };
+        public override void OnActivate()
+        {
+            IncPermanentPercentCooldownMod(owner, -0.05f);
+        }
+        public override void OnDeactivate(bool expired)
+        {
+            IncPermanentPercentCooldownMod(owner, 0.05f);
+        }
+        public override void OnBeingHit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
+        {
+            if(RandomChance() < 0.2f)
+            {
+                if(attacker is BaseTurret)
+                {
+                }
+                else
+                {
+                    float nextBuffVars_MoveSpeedMod;
+                    float nextBuffVars_AttackSpeedMod;
+                    nextBuffVars_MoveSpeedMod = -0.35f;
+                    AddBuff((ObjAIBase)owner, attacker, new Buffs.Slow(nextBuffVars_MoveSpeedMod, nextBuffVars_AttackSpeedMod), 100, 1, 3, BuffAddType.STACKS_AND_OVERLAPS, BuffType.SLOW, 0, true, false, false);
+                    nextBuffVars_AttackSpeedMod = -0.35f;
+                    AddBuff((ObjAIBase)owner, attacker, new Buffs.Cripple(nextBuffVars_AttackSpeedMod), 100, 1, 3, BuffAddType.STACKS_AND_OVERLAPS, BuffType.COMBAT_DEHANCER, 0, true, false, false);
+                }
             }
         }
     }

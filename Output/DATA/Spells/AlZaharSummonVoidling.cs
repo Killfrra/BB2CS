@@ -18,19 +18,19 @@ namespace Buffs
         };
         public override void OnSpellCast(string spellName, SpellScriptMetaData spellVars)
         {
-            TeamId teamID;
-            Vector3 castPos;
-            Minion other3;
-            int level;
-            float bonusDamage;
-            float bonusHealth;
-            float nextBuffVars_BonusHealth;
-            float nextBuffVars_BonusDamage;
             if(!spellVars.DoesntTriggerSpellCasts)
             {
+                TeamId teamID;
+                Vector3 castPos;
+                Minion other3;
+                int level;
+                float bonusDamage;
+                float bonusHealth;
+                float nextBuffVars_BonusHealth;
+                float nextBuffVars_BonusDamage;
                 teamID = GetTeamID(owner);
                 castPos = GetPointByUnitFacingOffset(owner, 100, 0);
-                other3 = SpawnMinion("Voidling", "MalzaharVoidling", "UncontrollablePet.lua", castPos, teamID, false, false, true, false, false, true, 0, default, false, (Champion)owner);
+                other3 = SpawnMinion("Voidling", "MalzaharVoidling", "UncontrollablePet.lua", castPos, teamID ?? TeamId.TEAM_CASTER, false, false, true, false, false, true, 0, default, false, (Champion)owner);
                 level = GetLevel(owner);
                 bonusDamage = level * 5;
                 bonusHealth = level * 50;

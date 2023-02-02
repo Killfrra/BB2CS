@@ -30,8 +30,8 @@ namespace Buffs
         public override void OnDeactivate(bool expired)
         {
             float nextBuffVars_CritDmgBonus;
-            float nextBuffVars_DCooldown;
             Vector3 castPos;
+            float nextBuffVars_DCooldown;
             nextBuffVars_CritDmgBonus = this.critDmgBonus;
             nextBuffVars_DCooldown = this.dCooldown;
             castPos = this.castPos;

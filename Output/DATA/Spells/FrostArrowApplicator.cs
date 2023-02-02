@@ -22,8 +22,6 @@ namespace Buffs
         }
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            int level;
-            float nextBuffVars_MovementSpeedMod;
             if(target is ObjAIBase)
             {
                 if(target is not BaseTurret)
@@ -32,6 +30,8 @@ namespace Buffs
                     {
                         if(hitResult != HitResult.HIT_Dodge)
                         {
+                            int level;
+                            float nextBuffVars_MovementSpeedMod;
                             level = GetSlotSpellLevel((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                             nextBuffVars_MovementSpeedMod = this.effect0[level];
                             AddBuff((ObjAIBase)owner, target, new Buffs.FrostArrow(nextBuffVars_MovementSpeedMod), 1, 1, 2, BuffAddType.RENEW_EXISTING, BuffType.SLOW, 0, true, false, false);

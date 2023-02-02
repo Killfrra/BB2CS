@@ -5,32 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class MissileBarrage : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            BuffName = "MissileBarrageCheck",
-            BuffTextureName = "Corki_MissileBarrage.dds",
-            NonDispellable = true,
-            PersistsThroughDeath = true,
-        };
-        public override void OnUpdateAmmo()
-        {
-            int count;
-            count = GetBuffCountFromAll(owner, nameof(Buffs.MissileBarrage));
-            if(count == 7)
-            {
-                AddBuff(attacker, owner, new Buffs.MissileBarrage(), 8, 1, 25000, BuffAddType.STACKS_AND_RENEWS, BuffType.COUNTER, 0, true, false, false);
-            }
-            else
-            {
-                AddBuff(attacker, owner, new Buffs.MissileBarrage(), 8, 1, charVars.ChargeCooldown, BuffAddType.STACKS_AND_RENEWS, BuffType.COUNTER, 0, true, false, false);
-            }
-        }
-    }
-}
 namespace Spells
 {
     public class MissileBarrage : BBSpellScript
@@ -92,6 +66,32 @@ namespace Spells
             else
             {
                 AddBuff((ObjAIBase)owner, owner, new Buffs.CorkiMissileBarrageNC(), 3, 1, 25000, BuffAddType.STACKS_AND_RENEWS, BuffType.AURA, 0, true, false, false);
+            }
+        }
+    }
+}
+namespace Buffs
+{
+    public class MissileBarrage : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            BuffName = "MissileBarrageCheck",
+            BuffTextureName = "Corki_MissileBarrage.dds",
+            NonDispellable = true,
+            PersistsThroughDeath = true,
+        };
+        public override void OnUpdateAmmo()
+        {
+            int count;
+            count = GetBuffCountFromAll(owner, nameof(Buffs.MissileBarrage));
+            if(count == 7)
+            {
+                AddBuff(attacker, owner, new Buffs.MissileBarrage(), 8, 1, 25000, BuffAddType.STACKS_AND_RENEWS, BuffType.COUNTER, 0, true, false, false);
+            }
+            else
+            {
+                AddBuff(attacker, owner, new Buffs.MissileBarrage(), 8, 1, charVars.ChargeCooldown, BuffAddType.STACKS_AND_RENEWS, BuffType.COUNTER, 0, true, false, false);
             }
         }
     }

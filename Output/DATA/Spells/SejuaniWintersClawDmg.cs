@@ -37,17 +37,17 @@ namespace Buffs
         }
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            TeamId teamID;
-            Particle temp; // UNUSED
-            int count;
             if(target is not BaseTurret)
             {
                 if(hitResult != HitResult.HIT_Dodge)
                 {
                     if(hitResult != HitResult.HIT_Miss)
                     {
+                        TeamId teamID;
+                        Particle temp; // UNUSED
+                        int count;
                         teamID = GetTeamID(attacker);
-                        SpellEffectCreate(out temp, out _, "Leona_ShieldOfDaybreak_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, false, false, false, false);
+                        SpellEffectCreate(out temp, out _, "Leona_ShieldOfDaybreak_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, false, false, false, false);
                         ApplyDamage(attacker, target, this.baseDamage, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELL, 1, 0.25f, 0, false, false, attacker);
                         SpellBuffRemoveStacks(owner, owner, nameof(Buffs.SejuaniWintersClawBuff), 1);
                         count = GetBuffCountFromAll(owner, nameof(Buffs.SejuaniWintersClawBuff));

@@ -18,9 +18,9 @@ namespace Chars
         }
         public override void OnKill()
         {
-            bool nextBuffVars_IsChampion;
             if(target is ObjAIBase)
             {
+                bool nextBuffVars_IsChampion; // UNUSED
                 if(target is Champion)
                 {
                     nextBuffVars_IsChampion = true;

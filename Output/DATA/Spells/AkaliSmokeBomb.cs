@@ -5,6 +5,33 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class AkaliSmokeBomb : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            CastingBreaksStealth = true,
+            DoesntBreakShields = true,
+            TriggersSpellCasts = true,
+            IsDamagingSpell = false,
+            NotSingleTargetSpell = true,
+            PhysicalDamageRatio = 1f,
+            SpellDamageRatio = 1f,
+        };
+        int[] effect0 = {8, 8, 8, 8, 8};
+        public override void SelfExecute()
+        {
+            TeamId teamID;
+            Vector3 targetPos;
+            Minion other3;
+            teamID = GetTeamID(owner);
+            targetPos = GetCastSpellTargetPos();
+            other3 = SpawnMinion("HiddenMinion", "TestCube", "idle.lua", targetPos, teamID ?? TeamId.TEAM_CASTER, false, true, false, true, true, true, 0, false, true, (Champion)owner);
+            AddBuff(attacker, other3, new Buffs.AkaliSmokeBomb(), 1, 1, this.effect0[level], BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class AkaliSmokeBomb : BBBuffScript
@@ -20,7 +47,7 @@ namespace Buffs
         {
             TeamId casterID;
             casterID = GetTeamID(attacker);
-            SpellEffectCreate(out this.particle2, out this.particle, "akali_smoke_bomb_tar_team_green.troy", "akali_smoke_bomb_tar_team_red.troy", casterID, 250, 0, TeamId.TEAM_BLUE, default, owner, false, owner, default, default, owner, default, default, false, default, default, false, false);
+            SpellEffectCreate(out this.particle2, out this.particle, "akali_smoke_bomb_tar_team_green.troy", "akali_smoke_bomb_tar_team_red.troy", casterID ?? TeamId.TEAM_UNKNOWN, 250, 0, TeamId.TEAM_BLUE, default, owner, false, owner, default, default, owner, default, default, false, default, default, false, false);
             SetNoRender(owner, true);
             SetGhosted(owner, true);
             SetTargetable(owner, false);
@@ -37,12 +64,12 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            float nextBuffVars_InitialTime;
-            float nextBuffVars_TimeLastHit;
             if(ExecutePeriodically(0.25f, ref this.lastTimeExecuted, true))
             {
                 foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 425, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectFriends | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
                 {
+                    float nextBuffVars_InitialTime; // UNUSED
+                    float nextBuffVars_TimeLastHit; // UNUSED
                     if(unit == attacker)
                     {
                         if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.Recall)) == 0)
@@ -69,33 +96,6 @@ namespace Buffs
                     }
                 }
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class AkaliSmokeBomb : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            CastingBreaksStealth = true,
-            DoesntBreakShields = true,
-            TriggersSpellCasts = true,
-            IsDamagingSpell = false,
-            NotSingleTargetSpell = true,
-            PhysicalDamageRatio = 1f,
-            SpellDamageRatio = 1f,
-        };
-        int[] effect0 = {8, 8, 8, 8, 8};
-        public override void SelfExecute()
-        {
-            TeamId teamID;
-            Vector3 targetPos;
-            Minion other3;
-            teamID = GetTeamID(owner);
-            targetPos = GetCastSpellTargetPos();
-            other3 = SpawnMinion("HiddenMinion", "TestCube", "idle.lua", targetPos, teamID, false, true, false, true, true, true, 0, false, true, (Champion)owner);
-            AddBuff(attacker, other3, new Buffs.AkaliSmokeBomb(), 1, 1, this.effect0[level], BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
         }
     }
 }

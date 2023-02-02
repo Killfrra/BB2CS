@@ -27,11 +27,6 @@ namespace Buffs
         public override void OnUpdateStats()
         {
             int count;
-            int level;
-            float sizeByLevel;
-            float bonus;
-            float healthPerStack;
-            float bonusHealth;
             count = GetBuffCountFromCaster(owner, owner, nameof(Buffs.Feast));
             if(count == 0)
             {
@@ -39,6 +34,11 @@ namespace Buffs
             }
             else
             {
+                int level;
+                float sizeByLevel;
+                float bonus;
+                float healthPerStack;
+                float bonusHealth;
                 level = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 sizeByLevel = this.effect1[level];
                 bonus = count * sizeByLevel;

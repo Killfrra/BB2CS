@@ -34,9 +34,9 @@ namespace Buffs
         public override void OnUpdateActions()
         {
             float _0_25; // UNITIALIZED
-            float distance;
             if(ExecutePeriodically(0, ref this.lastTimeExecuted, false, _0_25))
             {
+                float distance;
                 distance = DistanceBetweenObjectAndPoint(owner, this.startPosition);
                 if(distance > 10)
                 {

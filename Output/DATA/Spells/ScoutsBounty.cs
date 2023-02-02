@@ -5,6 +5,22 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class ScoutsBounty : BBSpellScript
+    {
+        int[] effect0 = {100, 150, 200};
+        int[] effect1 = {-30, -45, -60};
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            float nextBuffVars_BonusGold;
+            float nextBuffVars_ArmorReduction;
+            nextBuffVars_BonusGold = this.effect0[level];
+            nextBuffVars_ArmorReduction = this.effect1[level];
+            AddBuff(attacker, target, new Buffs.ScoutsBounty(nextBuffVars_ArmorReduction, nextBuffVars_BonusGold), 1, 1, 30, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_DEHANCER, 0);
+        }
+    }
+}
 namespace Buffs
 {
     public class ScoutsBounty : BBBuffScript
@@ -43,22 +59,6 @@ namespace Buffs
                 IncGold(attacker, this.bonusGold);
                 SpellBuffRemove(owner, nameof(Buffs.ScoutsBounty), attacker);
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class ScoutsBounty : BBSpellScript
-    {
-        int[] effect0 = {100, 150, 200};
-        int[] effect1 = {-30, -45, -60};
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            float nextBuffVars_BonusGold;
-            float nextBuffVars_ArmorReduction;
-            nextBuffVars_BonusGold = this.effect0[level];
-            nextBuffVars_ArmorReduction = this.effect1[level];
-            AddBuff(attacker, target, new Buffs.ScoutsBounty(nextBuffVars_ArmorReduction, nextBuffVars_BonusGold), 1, 1, 30, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_DEHANCER, 0);
         }
     }
 }

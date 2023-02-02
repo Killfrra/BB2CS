@@ -5,33 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class UdyrPhoenixStance : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            BuffName = "UdyrPhoenixStance",
-            BuffTextureName = "Udyr_PhoenixStance.dds",
-            PersistsThroughDeath = true,
-            SpellToggleSlot = 4,
-        };
-        int casterID; // UNUSED
-        Particle phoenix;
-        public override void OnActivate()
-        {
-            this.casterID = PushCharacterData("UdyrPhoenix", owner, false);
-            SpellEffectCreate(out this.phoenix, out _, "phoenixpelt.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "head", default, owner, default, default, false);
-            charVars.Count = 0;
-            OverrideAutoAttack(4, SpellSlotType.ExtraSlots, owner, 1, true);
-        }
-        public override void OnDeactivate(bool expired)
-        {
-            SpellEffectRemove(this.phoenix);
-            RemoveOverrideAutoAttack(owner, true);
-        }
-    }
-}
 namespace Spells
 {
     public class UdyrPhoenixStance : BBSpellScript
@@ -82,6 +55,33 @@ namespace Spells
             AddBuff((ObjAIBase)owner, owner, new Buffs.UdyrPhoenixStance(), 1, 1, 25000, BuffAddType.RENEW_EXISTING, BuffType.AURA, 0, true, false);
             SpellEffectCreate(out phoenixparticle, out _, "PhoenixStance.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false);
             AddBuff((ObjAIBase)owner, owner, new Buffs.UdyrPhoenixActivation(), 1, 1, 5, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false);
+        }
+    }
+}
+namespace Buffs
+{
+    public class UdyrPhoenixStance : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            BuffName = "UdyrPhoenixStance",
+            BuffTextureName = "Udyr_PhoenixStance.dds",
+            PersistsThroughDeath = true,
+            SpellToggleSlot = 4,
+        };
+        int casterID; // UNUSED
+        Particle phoenix;
+        public override void OnActivate()
+        {
+            this.casterID = PushCharacterData("UdyrPhoenix", owner, false);
+            SpellEffectCreate(out this.phoenix, out _, "phoenixpelt.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "head", default, owner, default, default, false);
+            charVars.Count = 0;
+            OverrideAutoAttack(4, SpellSlotType.ExtraSlots, owner, 1, true);
+        }
+        public override void OnDeactivate(bool expired)
+        {
+            SpellEffectRemove(this.phoenix);
+            RemoveOverrideAutoAttack(owner, true);
         }
     }
 }

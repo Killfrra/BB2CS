@@ -23,7 +23,6 @@ namespace Buffs
         {
             string attackerName; // UNUSED
             TeamId teamID;
-            Particle part2; // UNUSED
             StopChanneling((ObjAIBase)owner, ChannelingStopCondition.Cancel, ChannelingStopSource.StunnedOrSilencedOrTaunted);
             SetTaunted(owner, true);
             if(attacker is Champion)
@@ -35,18 +34,19 @@ namespace Buffs
             this.removePart = false;
             if(GetBuffCountFromCaster(owner, attacker, nameof(Buffs.GalioIdolOfDurandMarker)) > 0)
             {
-                SpellEffectCreate(out this.part, out _, "galio_taunt_unit_indicator.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "head", default, owner, default, default, false, default, default, false, false);
+                SpellEffectCreate(out this.part, out _, "galio_taunt_unit_indicator.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "head", default, owner, default, default, false, default, default, false, false);
                 this.removePart = true;
             }
             if(GetBuffCountFromCaster(owner, attacker, nameof(Buffs.ShenShadowDashCooldown)) > 0)
             {
-                SpellEffectCreate(out this.part, out _, "Global_Taunt_multi_unit.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "head", default, owner, default, default, false, default, default, false, false);
-                SpellEffectCreate(out part2, out _, "shen_shadowDash_unit_impact.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, default, default, false, false);
+                Particle part2; // UNUSED
+                SpellEffectCreate(out this.part, out _, "Global_Taunt_multi_unit.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "head", default, owner, default, default, false, default, default, false, false);
+                SpellEffectCreate(out part2, out _, "shen_shadowDash_unit_impact.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, default, default, false, false);
                 this.removePart = true;
             }
             if(GetBuffCountFromCaster(owner, attacker, nameof(Buffs.PuncturingTauntArmorDebuff)) > 0)
             {
-                SpellEffectCreate(out this.part, out _, "global_taunt.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "head", default, target, default, default, false, default, default, false, false);
+                SpellEffectCreate(out this.part, out _, "global_taunt.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "head", default, target, default, default, false, default, default, false, false);
                 this.removePart = true;
             }
         }

@@ -29,10 +29,10 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            float gameTime;
-            float aoeReduction;
             if(ExecutePeriodically(30, ref this.lastTimeExecuted, false))
             {
+                float gameTime;
+                float aoeReduction;
                 gameTime = GetGameTime();
                 aoeReduction = gameTime * 0.000111f;
                 aoeReduction = Math.Min(aoeReduction, 0.2f);

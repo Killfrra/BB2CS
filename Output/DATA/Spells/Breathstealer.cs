@@ -5,27 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class Breathstealer : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateAttachBoneName = new[]{ null, null, "head", },
-            AutoBuffActivateEffect = new[]{ "Summoner_Banish.troy", null, "Global_miss.troy", },
-            BuffName = "",
-            BuffTextureName = "",
-        };
-        public override void OnActivate()
-        {
-            IncPermanentPercentCooldownMod(owner, -0.15f);
-        }
-        public override void OnDeactivate(bool expired)
-        {
-            IncPermanentPercentCooldownMod(owner, 0.15f);
-        }
-    }
-}
 namespace Spells
 {
     public class Breathstealer : BBSpellScript
@@ -81,6 +60,27 @@ namespace Spells
             targetPos = GetUnitPosition(target);
             FaceDirection(owner, targetPos);
             SpellCast((ObjAIBase)owner, target, target.Position, target.Position, 7, SpellSlotType.ExtraSlots, 1, true, true, false, false, false, false);
+        }
+    }
+}
+namespace Buffs
+{
+    public class Breathstealer : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateAttachBoneName = new[]{ null, null, "head", },
+            AutoBuffActivateEffect = new[]{ "Summoner_Banish.troy", null, "Global_miss.troy", },
+            BuffName = "",
+            BuffTextureName = "",
+        };
+        public override void OnActivate()
+        {
+            IncPermanentPercentCooldownMod(owner, -0.15f);
+        }
+        public override void OnDeactivate(bool expired)
+        {
+            IncPermanentPercentCooldownMod(owner, 0.15f);
         }
     }
 }

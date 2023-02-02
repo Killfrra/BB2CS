@@ -16,20 +16,20 @@ namespace Buffs
         public override void OnActivate()
         {
             TeamId teamOfOwner;
-            TeamId teamChaosID;
-            TeamId teamOrderID;
             Vector3 beam1; // UNUSED
             Vector3 beam2; // UNUSED
             Vector3 beam3; // UNUSED
             teamOfOwner = GetTeamID(owner);
             if(teamOfOwner == TeamId.TEAM_BLUE)
             {
+                TeamId teamChaosID;
                 teamChaosID = TeamId.TEAM_PURPLE;
                 this.a = AddUnitPerceptionBubble(teamChaosID, 10, owner, 2, default, default, false);
                 this.b = AddUnitPerceptionBubble(teamChaosID, 10, attacker, 2, default, default, false);
             }
             else
             {
+                TeamId teamOrderID;
                 teamOrderID = TeamId.TEAM_BLUE;
                 this.a = AddUnitPerceptionBubble(teamOrderID, 10, owner, 2, default, default, false);
                 this.b = AddUnitPerceptionBubble(teamOrderID, 10, attacker, 2, default, default, false);

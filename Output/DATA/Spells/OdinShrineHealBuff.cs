@@ -40,12 +40,12 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            float healAmount;
-            Particle arr; // UNUSED
             if(ExecutePeriodically(2, ref this.lastTimeExecuted, false))
             {
                 if(!this.willRemove)
                 {
+                    float healAmount;
+                    Particle arr; // UNUSED
                     healAmount = this.tickWorth * this.tickNumber;
                     IncPAR(owner, this.tickWorthMana, PrimaryAbilityResourceType.MANA);
                     IncHealth(owner, healAmount, owner);

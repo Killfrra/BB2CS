@@ -5,6 +5,26 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class InsanityPotion : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = true,
+            NotSingleTargetSpell = true,
+        };
+        int[] effect0 = {35, 50, 65};
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            float nextBuffVars_Stats;
+            nextBuffVars_Stats = this.effect0[level];
+            AddBuff(attacker, target, new Buffs.InsanityPotion(nextBuffVars_Stats), 1, 1, 25, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+            SpellEffectCreate(out _, out _, "insanitypotion_buf.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "head", default, target, default, default, false, false, false, false, false);
+            SpellEffectCreate(out _, out _, "insanitypotion_steam.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "bottletip", default, target, default, default, false, false, false, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class InsanityPotion : BBBuffScript
@@ -27,11 +47,11 @@ namespace Buffs
             bool returnValue = true;
             int level;
             float cCreduction;
-            float percentReduction; // UNITIALIZED
             level = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             cCreduction = this.effect0[level];
             if(owner.Team != attacker.Team)
             {
+                float percentReduction; // UNITIALIZED
                 if(type == BuffType.SNARE)
                 {
                     duration *= cCreduction;
@@ -90,26 +110,6 @@ namespace Buffs
             IncFlatMagicDamageMod(owner, this.stats);
             IncFlatHPRegenMod(owner, statsPer5);
             IncFlatPARRegenMod(owner, statsPer5, PrimaryAbilityResourceType.MANA);
-        }
-    }
-}
-namespace Spells
-{
-    public class InsanityPotion : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = true,
-            NotSingleTargetSpell = true,
-        };
-        int[] effect0 = {35, 50, 65};
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            float nextBuffVars_Stats;
-            nextBuffVars_Stats = this.effect0[level];
-            AddBuff(attacker, target, new Buffs.InsanityPotion(nextBuffVars_Stats), 1, 1, 25, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
-            SpellEffectCreate(out _, out _, "insanitypotion_buf.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "head", default, target, default, default, false, false, false, false, false);
-            SpellEffectCreate(out _, out _, "insanitypotion_steam.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "bottletip", default, target, default, default, false, false, false, false, false);
         }
     }
 }

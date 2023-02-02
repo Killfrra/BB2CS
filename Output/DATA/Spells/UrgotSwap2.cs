@@ -5,6 +5,57 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class UrgotSwap2 : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            AutoCooldownByLevel = new[]{ 100f, 85f, 70f, 55f, 40f, },
+            DoesntBreakShields = true,
+            TriggersSpellCasts = true,
+            NotSingleTargetSpell = true,
+        };
+        Particle gateParticle;
+        int[] effect0 = {80, 105, 130};
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            if(target is Champion)
+            {
+                Vector3 targetPos;
+                TeamId teamOfOwner;
+                Particle nextBuffVars_GateParticle;
+                int defInc;
+                Vector3 nextBuffVars_TargetPos; // UNUSED
+                float nextBuffVars_DefInc;
+                targetPos = GetCastSpellTargetPos();
+                teamOfOwner = GetTeamID(owner);
+                SpellEffectCreate(out this.gateParticle, out _, "UrgotSwapTarget.troy", default, teamOfOwner ?? TeamId.TEAM_UNKNOWN, 200, 0, TeamId.TEAM_UNKNOWN, default, default, false, target, default, default, target, "root", default, false, default, default, false, false);
+                nextBuffVars_GateParticle = this.gateParticle;
+                nextBuffVars_TargetPos = targetPos;
+                FaceDirection(owner, targetPos);
+                AddBuff((ObjAIBase)owner, owner, new Buffs.UrgotSwapMarker(), 1, 1, 5, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+                AddBuff((ObjAIBase)owner, target, new Buffs.UrgotSwapMarker(), 1, 1, 5, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+                AddBuff((ObjAIBase)target, owner, new Buffs.UrgotSwapMissile(), 1, 1, 1, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+                level = GetSlotSpellLevel(attacker, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
+                defInc = this.effect0[level];
+                nextBuffVars_DefInc = defInc;
+                AddBuff(attacker, attacker, new Buffs.UrgotSwapDef(nextBuffVars_DefInc), 1, 1, 5, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+                BreakSpellShields(target);
+                AddBuff(attacker, target, new Buffs.Suppression(), 1, 1, 1, BuffAddType.REPLACE_EXISTING, BuffType.SUPPRESSION, 0, true, false, false);
+                AddBuff((ObjAIBase)owner, target, new Buffs.UrgotSwapTarget(), 1, 1, 1, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_DEHANCER, 0, true, false, false);
+                AddBuff((ObjAIBase)target, owner, new Buffs.UrgotSwap2(nextBuffVars_GateParticle), 1, 1, 1, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+            }
+            else
+            {
+                float manaRefund;
+                SetSlotSpellCooldownTimeVer2(5, 3, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner, false);
+                manaRefund = 120;
+                IncPAR(owner, manaRefund, PrimaryAbilityResourceType.MANA);
+            }
+        }
+    }
+}
 namespace Buffs
 {
     public class UrgotSwap2 : BBBuffScript
@@ -61,7 +112,7 @@ namespace Buffs
             //RequireVar(this.targetPos);
             this.isDisabled = 0;
             teamOfOwner = GetTeamID(owner);
-            SpellEffectCreate(out this.particle3, out _, "UrgotSwapDrip.troy", default, teamOfOwner, 200, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, false, default, default, false, false);
+            SpellEffectCreate(out this.particle3, out _, "UrgotSwapDrip.troy", default, teamOfOwner ?? TeamId.TEAM_UNKNOWN, 200, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, false, default, default, false, false);
             SetCanAttack(owner, false);
             SetCanMove(owner, false);
             PlayAnimation("teleUp", 1.2f, owner, false, false, true);
@@ -69,7 +120,6 @@ namespace Buffs
         public override void OnDeactivate(bool expired)
         {
             TeamId teamOfOwner; // UNUSED
-            float distance;
             SetCanMove(owner, true);
             SetCanAttack(owner, true);
             teamOfOwner = GetTeamID(owner);
@@ -84,6 +134,7 @@ namespace Buffs
             }
             else
             {
+                float distance;
                 distance = DistanceBetweenObjects("Owner", "Attacker");
                 if(distance < 3000)
                 {
@@ -106,57 +157,6 @@ namespace Buffs
             if(isDisabled == 1)
             {
                 SpellBuffClear(owner, nameof(Buffs.UrgotSwap2));
-            }
-        }
-    }
-}
-namespace Spells
-{
-    public class UrgotSwap2 : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            AutoCooldownByLevel = new[]{ 100f, 85f, 70f, 55f, 40f, },
-            DoesntBreakShields = true,
-            TriggersSpellCasts = true,
-            NotSingleTargetSpell = true,
-        };
-        Particle gateParticle;
-        int[] effect0 = {80, 105, 130};
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            Vector3 targetPos;
-            TeamId teamOfOwner;
-            Particle nextBuffVars_GateParticle;
-            Vector3 nextBuffVars_TargetPos;
-            float nextBuffVars_DefInc;
-            int defInc;
-            float manaRefund;
-            if(target is Champion)
-            {
-                targetPos = GetCastSpellTargetPos();
-                teamOfOwner = GetTeamID(owner);
-                SpellEffectCreate(out this.gateParticle, out _, "UrgotSwapTarget.troy", default, teamOfOwner, 200, 0, TeamId.TEAM_UNKNOWN, default, default, false, target, default, default, target, "root", default, false, default, default, false, false);
-                nextBuffVars_GateParticle = this.gateParticle;
-                nextBuffVars_TargetPos = targetPos;
-                FaceDirection(owner, targetPos);
-                AddBuff((ObjAIBase)owner, owner, new Buffs.UrgotSwapMarker(), 1, 1, 5, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
-                AddBuff((ObjAIBase)owner, target, new Buffs.UrgotSwapMarker(), 1, 1, 5, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
-                AddBuff((ObjAIBase)target, owner, new Buffs.UrgotSwapMissile(), 1, 1, 1, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
-                level = GetSlotSpellLevel(attacker, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
-                defInc = this.effect0[level];
-                nextBuffVars_DefInc = defInc;
-                AddBuff(attacker, attacker, new Buffs.UrgotSwapDef(nextBuffVars_DefInc), 1, 1, 5, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
-                BreakSpellShields(target);
-                AddBuff(attacker, target, new Buffs.Suppression(), 1, 1, 1, BuffAddType.REPLACE_EXISTING, BuffType.SUPPRESSION, 0, true, false, false);
-                AddBuff((ObjAIBase)owner, target, new Buffs.UrgotSwapTarget(), 1, 1, 1, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_DEHANCER, 0, true, false, false);
-                AddBuff((ObjAIBase)target, owner, new Buffs.UrgotSwap2(nextBuffVars_GateParticle), 1, 1, 1, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
-            }
-            else
-            {
-                SetSlotSpellCooldownTimeVer2(5, 3, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner, false);
-                manaRefund = 120;
-                IncPAR(owner, manaRefund, PrimaryAbilityResourceType.MANA);
             }
         }
     }

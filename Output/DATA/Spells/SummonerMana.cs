@@ -22,7 +22,6 @@ namespace Spells
             float totalMana;
             float secondaryMana;
             float baseCooldown;
-            float cooldownMultiplier;
             ownerLevel = GetLevel(owner);
             bonusMana = ownerLevel * 30;
             totalMana = bonusMana + 160;
@@ -36,6 +35,7 @@ namespace Spells
             baseCooldown = 180;
             if(avatarVars.SummonerCooldownBonus != 0)
             {
+                float cooldownMultiplier;
                 cooldownMultiplier = 1 - avatarVars.SummonerCooldownBonus;
                 baseCooldown *= cooldownMultiplier;
             }
@@ -44,10 +44,10 @@ namespace Spells
         public override float AdjustCooldown()
         {
             float returnValue = 0;
-            float cooldownMultiplier;
-            float baseCooldown;
             if(avatarVars.SummonerCooldownBonus != 0)
             {
+                float cooldownMultiplier;
+                float baseCooldown;
                 cooldownMultiplier = 1 - avatarVars.SummonerCooldownBonus;
                 baseCooldown = 180 * cooldownMultiplier;
             }

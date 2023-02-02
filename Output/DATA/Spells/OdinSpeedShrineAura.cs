@@ -105,16 +105,16 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            int count;
-            float newDuration;
-            float nextBuffVars_SpeedMod;
             if(ExecutePeriodically(0.25f, ref this.lastTimeExecuted, false))
             {
                 foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 365, SpellDataFlags.AffectHeroes, default, true))
                 {
+                    int count;
                     count = GetBuffCountFromAll(unit, nameof(Buffs.OdinShrineBombBuff));
                     if(count < 1)
                     {
+                        float newDuration;
+                        float nextBuffVars_SpeedMod;
                         newDuration = 10;
                         if(GetBuffCountFromCaster(unit, unit, nameof(Buffs.MonsterBuffs)) > 0)
                         {

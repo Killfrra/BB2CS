@@ -11,7 +11,6 @@ namespace Chars
     {
         public override void OnPreDealDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
         {
-            float healthPerc;
             if(damageType != DamageType.DAMAGE_TYPE_TRUE)
             {
                 if(target is ObjAIBase)
@@ -21,6 +20,7 @@ namespace Chars
                     }
                     else
                     {
+                        float healthPerc;
                         healthPerc = GetHealthPercent(target, PrimaryAbilityResourceType.MANA);
                         if(healthPerc <= 0.4f)
                         {

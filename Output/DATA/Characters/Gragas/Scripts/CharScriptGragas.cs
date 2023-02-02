@@ -12,9 +12,9 @@ namespace Chars
         float lastTimeExecuted;
         public override void OnUpdateActions()
         {
-            float attackDamage;
             if(ExecutePeriodically(0.5f, ref this.lastTimeExecuted, false))
             {
+                float attackDamage;
                 attackDamage = GetTotalAttackDamage(owner);
                 attackDamage *= 0.66f;
                 SetSpellToolTipVar(attackDamage, 1, 2, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (Champion)attacker);

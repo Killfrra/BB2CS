@@ -5,6 +5,36 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class GodofDeath : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            CastingBreaksStealth = true,
+            DoesntBreakShields = true,
+            TriggersSpellCasts = true,
+            IsDamagingSpell = true,
+            NotSingleTargetSpell = true,
+        };
+        int[] effect0 = {300, 300, 300, 0, 0};
+        float[] effect1 = {0.03f, 0.04f, 0.05f, 0, 0};
+        int[] effect2 = {300, 450, 600, 0, 0};
+        int[] effect3 = {15, 15, 15};
+        public override void SelfExecute()
+        {
+            int nextBuffVars_DamageCap;
+            float nextBuffVars_DamagePerc;
+            float nextBuffVars_CurrentDamageTotal;
+            float nextBuffVars_BonusHealth;
+            nextBuffVars_DamageCap = this.effect0[level];
+            nextBuffVars_DamagePerc = this.effect1[level];
+            nextBuffVars_CurrentDamageTotal = 0;
+            nextBuffVars_BonusHealth = this.effect2[level];
+            AddBuff(attacker, owner, new Buffs.GodofDeath(nextBuffVars_DamageCap, nextBuffVars_DamagePerc, nextBuffVars_CurrentDamageTotal, nextBuffVars_BonusHealth), 1, 1, this.effect3[level], BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class GodofDeath : BBBuffScript
@@ -33,10 +63,6 @@ namespace Buffs
         {
             float damageCap; // UNUSED
             float damagePerc;
-            float temp1;
-            float abilityPowerMod;
-            float abilityPowerBonus;
-            float hToDamage;
             SpellEffectCreate(out this.auraParticle, out _, "nassus_godofDeath_aura.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false, false, false, false, false);
             //RequireVar(this.damageCap);
             //RequireVar(this.damagePerc);
@@ -46,6 +72,10 @@ namespace Buffs
             damagePerc = this.damagePerc;
             foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 375, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
             {
+                float temp1;
+                float abilityPowerMod;
+                float abilityPowerBonus;
+                float hToDamage;
                 temp1 = GetMaxHealth(unit, PrimaryAbilityResourceType.MANA);
                 abilityPowerMod = GetFlatMagicDamageMod(owner);
                 abilityPowerBonus = abilityPowerMod * 0.0001f;
@@ -74,16 +104,16 @@ namespace Buffs
         {
             float damageCap;
             float damagePerc;
-            float temp1;
-            float abilityPowerMod;
-            float abilityPowerBonus;
-            float hToDamage;
             damageCap = this.damageCap;
             damagePerc = this.damagePerc;
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, false))
             {
                 foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 375, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
                 {
+                    float temp1;
+                    float abilityPowerMod;
+                    float abilityPowerBonus;
+                    float hToDamage;
                     temp1 = GetMaxHealth(unit, PrimaryAbilityResourceType.MANA);
                     abilityPowerMod = GetFlatMagicDamageMod(owner);
                     abilityPowerBonus = abilityPowerMod * 0.0001f;
@@ -100,36 +130,6 @@ namespace Buffs
                 }
                 SetBuffToolTipVar(1, this.currentDamageTotal);
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class GodofDeath : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            CastingBreaksStealth = true,
-            DoesntBreakShields = true,
-            TriggersSpellCasts = true,
-            IsDamagingSpell = true,
-            NotSingleTargetSpell = true,
-        };
-        int[] effect0 = {300, 300, 300, 0, 0};
-        float[] effect1 = {0.03f, 0.04f, 0.05f, 0, 0};
-        int[] effect2 = {300, 450, 600, 0, 0};
-        int[] effect3 = {15, 15, 15};
-        public override void SelfExecute()
-        {
-            int nextBuffVars_DamageCap;
-            float nextBuffVars_DamagePerc;
-            float nextBuffVars_CurrentDamageTotal;
-            float nextBuffVars_BonusHealth;
-            nextBuffVars_DamageCap = this.effect0[level];
-            nextBuffVars_DamagePerc = this.effect1[level];
-            nextBuffVars_CurrentDamageTotal = 0;
-            nextBuffVars_BonusHealth = this.effect2[level];
-            AddBuff(attacker, owner, new Buffs.GodofDeath(nextBuffVars_DamageCap, nextBuffVars_DamagePerc, nextBuffVars_CurrentDamageTotal, nextBuffVars_BonusHealth), 1, 1, this.effect3[level], BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
         }
     }
 }

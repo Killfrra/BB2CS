@@ -27,10 +27,10 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            int level;
-            float tooltipAmount;
             if(ExecutePeriodically(10, ref this.lastTimeExecuted, true))
             {
+                int level;
+                float tooltipAmount;
                 level = GetLevel(owner);
                 tooltipAmount = this.effect0[level];
                 if(tooltipAmount > this.lastTooltip)
@@ -42,13 +42,13 @@ namespace Buffs
         }
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            int level;
-            int nextBuffVars_DotDamage;
-            float nextBuffVars_moveSpeedMod;
             if(target is ObjAIBase)
             {
                 if(target is not BaseTurret)
                 {
+                    int level;
+                    int nextBuffVars_DotDamage;
+                    float nextBuffVars_moveSpeedMod;
                     level = GetLevel(owner);
                     nextBuffVars_DotDamage = this.effect1[level];
                     nextBuffVars_moveSpeedMod = -0.07f;

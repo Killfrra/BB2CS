@@ -5,6 +5,20 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class XerathLocusOfPower : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            CastingBreaksStealth = true,
+            DoesntBreakShields = true,
+            TriggersSpellCasts = true,
+            IsDamagingSpell = true,
+            NotSingleTargetSpell = true,
+        };
+    }
+}
 namespace Buffs
 {
     public class XerathLocusOfPower : BBBuffScript
@@ -45,7 +59,7 @@ namespace Buffs
             cooldown3 = GetSlotSpellCooldownTime((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             SetSpell((ObjAIBase)owner, 3, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, nameof(Spells.XerathArcaneBarrageWrapperExt));
             SetSlotSpellCooldownTimeVer2(cooldown3, 3, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner, false);
-            SpellEffectCreate(out this.particle, out _, "Xerath_LocusOfPower_buf.troy", default, teamOfOwner, 0, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, false, false, false, false, false);
+            SpellEffectCreate(out this.particle, out _, "Xerath_LocusOfPower_buf.troy", default, teamOfOwner ?? TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, false, false, false, false, false);
             SpellEffectCreate(out this.particlea, out _, "Xerath_LocusOfPower_beam.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "BUFFBONE_GLB_CHANNEL_LOC", default, owner, "spine", default, false, false, false, false, false);
             SpellEffectCreate(out this.particleb, out _, "Xerath_LocusOfPower_beam.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "BUFFBONE_CSTM_CHANNEL_2", default, owner, "spine", default, false, false, false, false, false);
             SpellEffectCreate(out this.particlec, out _, "Xerath_LocusOfPower_beam.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "BUFFBONE_CSTM_CHANNEL_3", default, owner, "spine", default, false, false, false, false, false);
@@ -119,19 +133,5 @@ namespace Buffs
         {
             SetCanMove(owner, false);
         }
-    }
-}
-namespace Spells
-{
-    public class XerathLocusOfPower : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            CastingBreaksStealth = true,
-            DoesntBreakShields = true,
-            TriggersSpellCasts = true,
-            IsDamagingSpell = true,
-            NotSingleTargetSpell = true,
-        };
     }
 }

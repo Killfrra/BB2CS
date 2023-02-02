@@ -27,16 +27,15 @@ namespace Buffs
         }
         public override void OnUpdateStats()
         {
-            int count;
-            int level;
-            float healthPerStack;
-            float feastBase;
-            float bonusFeastHealth;
-            float feastHealth;
-            float targetHealth;
-            float time;
             if(ExecutePeriodically(0.25f, ref this.lastTimeExecuted, false))
             {
+                int count;
+                int level;
+                float healthPerStack;
+                float feastBase;
+                float bonusFeastHealth;
+                float feastHealth;
+                float targetHealth;
                 count = GetBuffCountFromCaster(attacker, attacker, nameof(Buffs.Feast));
                 level = GetSlotSpellLevel(attacker, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 healthPerStack = this.effect0[level];
@@ -50,6 +49,7 @@ namespace Buffs
                 }
                 else
                 {
+                    float time;
                     time = GetSlotSpellCooldownTime(attacker, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                     if(time > 0)
                     {

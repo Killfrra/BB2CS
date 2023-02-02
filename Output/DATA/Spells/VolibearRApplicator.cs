@@ -58,12 +58,6 @@ namespace Buffs
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
             TeamId teamID;
-            ObjAIBase caster; // UNUSED
-            Particle kennenss; // UNUSED
-            Particle c; // UNUSED
-            int nextBuffVars_BounceCounter;
-            float nextBuffVars_VolibearRDamage;
-            float nextBuffVars_VolibearRRatio;
             teamID = GetTeamID(owner);
             if(target is not BaseTurret)
             {
@@ -73,14 +67,20 @@ namespace Buffs
                     {
                         if(hitResult != HitResult.HIT_Miss)
                         {
+                            ObjAIBase caster; // UNUSED
+                            Particle kennenss; // UNUSED
+                            Particle c; // UNUSED
+                            int nextBuffVars_BounceCounter;
+                            float nextBuffVars_VolibearRDamage;
+                            float nextBuffVars_VolibearRRatio;
                             caster = SetBuffCasterUnit();
                             if(attacker is not Champion)
                             {
                                 caster = GetPetOwner((Pet)attacker);
                             }
-                            SpellEffectCreate(out this.particleID, out _, "volibear_R_chain_lighting_01.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, target, false, attacker, "head", default, target, "root", default, true, false, false, false, false);
-                            SpellEffectCreate(out kennenss, out _, "Volibear_R_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, attacker, false, target, "C_BUFFBONE_GLB_CENTER_LOC", default, target, default, default, true, false, false, false, false);
-                            SpellEffectCreate(out kennenss, out _, "Volibear_R_tar_02.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, attacker, false, target, default, default, target, default, default, true, false, false, false, false);
+                            SpellEffectCreate(out this.particleID, out _, "volibear_R_chain_lighting_01.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, target, false, attacker, "head", default, target, "root", default, true, false, false, false, false);
+                            SpellEffectCreate(out kennenss, out _, "Volibear_R_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, attacker, false, target, "C_BUFFBONE_GLB_CENTER_LOC", default, target, default, default, true, false, false, false, false);
+                            SpellEffectCreate(out kennenss, out _, "Volibear_R_tar_02.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, attacker, false, target, default, default, target, default, default, true, false, false, false, false);
                             SpellEffectCreate(out c, out _, "Volibear_R_cas_04.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false, false, false, false, false);
                             nextBuffVars_BounceCounter = 1;
                             nextBuffVars_VolibearRDamage = this.volibearRDamage;

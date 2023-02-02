@@ -27,7 +27,6 @@ namespace Buffs
         public override void OnDeactivate(bool expired)
         {
             bool zombie;
-            string name;
             SetCanAttack(owner, true);
             SetCanCast(owner, true);
             SetCanMove(owner, true);
@@ -36,6 +35,7 @@ namespace Buffs
             {
                 if(owner.IsDead)
                 {
+                    string name;
                     name = GetUnitSkinName(owner);
                     if(name == "Annie")
                     {

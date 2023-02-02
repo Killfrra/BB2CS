@@ -19,7 +19,7 @@ namespace Buffs
         {
             TeamId teamID;
             teamID = GetTeamID(owner);
-            SpellEffectCreate(out this.mRShield, out _, "TrundleUlt_self_buf.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false);
+            SpellEffectCreate(out this.mRShield, out _, "TrundleUlt_self_buf.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false);
         }
         public override void OnDeactivate(bool expired)
         {

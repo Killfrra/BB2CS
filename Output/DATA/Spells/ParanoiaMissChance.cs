@@ -25,13 +25,13 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            float dist;
             if(attacker.IsDead)
             {
                 SpellBuffRemoveCurrent(owner);
             }
             else
             {
+                float dist;
                 dist = DistanceBetweenObjects("Attacker", "Owner");
                 if(dist >= 800)
                 {

@@ -38,10 +38,10 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            int level;
-            Particle a; // UNUSED
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, true))
             {
+                int level;
+                Particle a; // UNUSED
                 level = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 SpellEffectCreate(out a, out _, "Udyr_Phoenix_nova.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false, false, false, false, false);
                 foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 325, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))

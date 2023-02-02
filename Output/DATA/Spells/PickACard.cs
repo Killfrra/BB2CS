@@ -5,6 +5,47 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class PickACard : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            CastingBreaksStealth = true,
+            DoesntBreakShields = true,
+            TriggersSpellCasts = true,
+            IsDamagingSpell = true,
+            NotSingleTargetSpell = false,
+        };
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            float rnd1; // UNITIALIZED
+            float nextBuffVars_Counter;
+            bool nextBuffVars_WillRemove; // UNUSED
+            if(rnd1 < 0.34f)
+            {
+                nextBuffVars_Counter = 0;
+                SetSpell((ObjAIBase)owner, 1, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, nameof(Spells.BlueCardLock));
+                SetSlotSpellCooldownTime((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, 0.005f);
+            }
+            else if(rnd1 < 0.67f)
+            {
+                nextBuffVars_Counter = 2;
+                SetSpell((ObjAIBase)owner, 1, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, nameof(Spells.RedCardLock));
+                SetSlotSpellCooldownTime((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, 0.005f);
+            }
+            else
+            {
+                nextBuffVars_Counter = 4;
+                SetSpell((ObjAIBase)owner, 1, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, nameof(Spells.GoldCardLock));
+                SetSlotSpellCooldownTime((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, 0.005f);
+            }
+            nextBuffVars_WillRemove = false;
+            AddBuff((ObjAIBase)owner, target, new Buffs.PickACard_tracker(), 1, 1, 10, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+            AddBuff((ObjAIBase)owner, target, new Buffs.PickACard(nextBuffVars_Counter), 1, 1, 10, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class PickACard : BBBuffScript
@@ -28,20 +69,20 @@ namespace Buffs
             TeamId teamID;
             Particle sparks; // UNUSED
             teamID = GetTeamID(owner);
-            SpellEffectCreate(out sparks, out _, "AnnieSparks.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, false, false, false, false);
+            SpellEffectCreate(out sparks, out _, "AnnieSparks.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, false, false, false, false);
             //RequireVar(this.counter);
             //RequireVar(this.willRemove);
             if(this.counter < 2)
             {
-                SpellEffectCreate(out this.effectID, out _, "Card_Blue.troy", default, teamID, 600, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, owner.Position, target, default, default, false, false, false, false, false);
+                SpellEffectCreate(out this.effectID, out _, "Card_Blue.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 600, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, owner.Position, target, default, default, false, false, false, false, false);
             }
             else if(this.counter < 4)
             {
-                SpellEffectCreate(out this.effectID, out _, "Card_Red.troy", default, teamID, 600, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, owner.Position, target, default, default, false, false, false, false, false);
+                SpellEffectCreate(out this.effectID, out _, "Card_Red.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 600, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, owner.Position, target, default, default, false, false, false, false, false);
             }
             else
             {
-                SpellEffectCreate(out this.effectID, out _, "Card_Yellow.troy", default, teamID, 600, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, owner.Position, target, default, default, false, false, false, false, false);
+                SpellEffectCreate(out this.effectID, out _, "Card_Yellow.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 600, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, owner.Position, target, default, default, false, false, false, false, false);
             }
             this.frozen = 0;
             this.removeParticle = 1;
@@ -70,27 +111,27 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            TeamId teamID;
             if(this.frozen == 0)
             {
+                TeamId teamID;
                 teamID = GetTeamID(owner);
                 this.counter++;
                 if(this.counter == 2)
                 {
                     SpellEffectRemove(this.effectID);
-                    SpellEffectCreate(out this.effectID, out _, "Card_Red.troy", default, teamID, 600, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false, false, false, false, false);
+                    SpellEffectCreate(out this.effectID, out _, "Card_Red.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 600, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false, false, false, false, false);
                     SetSpell((ObjAIBase)owner, 1, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, nameof(Spells.RedCardLock));
                 }
                 else if(this.counter == 4)
                 {
                     SpellEffectRemove(this.effectID);
-                    SpellEffectCreate(out this.effectID, out _, "Card_Yellow.troy", default, teamID, 600, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, owner.Position, target, default, default, false, false, false, false, false);
+                    SpellEffectCreate(out this.effectID, out _, "Card_Yellow.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 600, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, owner.Position, target, default, default, false, false, false, false, false);
                     SetSpell((ObjAIBase)owner, 1, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, nameof(Spells.GoldCardLock));
                 }
                 else if(this.counter >= 6)
                 {
                     SpellEffectRemove(this.effectID);
-                    SpellEffectCreate(out this.effectID, out _, "Card_Blue.troy", default, teamID, 600, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, owner.Position, target, default, default, false, false, false, false, false);
+                    SpellEffectCreate(out this.effectID, out _, "Card_Blue.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 600, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, owner.Position, target, default, default, false, false, false, false, false);
                     SetSpell((ObjAIBase)owner, 1, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, nameof(Spells.BlueCardLock));
                     this.counter = 0;
                 }
@@ -155,11 +196,11 @@ namespace Buffs
         }
         public override void OnPreAttack()
         {
-            int level;
             if(target is ObjAIBase)
             {
                 if(this.frozen == 1)
                 {
+                    int level;
                     SkipNextAutoAttack(owner);
                     level = GetSlotSpellLevel((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                     if(this.counter <= 1)
@@ -176,47 +217,6 @@ namespace Buffs
                     }
                 }
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class PickACard : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            CastingBreaksStealth = true,
-            DoesntBreakShields = true,
-            TriggersSpellCasts = true,
-            IsDamagingSpell = true,
-            NotSingleTargetSpell = false,
-        };
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            float rnd1; // UNITIALIZED
-            float nextBuffVars_Counter;
-            bool nextBuffVars_WillRemove;
-            if(rnd1 < 0.34f)
-            {
-                nextBuffVars_Counter = 0;
-                SetSpell((ObjAIBase)owner, 1, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, nameof(Spells.BlueCardLock));
-                SetSlotSpellCooldownTime((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, 0.005f);
-            }
-            else if(rnd1 < 0.67f)
-            {
-                nextBuffVars_Counter = 2;
-                SetSpell((ObjAIBase)owner, 1, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, nameof(Spells.RedCardLock));
-                SetSlotSpellCooldownTime((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, 0.005f);
-            }
-            else
-            {
-                nextBuffVars_Counter = 4;
-                SetSpell((ObjAIBase)owner, 1, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, nameof(Spells.GoldCardLock));
-                SetSlotSpellCooldownTime((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, 0.005f);
-            }
-            nextBuffVars_WillRemove = false;
-            AddBuff((ObjAIBase)owner, target, new Buffs.PickACard_tracker(), 1, 1, 10, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
-            AddBuff((ObjAIBase)owner, target, new Buffs.PickACard(nextBuffVars_Counter), 1, 1, 10, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
         }
     }
 }

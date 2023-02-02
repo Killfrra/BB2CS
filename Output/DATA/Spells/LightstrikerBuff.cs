@@ -5,31 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class LightstrikerBuff : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateAttachBoneName = new[]{ "", "R_hand", "L_hand", },
-            AutoBuffActivateEffect = new[]{ "sword_of_the_divine_03.troy", "sword_of_the_divine_02.troy", "sword_of_the_divine_02.troy", "sword_of_the_divine_01.troy", },
-            BuffName = "Lightslicer",
-            BuffTextureName = "3084_Widowmaker.dds",
-        };
-        public override void OnActivate()
-        {
-            SetDodgePiercing(owner, true);
-        }
-        public override void OnDeactivate(bool expired)
-        {
-            SetDodgePiercing(owner, false);
-        }
-        public override void OnUpdateStats()
-        {
-            IncFlatArmorPenetrationMod(owner, 30);
-        }
-    }
-}
 namespace Spells
 {
     public class LightstrikerBuff : BBSpellScript
@@ -81,6 +56,31 @@ namespace Spells
             {
                 SetSlotSpellCooldownTimeVer2(40, 5, SpellSlotType.InventorySlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner);
             }
+        }
+    }
+}
+namespace Buffs
+{
+    public class LightstrikerBuff : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateAttachBoneName = new[]{ "", "R_hand", "L_hand", },
+            AutoBuffActivateEffect = new[]{ "sword_of_the_divine_03.troy", "sword_of_the_divine_02.troy", "sword_of_the_divine_02.troy", "sword_of_the_divine_01.troy", },
+            BuffName = "Lightslicer",
+            BuffTextureName = "3084_Widowmaker.dds",
+        };
+        public override void OnActivate()
+        {
+            SetDodgePiercing(owner, true);
+        }
+        public override void OnDeactivate(bool expired)
+        {
+            SetDodgePiercing(owner, false);
+        }
+        public override void OnUpdateStats()
+        {
+            IncFlatArmorPenetrationMod(owner, 30);
         }
     }
 }

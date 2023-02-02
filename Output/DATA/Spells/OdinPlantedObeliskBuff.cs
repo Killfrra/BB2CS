@@ -24,12 +24,11 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            float currentTime;
-            bool foundTarget;
-            int count;
-            int _1; // UNITIALIZED
             if(ExecutePeriodically(0.25f, ref this.lastTimeExecuted, false))
             {
+                float currentTime;
+                bool foundTarget;
+                int count;
                 currentTime = GetGameTime();
                 foundTarget = false;
                 count = GetBuffCountFromAll(owner, nameof(Buffs.OdinGuardianSuppression));
@@ -45,6 +44,7 @@ namespace Buffs
                         {
                             if(count <= 0)
                             {
+                                int _1; // UNITIALIZED
                                 SpellCast((ObjAIBase)owner, unit, default, default, 0, SpellSlotType.SpellSlots, 1 + _1, true, false, false, false, false, false);
                                 this.nextAttackTime = currentTime + 1.25f;
                                 foundTarget = true;
@@ -56,14 +56,11 @@ namespace Buffs
         }
         public override void OnBeingHit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            float myMaxHealth;
             TeamId myTeamID;
-            float healthToDecreaseBy;
-            float healthPercent;
-            float attackerMaxHealth;
-            float damageReturn;
             if(attacker is not Champion)
             {
+                float myMaxHealth;
+                float healthToDecreaseBy;
                 myMaxHealth = GetMaxHealth(owner, PrimaryAbilityResourceType.MANA);
                 myTeamID = GetTeamID(owner);
                 if(myTeamID == TeamId.TEAM_NEUTRAL)
@@ -81,6 +78,9 @@ namespace Buffs
                 myTeamID = GetTeamID(owner);
                 if(myTeamID == TeamId.TEAM_NEUTRAL)
                 {
+                    float healthPercent;
+                    float attackerMaxHealth;
+                    float damageReturn;
                     healthPercent = GetHealthPercent(owner, PrimaryAbilityResourceType.MANA);
                     if(healthPercent > 0.99f)
                     {

@@ -68,5 +68,10 @@ public class SpellScriptMetaDataNullable: IBBMetadata
 
         CastingBreaksStealth = globals.UseValueOrDefault(used, "CastingBreaksStealth").As<bool?>();
         CastTime = globals.UseValueOrDefault(used, "CastTime").As<float?>();
+
+        string[]? ReadStringArray(string name) =>
+            (globals.UseValueOrDefault(used, name) as JArray)?.ToObject<string[]>();
+        /*SpellFXOverrideSkins =*/ ReadStringArray("SpellFXOverrideSkins");
+        /*SpellVOOverrideSkins =*/ ReadStringArray("SpellVOOverrideSkins");
     }
 }

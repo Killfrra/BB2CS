@@ -5,37 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class TrundleQ : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            BuffName = "TrundleQ",
-            BuffTextureName = "Trundle_Bite.dds",
-        };
-        float sapVar;
-        Particle rh;
-        public TrundleQ(float sapVar = default)
-        {
-            this.sapVar = sapVar;
-        }
-        public override void OnActivate()
-        {
-            //RequireVar(this.sapVar);
-            IncFlatPhysicalDamageMod(owner, this.sapVar);
-            SpellEffectCreate(out this.rh, out _, "TrundleQ_buf.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "BUFFBONE_CSTM_WEAPON_1", default, owner, default, default, false, default, default, false, false);
-        }
-        public override void OnDeactivate(bool expired)
-        {
-            SpellEffectRemove(this.rh);
-        }
-        public override void OnUpdateStats()
-        {
-            IncFlatPhysicalDamageMod(owner, this.sapVar);
-        }
-    }
-}
 namespace Spells
 {
     public class TrundleQ : BBSpellScript
@@ -63,8 +32,8 @@ namespace Spells
             float scaledDamage;
             float dtD;
             int nextBuffVars_SapVar;
-            float nextBuffVars_NegSapVar;
             Particle asdf; // UNUSED
+            float nextBuffVars_NegSapVar;
             if(hitResult == HitResult.HIT_Critical)
             {
                 hitResult = HitResult.HIT_Normal;
@@ -94,6 +63,37 @@ namespace Spells
             {
                 PlayAnimation("Spell1", 0, attacker, false, true, true);
             }
+        }
+    }
+}
+namespace Buffs
+{
+    public class TrundleQ : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            BuffName = "TrundleQ",
+            BuffTextureName = "Trundle_Bite.dds",
+        };
+        float sapVar;
+        Particle rh;
+        public TrundleQ(float sapVar = default)
+        {
+            this.sapVar = sapVar;
+        }
+        public override void OnActivate()
+        {
+            //RequireVar(this.sapVar);
+            IncFlatPhysicalDamageMod(owner, this.sapVar);
+            SpellEffectCreate(out this.rh, out _, "TrundleQ_buf.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "BUFFBONE_CSTM_WEAPON_1", default, owner, default, default, false, default, default, false, false);
+        }
+        public override void OnDeactivate(bool expired)
+        {
+            SpellEffectRemove(this.rh);
+        }
+        public override void OnUpdateStats()
+        {
+            IncFlatPhysicalDamageMod(owner, this.sapVar);
         }
     }
 }

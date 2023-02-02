@@ -68,7 +68,7 @@ namespace Buffs
         {
             TeamId teamID;
             teamID = GetTeamID(owner);
-            SpellEffectCreate(out this.part, out _, "garen_heal.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, true, default, default, false, false);
+            SpellEffectCreate(out this.part, out _, "garen_heal.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, true, default, default, false, false);
             SpellBuffRemove(owner, nameof(Buffs.GarenRecouperateOn), (ObjAIBase)owner, 0);
         }
         public override void OnDeactivate(bool expired)
@@ -78,14 +78,14 @@ namespace Buffs
         }
         public override void OnUpdateStats()
         {
-            float healthPercent;
-            float maxHealth;
-            float healthToInc;
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, false))
             {
+                float healthPercent;
                 healthPercent = GetHealthPercent(owner, PrimaryAbilityResourceType.MANA);
                 if(healthPercent < 1)
                 {
+                    float maxHealth;
+                    float healthToInc;
                     maxHealth = GetMaxHealth(target, PrimaryAbilityResourceType.MANA);
                     healthToInc = maxHealth * 0.005f;
                     IncHealth(owner, healthToInc, owner);

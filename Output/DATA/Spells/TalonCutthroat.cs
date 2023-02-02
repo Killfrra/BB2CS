@@ -28,7 +28,7 @@ namespace Spells
             Particle p3; // UNUSED
             ownerTeam = GetTeamID(owner);
             castPos = GetUnitPosition(owner);
-            SpellEffectCreate(out p3, out _, "talon_E_cast.troy", default, ownerTeam, 1, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, castPos, target, default, default, true, false, false, false, false);
+            SpellEffectCreate(out p3, out _, "talon_E_cast.troy", default, ownerTeam ?? TeamId.TEAM_NEUTRAL, 1, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, castPos, target, default, default, true, false, false, false, false);
         }
         public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
         {
@@ -38,8 +38,6 @@ namespace Spells
             float damageVar;
             float silenceDur;
             float kIDamage;
-            Particle pH; // UNUSED
-            float nextBuffVars_AmpValue;
             FaceDirection(owner, target.Position);
             distance = DistanceBetweenObjects("Owner", "Target");
             finalDistance = distance + 175;
@@ -53,6 +51,8 @@ namespace Spells
             kIDamage = this.effect3[level];
             if(target.Team != owner.Team)
             {
+                Particle pH; // UNUSED
+                float nextBuffVars_AmpValue;
                 SpellEffectCreate(out pH, out _, "talon_E_tar.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, targetPos, target, default, default, true, false, false, false, false);
                 ApplySilence(attacker, target, silenceDur);
                 nextBuffVars_AmpValue = this.effect4[level];

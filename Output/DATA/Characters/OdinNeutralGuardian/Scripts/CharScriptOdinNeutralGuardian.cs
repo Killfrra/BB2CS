@@ -11,10 +11,10 @@ namespace Chars
     {
         public override void OnActivate()
         {
-            int nextBuffVars_HPPerLevel;
+            int nextBuffVars_HPPerLevel; // UNUSED
             int nextBuffVars_DmgPerLevel;
-            int nextBuffVars_ArmorPerLevel;
-            int nextBuffVars_MR_per_level;
+            int nextBuffVars_ArmorPerLevel; // UNUSED
+            int nextBuffVars_MR_per_level; // UNUSED
             SetImmovable(owner, true);
             SetDodgePiercing(owner, true);
             AddBuff((ObjAIBase)owner, owner, new Buffs.OdinGuardianBuff(), 1, 1, 25000, BuffAddType.REPLACE_EXISTING, BuffType.AURA, 0, true, false, false);

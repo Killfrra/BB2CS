@@ -29,15 +29,15 @@ namespace Buffs
             teamID = GetTeamID(attacker);
             if(brandSkinID == 3)
             {
-                SpellEffectCreate(out this.a, out _, "BrandBlaze_hotfoot_Frost.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "L_BUFFBONE_GLB_FOOT_LOC", default, owner, default, default, false, false, false, false, false);
-                SpellEffectCreate(out this.b, out _, "BrandBlaze_hotfoot_Frost.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "R_BUFFBONE_GLB_FOOT_LOC", default, owner, default, default, false, false, false, false, false);
-                SpellEffectCreate(out this.c, out _, "BrandFireMark_Frost.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false, false, false, false, false);
+                SpellEffectCreate(out this.a, out _, "BrandBlaze_hotfoot_Frost.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "L_BUFFBONE_GLB_FOOT_LOC", default, owner, default, default, false, false, false, false, false);
+                SpellEffectCreate(out this.b, out _, "BrandBlaze_hotfoot_Frost.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "R_BUFFBONE_GLB_FOOT_LOC", default, owner, default, default, false, false, false, false, false);
+                SpellEffectCreate(out this.c, out _, "BrandFireMark_Frost.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false, false, false, false, false);
             }
             else
             {
-                SpellEffectCreate(out this.a, out _, "BrandBlaze_hotfoot.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "L_BUFFBONE_GLB_FOOT_LOC", default, owner, default, default, false, false, false, false, false);
-                SpellEffectCreate(out this.b, out _, "BrandBlaze_hotfoot.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "R_BUFFBONE_GLB_FOOT_LOC", default, owner, default, default, false, false, false, false, false);
-                SpellEffectCreate(out this.c, out _, "BrandFireMark.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false, false, false, false, false);
+                SpellEffectCreate(out this.a, out _, "BrandBlaze_hotfoot.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "L_BUFFBONE_GLB_FOOT_LOC", default, owner, default, default, false, false, false, false, false);
+                SpellEffectCreate(out this.b, out _, "BrandBlaze_hotfoot.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "R_BUFFBONE_GLB_FOOT_LOC", default, owner, default, default, false, false, false, false, false);
+                SpellEffectCreate(out this.c, out _, "BrandFireMark.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false, false, false, false, false);
             }
         }
         public override void OnDeactivate(bool expired)
@@ -59,11 +59,11 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            float maxHealth;
-            float damageToDeal;
-            TeamId teamID;
             if(ExecutePeriodically(1.05f, ref this.lastTimeExecuted, false))
             {
+                float maxHealth;
+                float damageToDeal;
+                TeamId teamID;
                 maxHealth = GetMaxHealth(owner, PrimaryAbilityResourceType.MANA);
                 damageToDeal = maxHealth * 0.02f;
                 teamID = GetTeamID(owner);

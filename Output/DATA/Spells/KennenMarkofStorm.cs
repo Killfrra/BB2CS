@@ -23,7 +23,6 @@ namespace Buffs
             TeamId teamID;
             int level; // UNUSED
             bool doOnce; // UNUSED
-            Particle part; // UNUSED
             teamID = GetTeamID(attacker);
             this.doOnce = false;
             level = GetLevel(owner);
@@ -37,15 +36,16 @@ namespace Buffs
             {
                 this.doOnce = true;
                 SpellBuffRemove(owner, nameof(Buffs.KennenParticleHolder), (ObjAIBase)owner);
-                SpellEffectCreate(out this.globeTwo, out _, "kennen_mos2.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true);
+                SpellEffectCreate(out this.globeTwo, out _, "kennen_mos2.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true);
             }
             if(this.count >= 3)
             {
+                Particle part; // UNUSED
                 if(GetBuffCountFromCaster(owner, attacker, nameof(Buffs.KennenMoSDiminish)) == 0)
                 {
                     BreakSpellShields(owner);
                     IncPAR(attacker, 25, PrimaryAbilityResourceType.Energy);
-                    SpellEffectCreate(out part, out _, "kennen_mos_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true);
+                    SpellEffectCreate(out part, out _, "kennen_mos_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true);
                     ApplyStun(attacker, owner, 1.25f);
                     SpellBuffRemoveStacks(owner, attacker, nameof(Buffs.KennenMarkofStorm), 0);
                     if(target is Champion)
@@ -57,7 +57,7 @@ namespace Buffs
                 {
                     BreakSpellShields(owner);
                     IncPAR(attacker, 25, PrimaryAbilityResourceType.Energy);
-                    SpellEffectCreate(out part, out _, "kennen_mos_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true);
+                    SpellEffectCreate(out part, out _, "kennen_mos_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true);
                     ApplyStun(attacker, owner, 0.6f);
                     SpellBuffRemoveStacks(owner, attacker, nameof(Buffs.KennenMarkofStorm), 0);
                     if(target is Champion)

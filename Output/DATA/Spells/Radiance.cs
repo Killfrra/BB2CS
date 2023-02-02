@@ -32,14 +32,14 @@ namespace Buffs
             TeamId teamOfOwner;
             float damageIncrease;
             float nextBuffVars_DamageIncrease;
-            float nextBuffVars_AbilityPower;
             float abilityPower;
+            float nextBuffVars_AbilityPower;
             //RequireVar(this.damageIncrease);
             //RequireVar(this.abilityPower);
             IncFlatPhysicalDamageMod(owner, this.damageIncrease);
             IncFlatMagicDamageMod(owner, this.abilityPower);
             teamOfOwner = GetTeamID(owner);
-            SpellEffectCreate(out this.particle, out _, "taricgemstorm.troy", default, teamOfOwner, 0, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, false, false, false, false, false);
+            SpellEffectCreate(out this.particle, out _, "taricgemstorm.troy", default, teamOfOwner ?? TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, false, false, false, false, false);
             damageIncrease = this.damageIncrease * 0.5f;
             nextBuffVars_DamageIncrease = damageIncrease;
             abilityPower = this.abilityPower * 0.5f;
@@ -61,12 +61,12 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            float damageIncrease;
-            float nextBuffVars_DamageIncrease;
-            float nextBuffVars_AbilityPower;
-            float abilityPower;
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, false))
             {
+                float damageIncrease;
+                float nextBuffVars_DamageIncrease;
+                float abilityPower;
+                float nextBuffVars_AbilityPower;
                 damageIncrease = this.damageIncrease * 0.5f;
                 nextBuffVars_DamageIncrease = damageIncrease;
                 abilityPower = this.abilityPower * 0.5f;

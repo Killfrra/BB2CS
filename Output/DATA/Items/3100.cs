@@ -12,10 +12,6 @@ namespace Items
         int cooldownResevoir; // UNUSED
         public override void OnSpellCast(string spellName, SpellScriptMetaData spellVars)
         {
-            float abilityPower;
-            float baseDamage;
-            float nextBuffVars_BaseDamage;
-            float nextBuffVars_AbilityPower;
             if(spellVars.DoesntTriggerSpellCasts)
             {
             }
@@ -23,6 +19,10 @@ namespace Items
             {
                 if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.SheenDelay)) == 0)
                 {
+                    float abilityPower;
+                    float baseDamage;
+                    float nextBuffVars_BaseDamage; // UNUSED
+                    float nextBuffVars_AbilityPower;
                     abilityPower = GetFlatMagicDamageMod(owner);
                     baseDamage = GetBaseAttackDamage(owner);
                     nextBuffVars_BaseDamage = baseDamage;

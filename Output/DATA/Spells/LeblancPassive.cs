@@ -20,9 +20,9 @@ namespace Buffs
         };
         public override void OnTakeDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
         {
-            float healthPercent;
             if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.LeblancPassiveCooldown)) == 0)
             {
+                float healthPercent;
                 healthPercent = GetHealthPercent(owner, PrimaryAbilityResourceType.MANA);
                 if(healthPercent <= 0.4f)
                 {

@@ -25,15 +25,15 @@ namespace Spells
         }
         public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
         {
-            float bonusAttackDamage;
             float bonusDamage;
-            float physicalBonus;
-            float aOEDmg;
             float attackDamage;
             float damageToDeal;
             BreakSpellShields(target);
             if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.EmpowerTwo)) > 0)
             {
+                float bonusAttackDamage;
+                float physicalBonus;
+                float aOEDmg;
                 bonusAttackDamage = GetFlatPhysicalDamageMod(owner);
                 level = GetSlotSpellLevel((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 bonusDamage = this.effect0[level];

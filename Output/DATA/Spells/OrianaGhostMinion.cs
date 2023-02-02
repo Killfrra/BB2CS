@@ -31,8 +31,8 @@ namespace Buffs
             SetInvulnerable(owner, true);
             SetTargetable(owner, false);
             this.tempVision = AddPosPerceptionBubble(teamID, 225, ownerPos, 25000, default, false);
-            SpellEffectCreate(out this.ring2, out this.ring1, "yomu_ring_green.troy", "yomu_ring_red.troy", teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, ownerPos, owner, default, ownerPos, false, default, default, false, false);
-            SpellEffectCreate(out this.ring4, out this.ring3, "oriana_ball_glow_green.troy", "oriana_ball_glow_red.troy", teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "balldown", ownerPos, owner, default, ownerPos, false, default, default, false, false);
+            SpellEffectCreate(out this.ring2, out this.ring1, "yomu_ring_green.troy", "yomu_ring_red.troy", teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, ownerPos, owner, default, ownerPos, false, default, default, false, false);
+            SpellEffectCreate(out this.ring4, out this.ring3, "oriana_ball_glow_green.troy", "oriana_ball_glow_red.troy", teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "balldown", ownerPos, owner, default, ownerPos, false, default, default, false, false);
         }
         public override void OnDeactivate(bool expired)
         {

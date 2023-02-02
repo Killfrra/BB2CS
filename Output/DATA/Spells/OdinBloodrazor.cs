@@ -11,10 +11,6 @@ namespace Buffs
     {
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            float maxHealth;
-            TeamId teamId;
-            float damage;
-            ObjAIBase caster;
             if(target is ObjAIBase)
             {
                 if(target is not BaseTurret)
@@ -23,6 +19,10 @@ namespace Buffs
                     {
                         if(hitResult != HitResult.HIT_Miss)
                         {
+                            float maxHealth;
+                            TeamId teamId;
+                            float damage;
+                            ObjAIBase caster;
                             maxHealth = GetMaxHealth(target, PrimaryAbilityResourceType.MANA);
                             teamId = GetTeamID(target);
                             damage = 0.025f * maxHealth;

@@ -12,12 +12,12 @@ namespace Chars
         float lastTime2Executed;
         public override void OnUpdateActions()
         {
-            float totalDamage;
-            float baseDamage;
-            float bonusDamage;
-            float spell3Display;
             if(ExecutePeriodically(1, ref this.lastTime2Executed, true))
             {
+                float totalDamage;
+                float baseDamage;
+                float bonusDamage;
+                float spell3Display;
                 level = GetSlotSpellLevel((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 totalDamage = GetTotalAttackDamage(owner);
                 baseDamage = GetBaseAttackDamage(owner);

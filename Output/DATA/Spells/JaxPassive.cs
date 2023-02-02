@@ -21,11 +21,11 @@ namespace Buffs
         public override void OnUpdateStats()
         {
             int count;
-            int level;
-            float aS;
             count = GetBuffCountFromAll(owner, nameof(Buffs.JaxRelentlessAssaultAS));
             if(count > 0)
             {
+                int level;
+                float aS;
                 level = GetLevel(owner);
                 aS = this.effect0[level];
                 aS *= count;
@@ -42,16 +42,16 @@ namespace Buffs
         }
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            int ult;
-            int count;
             if(hitResult != HitResult.HIT_Dodge)
             {
                 if(hitResult != HitResult.HIT_Miss)
                 {
+                    int ult;
                     ult = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                     AddBuff((ObjAIBase)owner, owner, new Buffs.JaxRelentlessAssaultAS(), charVars.UltStacks, 1, 2.5f, BuffAddType.STACKS_AND_RENEWS, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
                     if(ult > 0)
                     {
+                        int count;
                         count = GetBuffCountFromAll(owner, nameof(Buffs.JaxRelentlessAssaultDebuff));
                         if(count == 0)
                         {

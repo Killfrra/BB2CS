@@ -22,7 +22,6 @@ namespace Spells
             TeamId teamID; // UNUSED
             float spellBaseDamage;
             bool isStealthed;
-            bool canSee;
             teamID = GetTeamID(attacker);
             spellBaseDamage = this.effect0[level];
             isStealthed = GetStealthed(target);
@@ -54,6 +53,7 @@ namespace Spells
                 }
                 else
                 {
+                    bool canSee;
                     canSee = CanSeeTarget(owner, target);
                     if(canSee)
                     {

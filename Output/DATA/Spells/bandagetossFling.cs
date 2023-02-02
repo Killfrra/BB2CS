@@ -27,7 +27,6 @@ namespace Buffs
         }
         public override void OnUpdateStats()
         {
-            Particle nextBuffVars_ParticleID;
             SetNoRender(owner, true);
             SetGhosted(owner, true);
             SetTargetable(owner, false);
@@ -36,6 +35,7 @@ namespace Buffs
             SetForceRenderParticles(owner, true);
             if(this.willBeam)
             {
+                Particle nextBuffVars_ParticleID;
                 SpellEffectCreate(out nextBuffVars_ParticleID, out _, default, default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "head", default, attacker, "R_hand", default, false);
                 this.willBeam = false;
                 AddBuff(attacker, attacker, new Buffs.BandagetossFlingCaster(nextBuffVars_ParticleID), 1, 1, 2, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0);

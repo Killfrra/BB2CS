@@ -24,9 +24,9 @@ namespace Buffs
         public override bool OnAllowAdd(BuffType type, string scriptName, int maxStack, float duration)
         {
             bool returnValue = true;
-            float cCreduction;
             if(avatarVars.MasteryJuggernaut)
             {
+                float cCreduction;
                 cCreduction = 0.9f;
                 if(owner.Team != attacker.Team)
                 {
@@ -104,7 +104,6 @@ namespace Buffs
         }
         public override void OnKill()
         {
-            float masteryBountyAmt;
             if(avatarVars.MasteryScholar)
             {
                 if(target is Champion)
@@ -125,6 +124,7 @@ namespace Buffs
                 {
                     if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.OdinPlayerBuff)) > 0)
                     {
+                        float masteryBountyAmt;
                         masteryBountyAmt = avatarVars.MasteryBountyAmt / 2;
                         IncGold(owner, masteryBountyAmt);
                     }
@@ -137,7 +137,6 @@ namespace Buffs
         }
         public override void OnAssist()
         {
-            float masteryBountyAmt;
             if(avatarVars.MasteryScholar)
             {
                 if(target is Champion)
@@ -158,6 +157,7 @@ namespace Buffs
                 {
                     if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.OdinPlayerBuff)) > 0)
                     {
+                        float masteryBountyAmt;
                         masteryBountyAmt = avatarVars.MasteryBountyAmt / 2;
                         IncGold(owner, masteryBountyAmt);
                     }

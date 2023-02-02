@@ -26,12 +26,6 @@ namespace Buffs
         public override void OnUpdateActions()
         {
             int level;
-            float baseRange;
-            float range;
-            float maxHealth;
-            float health;
-            float healthPercent;
-            float nextBuffVars_MoveSpeedBuff;
             level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             if(level >= 1)
             {
@@ -42,15 +36,21 @@ namespace Buffs
                 {
                     if(ExecutePeriodically(2, ref this.lastTimeExecuted, false))
                     {
+                        float baseRange;
+                        float range;
                         baseRange = level * 800;
                         range = baseRange + 700;
                         foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, range, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectHeroes, default, true))
                         {
+                            float maxHealth;
+                            float health;
+                            float healthPercent;
                             maxHealth = GetMaxHealth(unit, PrimaryAbilityResourceType.MANA);
                             health = GetHealth(unit, PrimaryAbilityResourceType.MANA);
                             healthPercent = health / maxHealth;
                             if(healthPercent <= 0.5f)
                             {
+                                float nextBuffVars_MoveSpeedBuff;
                                 AddBuff(attacker, unit, new Buffs.BloodScent_target(), 1, 1, 3, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_DEHANCER, 0, true, false, false);
                                 nextBuffVars_MoveSpeedBuff = this.effect0[level];
                                 AddBuff(attacker, attacker, new Buffs.BloodScent(nextBuffVars_MoveSpeedBuff), 1, 1, 3, BuffAddType.RENEW_EXISTING, BuffType.HASTE, 0, true, false, false);

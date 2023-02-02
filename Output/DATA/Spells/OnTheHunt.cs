@@ -5,6 +5,32 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class OnTheHunt : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            AutoCooldownByLevel = new[]{ 90f, 90f, 90f, },
+            TriggersSpellCasts = true,
+            NotSingleTargetSpell = true,
+        };
+        float[] effect0 = {0.25f, 0.25f, 0.25f};
+        float[] effect1 = {0.3f, 0.45f, 0.6f};
+        float[] effect2 = {0.15f, 0.225f, 0.3f};
+        int[] effect3 = {15, 15, 15};
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            float nextBuffVars_MoveSpeedMod;
+            float nextBuffVars_AttackSpeedMod;
+            float nextBuffVars_AllyAttackSpeedMod; // UNUSED
+            nextBuffVars_MoveSpeedMod = this.effect0[level];
+            nextBuffVars_AttackSpeedMod = this.effect1[level];
+            nextBuffVars_AllyAttackSpeedMod = this.effect2[level];
+            AddBuff(attacker, attacker, new Buffs.OnTheHunt(nextBuffVars_MoveSpeedMod, nextBuffVars_AttackSpeedMod), 1, 1, this.effect3[level], BuffAddType.REPLACE_EXISTING, BuffType.HASTE, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class OnTheHunt : BBBuffScript
@@ -45,9 +71,9 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            float duration;
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, false))
             {
+                float duration;
                 duration = GetBuffRemainingDuration(owner, nameof(Buffs.OnTheHunt));
                 foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 1000, SpellDataFlags.AffectFriends | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes | SpellDataFlags.NotAffectSelf, default, true))
                 {
@@ -57,32 +83,6 @@ namespace Buffs
                     }
                 }
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class OnTheHunt : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            AutoCooldownByLevel = new[]{ 90f, 90f, 90f, },
-            TriggersSpellCasts = true,
-            NotSingleTargetSpell = true,
-        };
-        float[] effect0 = {0.25f, 0.25f, 0.25f};
-        float[] effect1 = {0.3f, 0.45f, 0.6f};
-        float[] effect2 = {0.15f, 0.225f, 0.3f};
-        int[] effect3 = {15, 15, 15};
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            float nextBuffVars_MoveSpeedMod;
-            float nextBuffVars_AttackSpeedMod;
-            float nextBuffVars_AllyAttackSpeedMod;
-            nextBuffVars_MoveSpeedMod = this.effect0[level];
-            nextBuffVars_AttackSpeedMod = this.effect1[level];
-            nextBuffVars_AllyAttackSpeedMod = this.effect2[level];
-            AddBuff(attacker, attacker, new Buffs.OnTheHunt(nextBuffVars_MoveSpeedMod, nextBuffVars_AttackSpeedMod), 1, 1, this.effect3[level], BuffAddType.REPLACE_EXISTING, BuffType.HASTE, 0, true, false, false);
         }
     }
 }

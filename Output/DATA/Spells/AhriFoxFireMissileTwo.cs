@@ -5,21 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class AhriFoxFireMissileTwo : BBBuffScript
-    {
-        public override void OnUpdateActions()
-        {
-            int count;
-            count = GetBuffCountFromAll(owner, nameof(Buffs.AhriFoxFireMissileTwo));
-            if(count == 3)
-            {
-                SpellBuffClear(owner, nameof(Buffs.AhriFoxFireMissileTwo));
-            }
-        }
-    }
-}
 namespace Spells
 {
     public class AhriFoxFireMissileTwo : BBSpellScript
@@ -48,7 +33,7 @@ namespace Spells
                 if(charVars.FoxFireIsActive == 1)
                 {
                     SpellEffectCreate(out ar, out _, "Ahri_PassiveHeal.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, attacker, default, default, attacker, default, default, false, false, false, false, false);
-                    SpellEffectCreate(out asdf, out _, "Ahri_passive_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, "spine", default, target, default, default, true, false, false, false, false);
+                    SpellEffectCreate(out asdf, out _, "Ahri_passive_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, "spine", default, target, default, default, true, false, false, false, false);
                     nextBuffVars_DrainPercent = 0.35f;
                     nextBuffVars_DrainedBool = false;
                     AddBuff(attacker, attacker, new Buffs.GlobalDrain(nextBuffVars_DrainPercent, nextBuffVars_DrainedBool), 1, 1, 0.01f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
@@ -75,7 +60,7 @@ namespace Spells
                 if(charVars.FoxFireIsActive == 1)
                 {
                     SpellEffectCreate(out ar, out _, "Ahri_PassiveHeal.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, attacker, default, default, attacker, default, default, false, false, false, false, false);
-                    SpellEffectCreate(out asdf, out _, "Ahri_passive_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, "spine", default, target, default, default, true, false, false, false, false);
+                    SpellEffectCreate(out asdf, out _, "Ahri_passive_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, "spine", default, target, default, default, true, false, false, false, false);
                     AddBuff(attacker, attacker, new Buffs.AhriSoulCrusher3(), 3, 3, 5, BuffAddType.STACKS_AND_OVERLAPS, BuffType.INTERNAL, 0.25f, true, false, false);
                     nextBuffVars_DrainPercent = 0.35f;
                     nextBuffVars_DrainedBool = false;
@@ -103,6 +88,21 @@ namespace Spells
                 AddBuff(attacker, target, new Buffs.AhriFoxFireMissileTwo(), 3, 1, 6, BuffAddType.STACKS_AND_CONTINUE, BuffType.INTERNAL, 0, true, false, false);
             }
             DestroyMissile(missileNetworkID);
+        }
+    }
+}
+namespace Buffs
+{
+    public class AhriFoxFireMissileTwo : BBBuffScript
+    {
+        public override void OnUpdateActions()
+        {
+            int count;
+            count = GetBuffCountFromAll(owner, nameof(Buffs.AhriFoxFireMissileTwo));
+            if(count == 3)
+            {
+                SpellBuffClear(owner, nameof(Buffs.AhriFoxFireMissileTwo));
+            }
         }
     }
 }

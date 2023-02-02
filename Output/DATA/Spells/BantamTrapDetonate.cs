@@ -25,12 +25,12 @@ namespace Buffs
         {
             TeamId teemoTeam;
             Particle particle; // UNUSED
-            float nextBuffVars_AttackSpeedMod;
-            float nextBuffVars_MoveSpeedMod;
             teemoTeam = GetTeamID(attacker);
-            SpellEffectCreate(out particle, out _, "ShroomMine.troy", default, teemoTeam, 300, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, owner.Position, owner, default, default, false);
+            SpellEffectCreate(out particle, out _, "ShroomMine.troy", default, teemoTeam ?? TeamId.TEAM_UNKNOWN, 300, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, owner.Position, owner, default, default, false);
             foreach(AttackableUnit unit in GetUnitsInArea(attacker, owner.Position, 450, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
             {
+                float nextBuffVars_AttackSpeedMod;
+                float nextBuffVars_MoveSpeedMod;
                 BreakSpellShields(unit);
                 nextBuffVars_AttackSpeedMod = 0;
                 nextBuffVars_MoveSpeedMod = -0.6f;

@@ -12,19 +12,19 @@ namespace Spells
         float[] effect0 = {0.4f, 0.5f, 0.6f, 0.7f, 0.8f};
         public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
         {
-            float damageMod;
-            float attackDamage;
-            float procDamage;
             if(hitResult != HitResult.HIT_Dodge)
             {
                 if(hitResult != HitResult.HIT_Miss)
                 {
+                    float attackDamage;
                     if(target is ObjAIBase)
                     {
                         if(target is not BaseTurret)
                         {
                             if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.KennenDoubleStrikeLive)) > 0)
                             {
+                                float damageMod;
+                                float procDamage;
                                 AddBuff((ObjAIBase)owner, target, new Buffs.KennenMarkofStorm(), 5, 1, 8, BuffAddType.STACKS_AND_RENEWS, BuffType.COMBAT_DEHANCER, 0, true, false, false);
                                 level = GetSlotSpellLevel((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                                 damageMod = this.effect0[level];

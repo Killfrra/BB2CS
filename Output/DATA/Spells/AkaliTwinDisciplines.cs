@@ -32,10 +32,9 @@ namespace Buffs
         public override void OnUpdateStats()
         {
             float nextBuffVars_AkaliAP;
-            float nextBuffVars_AkaliDmg;
-            float dmgMultTooltip;
             if(this.akaliAP >= 19.5f)
             {
+                float dmgMultTooltip;
                 nextBuffVars_AkaliAP = this.akaliAP;
                 this.bonusDmgPerc = 0.08f;
                 this.akaliAP -= 20;
@@ -51,6 +50,7 @@ namespace Buffs
             }
             if(this.akaliDmg >= 9.5f)
             {
+                float nextBuffVars_AkaliDmg;
                 nextBuffVars_AkaliDmg = this.akaliDmg;
                 this.baseVampPercent = 0.08f;
                 this.akaliDmg -= 10;

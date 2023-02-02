@@ -51,11 +51,11 @@ namespace Buffs
         }
         public override void OnBeingSpellHit(SpellScriptMetaData spellVars)
         {
-            Particle ar; // UNUSED
             if(!spellVars.DoesntTriggerSpellCasts)
             {
                 if(owner.Team != attacker.Team)
                 {
+                    Particle ar; // UNUSED
                     this.willRemove = true;
                     SpellEffectCreate(out ar, out _, "SpellEffect_proc.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, attacker, default, default, target, default, default, false);
                 }

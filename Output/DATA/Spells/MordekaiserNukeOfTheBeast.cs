@@ -22,7 +22,7 @@ namespace Spells
             float bonusAPDamage;
             float nextBuffVars_BaseDamage;
             teamID = GetTeamID(owner);
-            SpellEffectCreate(out aasdf, out _, "mordakaiser_maceOfSpades_tar2.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true);
+            SpellEffectCreate(out aasdf, out _, "mordakaiser_maceOfSpades_tar2.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true);
             level = GetSlotSpellLevel((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             baseDamage = this.effect0[level];
             baseDamage = GetBaseAttackDamage(owner);

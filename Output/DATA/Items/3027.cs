@@ -25,10 +25,10 @@ namespace Items
         }
         public override void OnUpdateActions()
         {
-            Particle thisParticle; // UNUSED
             int tempLevel;
             if(ExecutePeriodically(60, ref this.lastTimeExecuted, false))
             {
+                Particle thisParticle; // UNUSED
                 this.bonusHealth += 18;
                 this.bonusMana += 20;
                 this.bonusAbilityPower += 2;

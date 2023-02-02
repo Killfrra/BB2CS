@@ -18,13 +18,13 @@ namespace Spells
         int[] effect0 = {140, 250, 360};
         public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
         {
-            float baseDmg;
-            float totalAD;
-            float baseAD;
-            float bonusAD;
             level = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             if(GetBuffCountFromCaster(target, attacker, nameof(Buffs.GravesChargeShotShot)) == 0)
             {
+                float baseDmg;
+                float totalAD;
+                float baseAD;
+                float bonusAD;
                 baseDmg = this.effect0[level];
                 totalAD = GetTotalAttackDamage(attacker);
                 baseAD = GetBaseAttackDamage(attacker);

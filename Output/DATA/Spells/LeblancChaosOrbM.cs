@@ -5,27 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class LeblancChaosOrbM : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            BuffName = "LeblancMarkOfSilenceM",
-            BuffTextureName = "LeblancMarkOfSilenceM.dds",
-            NonDispellable = true,
-        };
-        Particle b;
-        public override void OnActivate()
-        {
-            SpellEffectCreate(out this.b, out _, "leBlanc_displace_AOE_tar_ult.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false);
-        }
-        public override void OnDeactivate(bool expired)
-        {
-            SpellEffectRemove(this.b);
-        }
-    }
-}
 namespace Spells
 {
     public class LeblancChaosOrbM : BBSpellScript
@@ -91,6 +70,27 @@ namespace Spells
                 level = GetSlotSpellLevel((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 ApplyDamage(attacker, target, this.effect6[level], DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELL, 1, 0.84f, 1, false, false, attacker);
             }
+        }
+    }
+}
+namespace Buffs
+{
+    public class LeblancChaosOrbM : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            BuffName = "LeblancMarkOfSilenceM",
+            BuffTextureName = "LeblancMarkOfSilenceM.dds",
+            NonDispellable = true,
+        };
+        Particle b;
+        public override void OnActivate()
+        {
+            SpellEffectCreate(out this.b, out _, "leBlanc_displace_AOE_tar_ult.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false);
+        }
+        public override void OnDeactivate(bool expired)
+        {
+            SpellEffectRemove(this.b);
         }
     }
 }

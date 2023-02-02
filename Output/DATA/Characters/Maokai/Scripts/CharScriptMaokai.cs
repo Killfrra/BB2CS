@@ -12,11 +12,11 @@ namespace Chars
         float lastTimeExecuted;
         public override void OnUpdateActions()
         {
-            TeamId teamID;
             if(ExecutePeriodically(0.5f, ref this.lastTimeExecuted, false))
             {
                 if(!owner.IsDead)
                 {
+                    TeamId teamID;
                     teamID = GetTeamID(owner);
                     foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 1800, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectFriends | SpellDataFlags.AffectHeroes | SpellDataFlags.AlwaysSelf, default, true))
                     {
@@ -34,13 +34,13 @@ namespace Chars
         }
         public override void OnPreAttack()
         {
-            float healthPercent;
             if(target is ObjAIBase)
             {
                 if(target is not BaseTurret)
                 {
                     if(GetBuffCountFromCaster(owner, attacker, nameof(Buffs.MaokaiSapMagicMelee)) > 0)
                     {
+                        float healthPercent;
                         healthPercent = GetHealthPercent(owner, PrimaryAbilityResourceType.MANA);
                         if(healthPercent < 1)
                         {

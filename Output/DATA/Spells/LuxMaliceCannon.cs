@@ -33,8 +33,8 @@ namespace Spells
             FaceDirection(owner, targetPos);
             beam1 = GetPointByUnitFacingOffset(owner, 145, 0);
             beam3 = GetPointByUnitFacingOffset(owner, 3300, 0);
-            other1 = SpawnMinion("hiu", "TestCubeRender", "idle.lua", beam1, teamID, false, true, false, false, false, true, 450, default, false, (Champion)owner);
-            other3 = SpawnMinion("hiu", "TestCube", "idle.lua", beam3, teamID, false, true, false, false, false, true, 450, default, false, (Champion)owner);
+            other1 = SpawnMinion("hiu", "TestCubeRender", "idle.lua", beam1, teamID ?? TeamId.TEAM_CASTER, false, true, false, false, false, true, 450, default, false, (Champion)owner);
+            other3 = SpawnMinion("hiu", "TestCube", "idle.lua", beam3, teamID ?? TeamId.TEAM_CASTER, false, true, false, false, false, true, 450, default, false, (Champion)owner);
             LinkVisibility(other1, other3);
             AddBuff(attacker, other1, new Buffs.LuxMaliceCannonDeathFix(), 1, 1, 2, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false);
             AddBuff(attacker, other3, new Buffs.LuxMaliceCannonDeathFix(), 1, 1, 2, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false);

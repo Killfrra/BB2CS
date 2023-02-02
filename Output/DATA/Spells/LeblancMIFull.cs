@@ -36,7 +36,7 @@ namespace Buffs
             TeamId teamID;
             Particle hi; // UNUSED
             teamID = GetTeamID(attacker);
-            SpellEffectCreate(out hi, out _, "leblanc_mirrorimage_death.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, owner.Position, owner, default, default, true, default, default, false, false);
+            SpellEffectCreate(out hi, out _, "leblanc_mirrorimage_death.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, owner.Position, owner, default, default, true, default, default, false, false);
             SetInvulnerable(owner, false);
             ApplyDamage((ObjAIBase)owner, owner, 10000, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_INTERNALRAW, 1, 1, 1, false, false, (ObjAIBase)owner);
         }

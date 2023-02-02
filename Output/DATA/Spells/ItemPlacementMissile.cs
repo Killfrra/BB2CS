@@ -5,19 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class ItemPlacementMissile : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateEffect = new[]{ "DarkBinding_tar.troy", "", },
-            BuffName = "Dark Binding",
-            BuffTextureName = "FallenAngel_DarkBinding.dds",
-            PopupMessage = new[]{ "game_floatingtext_Snared", },
-        };
-    }
-}
 namespace Spells
 {
     public class ItemPlacementMissile : BBSpellScript
@@ -38,5 +25,18 @@ namespace Spells
             }
             SpellEffectCreate(out _, out _, "ItemPlacement_tar.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, false);
         }
+    }
+}
+namespace Buffs
+{
+    public class ItemPlacementMissile : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateEffect = new[]{ "DarkBinding_tar.troy", "", },
+            BuffName = "Dark Binding",
+            BuffTextureName = "FallenAngel_DarkBinding.dds",
+            PopupMessage = new[]{ "game_floatingtext_Snared", },
+        };
     }
 }

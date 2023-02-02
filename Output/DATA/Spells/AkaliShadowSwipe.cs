@@ -25,7 +25,6 @@ namespace Spells
             float akaliAP;
             float damageToDeal;
             bool isStealthed;
-            bool canSee;
             bonusDamage = this.effect0[level];
             akaliDamage = GetTotalAttackDamage(owner);
             akaliAP = GetFlatMagicDamageMod(owner);
@@ -44,6 +43,7 @@ namespace Spells
             }
             else
             {
+                bool canSee;
                 canSee = CanSeeTarget(owner, target);
                 if(canSee)
                 {

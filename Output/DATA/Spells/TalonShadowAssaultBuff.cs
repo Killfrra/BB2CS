@@ -28,7 +28,7 @@ namespace Buffs
             SetStealthed(owner, true);
             AddBuff((ObjAIBase)owner, owner, new Buffs.TalonHaste(nextBuffVars_MoveSpeedMod), 1, 1, 2.5f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
             ownerPos = GetUnitPosition(owner);
-            SpellEffectCreate(out this.talon_ult_sound, out _, "talon_ult_sound.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, ownerPos, default, default, ownerPos, true, false, false, false, false);
+            SpellEffectCreate(out this.talon_ult_sound, out _, "talon_ult_sound.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, ownerPos, default, default, ownerPos, true, false, false, false, false);
         }
         public override void OnDeactivate(bool expired)
         {

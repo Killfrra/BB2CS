@@ -5,32 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class DarkWind : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateEffect = new[]{ "Global_Silence.troy", },
-            BuffName = "Silence",
-            BuffTextureName = "Fiddlesticks_DarkWind.dds",
-            PopupMessage = new[]{ "game_floatingtext_Silenced", },
-        };
-        public override void OnActivate()
-        {
-            SetSilenced(owner, true);
-            ApplyAssistMarker(attacker, owner, 10);
-        }
-        public override void OnDeactivate(bool expired)
-        {
-            SetSilenced(owner, false);
-        }
-        public override void OnUpdateStats()
-        {
-            SetSilenced(owner, true);
-        }
-    }
-}
 namespace Spells
 {
     public class DarkWind : BBSpellScript
@@ -64,6 +38,32 @@ namespace Spells
             {
                 ApplyDamage(attacker, target, 100, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0.35f, 1, false, false);
             }
+        }
+    }
+}
+namespace Buffs
+{
+    public class DarkWind : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateEffect = new[]{ "Global_Silence.troy", },
+            BuffName = "Silence",
+            BuffTextureName = "Fiddlesticks_DarkWind.dds",
+            PopupMessage = new[]{ "game_floatingtext_Silenced", },
+        };
+        public override void OnActivate()
+        {
+            SetSilenced(owner, true);
+            ApplyAssistMarker(attacker, owner, 10);
+        }
+        public override void OnDeactivate(bool expired)
+        {
+            SetSilenced(owner, false);
+        }
+        public override void OnUpdateStats()
+        {
+            SetSilenced(owner, true);
         }
     }
 }

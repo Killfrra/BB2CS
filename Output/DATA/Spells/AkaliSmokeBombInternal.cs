@@ -18,16 +18,16 @@ namespace Buffs
         public override void OnActivate()
         {
             TeamId teamID;
-            Fade iD; // UNUSED
             teamID = GetTeamID(owner);
             //RequireVar(this.initialTime);
             //RequireVar(this.timeLastHit);
             this.willFade = true;
             if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.Recall)) == 0)
             {
+                Fade iD; // UNUSED
                 iD = PushCharacterFade(owner, 0.2f, 1.5f);
                 this.willFade = false;
-                SpellEffectCreate(out this.abc, out _, "akali_invis_cas.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, true);
+                SpellEffectCreate(out this.abc, out _, "akali_invis_cas.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, true);
             }
         }
         public override void OnDeactivate(bool expired)

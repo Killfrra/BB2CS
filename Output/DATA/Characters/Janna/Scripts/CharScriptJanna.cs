@@ -12,7 +12,6 @@ namespace Chars
         float lastTimeExecuted;
         public override void OnUpdateActions()
         {
-            float cooldown;
             if(!owner.IsDead)
             {
                 level = GetSlotSpellLevel((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
@@ -20,6 +19,7 @@ namespace Chars
                 {
                     if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.SowTheWind)) == 0)
                     {
+                        float cooldown;
                         cooldown = GetSlotSpellCooldownTime((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                         if(cooldown <= 0)
                         {

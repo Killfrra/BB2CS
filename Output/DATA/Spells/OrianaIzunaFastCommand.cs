@@ -20,11 +20,11 @@ namespace Spells
             Vector3 targetPos;
             Vector3 ownerPos;
             float distance;
-            bool nextBuffVars_GhostAlive;
-            Vector3 nextBuffVars_CastPos;
-            Vector3 nextBuffVars_TargetPos;
+            bool nextBuffVars_GhostAlive; // UNUSED
             bool deployed;
             Vector3 castPos;
+            Vector3 nextBuffVars_CastPos; // UNUSED
+            Vector3 nextBuffVars_TargetPos; // UNUSED
             SpellBuffClear(owner, nameof(Buffs._0));
             SpellBuffClear(owner, nameof(Buffs.OrianaGhostSelf));
             targetPos = GetCastSpellTargetPos();

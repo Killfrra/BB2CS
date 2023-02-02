@@ -5,6 +5,36 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class HallucinateFull : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            CastingBreaksStealth = false,
+            TriggersSpellCasts = true,
+            IsDamagingSpell = false,
+            NotSingleTargetSpell = true,
+        };
+        int[] effect0 = {300, 450, 600};
+        float[] effect1 = {0.75f, 0.75f, 0.75f};
+        float[] effect2 = {1.5f, 1.5f, 1.5f};
+        float[] effect3 = {0.85f, 0.85f, 0.85f};
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            int nextBuffVars_DamageAmount;
+            float nextBuffVars_DamageDealt;
+            float nextBuffVars_DamageTaken;
+            float nextBuffVars_shacoDamageTaken;
+            DestroyMissileForTarget(owner);
+            nextBuffVars_DamageAmount = this.effect0[level];
+            nextBuffVars_DamageDealt = this.effect1[level];
+            nextBuffVars_DamageTaken = this.effect2[level];
+            nextBuffVars_shacoDamageTaken = this.effect3[level];
+            AddBuff((ObjAIBase)owner, owner, new Buffs.HallucinateApplicator(nextBuffVars_DamageAmount, nextBuffVars_DamageDealt, nextBuffVars_DamageTaken, nextBuffVars_shacoDamageTaken), 1, 1, 0.25f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class HallucinateFull : BBBuffScript
@@ -45,7 +75,7 @@ namespace Buffs
             TeamId teamID;
             Particle hi; // UNUSED
             teamID = GetTeamID(attacker);
-            SpellEffectCreate(out hi, out _, "Hallucinate_nova.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, owner.Position, owner, default, default, true, false, false, false, false);
+            SpellEffectCreate(out hi, out _, "Hallucinate_nova.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, owner.Position, owner, default, default, true, false, false, false, false);
             foreach(AttackableUnit unit in GetUnitsInArea(attacker, owner.Position, 300, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
             {
                 BreakSpellShields(unit);
@@ -61,7 +91,7 @@ namespace Buffs
             Champion caster;
             float totalDamage;
             teamID = GetTeamID(owner);
-            caster = GetChampionBySkinName("Shaco", teamID);
+            caster = GetChampionBySkinName("Shaco", teamID ?? TeamId.TEAM_UNKNOWN);
             totalDamage = damageAmount * this.damageDealt;
             if(target is BaseTurret)
             {
@@ -73,36 +103,6 @@ namespace Buffs
         public override void OnPreDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
         {
             damageAmount *= this.damageTaken;
-        }
-    }
-}
-namespace Spells
-{
-    public class HallucinateFull : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            CastingBreaksStealth = false,
-            TriggersSpellCasts = true,
-            IsDamagingSpell = false,
-            NotSingleTargetSpell = true,
-        };
-        int[] effect0 = {300, 450, 600};
-        float[] effect1 = {0.75f, 0.75f, 0.75f};
-        float[] effect2 = {1.5f, 1.5f, 1.5f};
-        float[] effect3 = {0.85f, 0.85f, 0.85f};
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            int nextBuffVars_DamageAmount;
-            float nextBuffVars_DamageDealt;
-            float nextBuffVars_DamageTaken;
-            float nextBuffVars_shacoDamageTaken;
-            DestroyMissileForTarget(owner);
-            nextBuffVars_DamageAmount = this.effect0[level];
-            nextBuffVars_DamageDealt = this.effect1[level];
-            nextBuffVars_DamageTaken = this.effect2[level];
-            nextBuffVars_shacoDamageTaken = this.effect3[level];
-            AddBuff((ObjAIBase)owner, owner, new Buffs.HallucinateApplicator(nextBuffVars_DamageAmount, nextBuffVars_DamageDealt, nextBuffVars_DamageTaken, nextBuffVars_shacoDamageTaken), 1, 1, 0.25f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
         }
     }
 }

@@ -28,7 +28,6 @@ namespace Spells
             float aP;
             float nextBuffVars_SlowAmount;
             Particle gragas; // UNUSED
-            bool isStealthed;
             teamID = GetTeamID(attacker);
             level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             dmg = this.effect0[level];
@@ -64,16 +63,17 @@ namespace Spells
             }
             if(target is Champion)
             {
-                SpellEffectCreate(out gragas, out _, "rumble_taze_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false);
+                SpellEffectCreate(out gragas, out _, "rumble_taze_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false);
                 ApplyDamage(attacker, target, dmg, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELL, 1, aP, 0, false, false, attacker);
                 DestroyMissile(missileNetworkID);
             }
             else
             {
+                bool isStealthed;
                 isStealthed = GetStealthed(target);
                 if(!isStealthed)
                 {
-                    SpellEffectCreate(out gragas, out _, "rumble_taze_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false);
+                    SpellEffectCreate(out gragas, out _, "rumble_taze_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, default, default, false);
                     ApplyDamage(attacker, target, dmg, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELL, 1, aP, 0, false, false, attacker);
                     DestroyMissile(missileNetworkID);
                     AddBuff(attacker, target, new Buffs.RumbleGrenadeZapEffect(), 1, 1, 0.1f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);

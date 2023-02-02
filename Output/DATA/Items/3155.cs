@@ -12,15 +12,6 @@ namespace Items
         public override void OnPreDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
         {
             TeamId teamID;
-            float hP;
-            float projectedHP;
-            float maxHP;
-            float newPercentHP;
-            Particle c; // UNUSED
-            Particle a; // UNUSED
-            Particle b; // UNUSED
-            float shieldHealth;
-            float nextBuffVars_ShieldHealth;
             teamID = GetTeamID(owner);
             if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.HexdrinkerTimer)) == 0)
             {
@@ -30,13 +21,22 @@ namespace Items
                     {
                         if(damageAmount > 0)
                         {
+                            float hP;
+                            float projectedHP;
+                            float maxHP;
+                            float newPercentHP;
                             hP = GetHealth(owner, PrimaryAbilityResourceType.MANA);
                             projectedHP = hP - damageAmount;
                             maxHP = GetMaxHealth(owner, PrimaryAbilityResourceType.MANA);
                             newPercentHP = projectedHP / maxHP;
                             if(newPercentHP < 0.3f)
                             {
-                                SpellEffectCreate(out c, out _, "hexTech_dmg_shield_birth.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, true);
+                                Particle c; // UNUSED
+                                Particle a; // UNUSED
+                                Particle b; // UNUSED
+                                float shieldHealth;
+                                float nextBuffVars_ShieldHealth;
+                                SpellEffectCreate(out c, out _, "hexTech_dmg_shield_birth.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, true);
                                 SpellEffectCreate(out a, out _, "hexTech_dmg_shield_onHit_01.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false);
                                 SpellEffectCreate(out b, out _, "hexTech_dmg_shield_onHit_02.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false);
                                 shieldHealth = 300;

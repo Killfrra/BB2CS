@@ -5,16 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class GravesClusterShotAttack : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateEffect = new[]{ "Graves_ClusterShot_cas.troy", },
-        };
-    }
-}
 namespace Spells
 {
     public class GravesClusterShotAttack : BBSpellScript
@@ -37,7 +27,7 @@ namespace Spells
             float bonusDamage;
             int count;
             teamOfCaster = GetTeamID(attacker);
-            SpellEffectCreate(out part, out _, "Graves_ClusterShot_Tar.troy", default, teamOfCaster, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, target.Position, target, default, default, true, false, false, false, false);
+            SpellEffectCreate(out part, out _, "Graves_ClusterShot_Tar.troy", default, teamOfCaster ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, target.Position, target, default, default, true, false, false, false, false);
             BreakSpellShields(target);
             totalDamage = GetTotalAttackDamage(attacker);
             baseDamage = GetBaseAttackDamage(owner);
@@ -54,5 +44,15 @@ namespace Spells
             AddBuff((ObjAIBase)target, target, new Buffs.GravesClusterShotAttack(), 1, 1, 0.25f, BuffAddType.STACKS_AND_RENEWS, BuffType.INTERNAL, 0, true, false, false);
             ApplyDamage(attacker, target, bonusDamage, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0, 0, false, false, attacker);
         }
+    }
+}
+namespace Buffs
+{
+    public class GravesClusterShotAttack : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateEffect = new[]{ "Graves_ClusterShot_cas.troy", },
+        };
     }
 }

@@ -5,6 +5,29 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class OlafRagnarok : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            AutoCooldownByLevel = new[]{ 120f, 120f, 120f, },
+            CastingBreaksStealth = true,
+            DoesntBreakShields = true,
+            TriggersSpellCasts = true,
+            IsDamagingSpell = false,
+            NotSingleTargetSpell = true,
+        };
+        int[] effect0 = {20, 30, 40};
+        int[] effect1 = {6, 6, 6};
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            float nextBuffVars_DamageAbsorption;
+            nextBuffVars_DamageAbsorption = this.effect0[level];
+            AddBuff(attacker, target, new Buffs.OlafRagnarok(nextBuffVars_DamageAbsorption), 1, 1, this.effect1[level], BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class OlafRagnarok : BBBuffScript
@@ -120,29 +143,6 @@ namespace Buffs
                     damageAmount -= damageAmount;
                 }
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class OlafRagnarok : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            AutoCooldownByLevel = new[]{ 120f, 120f, 120f, },
-            CastingBreaksStealth = true,
-            DoesntBreakShields = true,
-            TriggersSpellCasts = true,
-            IsDamagingSpell = false,
-            NotSingleTargetSpell = true,
-        };
-        int[] effect0 = {20, 30, 40};
-        int[] effect1 = {6, 6, 6};
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            float nextBuffVars_DamageAbsorption;
-            nextBuffVars_DamageAbsorption = this.effect0[level];
-            AddBuff(attacker, target, new Buffs.OlafRagnarok(nextBuffVars_DamageAbsorption), 1, 1, this.effect1[level], BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
         }
     }
 }

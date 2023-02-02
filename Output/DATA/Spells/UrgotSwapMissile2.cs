@@ -5,25 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class UrgotSwapMissile2 : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateEffect = new[]{ "DarkBinding_tar.troy", "", },
-            BuffName = "Dark Binding",
-            BuffTextureName = "FallenAngel_DarkBinding.dds",
-            PopupMessage = new[]{ "game_floatingtext_Snared", },
-        };
-        public override void OnActivate()
-        {
-            Vector3 ownerPos;
-            ownerPos = GetUnitPosition(owner);
-            SetCameraPosition((Champion)owner, ownerPos);
-        }
-    }
-}
 namespace Spells
 {
     public class UrgotSwapMissile2 : BBSpellScript
@@ -44,6 +25,25 @@ namespace Spells
             {
                 DestroyMissile(missileNetworkID);
             }
+        }
+    }
+}
+namespace Buffs
+{
+    public class UrgotSwapMissile2 : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateEffect = new[]{ "DarkBinding_tar.troy", "", },
+            BuffName = "Dark Binding",
+            BuffTextureName = "FallenAngel_DarkBinding.dds",
+            PopupMessage = new[]{ "game_floatingtext_Snared", },
+        };
+        public override void OnActivate()
+        {
+            Vector3 ownerPos;
+            ownerPos = GetUnitPosition(owner);
+            SetCameraPosition((Champion)owner, ownerPos);
         }
     }
 }

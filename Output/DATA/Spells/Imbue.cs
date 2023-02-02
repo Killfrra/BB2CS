@@ -26,8 +26,6 @@ namespace Spells
             float aP;
             float aPMod;
             float healAmount;
-            float temp1;
-            Particle self; // UNUSED
             baseHealAmount = this.effect0[level];
             aP = GetFlatMagicDamageMod(owner);
             aPMod = 0.6f * aP;
@@ -39,6 +37,8 @@ namespace Spells
             }
             else
             {
+                float temp1;
+                Particle self; // UNUSED
                 IncHealth(owner, healAmount, owner);
                 temp1 = GetHealthPercent(target, PrimaryAbilityResourceType.MANA);
                 if(temp1 < 1)

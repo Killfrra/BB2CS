@@ -27,7 +27,7 @@ namespace Buffs
             TeamId teamID; // UNITIALIZED
             //RequireVar(this.attackSpeedMod);
             //RequireVar(this.armorMod);
-            SpellEffectCreate(out this.asdf, out _, "JarvanDemacianStandard_shield.troy", default, teamID, 0, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, owner, default, default, true);
+            SpellEffectCreate(out this.asdf, out _, "JarvanDemacianStandard_shield.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, owner, default, default, true);
             ApplyAssistMarker(attacker, owner, 10);
         }
         public override void OnDeactivate(bool expired)

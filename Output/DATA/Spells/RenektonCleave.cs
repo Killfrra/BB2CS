@@ -27,7 +27,6 @@ namespace Spells
             float ragePercent;
             float healthPercent;
             float nextBuffVars_DrainPercent;
-            int nextBuffVars_MaxDrain;
             float furyGainIncrement;
             float furyGain;
             float bonusDamage;
@@ -38,6 +37,7 @@ namespace Spells
             Particle c; // UNUSED
             bool shouldHit;
             bool visible;
+            int nextBuffVars_MaxDrain;
             teamID = GetTeamID(owner);
             ragePercent = GetPARPercent(owner, PrimaryAbilityResourceType.Other);
             healthPercent = GetHealthPercent(owner, PrimaryAbilityResourceType.Other);
@@ -58,7 +58,7 @@ namespace Spells
             }
             if(ragePercent >= 0.5f)
             {
-                SpellEffectCreate(out c, out _, "renektoncleave_trail_rage.troy ", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, "spine", default, owner, default, default, true, default, default, false);
+                SpellEffectCreate(out c, out _, "renektoncleave_trail_rage.troy ", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, "spine", default, owner, default, default, true, default, default, false);
                 foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, rangeVar, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
                 {
                     shouldHit = true;
@@ -95,7 +95,7 @@ namespace Spells
             }
             else
             {
-                SpellEffectCreate(out c, out _, "renektoncleave_trail.troy ", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, "spine", default, owner, default, default, true, default, default, false);
+                SpellEffectCreate(out c, out _, "renektoncleave_trail.troy ", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, "spine", default, owner, default, default, true, default, default, false);
                 foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, rangeVar, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
                 {
                     shouldHit = true;

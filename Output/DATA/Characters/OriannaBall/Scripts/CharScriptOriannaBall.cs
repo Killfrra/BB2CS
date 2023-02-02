@@ -16,7 +16,7 @@ namespace Chars
             Vector3 nextBuffVars_MyPosition;
             Vector3 myPosition;
             teamID = GetTeamID(owner);
-            caster = GetChampionBySkinName("Orianna", teamID);
+            caster = GetChampionBySkinName("Orianna", teamID ?? TeamId.TEAM_UNKNOWN);
             AddBuff(caster, owner, new Buffs.OrianaGhost(), 1, 1, 25000, BuffAddType.RENEW_EXISTING, BuffType.AURA, 0, true, false, false);
             AddBuff(caster, owner, new Buffs.OrianaGhostMinion(), 1, 1, 25000, BuffAddType.RENEW_EXISTING, BuffType.AURA, 0, true, false, false);
             myPosition = GetUnitPosition(owner);

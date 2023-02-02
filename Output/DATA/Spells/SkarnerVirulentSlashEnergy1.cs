@@ -20,8 +20,8 @@ namespace Buffs
         {
             TeamId teamID;
             teamID = GetTeamID(owner);
-            SpellEffectCreate(out this.particle1, out _, "Skarner_Crystal_Slash_Activate_L.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "L_hand", default, default, default, default, false, default, default, false, false);
-            SpellEffectCreate(out this.particle2, out _, "Skarner_Crystal_Slash_Activate_R.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "R_hand", default, default, default, default, false, default, default, false, false);
+            SpellEffectCreate(out this.particle1, out _, "Skarner_Crystal_Slash_Activate_L.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "L_hand", default, default, default, default, false, default, default, false, false);
+            SpellEffectCreate(out this.particle2, out _, "Skarner_Crystal_Slash_Activate_R.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, "R_hand", default, default, default, default, false, default, default, false, false);
         }
         public override void OnDeactivate(bool expired)
         {

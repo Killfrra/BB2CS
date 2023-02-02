@@ -34,9 +34,9 @@ namespace Buffs
         }
         public override void OnDeactivate(bool expired)
         {
-            Particle ar; // UNUSED
             if(!this.willRemove)
             {
+                Particle ar; // UNUSED
                 SpellEffectCreate(out ar, out _, "blindMonk_W_shield_self_deactivate.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false, default, default, false);
             }
             if(this.shieldAbsorb > 0)
@@ -46,9 +46,6 @@ namespace Buffs
         }
         public override void OnPreDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
         {
-            ObjAIBase caster; // UNUSED
-            TeamId teamID;
-            Particle ar; // UNUSED
             this.oldArmorAmount = this.shieldAbsorb;
             if(this.shieldAbsorb >= damageAmount)
             {
@@ -59,12 +56,15 @@ namespace Buffs
             }
             else
             {
+                ObjAIBase caster; // UNUSED
+                TeamId teamID;
+                Particle ar; // UNUSED
                 caster = SetBuffCasterUnit();
                 teamID = GetTeamID(owner);
                 damageAmount -= this.shieldAbsorb;
                 this.shieldAbsorb = 0;
                 ReduceShield(owner, this.oldArmorAmount, true, true);
-                SpellEffectCreate(out ar, out _, "blindMonk_W_shield_block.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, true, default, default, false);
+                SpellEffectCreate(out ar, out _, "blindMonk_W_shield_block.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, true, default, default, false);
                 SpellBuffRemoveCurrent(owner);
             }
         }

@@ -27,9 +27,9 @@ namespace Buffs
             ObjAIBase caster;
             int level;
             teamID = GetTeamID(attacker);
-            SpellEffectCreate(out this.particle5, out this.particle5, "yorick_ult_revive_tar.troy", default, teamID, 0, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, false, default, default, false, false);
-            SpellEffectCreate(out this.particle, out this.particle, "yorick_ult_02.troy", default, teamID, 500, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, false, default, default, false, false);
-            SpellEffectCreate(out this.particle3, out this.particle4, "yorick_revive_skin_teamID_green.troy", "yorick_revive_skin_teamID_red.troy", teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, false, default, default, false, false);
+            SpellEffectCreate(out this.particle5, out this.particle5, "yorick_ult_revive_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, false, default, default, false, false);
+            SpellEffectCreate(out this.particle, out this.particle, "yorick_ult_02.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 500, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, false, default, default, false, false);
+            SpellEffectCreate(out this.particle3, out this.particle4, "yorick_revive_skin_teamID_green.troy", "yorick_revive_skin_teamID_red.troy", teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, default, false, owner, default, default, target, default, default, false, default, default, false, false);
             SpellBuffRemoveType(owner, BuffType.COMBAT_ENCHANCER);
             SpellBuffRemoveType(owner, BuffType.COMBAT_DEHANCER);
             SpellBuffRemoveType(owner, BuffType.STUN);
@@ -65,7 +65,6 @@ namespace Buffs
         public override void OnDeactivate(bool expired)
         {
             TeamId teamID;
-            Particle a; // UNUSED
             teamID = GetTeamID(owner);
             if(teamID == TeamId.TEAM_BLUE)
             {
@@ -83,7 +82,8 @@ namespace Buffs
             }
             if(owner.IsDead)
             {
-                SpellEffectCreate(out a, out _, "YorickRevenantDeathSound.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, default, default, false, false);
+                Particle a; // UNUSED
+                SpellEffectCreate(out a, out _, "YorickRevenantDeathSound.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, default, default, false, false);
             }
             ApplyDamage((ObjAIBase)owner, owner, 10000, DamageType.DAMAGE_TYPE_TRUE, DamageSource.DAMAGE_SOURCE_INTERNALRAW, 1, 0, 1, false, false, (ObjAIBase)owner);
             SpellEffectRemove(this.particle);
@@ -126,9 +126,9 @@ namespace Buffs
         public override float OnHeal(float health)
         {
             float returnValue = 0;
-            float effectiveHeal;
             if(health >= 0)
             {
+                float effectiveHeal;
                 effectiveHeal = health * 0;
                 returnValue = effectiveHeal;
             }

@@ -24,7 +24,6 @@ namespace Spells
             float healthCost;
             float temp1;
             TeamId casterID; // UNUSED
-            bool canSee;
             count = GetBuffCountFromAll(owner, nameof(Buffs.VladimirTidesofBloodCost));
             charVars.NumTideStacks = count;
             multiplier = count * 0.25f;
@@ -42,6 +41,7 @@ namespace Spells
             level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 620, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
             {
+                bool canSee;
                 canSee = CanSeeTarget(owner, target);
                 if(canSee)
                 {

@@ -5,37 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class FerociousHowl : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateAttachBoneName = new[]{ "", "pelvis", },
-            AutoBuffActivateEffect = new[]{ "minatuar_unbreakableWill_cas.troy", "feroscioushowl_cas2.troy", },
-            BuffName = "Ferocious Howl",
-            BuffTextureName = "Minotaur_FerociousHowl.dds",
-        };
-        float damageReduction;
-        float bonusDamage;
-        public FerociousHowl(float damageReduction = default, float bonusDamage = default)
-        {
-            this.damageReduction = damageReduction;
-            this.bonusDamage = bonusDamage;
-        }
-        public override void OnActivate()
-        {
-            //RequireVar(this.damageReduction);
-            //RequireVar(this.bonusDamage);
-        }
-        public override void OnUpdateStats()
-        {
-            IncPercentMagicReduction(owner, this.damageReduction);
-            IncPercentPhysicalReduction(owner, this.damageReduction);
-            IncFlatPhysicalDamageMod(owner, this.bonusDamage);
-        }
-    }
-}
 namespace Spells
 {
     public class FerociousHowl : BBSpellScript
@@ -67,6 +36,37 @@ namespace Spells
             nextBuffVars_bonusDamage = this.effect1[level];
             AddBuff((ObjAIBase)owner, owner, new Buffs.FerociousHowl(nextBuffVars_DamageReduction, nextBuffVars_bonusDamage), 1, 1, this.effect2[level], BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
             AddBuff((ObjAIBase)owner, owner, new Buffs.AlistarTrample(), 1, 1, 3, BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, false, false, false);
+        }
+    }
+}
+namespace Buffs
+{
+    public class FerociousHowl : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateAttachBoneName = new[]{ "", "pelvis", },
+            AutoBuffActivateEffect = new[]{ "minatuar_unbreakableWill_cas.troy", "feroscioushowl_cas2.troy", },
+            BuffName = "Ferocious Howl",
+            BuffTextureName = "Minotaur_FerociousHowl.dds",
+        };
+        float damageReduction;
+        float bonusDamage;
+        public FerociousHowl(float damageReduction = default, float bonusDamage = default)
+        {
+            this.damageReduction = damageReduction;
+            this.bonusDamage = bonusDamage;
+        }
+        public override void OnActivate()
+        {
+            //RequireVar(this.damageReduction);
+            //RequireVar(this.bonusDamage);
+        }
+        public override void OnUpdateStats()
+        {
+            IncPercentMagicReduction(owner, this.damageReduction);
+            IncPercentPhysicalReduction(owner, this.damageReduction);
+            IncFlatPhysicalDamageMod(owner, this.bonusDamage);
         }
     }
 }

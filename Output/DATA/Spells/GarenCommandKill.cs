@@ -34,9 +34,9 @@ namespace Buffs
         }
         public override void OnKill()
         {
-            float bonusAdd;
             if(charVars.TotalBonus < charVars.MaxBonus)
             {
+                float bonusAdd;
                 bonusAdd = 0.5f + charVars.TotalBonus;
                 charVars.TotalBonus = bonusAdd;
                 IncPermanentFlatSpellBlockMod(owner, 0.5f);
@@ -46,12 +46,12 @@ namespace Buffs
         }
         public override void OnLevelUpSpell(int slot)
         {
-            int level;
-            float nextBuffVars_BonusArmor;
-            float nextBuffVars_BonusMR;
-            float nextBuffVars_MaxBonus;
             if(slot == 1)
             {
+                int level;
+                float nextBuffVars_BonusArmor;
+                float nextBuffVars_BonusMR;
+                float nextBuffVars_MaxBonus; // UNUSED
                 level = GetSlotSpellLevel((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 nextBuffVars_BonusArmor = this.bonusArmor;
                 nextBuffVars_BonusMR = this.bonusMR;

@@ -5,6 +5,32 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class PhosphorusBomb : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            CastingBreaksStealth = true,
+            DoesntBreakShields = false,
+            TriggersSpellCasts = true,
+            IsDamagingSpell = true,
+            NotSingleTargetSpell = true,
+            PhysicalDamageRatio = 1f,
+            SpellDamageRatio = 1f,
+        };
+        public override void SelfExecute()
+        {
+            TeamId teamID; // UNUSED
+            Vector3 targetPos;
+            Vector3 nextBuffVars_TargetPos;
+            teamID = GetTeamID(owner);
+            targetPos = GetCastSpellTargetPos();
+            nextBuffVars_TargetPos = targetPos;
+            AddBuff(attacker, attacker, new Buffs.PhosphorusBomb(nextBuffVars_TargetPos), 1, 1, 4, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class PhosphorusBomb : BBBuffScript
@@ -48,32 +74,6 @@ namespace Buffs
         {
             RemovePerceptionBubble(this.bubbleID);
             SpellEffectRemove(this.particle);
-        }
-    }
-}
-namespace Spells
-{
-    public class PhosphorusBomb : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            CastingBreaksStealth = true,
-            DoesntBreakShields = false,
-            TriggersSpellCasts = true,
-            IsDamagingSpell = true,
-            NotSingleTargetSpell = true,
-            PhysicalDamageRatio = 1f,
-            SpellDamageRatio = 1f,
-        };
-        public override void SelfExecute()
-        {
-            TeamId teamID; // UNUSED
-            Vector3 targetPos;
-            Vector3 nextBuffVars_TargetPos;
-            teamID = GetTeamID(owner);
-            targetPos = GetCastSpellTargetPos();
-            nextBuffVars_TargetPos = targetPos;
-            AddBuff(attacker, attacker, new Buffs.PhosphorusBomb(nextBuffVars_TargetPos), 1, 1, 4, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
         }
     }
 }

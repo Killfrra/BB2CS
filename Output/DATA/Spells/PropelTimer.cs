@@ -15,12 +15,12 @@ namespace Buffs
         };
         public override void OnDeactivate(bool expired)
         {
-            Vector3 propelPos;
-            TeamId teamID; // UNUSED
-            Minion other1;
-            Particle effectToRemove; // UNUSED
             foreach(AttackableUnit unit in GetRandomUnitsInArea((ObjAIBase)owner, owner.Position, 1000, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, 1, default, true))
             {
+                Vector3 propelPos;
+                TeamId teamID; // UNUSED
+                Minion other1;
+                Particle effectToRemove; // UNUSED
                 propelPos = GetRandomPointInAreaUnit(unit, 100, 25);
                 teamID = GetTeamID(owner);
                 other1 = SpawnMinion("DontSeeThisPlease", "SpellBook1", "idle.lua", propelPos, TeamId.TEAM_NEUTRAL, false, true, false, true, false, false, 0, default, true);

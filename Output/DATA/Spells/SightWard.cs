@@ -5,6 +5,36 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class SightWard : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = false,
+            NotSingleTargetSpell = true,
+        };
+        public override void SelfExecute()
+        {
+            TeamId teamID;
+            Vector3 targetPos;
+            Minion other3;
+            teamID = GetTeamID(owner);
+            targetPos = GetCastSpellTargetPos();
+            other3 = SpawnMinion("SightWard", "SightWard", "idle.lua", targetPos, teamID ?? TeamId.TEAM_UNKNOWN, true, true, false, false, false, false, 0, true, false, (Champion)owner);
+            AddBuff(attacker, other3, new Buffs.SharedWardBuff(), 1, 1, 180, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+            AddBuff(attacker, other3, new Buffs.SightWard(), 1, 1, 180, BuffAddType.REPLACE_EXISTING, BuffType.INVISIBILITY, 0, true, false, false);
+            AddBuff(attacker, other3, new Buffs.ItemPlacementMissile(), 1, 1, 2, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+            if(avatarVars.Scout)
+            {
+                AddBuff(attacker, other3, new Buffs.MasteryScoutBuff(), 1, 1, 180, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+            }
+            SetSpell((ObjAIBase)owner, 7, SpellSlotType.ExtraSlots, SpellbookType.SPELLBOOK_CHAMPION, nameof(Spells.ItemPlacementMissile));
+            FaceDirection(owner, targetPos);
+            SpellCast((ObjAIBase)owner, default, targetPos, targetPos, 7, SpellSlotType.ExtraSlots, 1, true, true, false, false, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class SightWard : BBBuffScript
@@ -122,36 +152,6 @@ namespace Buffs
             float returnValue = 0;
             returnValue = 0;
             return returnValue;
-        }
-    }
-}
-namespace Spells
-{
-    public class SightWard : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = false,
-            NotSingleTargetSpell = true,
-        };
-        public override void SelfExecute()
-        {
-            TeamId teamID;
-            Vector3 targetPos;
-            Minion other3;
-            teamID = GetTeamID(owner);
-            targetPos = GetCastSpellTargetPos();
-            other3 = SpawnMinion("SightWard", "SightWard", "idle.lua", targetPos, teamID, true, true, false, false, false, false, 0, true, false, (Champion)owner);
-            AddBuff(attacker, other3, new Buffs.SharedWardBuff(), 1, 1, 180, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
-            AddBuff(attacker, other3, new Buffs.SightWard(), 1, 1, 180, BuffAddType.REPLACE_EXISTING, BuffType.INVISIBILITY, 0, true, false, false);
-            AddBuff(attacker, other3, new Buffs.ItemPlacementMissile(), 1, 1, 2, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
-            if(avatarVars.Scout)
-            {
-                AddBuff(attacker, other3, new Buffs.MasteryScoutBuff(), 1, 1, 180, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
-            }
-            SetSpell((ObjAIBase)owner, 7, SpellSlotType.ExtraSlots, SpellbookType.SPELLBOOK_CHAMPION, nameof(Spells.ItemPlacementMissile));
-            FaceDirection(owner, targetPos);
-            SpellCast((ObjAIBase)owner, default, targetPos, targetPos, 7, SpellSlotType.ExtraSlots, 1, true, true, false, false, false, false);
         }
     }
 }

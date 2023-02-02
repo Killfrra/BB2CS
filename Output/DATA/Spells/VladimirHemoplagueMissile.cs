@@ -14,12 +14,12 @@ namespace Spells
         public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
         {
             float nextBuffVars_DamagePerLevel;
-            float nextBuffVars_DamageIncrease;
-            object nextBuffVars_TargetPos;
             TeamId teamofOwner;
             int vladSkinID;
             Particle particle; // UNUSED
             object targetPos; // UNITIALIZED
+            float nextBuffVars_DamageIncrease;
+            object nextBuffVars_TargetPos; // UNUSED
             AddBuff((ObjAIBase)owner, owner, new Buffs.UnlockAnimation(), 1, 1, 0.5f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
             PlayAnimation("Spell4", 0.5f, owner, false, true, true);
             teamofOwner = GetTeamID(owner);

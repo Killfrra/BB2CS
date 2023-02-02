@@ -5,6 +5,17 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class VolibearQExtra : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = false,
+            NotSingleTargetSpell = true,
+        };
+    }
+}
 namespace Buffs
 {
     public class VolibearQExtra : BBBuffScript
@@ -51,16 +62,5 @@ namespace Buffs
             SetCanCast(owner, false);
             SetCanMove(owner, false);
         }
-    }
-}
-namespace Spells
-{
-    public class VolibearQExtra : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = false,
-            NotSingleTargetSpell = true,
-        };
     }
 }

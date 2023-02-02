@@ -18,7 +18,6 @@ namespace Buffs
         }
         public override void OnActivate()
         {
-            int playerLevel;
             //RequireVar(this.hPPerLevel);
             //RequireVar(this.dmgPerLevel);
             //RequireVar(this.armorPerLevel);
@@ -26,6 +25,7 @@ namespace Buffs
             this.maxPlayerLevel = 0;
             foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 9999, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectFriends | SpellDataFlags.AffectHeroes, default, true))
             {
+                int playerLevel;
                 playerLevel = GetLevel(unit);
                 if(playerLevel > this.maxPlayerLevel)
                 {
@@ -35,16 +35,16 @@ namespace Buffs
         }
         public override void OnUpdateStats()
         {
-            float myHealth;
-            int playerLevel;
             float dmgIncrease;
             if(ExecutePeriodically(10, ref this.lastTimeExecuted, false))
             {
+                float myHealth;
                 myHealth = GetHealthPercent(target, PrimaryAbilityResourceType.MANA);
                 if(myHealth >= 0.99f)
                 {
                     foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 9999, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectFriends | SpellDataFlags.AffectHeroes, default, true))
                     {
+                        int playerLevel;
                         playerLevel = GetLevel(unit);
                         if(playerLevel > this.maxPlayerLevel)
                         {

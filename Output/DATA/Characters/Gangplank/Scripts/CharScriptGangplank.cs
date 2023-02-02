@@ -12,7 +12,6 @@ namespace Chars
         public override void OnUpdateActions()
         {
             int level2;
-            float cooldown2;
             float attackDamage;
             level = GetSlotSpellLevel((ObjAIBase)owner, 2, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             if(level > 0)
@@ -25,6 +24,7 @@ namespace Chars
             level2 = GetSlotSpellLevel((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
             if(level2 > 0)
             {
+                float cooldown2;
                 cooldown2 = GetSlotSpellCooldownTime((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 if(cooldown2 > 0)
                 {

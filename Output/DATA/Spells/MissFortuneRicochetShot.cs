@@ -5,12 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class MissFortuneRicochetShot : BBBuffScript
-    {
-    }
-}
 namespace Spells
 {
     public class MissFortuneRicochetShot : BBSpellScript
@@ -58,13 +52,13 @@ namespace Spells
             abilityDamage = this.effect0[level];
             damageToDeal = attackBonus + abilityDamage;
             ApplyDamage(attacker, target, damageToDeal, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_ATTACK, 1, 0, 0, false, true, attacker);
-            SpellEffectCreate(out asdf, out _, "missFortune_richochet_tar_first.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true);
-            other1 = SpawnMinion("LocationFinder", "TestCube", "idle.lua", target.Position, teamID, true, true, true, true, true, true, 0, default, true);
+            SpellEffectCreate(out asdf, out _, "missFortune_richochet_tar_first.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true);
+            other1 = SpawnMinion("LocationFinder", "TestCube", "idle.lua", target.Position, teamID ?? TeamId.TEAM_UNKNOWN, true, true, true, true, true, true, 0, default, true);
             FaceDirection(other1, attacker.Position);
             leftPos = GetPointByUnitFacingOffset(other1, 500, 90);
             rightPos = GetPointByUnitFacingOffset(other1, 500, 270);
-            other2 = SpawnMinion("LocationFinder", "TestCube", "idle.lua", leftPos, teamID, true, true, true, true, true, true, 0, default, true);
-            other3 = SpawnMinion("LocationFinder", "TestCube", "idle.lua", rightPos, teamID, true, true, true, true, true, true, 0, default, true);
+            other2 = SpawnMinion("LocationFinder", "TestCube", "idle.lua", leftPos, teamID ?? TeamId.TEAM_UNKNOWN, true, true, true, true, true, true, 0, default, true);
+            other3 = SpawnMinion("LocationFinder", "TestCube", "idle.lua", rightPos, teamID ?? TeamId.TEAM_UNKNOWN, true, true, true, true, true, true, 0, default, true);
             FaceDirection(other2, attacker.Position);
             FaceDirection(other3, attacker.Position);
             AddBuff(attacker, other1, new Buffs.ExpirationTimer(), 1, 1, 1, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false);
@@ -114,5 +108,11 @@ namespace Spells
                 }
             }
         }
+    }
+}
+namespace Buffs
+{
+    public class MissFortuneRicochetShot : BBBuffScript
+    {
     }
 }

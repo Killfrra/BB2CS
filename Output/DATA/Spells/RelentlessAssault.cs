@@ -5,6 +5,24 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class RelentlessAssault : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = true,
+            NotSingleTargetSpell = true,
+        };
+        float[] effect0 = {5, 6.5f, 8};
+        public override void SelfExecute()
+        {
+            float duration;
+            duration = this.effect0[level];
+            AddBuff(attacker, owner, new Buffs.ArmsmasterRelentlessMR(), 1, 1, duration, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class RelentlessAssault : BBBuffScript
@@ -17,11 +35,11 @@ namespace Buffs
         float[] effect0 = {0.06f, 0.1f, 0.14f};
         public override void OnUpdateStats()
         {
-            int level;
-            float attackSpeedPerLevel;
-            float attackSpeedMod;
             if(charVars.NumSwings > 0)
             {
+                int level;
+                float attackSpeedPerLevel;
+                float attackSpeedMod;
                 level = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 attackSpeedPerLevel = this.effect0[level];
                 attackSpeedMod = charVars.NumSwings * attackSpeedPerLevel;
@@ -41,7 +59,6 @@ namespace Buffs
         }
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            int count;
             charVars.LastHitTime = GetTime();
             if(target is ObjAIBase)
             {
@@ -63,6 +80,7 @@ namespace Buffs
                     }
                     if(target is ObjAIBase)
                     {
+                        int count;
                         AddBuff(attacker, attacker, new Buffs.RelentlessAssaultDebuff(), 8, 1, 2.5f, BuffAddType.STACKS_AND_RENEWS, BuffType.INTERNAL, 0, true, false);
                         count = GetBuffCountFromCaster(attacker, attacker, nameof(Buffs.RelentlessAssaultDebuff));
                         if(count >= 2)
@@ -72,24 +90,6 @@ namespace Buffs
                     }
                 }
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class RelentlessAssault : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = true,
-            NotSingleTargetSpell = true,
-        };
-        float[] effect0 = {5, 6.5f, 8};
-        public override void SelfExecute()
-        {
-            float duration;
-            duration = this.effect0[level];
-            AddBuff(attacker, owner, new Buffs.ArmsmasterRelentlessMR(), 1, 1, duration, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false);
         }
     }
 }

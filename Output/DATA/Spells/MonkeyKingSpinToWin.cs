@@ -5,6 +5,34 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class MonkeyKingSpinToWin : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            CastingBreaksStealth = true,
+            TriggersSpellCasts = true,
+            NotSingleTargetSpell = true,
+        };
+        int[] effect0 = {120, 105, 90, 90, 90};
+        int[] effect1 = {20, 110, 200, 0, 0};
+        float[] effect2 = {0.015f, 0.015f, 0.015f, 0.015f, 0.015f};
+        int[] effect3 = {4, 4, 4};
+        public override void SelfExecute()
+        {
+            float nextBuffVars_SpellCooldown;
+            float nextBuffVars_BaseDamage;
+            float nextBuffVars_MoveSpeedMod;
+            nextBuffVars_SpellCooldown = this.effect0[level];
+            nextBuffVars_BaseDamage = this.effect1[level];
+            nextBuffVars_MoveSpeedMod = this.effect2[level];
+            AddBuff(attacker, owner, new Buffs.MonkeyKingSpinToWin(nextBuffVars_SpellCooldown, nextBuffVars_BaseDamage, nextBuffVars_MoveSpeedMod), 1, 1, this.effect3[level], BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+            SetSpell((ObjAIBase)owner, 3, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, nameof(Spells.MonkeyKingSpinToWinLeave));
+            SetSlotSpellCooldownTimeVer2(1, 3, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class MonkeyKingSpinToWin : BBBuffScript
@@ -71,16 +99,12 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            TeamId teamID;
-            float totalAttackDamage;
-            float damagePerSecond;
-            float damageToDeal;
-            bool isStealthed;
-            Particle samPH; // UNUSED
-            Particle pH; // UNUSED
-            bool canSee;
             if(ExecutePeriodically(0.5f, ref this.lastTimeExecuted, true))
             {
+                TeamId teamID;
+                float totalAttackDamage;
+                float damagePerSecond;
+                float damageToDeal;
                 teamID = GetTeamID(owner);
                 totalAttackDamage = GetTotalAttackDamage(owner);
                 totalAttackDamage *= 1.2f;
@@ -89,12 +113,16 @@ namespace Buffs
                 this.moveSpeedMod += 0.05f;
                 foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 315, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
                 {
+                    bool isStealthed;
+                    Particle samPH; // UNUSED
+                    Particle pH; // UNUSED
+                    bool canSee;
                     isStealthed = GetStealthed(unit);
                     if(teamID == TeamId.TEAM_BLUE)
                     {
                         if(!isStealthed)
                         {
-                            SpellEffectCreate(out samPH, out _, "monkey_king_ult_unit_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
+                            SpellEffectCreate(out samPH, out _, "monkey_king_ult_unit_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
                             ApplyDamage(attacker, unit, damageToDeal, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0, 0, false, false, attacker);
                             if(GetBuffCountFromCaster(unit, unit, nameof(Buffs.MonkeyKingSpinMarkerOrder)) == 0)
                             {
@@ -102,7 +130,7 @@ namespace Buffs
                                 {
                                     AddBuff((ObjAIBase)unit, unit, new Buffs.MonkeyKingSpinMarkerOrder(), 1, 1, 5, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
                                     BreakSpellShields(unit);
-                                    SpellEffectCreate(out pH, out _, "monkey_king_ult_unit_tar_02.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
+                                    SpellEffectCreate(out pH, out _, "monkey_king_ult_unit_tar_02.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
                                     AddBuff(attacker, unit, new Buffs.MonkeyKingSpinKnockup(), 1, 1, 1, BuffAddType.RENEW_EXISTING, BuffType.STUN, 0, true, false, true);
                                 }
                             }
@@ -112,14 +140,14 @@ namespace Buffs
                             if(target is Champion)
                             {
                                 ApplyDamage(attacker, unit, damageToDeal, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0, 0, false, false, attacker);
-                                SpellEffectCreate(out samPH, out _, "monkey_king_ult_unit_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
+                                SpellEffectCreate(out samPH, out _, "monkey_king_ult_unit_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
                                 if(GetBuffCountFromCaster(unit, unit, nameof(Buffs.MonkeyKingSpinMarkerOrder)) == 0)
                                 {
                                     if(GetBuffCountFromCaster(unit, unit, nameof(Buffs.MonkeyKingSpinMarkerChaos)) == 0)
                                     {
                                         AddBuff((ObjAIBase)unit, unit, new Buffs.MonkeyKingSpinMarkerOrder(), 1, 1, 5, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
                                         BreakSpellShields(unit);
-                                        SpellEffectCreate(out pH, out _, "monkey_king_ult_unit_tar_02.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
+                                        SpellEffectCreate(out pH, out _, "monkey_king_ult_unit_tar_02.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
                                         AddBuff(attacker, unit, new Buffs.MonkeyKingSpinKnockup(), 1, 1, 1, BuffAddType.RENEW_EXISTING, BuffType.STUN, 0, true, false, true);
                                     }
                                 }
@@ -130,14 +158,14 @@ namespace Buffs
                                 if(canSee)
                                 {
                                     ApplyDamage(attacker, unit, damageToDeal, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0, 0, false, false, attacker);
-                                    SpellEffectCreate(out samPH, out _, "monkey_king_ult_unit_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
+                                    SpellEffectCreate(out samPH, out _, "monkey_king_ult_unit_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
                                     if(GetBuffCountFromCaster(unit, unit, nameof(Buffs.MonkeyKingSpinMarkerOrder)) == 0)
                                     {
                                         if(GetBuffCountFromCaster(unit, unit, nameof(Buffs.MonkeyKingSpinMarkerChaos)) == 0)
                                         {
                                             AddBuff((ObjAIBase)unit, unit, new Buffs.MonkeyKingSpinMarkerOrder(), 1, 1, 5, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
                                             BreakSpellShields(unit);
-                                            SpellEffectCreate(out pH, out _, "monkey_king_ult_unit_tar_02.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
+                                            SpellEffectCreate(out pH, out _, "monkey_king_ult_unit_tar_02.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
                                             AddBuff(attacker, unit, new Buffs.MonkeyKingSpinKnockup(), 1, 1, 1, BuffAddType.RENEW_EXISTING, BuffType.STUN, 0, true, false, true);
                                         }
                                     }
@@ -149,7 +177,7 @@ namespace Buffs
                     {
                         if(!isStealthed)
                         {
-                            SpellEffectCreate(out samPH, out _, "monkey_king_ult_unit_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
+                            SpellEffectCreate(out samPH, out _, "monkey_king_ult_unit_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
                             ApplyDamage(attacker, unit, damageToDeal, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0, 0, false, false, attacker);
                             if(GetBuffCountFromCaster(unit, unit, nameof(Buffs.MonkeyKingSpinMarkerChaos)) == 0)
                             {
@@ -157,7 +185,7 @@ namespace Buffs
                                 {
                                     AddBuff((ObjAIBase)unit, unit, new Buffs.MonkeyKingSpinMarkerChaos(), 1, 1, 5, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
                                     BreakSpellShields(unit);
-                                    SpellEffectCreate(out pH, out _, "monkey_king_ult_unit_tar_02.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
+                                    SpellEffectCreate(out pH, out _, "monkey_king_ult_unit_tar_02.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
                                     AddBuff(attacker, unit, new Buffs.MonkeyKingSpinKnockup(), 1, 1, 1, BuffAddType.RENEW_EXISTING, BuffType.STUN, 0, true, false, true);
                                 }
                             }
@@ -167,14 +195,14 @@ namespace Buffs
                             if(target is Champion)
                             {
                                 ApplyDamage(attacker, unit, damageToDeal, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0, 0, false, false, attacker);
-                                SpellEffectCreate(out samPH, out _, "monkey_king_ult_unit_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
+                                SpellEffectCreate(out samPH, out _, "monkey_king_ult_unit_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
                                 if(GetBuffCountFromCaster(unit, unit, nameof(Buffs.MonkeyKingSpinMarkerChaos)) == 0)
                                 {
                                     if(GetBuffCountFromCaster(unit, unit, nameof(Buffs.MonkeyKingSpinMarkerOrder)) == 0)
                                     {
                                         AddBuff((ObjAIBase)unit, unit, new Buffs.MonkeyKingSpinMarkerChaos(), 1, 1, 5, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
                                         BreakSpellShields(unit);
-                                        SpellEffectCreate(out pH, out _, "monkey_king_ult_unit_tar_02.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
+                                        SpellEffectCreate(out pH, out _, "monkey_king_ult_unit_tar_02.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
                                         AddBuff(attacker, unit, new Buffs.MonkeyKingSpinKnockup(), 1, 1, 1, BuffAddType.RENEW_EXISTING, BuffType.STUN, 0, true, false, true);
                                     }
                                 }
@@ -185,14 +213,14 @@ namespace Buffs
                                 if(canSee)
                                 {
                                     ApplyDamage(attacker, unit, damageToDeal, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0, 0, false, false, attacker);
-                                    SpellEffectCreate(out samPH, out _, "monkey_king_ult_unit_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
+                                    SpellEffectCreate(out samPH, out _, "monkey_king_ult_unit_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
                                     if(GetBuffCountFromCaster(unit, unit, nameof(Buffs.MonkeyKingSpinMarkerChaos)) == 0)
                                     {
                                         if(GetBuffCountFromCaster(unit, unit, nameof(Buffs.MonkeyKingSpinMarkerOrder)) == 0)
                                         {
                                             AddBuff((ObjAIBase)unit, unit, new Buffs.MonkeyKingSpinMarkerChaos(), 1, 1, 5, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
                                             BreakSpellShields(unit);
-                                            SpellEffectCreate(out pH, out _, "monkey_king_ult_unit_tar_02.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
+                                            SpellEffectCreate(out pH, out _, "monkey_king_ult_unit_tar_02.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, unit, default, default, true, false, false, false, false);
                                             AddBuff(attacker, unit, new Buffs.MonkeyKingSpinKnockup(), 1, 1, 1, BuffAddType.RENEW_EXISTING, BuffType.STUN, 0, true, false, true);
                                         }
                                     }
@@ -202,34 +230,6 @@ namespace Buffs
                     }
                 }
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class MonkeyKingSpinToWin : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            CastingBreaksStealth = true,
-            TriggersSpellCasts = true,
-            NotSingleTargetSpell = true,
-        };
-        int[] effect0 = {120, 105, 90, 90, 90};
-        int[] effect1 = {20, 110, 200, 0, 0};
-        float[] effect2 = {0.015f, 0.015f, 0.015f, 0.015f, 0.015f};
-        int[] effect3 = {4, 4, 4};
-        public override void SelfExecute()
-        {
-            float nextBuffVars_SpellCooldown;
-            float nextBuffVars_BaseDamage;
-            float nextBuffVars_MoveSpeedMod;
-            nextBuffVars_SpellCooldown = this.effect0[level];
-            nextBuffVars_BaseDamage = this.effect1[level];
-            nextBuffVars_MoveSpeedMod = this.effect2[level];
-            AddBuff(attacker, owner, new Buffs.MonkeyKingSpinToWin(nextBuffVars_SpellCooldown, nextBuffVars_BaseDamage, nextBuffVars_MoveSpeedMod), 1, 1, this.effect3[level], BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
-            SetSpell((ObjAIBase)owner, 3, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, nameof(Spells.MonkeyKingSpinToWinLeave));
-            SetSlotSpellCooldownTimeVer2(1, 3, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner, false);
         }
     }
 }

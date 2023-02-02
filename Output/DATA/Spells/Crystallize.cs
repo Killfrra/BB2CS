@@ -5,16 +5,67 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class Crystallize : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            CastingBreaksStealth = true,
+            DoesntBreakShields = true,
+            TriggersSpellCasts = true,
+            IsDamagingSpell = false,
+            NotSingleTargetSpell = true,
+        };
+        int meltingTime; // UNUSED
+        int[] effect0 = {4, 5, 6, 7, 8};
+        int[] effect1 = {400, 500, 600, 700, 800};
+        int[] effect2 = {200, 250, 300, 350, 400};
+        public override void SelfExecute()
+        {
+            if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.Crystallize)) > 0)
+            {
+            }
+            else
+            {
+                Vector3 targetPos;
+                Vector3 ownerPos;
+                float distance;
+                TeamId teamID;
+                int iter;
+                float lineWidth;
+                int halfLength; // UNUSED
+                bool foundFirstPos; // UNUSED
+                Vector3 facingPoint;
+                level = GetSlotSpellLevel((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
+                this.meltingTime = 5;
+                targetPos = GetCastSpellTargetPos();
+                ownerPos = GetUnitPosition(owner);
+                distance = DistanceBetweenPoints(ownerPos, targetPos);
+                teamID = GetTeamID(owner);
+                iter = this.effect0[level];
+                lineWidth = this.effect1[level];
+                halfLength = this.effect2[level];
+                foundFirstPos = false;
+                facingPoint = GetPointByUnitFacingOffset(owner, 9999, 0);
+                foreach(Vector3 pos in GetPointsOnLine(ownerPos, targetPos, lineWidth, distance, iter))
+                {
+                    Minion other2;
+                    other2 = SpawnMinion("IceBlock", "AniviaIceblock", "idle.lua", pos, teamID ?? TeamId.TEAM_UNKNOWN, true, true, true, true, false, true, 0, false, false);
+                    FaceDirection(other2, facingPoint);
+                    AddBuff((ObjAIBase)owner, other2, new Buffs.Crystallize(), 1, 1, 5, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+                    SetGhostProof(other2, true);
+                }
+            }
+        }
+    }
+}
 namespace Buffs
 {
     public class Crystallize : BBBuffScript
     {
         public override void OnActivate()
         {
-            bool ghosted;
-            float pushDistance;
-            Vector3 targetPos;
-            Vector3 nextBuffVars_TargetPos;
             SetTargetable(owner, false);
             SetInvulnerable(owner, true);
             SetCanAttack(owner, false);
@@ -26,6 +77,10 @@ namespace Buffs
             SetForceRenderParticles(owner, true);
             foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 100, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectFriends | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, false))
             {
+                bool ghosted;
+                float pushDistance;
+                Vector3 targetPos;
+                Vector3 nextBuffVars_TargetPos;
                 ghosted = GetGhosted(unit);
                 if(unit is Champion)
                 {
@@ -68,61 +123,6 @@ namespace Buffs
             SetIgnoreCallForHelp(owner, true);
             SetCallForHelpSuppresser(owner, true);
             SetCanMove(owner, false);
-        }
-    }
-}
-namespace Spells
-{
-    public class Crystallize : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            CastingBreaksStealth = true,
-            DoesntBreakShields = true,
-            TriggersSpellCasts = true,
-            IsDamagingSpell = false,
-            NotSingleTargetSpell = true,
-        };
-        int meltingTime; // UNUSED
-        int[] effect0 = {4, 5, 6, 7, 8};
-        int[] effect1 = {400, 500, 600, 700, 800};
-        int[] effect2 = {200, 250, 300, 350, 400};
-        public override void SelfExecute()
-        {
-            Vector3 targetPos;
-            Vector3 ownerPos;
-            float distance;
-            TeamId teamID;
-            int iter;
-            float lineWidth;
-            int halfLength; // UNUSED
-            bool foundFirstPos; // UNUSED
-            Vector3 facingPoint;
-            Minion other2;
-            if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.Crystallize)) > 0)
-            {
-            }
-            else
-            {
-                level = GetSlotSpellLevel((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
-                this.meltingTime = 5;
-                targetPos = GetCastSpellTargetPos();
-                ownerPos = GetUnitPosition(owner);
-                distance = DistanceBetweenPoints(ownerPos, targetPos);
-                teamID = GetTeamID(owner);
-                iter = this.effect0[level];
-                lineWidth = this.effect1[level];
-                halfLength = this.effect2[level];
-                foundFirstPos = false;
-                facingPoint = GetPointByUnitFacingOffset(owner, 9999, 0);
-                foreach(Vector3 pos in GetPointsOnLine(ownerPos, targetPos, lineWidth, distance, iter))
-                {
-                    other2 = SpawnMinion("IceBlock", "AniviaIceblock", "idle.lua", pos, teamID, true, true, true, true, false, true, 0, false, false);
-                    FaceDirection(other2, facingPoint);
-                    AddBuff((ObjAIBase)owner, other2, new Buffs.Crystallize(), 1, 1, 5, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
-                    SetGhostProof(other2, true);
-                }
-            }
         }
     }
 }

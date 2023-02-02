@@ -68,9 +68,9 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            float maxHealth;
             if(ExecutePeriodically(0.9f, ref this.lastTimeExecuted, false))
             {
+                float maxHealth;
                 maxHealth = GetMaxHealth(owner, PrimaryAbilityResourceType.MANA);
                 maxHealth *= 0.2f;
                 ApplyDamage((ObjAIBase)owner, owner, maxHealth, DamageType.DAMAGE_TYPE_TRUE, DamageSource.DAMAGE_SOURCE_INTERNALRAW, 1, 0, 0, false, false, (ObjAIBase)owner);
@@ -97,16 +97,16 @@ namespace Buffs
             lifestealPercent = this.effect0[level];
             healAmount = damageAmount * lifestealPercent;
             IncHealth(caster, healAmount, caster);
-            SpellEffectCreate(out a, out _, "yorick_ravenousGhoul_lifesteal_self.troy", default, teamID, 0, 0, TeamId.TEAM_UNKNOWN, default, caster, false, caster, default, default, caster, default, default, true, default, default, false, false);
+            SpellEffectCreate(out a, out _, "yorick_ravenousGhoul_lifesteal_self.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, caster, false, caster, default, default, caster, default, default, true, default, default, false, false);
             ApplyDamage(caster, target, damageAmount, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_PROC, 1, 0, 0, false, false, caster);
             damageAmount *= 0;
         }
         public override float OnHeal(float health)
         {
             float returnValue = 0;
-            float effectiveHeal;
             if(health >= 0)
             {
+                float effectiveHeal;
                 effectiveHeal = health * 0;
                 returnValue = effectiveHeal;
             }

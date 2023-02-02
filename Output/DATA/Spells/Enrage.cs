@@ -5,6 +5,33 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class Enrage : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = false,
+            NotSingleTargetSpell = true,
+        };
+        int[] effect0 = {25, 35, 45, 55, 65};
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.Enrage)) > 0)
+            {
+                SpellBuffRemove(owner, nameof(Buffs.Enrage), (ObjAIBase)owner, 0);
+            }
+            else
+            {
+                float nextBuffVars_BonusDamage;
+                float nextBuffVars_BonusDamageIncrement;
+                nextBuffVars_BonusDamage = this.effect0[level];
+                nextBuffVars_BonusDamageIncrement = 10;
+                AddBuff(attacker, owner, new Buffs.Enrage(nextBuffVars_BonusDamage, nextBuffVars_BonusDamageIncrement), 1, 1, 20000, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+            }
+        }
+    }
+}
 namespace Buffs
 {
     public class Enrage : BBBuffScript
@@ -73,33 +100,6 @@ namespace Buffs
             {
                 IncPermanentFlatPhysicalDamageMod(owner, this.bonusDamageIncrement);
                 this.bonusDamage += this.bonusDamageIncrement;
-            }
-        }
-    }
-}
-namespace Spells
-{
-    public class Enrage : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = false,
-            NotSingleTargetSpell = true,
-        };
-        int[] effect0 = {25, 35, 45, 55, 65};
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            float nextBuffVars_BonusDamage;
-            float nextBuffVars_BonusDamageIncrement;
-            if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.Enrage)) > 0)
-            {
-                SpellBuffRemove(owner, nameof(Buffs.Enrage), (ObjAIBase)owner, 0);
-            }
-            else
-            {
-                nextBuffVars_BonusDamage = this.effect0[level];
-                nextBuffVars_BonusDamageIncrement = 10;
-                AddBuff(attacker, owner, new Buffs.Enrage(nextBuffVars_BonusDamage, nextBuffVars_BonusDamageIncrement), 1, 1, 20000, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
             }
         }
     }

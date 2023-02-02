@@ -18,10 +18,10 @@ namespace Buffs
         int numAlliedChampions;
         public override void OnUpdateStats()
         {
-            TeamId teamID;
-            int numHostileChampions;
             if(ExecutePeriodically(10, ref this.lastTimeExecuted, false))
             {
+                TeamId teamID;
+                int numHostileChampions;
                 teamID = GetTeamID(owner);
                 if(teamID == TeamId.TEAM_BLUE)
                 {

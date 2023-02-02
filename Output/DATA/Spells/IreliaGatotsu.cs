@@ -5,34 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class IreliaGatotsu : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateEffect = new[]{ "", },
-            BuffName = "IreliaGatotsu",
-            BuffTextureName = "Irelia_Bladesurge.dds",
-        };
-        public override void OnDeactivate(bool expired)
-        {
-            Particle placeholder; // UNUSED
-            Particle castParticle; // UNUSED
-            if(attacker.IsDead)
-            {
-                SpellEffectCreate(out placeholder, out _, "irelia_gotasu_ability_indicator.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false, false, false, false, false);
-                SpellEffectCreate(out castParticle, out _, "irelia_gotasu_mana_refresh.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false, false, false, false, false);
-                SetSlotSpellCooldownTime((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, 0);
-                IncPAR(owner, 35, PrimaryAbilityResourceType.MANA);
-            }
-        }
-        public override void OnUpdateActions()
-        {
-            SpellBuffRemoveCurrent(owner);
-        }
-    }
-}
 namespace Spells
 {
     public class IreliaGatotsu : BBSpellScript
@@ -86,11 +58,11 @@ namespace Spells
             float dashSpeed;
             float distance;
             Vector3 nextBuffVars_TargetPos;
+            float damageVar;
+            float baseDamage;
             float nextBuffVars_Distance;
             float nextBuffVars_dashSpeed;
             float nextBuffVars_DamageVar;
-            float damageVar;
-            float baseDamage;
             SpellEffectCreate(out smokeBomb, out _, "irelia_gotasu_cas.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, target, default, default, false, false, false, false, false);
             ownerPos = GetUnitPosition(owner);
             SpellEffectCreate(out p3, out _, "irelia_gotasu_cast_01.troy", default, TeamId.TEAM_NEUTRAL, 900, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, ownerPos, target, default, default, true, false, false, false, false);
@@ -106,6 +78,34 @@ namespace Spells
             baseDamage = GetBaseAttackDamage(owner);
             nextBuffVars_DamageVar = damageVar + baseDamage;
             AddBuff((ObjAIBase)target, owner, new Buffs.IreliaGatotsuDash(nextBuffVars_TargetPos, nextBuffVars_Distance, nextBuffVars_dashSpeed, nextBuffVars_DamageVar), 1, 1, 0.5f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0.25f, true, false, false);
+        }
+    }
+}
+namespace Buffs
+{
+    public class IreliaGatotsu : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateEffect = new[]{ "", },
+            BuffName = "IreliaGatotsu",
+            BuffTextureName = "Irelia_Bladesurge.dds",
+        };
+        public override void OnDeactivate(bool expired)
+        {
+            if(attacker.IsDead)
+            {
+                Particle placeholder; // UNUSED
+                Particle castParticle; // UNUSED
+                SpellEffectCreate(out placeholder, out _, "irelia_gotasu_ability_indicator.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false, false, false, false, false);
+                SpellEffectCreate(out castParticle, out _, "irelia_gotasu_mana_refresh.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, false, false, false, false, false);
+                SetSlotSpellCooldownTime((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, 0);
+                IncPAR(owner, 35, PrimaryAbilityResourceType.MANA);
+            }
+        }
+        public override void OnUpdateActions()
+        {
+            SpellBuffRemoveCurrent(owner);
         }
     }
 }

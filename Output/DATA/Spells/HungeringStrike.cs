@@ -23,13 +23,8 @@ namespace Spells
             int warwickSkinID;
             Particle a; // UNUSED
             float nextBuffVars_DrainPercent;
-            bool nextBuffVars_DrainedBool;
-            float temp1;
-            float maxHealth;
-            float percentDamage;
-            float minDamage;
-            float damageToDeal;
             Particle ar; // UNUSED
+            bool nextBuffVars_DrainedBool;
             warwickSkinID = GetSkinID(attacker);
             if(warwickSkinID == 6)
             {
@@ -44,6 +39,11 @@ namespace Spells
             AddBuff(attacker, attacker, new Buffs.GlobalDrain(nextBuffVars_DrainPercent, nextBuffVars_DrainedBool), 1, 1, 0.01f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
             if(target is Champion)
             {
+                float temp1;
+                float maxHealth;
+                float percentDamage;
+                float minDamage;
+                float damageToDeal;
                 temp1 = GetMaxHealth(target, PrimaryAbilityResourceType.MANA);
                 maxHealth = this.effect0[level];
                 percentDamage = temp1 * maxHealth;

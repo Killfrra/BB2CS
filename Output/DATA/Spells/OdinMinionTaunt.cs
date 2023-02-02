@@ -43,11 +43,11 @@ namespace Buffs
         {
             string attackerSkinName; // UNUSED
             float damageMultiplier;
-            TeamId attackerTeam;
             attackerSkinName = GetUnitSkinName(attacker);
             damageMultiplier = 1;
             if(GetBuffCountFromCaster(attacker, attacker, nameof(Buffs.OdinGuardianBuff)) > 0)
             {
+                TeamId attackerTeam;
                 attackerTeam = GetTeamID(attacker);
                 if(attackerTeam != TeamId.TEAM_NEUTRAL)
                 {

@@ -5,33 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class DeathLotus : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            AutoBuffActivateAttachBoneName = new[]{ "", },
-            AutoBuffActivateEffect = new[]{ "", },
-            BuffName = "",
-            BuffTextureName = "",
-        };
-        int level;
-        public DeathLotus(int level = default)
-        {
-            this.level = level;
-        }
-        public override void OnUpdateActions()
-        {
-            int level;
-            level = this.level;
-            foreach(AttackableUnit unit in GetClosestUnitsInArea(owner, owner.Position, 550, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectHeroes, 3, default, true))
-            {
-                SpellCast((ObjAIBase)owner, unit, owner.Position, owner.Position, 0, SpellSlotType.ExtraSlots, level, true, true, false, false, false, false);
-            }
-        }
-    }
-}
 namespace Spells
 {
     public class DeathLotus : BBSpellScript
@@ -71,6 +44,33 @@ namespace Spells
         {
             SpellBuffRemove(owner, nameof(Buffs.DeathLotusSound), (ObjAIBase)owner);
             SpellBuffRemove(owner, nameof(Buffs.DeathLotus), (ObjAIBase)owner);
+        }
+    }
+}
+namespace Buffs
+{
+    public class DeathLotus : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            AutoBuffActivateAttachBoneName = new[]{ "", },
+            AutoBuffActivateEffect = new[]{ "", },
+            BuffName = "",
+            BuffTextureName = "",
+        };
+        int level;
+        public DeathLotus(int level = default)
+        {
+            this.level = level;
+        }
+        public override void OnUpdateActions()
+        {
+            int level;
+            level = this.level;
+            foreach(AttackableUnit unit in GetClosestUnitsInArea(owner, owner.Position, 550, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectHeroes, 3, default, true))
+            {
+                SpellCast((ObjAIBase)owner, unit, owner.Position, owner.Position, 0, SpellSlotType.ExtraSlots, level, true, true, false, false, false, false);
+            }
         }
     }
 }

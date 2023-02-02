@@ -23,16 +23,16 @@ namespace Buffs
         public override void OnUpdateActions()
         {
             TeamId teamID;
-            float aPValue;
-            float aPMod;
-            float totalDamage;
-            float minionDamage;
-            Particle kennenss; // UNUSED
             teamID = GetTeamID(owner);
             foreach(AttackableUnit unit in GetUnitsInArea((ObjAIBase)owner, owner.Position, 200, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes, default, true))
             {
                 if(GetBuffCountFromCaster(unit, owner, nameof(Buffs.KennenLightningRushMarker)) == 0)
                 {
+                    float aPValue;
+                    float aPMod;
+                    float totalDamage;
+                    float minionDamage;
+                    Particle kennenss; // UNUSED
                     aPValue = GetFlatMagicDamageMod(owner);
                     aPMod = aPValue * 0.6f;
                     totalDamage = this.rushDamage + aPMod;
@@ -43,13 +43,13 @@ namespace Buffs
                     {
                         AddBuff(attacker, unit, new Buffs.KennenMarkofStorm(), 5, 1, 8, BuffAddType.STACKS_AND_RENEWS, BuffType.COMBAT_DEHANCER, 0, true, false, false);
                         ApplyDamage(attacker, unit, totalDamage, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0, 1, false, false, attacker);
-                        SpellEffectCreate(out kennenss, out _, "kennen_lr_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, target, default, default, true, default, default, false, false);
+                        SpellEffectCreate(out kennenss, out _, "kennen_lr_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, target, default, default, true, default, default, false, false);
                     }
                     else
                     {
                         AddBuff(attacker, unit, new Buffs.KennenMarkofStorm(), 5, 1, 8, BuffAddType.STACKS_AND_RENEWS, BuffType.COMBAT_DEHANCER, 0, true, false, false);
                         ApplyDamage(attacker, unit, minionDamage, DamageType.DAMAGE_TYPE_MAGICAL, DamageSource.DAMAGE_SOURCE_SPELLAOE, 1, 0, 1, false, false, attacker);
-                        SpellEffectCreate(out kennenss, out _, "kennen_lr_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, target, default, default, true, default, default, false, false);
+                        SpellEffectCreate(out kennenss, out _, "kennen_lr_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, unit, default, default, target, default, default, true, default, default, false, false);
                     }
                     if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.KennenLREnergy)) == 0)
                     {

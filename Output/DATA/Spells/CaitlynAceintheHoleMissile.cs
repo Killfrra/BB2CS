@@ -41,7 +41,7 @@ namespace Spells
             physPreMod = 2 * bonusDmg;
             damageToDeal = physPreMod + baseDamage;
             ApplyDamage(attacker, target, damageToDeal, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_SPELL, 1, 0, 0, true, true, attacker);
-            SpellEffectCreate(out particle, out _, "caitlyn_ace_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, default, false, default, default, targetPos, owner, default, default, true);
+            SpellEffectCreate(out particle, out _, "caitlyn_ace_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, default, false, default, default, targetPos, owner, default, default, true);
             SpellBuffRemove(attacker, nameof(Buffs.IfHasBuffCheck), attacker);
             DestroyMissile(missileNetworkID);
             if(GetBuffCountFromCaster(target, attacker, nameof(Buffs.CaitlynAceintheHole)) > 0)

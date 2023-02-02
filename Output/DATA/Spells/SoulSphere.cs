@@ -24,13 +24,13 @@ namespace Buffs
         public override void OnDeactivate(bool expired)
         {
             float hP;
-            float hPToAdd;
             SpellEffectRemove(this.particle);
             IncPermanentFlatHPPoolMod(owner, -200);
             IncPermanentFlatMagicDamageMod(owner, -20);
             hP = GetHealth(owner, PrimaryAbilityResourceType.MANA);
             if(hP <= 200)
             {
+                float hPToAdd;
                 hPToAdd = 1 - hP;
                 IncHealth(owner, hPToAdd, owner);
             }

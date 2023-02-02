@@ -30,9 +30,9 @@ namespace Buffs
         }
         public override void OnPreDealDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
         {
-            float drainHealth;
             if(!this.drainedBool)
             {
+                float drainHealth;
                 drainHealth = damageAmount * this.drainPercent;
                 IncHealth(attacker, drainHealth, attacker);
                 this.drainedBool = true;

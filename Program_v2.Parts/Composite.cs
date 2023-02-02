@@ -85,7 +85,7 @@ public class Composite
         //InferType();
 
         int count = Convert.ToInt32(Value != null) +
-                    Convert.ToInt32(Var != null) +
+                    Convert.ToInt32(Var != null/* && Var.Var.Initialized*/) +
                     Convert.ToInt32(VarByLevel != null);
         if(count > 0)
         {
@@ -132,7 +132,7 @@ public class Composite
                 {
                     output.Add(ObjectToCSharp(Value));
                 }
-                if(Var != null)
+                if(Var != null/* && Var.Var.Initialized*/)
                 {
                     output.Add(Var.ToCSharp());
                 }
@@ -145,7 +145,7 @@ public class Composite
             else
             {
                 var output = new List<string>();
-                if(Var != null)
+                if(Var != null/* && Var.Var.Initialized*/)
                 {
                     output.Add(Var.ToCSharp());
                 }

@@ -17,16 +17,16 @@ namespace Buffs
         int[] effect0 = {80, 70, 60, 40, 40};
         public override void OnDeactivate(bool expired)
         {
-            int level;
-            float spellCooldown;
-            float cooldownStat;
-            float multiplier;
-            float newCooldown;
             if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.XerathArcaneBarrageBarrage)) > 0)
             {
             }
             else
             {
+                int level;
+                float spellCooldown;
+                float cooldownStat;
+                float multiplier;
+                float newCooldown;
                 level = GetSlotSpellLevel((ObjAIBase)owner, 3, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots);
                 spellCooldown = this.effect0[level];
                 cooldownStat = GetPercentCooldownMod(owner);

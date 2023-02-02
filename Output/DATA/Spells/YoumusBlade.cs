@@ -5,27 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class YoumusBlade : BBBuffScript
-    {
-        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
-        {
-            NonDispellable = false,
-            PersistsThroughDeath = true,
-        };
-        public override void OnActivate()
-        {
-            IncPermanentPercentCooldownMod(owner, -0.15f);
-            IncPermanentFlatArmorPenetrationMod(owner, 20);
-        }
-        public override void OnDeactivate(bool expired)
-        {
-            IncPermanentPercentCooldownMod(owner, 0.15f);
-            IncPermanentFlatArmorPenetrationMod(owner, -20);
-        }
-    }
-}
 namespace Spells
 {
     public class YoumusBlade : BBSpellScript
@@ -76,6 +55,27 @@ namespace Spells
             {
                 SetSlotSpellCooldownTimeVer2(60, 5, SpellSlotType.InventorySlots, SpellbookType.SPELLBOOK_CHAMPION, (ObjAIBase)owner);
             }
+        }
+    }
+}
+namespace Buffs
+{
+    public class YoumusBlade : BBBuffScript
+    {
+        public override BuffScriptMetadataUnmutable MetaData { get; } = new()
+        {
+            NonDispellable = false,
+            PersistsThroughDeath = true,
+        };
+        public override void OnActivate()
+        {
+            IncPermanentPercentCooldownMod(owner, -0.15f);
+            IncPermanentFlatArmorPenetrationMod(owner, 20);
+        }
+        public override void OnDeactivate(bool expired)
+        {
+            IncPermanentPercentCooldownMod(owner, 0.15f);
+            IncPermanentFlatArmorPenetrationMod(owner, -20);
         }
     }
 }

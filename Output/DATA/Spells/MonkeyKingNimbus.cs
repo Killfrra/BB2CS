@@ -38,17 +38,14 @@ namespace Spells
             float dashSpeed;
             float distance;
             Vector3 nextBuffVars_TargetPos;
-            float nextBuffVars_Distance;
-            float nextBuffVars_dashSpeed;
-            float nextBuffVars_AttackSpeedVar;
-            float nextBuffVars_DamageVar;
             float damageVar;
             float bonusAD;
             float bonusDamage;
             float unitsHit;
-            bool isStealthed;
-            bool canSee;
-            Minion other1;
+            float nextBuffVars_Distance; // UNUSED
+            float nextBuffVars_dashSpeed;
+            float nextBuffVars_AttackSpeedVar;
+            float nextBuffVars_DamageVar;
             teamID = GetTeamID(owner);
             ownerPos = GetUnitPosition(owner);
             SpellEffectCreate(out p3, out _, "monkeyKing_Q_cas.troy", default, TeamId.TEAM_NEUTRAL, 900, 0, TeamId.TEAM_UNKNOWN, default, owner, false, default, default, ownerPos, target, default, default, true, false, false, false, false);
@@ -77,15 +74,18 @@ namespace Spells
                 {
                     if(unit != target)
                     {
+                        bool isStealthed;
+                        Minion other1;
                         isStealthed = GetStealthed(unit);
                         if(isStealthed)
                         {
+                            bool canSee;
                             canSee = CanSeeTarget(owner, unit);
                             if(canSee)
                             {
                                 targetPos = GetUnitPosition(unit);
                                 nextBuffVars_TargetPos = targetPos;
-                                other1 = SpawnMinion("MonkeyKingClone", "MonkeyKingFlying", "Aggro.lua", ownerPos, teamID, false, false, false, false, false, true, 0, false, false, (Champion)owner);
+                                other1 = SpawnMinion("MonkeyKingClone", "MonkeyKingFlying", "Aggro.lua", ownerPos, teamID ?? TeamId.TEAM_CASTER, false, false, false, false, false, true, 0, false, false, (Champion)owner);
                                 AddBuff((ObjAIBase)unit, other1, new Buffs.MonkeyKingNimbusKickClone(nextBuffVars_TargetPos, nextBuffVars_dashSpeed, nextBuffVars_DamageVar), 1, 1, 2, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0.25f, true, false, true);
                                 unitsHit++;
                             }
@@ -94,7 +94,7 @@ namespace Spells
                         {
                             targetPos = GetUnitPosition(unit);
                             nextBuffVars_TargetPos = targetPos;
-                            other1 = SpawnMinion("MonkeyKingClone", "MonkeyKingFlying", "Aggro.lua", ownerPos, teamID, false, false, false, false, false, true, 0, false, false, (Champion)owner);
+                            other1 = SpawnMinion("MonkeyKingClone", "MonkeyKingFlying", "Aggro.lua", ownerPos, teamID ?? TeamId.TEAM_CASTER, false, false, false, false, false, true, 0, false, false, (Champion)owner);
                             AddBuff((ObjAIBase)unit, other1, new Buffs.MonkeyKingNimbusKickClone(nextBuffVars_TargetPos, nextBuffVars_dashSpeed, nextBuffVars_DamageVar), 1, 1, 2, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0.25f, true, false, true);
                             unitsHit++;
                         }

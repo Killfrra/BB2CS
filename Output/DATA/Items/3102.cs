@@ -12,11 +12,11 @@ namespace Items
         float lastTimeExecuted;
         public override void OnUpdateActions()
         {
-            bool nextBuffVars_WillRemove;
             if(ExecutePeriodically(2, ref this.lastTimeExecuted, false))
             {
                 if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.BansheesVeilTimer)) == 0)
                 {
+                    bool nextBuffVars_WillRemove;
                     nextBuffVars_WillRemove = false;
                     AddBuff((ObjAIBase)owner, owner, new Buffs.BansheesVeil(nextBuffVars_WillRemove), 1, 1, 3, BuffAddType.RENEW_EXISTING, BuffType.AURA, 0, true, false);
                 }
@@ -24,10 +24,10 @@ namespace Items
         }
         public override void OnActivate()
         {
-            ObjAIBase caster;
             bool nextBuffVars_WillRemove;
             if(owner is not Champion)
             {
+                ObjAIBase caster;
                 caster = GetPetOwner((Pet)owner);
                 if(GetBuffCountFromCaster(caster, caster, nameof(Buffs.BansheesVeil)) > 0)
                 {

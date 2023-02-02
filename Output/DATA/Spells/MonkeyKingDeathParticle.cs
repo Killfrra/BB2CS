@@ -25,7 +25,7 @@ namespace Buffs
             Particle stoneRemoval; // UNUSED
             SpellEffectRemove(this.particle1);
             teamID = GetTeamID(owner);
-            SpellEffectCreate(out stoneRemoval, out _, "MonkeyKingPHRemoveRocks.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, default, default, false, false);
+            SpellEffectCreate(out stoneRemoval, out _, "MonkeyKingPHRemoveRocks.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, owner, default, default, owner, default, default, true, default, default, false, false);
         }
     }
 }

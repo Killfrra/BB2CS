@@ -5,33 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class BluePill : BBBuffScript
-    {
-        bool willRemove;
-        public BluePill(bool willRemove = default)
-        {
-            this.willRemove = willRemove;
-        }
-        public override void OnActivate()
-        {
-            //RequireVar(this.willRemove);
-        }
-        public override void OnUpdateActions()
-        {
-            if(this.willRemove)
-            {
-                StopChanneling((ObjAIBase)owner, ChannelingStopCondition.Cancel, ChannelingStopSource.LostTarget);
-                SpellBuffRemoveCurrent(owner);
-            }
-        }
-        public override void OnTakeDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
-        {
-            this.willRemove = true;
-        }
-    }
-}
 namespace Spells
 {
     public class BluePill : BBSpellScript
@@ -71,6 +44,33 @@ namespace Spells
         public override void ChannelingCancelStop()
         {
             SpellEffectRemove(this.particleID);
+        }
+    }
+}
+namespace Buffs
+{
+    public class BluePill : BBBuffScript
+    {
+        bool willRemove;
+        public BluePill(bool willRemove = default)
+        {
+            this.willRemove = willRemove;
+        }
+        public override void OnActivate()
+        {
+            //RequireVar(this.willRemove);
+        }
+        public override void OnUpdateActions()
+        {
+            if(this.willRemove)
+            {
+                StopChanneling((ObjAIBase)owner, ChannelingStopCondition.Cancel, ChannelingStopSource.LostTarget);
+                SpellBuffRemoveCurrent(owner);
+            }
+        }
+        public override void OnTakeDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
+        {
+            this.willRemove = true;
         }
     }
 }

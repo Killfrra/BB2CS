@@ -19,11 +19,11 @@ namespace Buffs
         float lastTimeExecuted;
         public override void OnUpdateActions()
         {
-            float maxHealth;
-            float percHealth;
-            float burnDmg;
             if(ExecutePeriodically(0.5f, ref this.lastTimeExecuted, true))
             {
+                float maxHealth;
+                float percHealth;
+                float burnDmg;
                 maxHealth = GetMaxHealth(owner, PrimaryAbilityResourceType.MANA);
                 percHealth = maxHealth / 100;
                 burnDmg = percHealth * 1;

@@ -5,6 +5,34 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class JackInTheBox : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            CastingBreaksStealth = true,
+            DoesntBreakShields = false,
+            TriggersSpellCasts = true,
+            IsDamagingSpell = false,
+            NotSingleTargetSpell = true,
+        };
+        int[] effect0 = {0, 100, 200, 300, 400};
+        float[] effect1 = {0.5f, 0.75f, 1, 1.25f, 1.5f};
+        public override void SelfExecute()
+        {
+            Vector3 targetPos;
+            Vector3 nextBuffVars_TargetPos;
+            int nextBuffVars_BonusHealth;
+            float nextBuffVars_FearDuration;
+            targetPos = GetCastSpellTargetPos();
+            nextBuffVars_TargetPos = targetPos;
+            nextBuffVars_BonusHealth = this.effect0[level];
+            nextBuffVars_FearDuration = this.effect1[level];
+            AddBuff(attacker, owner, new Buffs.JackInTheBoxInternal(nextBuffVars_TargetPos, nextBuffVars_BonusHealth, nextBuffVars_FearDuration), 1, 1, 0.1f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class JackInTheBox : BBBuffScript
@@ -122,8 +150,6 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            ObjAIBase caster;
-            int unitFound;
             if(lifeTime >= 2)
             {
                 if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.EndKill)) == 0)
@@ -134,6 +160,7 @@ namespace Buffs
                     }
                     foreach(AttackableUnit unit in GetClosestVisibleUnitsInArea(attacker, owner.Position, 300, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectNeutral | SpellDataFlags.AffectBuildings | SpellDataFlags.AffectMinions | SpellDataFlags.AffectHeroes | SpellDataFlags.AffectTurrets, 1, default, true))
                     {
+                        ObjAIBase caster;
                         caster = SetBuffCasterUnit();
                         this.iD = PushCharacterFade(owner, 1, 0.1f);
                         AddBuff(attacker, attacker, new Buffs.JackInTheBoxDamageSensor(), 1, 1, 5, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0, false, false, false);
@@ -153,6 +180,7 @@ namespace Buffs
                 IncPAR(owner, -0.5f, PrimaryAbilityResourceType.Shield);
                 if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.EndKill)) > 0)
                 {
+                    int unitFound;
                     unitFound = 0;
                     foreach(AttackableUnit unit in GetClosestVisibleUnitsInArea(attacker, owner.Position, 400, SpellDataFlags.AffectEnemies | SpellDataFlags.AffectHeroes, 1, nameof(Buffs.JackInTheBoxHardLock), true))
                     {
@@ -199,11 +227,11 @@ namespace Buffs
         }
         public override void OnPreMitigationDamage(float damageAmount, DamageType damageType, DamageSource damageSource)
         {
-            bool canSee;
             if(attacker is not BaseTurret)
             {
                 if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.Stealth)) > 0)
                 {
+                    bool canSee;
                     canSee = CanSeeTarget(attacker, owner);
                     if(!canSee)
                     {
@@ -211,34 +239,6 @@ namespace Buffs
                     }
                 }
             }
-        }
-    }
-}
-namespace Spells
-{
-    public class JackInTheBox : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            CastingBreaksStealth = true,
-            DoesntBreakShields = false,
-            TriggersSpellCasts = true,
-            IsDamagingSpell = false,
-            NotSingleTargetSpell = true,
-        };
-        int[] effect0 = {0, 100, 200, 300, 400};
-        float[] effect1 = {0.5f, 0.75f, 1, 1.25f, 1.5f};
-        public override void SelfExecute()
-        {
-            Vector3 targetPos;
-            Vector3 nextBuffVars_TargetPos;
-            int nextBuffVars_BonusHealth;
-            float nextBuffVars_FearDuration;
-            targetPos = GetCastSpellTargetPos();
-            nextBuffVars_TargetPos = targetPos;
-            nextBuffVars_BonusHealth = this.effect0[level];
-            nextBuffVars_FearDuration = this.effect1[level];
-            AddBuff(attacker, owner, new Buffs.JackInTheBoxInternal(nextBuffVars_TargetPos, nextBuffVars_BonusHealth, nextBuffVars_FearDuration), 1, 1, 0.1f, BuffAddType.REPLACE_EXISTING, BuffType.INTERNAL, 0, true, false, false);
         }
     }
 }

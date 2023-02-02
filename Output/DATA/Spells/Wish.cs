@@ -23,7 +23,6 @@ namespace Spells
             float spellPowerBonus;
             float healthToHeal;
             float temp1;
-            Particle infuse; // UNUSED
             teamID = GetTeamID(attacker);
             spellPower = GetFlatMagicDamageMod(owner);
             baseHealthToHeal = this.effect0[level];
@@ -33,7 +32,8 @@ namespace Spells
             temp1 = GetHealthPercent(target, PrimaryAbilityResourceType.MANA);
             if(temp1 < 1)
             {
-                SpellEffectCreate(out infuse, out _, "Wish_tar.troy", default, teamID, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, false, false, false, false);
+                Particle infuse; // UNUSED
+                SpellEffectCreate(out infuse, out _, "Wish_tar.troy", default, teamID ?? TeamId.TEAM_UNKNOWN, 10, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, true, false, false, false, false);
                 ApplyAssistMarker((ObjAIBase)owner, target, 10);
             }
         }

@@ -25,14 +25,14 @@ namespace Buffs
         }
         public override void OnDeactivate(bool expired)
         {
-            Vector3 pos1;
-            int level; // UNUSED
-            Pet other1;
-            Particle fadeParticle; // UNUSED
             SetStealthed(owner, false);
             this.iD = PushCharacterFade(owner, 1, 0);
             if(!owner.IsDead)
             {
+                Vector3 pos1;
+                int level; // UNUSED
+                Pet other1;
+                Particle fadeParticle; // UNUSED
                 pos1 = GetRandomPointInAreaUnit(owner, 250, 50);
                 level = 1;
                 other1 = CloneUnitPet(owner, nameof(Buffs.LeblancMI), 8, pos1, 0, 0, true);

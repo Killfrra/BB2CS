@@ -5,6 +5,29 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class Overdrive : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            AutoCooldownByLevel = new[]{ 90f, 90f, 90f, 18f, 14f, },
+            TriggersSpellCasts = true,
+            NotSingleTargetSpell = true,
+        };
+        float[] effect0 = {0.16f, 0.2f, 0.24f, 0.28f, 0.32f};
+        float[] effect1 = {0.3f, 0.38f, 0.46f, 0.54f, 0.62f};
+        int[] effect2 = {8, 8, 8, 8, 8};
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            float nextBuffVars_MoveSpeedMod;
+            float nextBuffVars_AttackSpeedMod;
+            nextBuffVars_MoveSpeedMod = this.effect0[level];
+            nextBuffVars_AttackSpeedMod = this.effect1[level];
+            AddBuff(attacker, target, new Buffs.Overdrive(nextBuffVars_AttackSpeedMod, nextBuffVars_MoveSpeedMod), 1, 1, this.effect2[level], BuffAddType.RENEW_EXISTING, BuffType.HASTE, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class Overdrive : BBBuffScript
@@ -84,29 +107,6 @@ namespace Buffs
         {
             IncPercentMovementSpeedMod(owner, this.moveSpeedMod);
             IncPercentAttackSpeedMod(owner, this.attackSpeedMod);
-        }
-    }
-}
-namespace Spells
-{
-    public class Overdrive : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            AutoCooldownByLevel = new[]{ 90f, 90f, 90f, 18f, 14f, },
-            TriggersSpellCasts = true,
-            NotSingleTargetSpell = true,
-        };
-        float[] effect0 = {0.16f, 0.2f, 0.24f, 0.28f, 0.32f};
-        float[] effect1 = {0.3f, 0.38f, 0.46f, 0.54f, 0.62f};
-        int[] effect2 = {8, 8, 8, 8, 8};
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            float nextBuffVars_MoveSpeedMod;
-            float nextBuffVars_AttackSpeedMod;
-            nextBuffVars_MoveSpeedMod = this.effect0[level];
-            nextBuffVars_AttackSpeedMod = this.effect1[level];
-            AddBuff(attacker, target, new Buffs.Overdrive(nextBuffVars_AttackSpeedMod, nextBuffVars_MoveSpeedMod), 1, 1, this.effect2[level], BuffAddType.RENEW_EXISTING, BuffType.HASTE, 0, true, false, false);
         }
     }
 }

@@ -37,12 +37,12 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            float sSCD1;
-            float sSCD2;
-            float newSSCD1;
-            float newSSCD2;
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, false))
             {
+                float sSCD1;
+                float sSCD2;
+                float newSSCD1;
+                float newSSCD2;
                 sSCD1 = GetSlotSpellCooldownTime((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_SUMMONER, SpellSlotType.SpellSlots);
                 sSCD2 = GetSlotSpellCooldownTime((ObjAIBase)owner, 1, SpellbookType.SPELLBOOK_SUMMONER, SpellSlotType.SpellSlots);
                 newSSCD1 = sSCD1 - 1;
@@ -53,11 +53,11 @@ namespace Buffs
         }
         public override void OnHitUnit(float damageAmount, DamageType damageType, DamageSource damageSource, HitResult hitResult)
         {
-            float tempTable1_ThirdDA;
             if(target is ObjAIBase)
             {
                 if(target is not BaseTurret)
                 {
+                    float tempTable1_ThirdDA;
                     SpellEffectCreate(out _, out _, "TiamatMelee_itm.troy", default, TeamId.TEAM_UNKNOWN, 0, 0, TeamId.TEAM_UNKNOWN, default, owner, false, target, default, default, target, default, default, false, default, default, false);
                     if(IsRanged(owner))
                     {

@@ -5,12 +5,6 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
-namespace Buffs
-{
-    public class SealFateMissile : BBBuffScript
-    {
-    }
-}
 namespace Spells
 {
     public class SealFateMissile : BBSpellScript
@@ -23,5 +17,11 @@ namespace Spells
             PhysicalDamageRatio = 1f,
             SpellDamageRatio = 1f,
         };
+    }
+}
+namespace Buffs
+{
+    public class SealFateMissile : BBBuffScript
+    {
     }
 }

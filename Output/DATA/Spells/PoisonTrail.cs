@@ -5,6 +5,38 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class PoisonTrail : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = false,
+            NotSingleTargetSpell = true,
+        };
+        int[] effect0 = {22, 34, 46, 58, 70};
+        public override void SelfExecute()
+        {
+            if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.PoisonTrail)) > 0)
+            {
+                SpellBuffRemove(owner, nameof(Buffs.PoisonTrail), (ObjAIBase)owner, 0);
+                SetSlotSpellCooldownTime((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, 1);
+            }
+            else
+            {
+                Vector3 pos;
+                Vector3 nextBuffVars_LastPosition;
+                int nextBuffVars_DamagePerTick;
+                float nextBuffVars_ManaCost;
+                pos = GetUnitPosition(owner);
+                nextBuffVars_LastPosition = pos;
+                nextBuffVars_DamagePerTick = this.effect0[level];
+                nextBuffVars_ManaCost = 13;
+                AddBuff((ObjAIBase)owner, owner, new Buffs.PoisonTrail(nextBuffVars_LastPosition, nextBuffVars_DamagePerTick, nextBuffVars_ManaCost), 1, 1, 20000, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+            }
+        }
+    }
+}
 namespace Buffs
 {
     public class PoisonTrail : BBBuffScript
@@ -39,7 +71,7 @@ namespace Buffs
             teamID = GetTeamID(owner);
             curPos = GetPointByUnitFacingOffset(owner, 25, 180);
             nextBuffVars_DamagePerTick = this.damagePerTick;
-            other3 = SpawnMinion("AcidTrail", "TestCube", "idle.lua", curPos, teamID, true, false, false, true, false, true, 0, false, true, (Champion)owner);
+            other3 = SpawnMinion("AcidTrail", "TestCube", "idle.lua", curPos, teamID ?? TeamId.TEAM_CASTER, true, false, false, true, false, true, 0, false, true, (Champion)owner);
             AddBuff((ObjAIBase)owner, other3, new Buffs.PoisonTrailApplicator(nextBuffVars_DamagePerTick), 1, 1, 3.25f, BuffAddType.RENEW_EXISTING, BuffType.DAMAGE, 0, true, false, false);
             this.lastPosition = curPos;
         }
@@ -47,16 +79,14 @@ namespace Buffs
         {
             Vector3 curPos;
             float distance;
-            float ownerMana;
-            float negManaCost;
             TeamId teamID;
-            Vector3 frontPos;
             float nextBuffVars_DamagePerTick;
             Minion other3;
             curPos = GetPointByUnitFacingOffset(owner, 25, 180);
             distance = DistanceBetweenPoints(curPos, this.lastPosition);
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, false))
             {
+                float ownerMana;
                 ownerMana = GetPAR(owner, PrimaryAbilityResourceType.MANA);
                 if(ownerMana < this.manaCost)
                 {
@@ -64,14 +94,16 @@ namespace Buffs
                 }
                 else
                 {
+                    float negManaCost;
                     negManaCost = -1 * this.manaCost;
                     IncPAR(owner, negManaCost, PrimaryAbilityResourceType.MANA);
                     if(distance <= 90)
                     {
+                        Vector3 frontPos;
                         teamID = GetTeamID(attacker);
                         frontPos = GetPointByUnitFacingOffset(owner, 35, 0);
                         nextBuffVars_DamagePerTick = this.damagePerTick;
-                        other3 = SpawnMinion("AcidTrail", "TestCube", "idle.lua", frontPos, teamID, true, false, false, true, false, true, 0, false, true, (Champion)attacker);
+                        other3 = SpawnMinion("AcidTrail", "TestCube", "idle.lua", frontPos, teamID ?? TeamId.TEAM_CASTER, true, false, false, true, false, true, 0, false, true, (Champion)attacker);
                         AddBuff(attacker, other3, new Buffs.PoisonTrailApplicator(nextBuffVars_DamagePerTick), 1, 1, 3.5f, BuffAddType.RENEW_EXISTING, BuffType.DAMAGE, 0, true, false, false);
                         this.lastPosition = curPos;
                     }
@@ -81,41 +113,9 @@ namespace Buffs
             {
                 teamID = GetTeamID(attacker);
                 nextBuffVars_DamagePerTick = this.damagePerTick;
-                other3 = SpawnMinion("AcidTrail", "TestCube", "idle.lua", curPos, teamID, true, false, false, true, false, true, 0, false, true, (Champion)attacker);
+                other3 = SpawnMinion("AcidTrail", "TestCube", "idle.lua", curPos, teamID ?? TeamId.TEAM_CASTER, true, false, false, true, false, true, 0, false, true, (Champion)attacker);
                 AddBuff(attacker, other3, new Buffs.PoisonTrailApplicator(nextBuffVars_DamagePerTick), 1, 1, 3.5f, BuffAddType.REPLACE_EXISTING, BuffType.DAMAGE, 0, true, false, false);
                 this.lastPosition = curPos;
-            }
-        }
-    }
-}
-namespace Spells
-{
-    public class PoisonTrail : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = false,
-            NotSingleTargetSpell = true,
-        };
-        int[] effect0 = {22, 34, 46, 58, 70};
-        public override void SelfExecute()
-        {
-            Vector3 pos;
-            Vector3 nextBuffVars_LastPosition;
-            int nextBuffVars_DamagePerTick;
-            float nextBuffVars_ManaCost;
-            if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.PoisonTrail)) > 0)
-            {
-                SpellBuffRemove(owner, nameof(Buffs.PoisonTrail), (ObjAIBase)owner, 0);
-                SetSlotSpellCooldownTime((ObjAIBase)owner, 0, SpellbookType.SPELLBOOK_CHAMPION, SpellSlotType.SpellSlots, 1);
-            }
-            else
-            {
-                pos = GetUnitPosition(owner);
-                nextBuffVars_LastPosition = pos;
-                nextBuffVars_DamagePerTick = this.effect0[level];
-                nextBuffVars_ManaCost = 13;
-                AddBuff((ObjAIBase)owner, owner, new Buffs.PoisonTrail(nextBuffVars_LastPosition, nextBuffVars_DamagePerTick, nextBuffVars_ManaCost), 1, 1, 20000, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
             }
         }
     }

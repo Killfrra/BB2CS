@@ -5,6 +5,21 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class OracleExtractSight : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            TriggersSpellCasts = false,
+            NotSingleTargetSpell = true,
+        };
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            AddBuff((ObjAIBase)target, target, new Buffs.OracleExtractSight(), 1, 1, 300, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class OracleExtractSight : BBBuffScript
@@ -28,21 +43,6 @@ namespace Buffs
         public override void OnDeactivate(bool expired)
         {
             RemovePerceptionBubble(this.thisBubble);
-        }
-    }
-}
-namespace Spells
-{
-    public class OracleExtractSight : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            TriggersSpellCasts = false,
-            NotSingleTargetSpell = true,
-        };
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            AddBuff((ObjAIBase)target, target, new Buffs.OracleExtractSight(), 1, 1, 300, BuffAddType.REPLACE_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Chars
     {
         public override void OnActivate()
         {
-            float nextBuffVars_BleedAmount;
+            float nextBuffVars_BleedAmount; // UNUSED
             AddBuff((ObjAIBase)owner, owner, new Buffs.ChampionChampionDelta(), 1, 1, 25000, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0, true, false, false);
             AddBuff((ObjAIBase)owner, owner, new Buffs.APBonusDamageToTowers(), 1, 1, 25000, BuffAddType.RENEW_EXISTING, BuffType.INTERNAL, 0, true, false, false);
             nextBuffVars_BleedAmount = 0.4f;

@@ -15,7 +15,7 @@ namespace Spells
             Champion other1;
             float dmg;
             teamID = GetTeamID(owner);
-            other1 = GetChampionBySkinName("Malzahar", teamID);
+            other1 = GetChampionBySkinName("Malzahar", teamID ?? TeamId.TEAM_UNKNOWN);
             dmg = GetTotalAttackDamage(owner);
             ApplyDamage(other1, target, dmg, DamageType.DAMAGE_TYPE_PHYSICAL, DamageSource.DAMAGE_SOURCE_PROC, 1, 0, 1, false, false, attacker);
         }

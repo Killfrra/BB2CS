@@ -16,12 +16,12 @@ namespace Chars
         int[] effect1 = {20, 15, 10};
         public override void OnUpdateActions()
         {
-            float akaliDamage1;
-            float danceTimerCooldown;
-            float cooldownMod;
-            float danceTimerCooldownNL;
             if(ExecutePeriodically(1, ref this.lastTime2Executed, true))
             {
+                float akaliDamage1;
+                float danceTimerCooldown;
+                float cooldownMod;
+                float danceTimerCooldownNL;
                 this.akaliDamageVar = GetTotalAttackDamage(owner);
                 akaliDamage1 = this.akaliDamageVar * 0.6f;
                 SetSpellToolTipVar(akaliDamage1, 1, 2, SpellSlotType.SpellSlots, SpellbookType.SPELLBOOK_CHAMPION, (Champion)owner);
@@ -42,11 +42,11 @@ namespace Chars
         }
         public override void OnKill()
         {
-            int count;
             if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.AkaliShadowDance)) > 0)
             {
                 if(target is Champion)
                 {
+                    int count;
                     count = GetBuffCountFromAll(owner, nameof(Buffs.AkaliShadowDance));
                     if(count >= 4)
                     {
@@ -64,11 +64,11 @@ namespace Chars
         }
         public override void OnAssist()
         {
-            int count;
             if(GetBuffCountFromCaster(owner, owner, nameof(Buffs.AkaliShadowDance)) > 0)
             {
                 if(target is Champion)
                 {
+                    int count;
                     count = GetBuffCountFromAll(owner, nameof(Buffs.AkaliShadowDance));
                     if(count >= 4)
                     {

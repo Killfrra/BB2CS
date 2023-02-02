@@ -31,11 +31,11 @@ namespace Buffs
         }
         public override void OnUpdateActions()
         {
-            float healthPercent;
-            float missingHealthPercent;
-            float healthToRestore;
             if(ExecutePeriodically(1, ref this.lastTimeExecuted, false))
             {
+                float healthPercent;
+                float missingHealthPercent;
+                float healthToRestore;
                 healthPercent = GetHealthPercent(owner, PrimaryAbilityResourceType.MANA);
                 missingHealthPercent = 1 - healthPercent;
                 healthToRestore = 5 * missingHealthPercent;

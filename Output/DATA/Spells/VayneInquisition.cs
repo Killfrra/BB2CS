@@ -5,6 +5,26 @@ using static Functions;
 using static Functions_CS;
 using Math = System.Math;
 
+namespace Spells
+{
+    public class VayneInquisition : BBSpellScript
+    {
+        public override SpellScriptMetaDataNullable MetaData { get; } = new()
+        {
+            AutoCooldownByLevel = new[]{ 75f, 75f, 75f, 18f, 14f, },
+            TriggersSpellCasts = true,
+            NotSingleTargetSpell = true,
+        };
+        int[] effect0 = {25, 40, 55};
+        int[] effect1 = {8, 10, 12};
+        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
+        {
+            float nextBuffVars_ADMod;
+            nextBuffVars_ADMod = this.effect0[level];
+            AddBuff(attacker, target, new Buffs.VayneInquisition(nextBuffVars_ADMod), 1, 1, this.effect1[level], BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
+        }
+    }
+}
 namespace Buffs
 {
     public class VayneInquisition : BBBuffScript
@@ -83,26 +103,6 @@ namespace Buffs
         public override void OnUpdateStats()
         {
             IncFlatPhysicalDamageMod(owner, this.aDMod);
-        }
-    }
-}
-namespace Spells
-{
-    public class VayneInquisition : BBSpellScript
-    {
-        public override SpellScriptMetaDataNullable MetaData { get; } = new()
-        {
-            AutoCooldownByLevel = new[]{ 75f, 75f, 75f, 18f, 14f, },
-            TriggersSpellCasts = true,
-            NotSingleTargetSpell = true,
-        };
-        int[] effect0 = {25, 40, 55};
-        int[] effect1 = {8, 10, 12};
-        public override void TargetExecute(SpellMissile missileNetworkID, HitResult hitResult)
-        {
-            float nextBuffVars_ADMod;
-            nextBuffVars_ADMod = this.effect0[level];
-            AddBuff(attacker, target, new Buffs.VayneInquisition(nextBuffVars_ADMod), 1, 1, this.effect1[level], BuffAddType.RENEW_EXISTING, BuffType.COMBAT_ENCHANCER, 0, true, false, false);
         }
     }
 }
